@@ -3,7 +3,12 @@
 
 int main(void) {
 	UI ui(ON);
-	std::cout << ui.getStatus() << std::endl;
-	
+
+	if(ui.getStatus() == ON) {
+		std::cout << "All systems go!" << std::endl;
+	} else {
+		std::cout << "APIs not ready!" << std::endl;
+	}
+
 	return 0;
 }
