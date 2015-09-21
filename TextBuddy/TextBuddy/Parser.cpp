@@ -27,6 +27,15 @@ const std::string Parser::COMMAND_DISPLAY_ALL = "display";
 const std::string Parser::COMMAND_SORT_ALL = "sort";
 const std::string Parser::COMMAND_EXIT = "exit";
 
+// These are the possible field types
+const std::string Parser::FIELD_DATE = "by";
+const std::string Parser::FIELD_DAY = "on";
+const std::string Parser::FIELD_TIME_AT = "at";
+const std::string Parser::FIELD_TIME_FROM = "from";
+const std::string Parser::FIELD_TIME_TO = "to";
+const std::string Parser::FIELD_PRIORITY = "star";
+const std::string Parser::FIELD_LABEL = ":";
+
 // ==================================================
 //                      METHODS
 // ==================================================
@@ -47,23 +56,25 @@ std::string Parser::parseFileName(char* argv[]) {
 Command Parser::parseCommand(std::string userCommand) {
 	userCommand = removeSpaces(userCommand);
 	std::string commandString = getFirstWord(userCommand);
+
+	Command cmd;
 	CommandType newCommand;
 
 	if(equalsIgnoreCase(commandString, COMMAND_ADD))	{
 		newCommand = ADD;
-	}	else if(equalsIgnoreCase(commandString, COMMAND_DELETE)) {
+	} else if(equalsIgnoreCase(commandString, COMMAND_DELETE)) {
 		newCommand = DELETE;
-	}	else if(equalsIgnoreCase(commandString, COMMAND_SEARCH)) {
+	} else if(equalsIgnoreCase(commandString, COMMAND_SEARCH)) {
 		newCommand = SEARCH;
-	}	else if(equalsIgnoreCase(commandString, COMMAND_CLEAR_ALL)) {
+	} else if(equalsIgnoreCase(commandString, COMMAND_CLEAR_ALL)) {
 		newCommand = CLEAR_ALL;
-	}	else if(equalsIgnoreCase(commandString, COMMAND_DISPLAY_ALL)) {
+	} else if(equalsIgnoreCase(commandString, COMMAND_DISPLAY_ALL)) {
 		newCommand = DISPLAY_ALL;
-	}	else if(equalsIgnoreCase(commandString, COMMAND_SORT_ALL)) {
+	} else if(equalsIgnoreCase(commandString, COMMAND_SORT_ALL)) {
 		newCommand = SORT_ALL;
-	}	else if(equalsIgnoreCase(commandString, COMMAND_EXIT)) {
+	} else if(equalsIgnoreCase(commandString, COMMAND_EXIT)) {
 		newCommand = EXIT;
-	}	else {
+	} else {
 		newCommand = INVALID;
 	}
 
@@ -71,8 +82,60 @@ Command Parser::parseCommand(std::string userCommand) {
 }
 
 Task Parser::parseTask(std::string restOfCommand) {
+	std::vector<std::string> userInput = splitParameters(restOfCommand);
+	std::vector<std::string>::iterator curr;
 	Task newTask;
-	newTask.setTaskName(restOfCommand);
+	FieldType inputMode = NAME;
+	std::string inputString = "";
+
+	while(curr != userInput.end()) {
+		while(!equalsIgnoreCase(*curr, FIELD_DATE)
+			&& !equalsIgnoreCase(*curr, FIELD_DAY)
+			&& !equalsIgnoreCase(*curr, FIELD_TIME_AT)
+			&& !equalsIgnoreCase(*curr, FIELD_TIME_FROM)
+			&& !equalsIgnoreCase(*curr, FIELD_TIME_TO)
+			&& !equalsIgnoreCase(*curr, FIELD_LABEL)) {
+				inputString += *curr;
+		}
+
+		switch(inputMode) {
+		case NAME:
+			newTask.setTaskName(restOfCommand);
+		case DATE:
+		case DAY:
+			//newTask.toggleFloating();
+			//newTask.setDate(inputString);
+		case TIME_AT:
+			//newTask.setTimeAt(inputString);
+		case TIME_FROM:
+			//newTask.setTimeFrom(inputString);
+		case TIME_TO:
+			//newTask.setTimeTo(inputString);
+		case PRIORITY:
+			//newTask.togglePriority();
+		case LABEL:
+			//newTask.setLabel(inputString);
+		default:
+			break;
+		}
+
+		if(equalsIgnoreCase(*curr, FIELD_DATE)) {
+			inputMode = DATE;
+		} else if(equalsIgnoreCase(*curr, FIELD_DAY)) {
+			inputMode = DAY;
+		} else if(equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
+			inputMode = TIME_AT;
+		} else if(equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
+			inputMode = TIME_FROM;
+		} else if(equalsIgnoreCase(*curr, FIELD_TIME_TO)) {
+			inputMode = TIME_TO;
+		} else if(equalsIgnoreCase(*curr, FIELD_TIME_TO)) {
+			inputMode = PRIORITY;
+		} else if(equalsIgnoreCase(*curr, FIELD_LABEL)) {
+			inputMode = LABEL;
+		}
+	}
+
 	return newTask;
 }
 

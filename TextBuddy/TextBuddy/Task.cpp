@@ -3,7 +3,15 @@
 #include "stdafx.h"
 #include "Task.h"
 
-Task::Task() {}
+ Task::Task() {
+	isDone = false;
+	isFloating = true;
+	isPriority = false;
+	date = "";
+	time = "";
+	label = "";
+}
+
 Task::~Task() {}
 
 void Task::setTaskName(std::string restOfCommand) {

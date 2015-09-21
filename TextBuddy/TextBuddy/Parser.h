@@ -3,10 +3,22 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+enum FieldType {
+	NAME,
+	DATE,
+	DAY,
+	TIME_AT,
+	TIME_FROM,
+	TIME_TO,
+	PRIORITY,
+	LABEL
+};
+
 class Parser{
 private:
 	bool isActive;
-		// This defines the file extension used by TextBuddy
+
+	// This defines the file extension used by TextBuddy
 	static const std::string FILE_EXTENSION;
 
 	// These are the possible command types
@@ -18,12 +30,25 @@ private:
 	static const std::string COMMAND_SORT_ALL;
 	static const std::string COMMAND_EXIT;
 
+	// These are the possible field types for tasks
+	static const std::string FIELD_DATE;
+	static const std::string FIELD_DAY;
+	static const std::string FIELD_TIME_AT;
+	static const std::string FIELD_TIME_FROM;
+	static const std::string FIELD_TIME_TO;
+	static const std::string FIELD_PRIORITY;
+	static const std::string FIELD_LABEL;
+
 	// These are the locations at which various parameters appear
 	static const int PARAM_POSITION_TASK = 0;
 	static const int PARAM_POSITION_TASK_NUMBER = 0;
 
 	// This is the return value for invalid numbers
 	static const int INVALID_NUMBER_FORMAT = -1;
+
+	// These handle task parameters
+	static std::string parseDate(std::vector<std::string>);
+	static std::string parseTime(std::vector<std::string>);
 
 	// These functions support user methods
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
@@ -42,7 +67,7 @@ public:
 	Parser(bool status);
 	~Parser();
 
-	static bool getStatus();
+	bool getStatus();
 	static std::string parseFileName(char* argv[]);
 	static Command parseCommand(std::string userCommand);
 	static Task parseTask(std::string restOfCommand);

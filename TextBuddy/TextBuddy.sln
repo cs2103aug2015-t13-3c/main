@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextBuddy", "TextBuddy\Text
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextBuddyTests", "TextBuddyTests\TextBuddyTests.vcxproj", "{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextBuddyStubs", "TextBuddyStubs\TextBuddyStubs.vcxproj", "{07F5D403-0A67-4267-A7D2-F539E91D6EFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}.Debug|Win32.Build.0 = Debug|Win32
 		{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}.Release|Win32.ActiveCfg = Release|Win32
 		{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}.Release|Win32.Build.0 = Release|Win32
+		{07F5D403-0A67-4267-A7D2-F539E91D6EFC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{07F5D403-0A67-4267-A7D2-F539E91D6EFC}.Debug|Win32.Build.0 = Debug|Win32
+		{07F5D403-0A67-4267-A7D2-F539E91D6EFC}.Release|Win32.ActiveCfg = Release|Win32
+		{07F5D403-0A67-4267-A7D2-F539E91D6EFC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
