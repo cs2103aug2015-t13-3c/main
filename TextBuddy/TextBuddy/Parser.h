@@ -1,23 +1,10 @@
 // @@author Aaron Chong Jun Hao
 
-#include"Command.h"
-#include"Task.h"
-
 #ifndef PARSER_H_
 #define PARSER_H_
 
-#include "stdafx.h"
-
-enum FieldType {
-	NAME,
-	DATE,
-	DAY,
-	TIME_AT,
-	TIME_FROM,
-	TIME_TO,
-	PRIORITY,
-	LABEL
-};
+#include"Command.h"
+#include"Task.h"
 
 class Parser{
 private:

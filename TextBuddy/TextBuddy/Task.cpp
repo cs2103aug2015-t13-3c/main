@@ -13,18 +13,20 @@ int Task::runningCount = 0;
 	isDone = false;
 	isPriority = false;
 		
-	day = MON;
-	dateStart = 0; // YYMMDD, supports 2015-2099
-	dateEnd = 0;
-	timeFrom = 0;  // HHMM, 24-hour format
-	timeTo = 0;    // HHMM, 24-hour format
+	startDay = MON;
+	startDate = 0; // YYMMDD, supports 2015-2099
+	startTime = 0; // HHMM, 24-hour format
+
+	endDay = MON;
+	endDate = 0;
+	endTime = 0;
 }
 
 Task::~Task() {}
 
-void Task::setName(std::string restOfCommand) {
+bool Task::setName(std::string restOfCommand) {
 	name = restOfCommand;
-	return;
+	return true;
 }
 
 std::string Task::getName() {

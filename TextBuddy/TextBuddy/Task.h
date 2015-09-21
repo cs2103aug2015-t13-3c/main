@@ -9,6 +9,17 @@ enum TaskType {
 	TODO
 };
 
+enum FieldType {
+	NAME,
+	DATE,
+	DAY,
+	TIME_AT,
+	TIME_FROM,
+	TIME_TO,
+	PRIORITY,
+	LABEL
+};
+
 enum Month {
 	JAN, FEB, MAR,
 	APR, MAY, JUN,
@@ -65,22 +76,22 @@ public:
 	int getEndDate();
 	int getEndTime();
 
-	// Setters
-	std::string setName();
-	TaskType setType();
-	int setID();
-	std::string setLabel();
+	// Setters, return if successful
+	bool setName(std::string newName);
+	bool setType(TaskType newType);
+	bool setID(int newID);
+	bool setLabel(std::string newLabel);
 
 	bool toggleDone();
 	bool togglePriority();
 
-	Day setStartDay();
-	int setStartDate();
-	int setStartTime();
+	bool setStartDay(Day newStartDay);
+	bool setStartDate(int newStartDate);
+	bool setStartTime(int newStartTime);
 
-	Day setEndDay();
-	int setEndDate();
-	int setEndTime();
+	Day setEndDay(Day newEndDate);
+	bool setEndDate(int newEndDate);
+	bool setEndTime(int newEndTime);
 };
 
 #endif
