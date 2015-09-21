@@ -18,5 +18,13 @@ namespace TextBuddyTests
 			Assert::AreEqual(true,status);
 		}
 
+		TEST_METHOD(IO_loadFile_emptyFile)
+		{
+			// Empty file should load empty vector
+			vector<string> actualText = IO::loadFile("");
+			vector<string> emptyVector;
+
+			Assert::AreEqual(emptyVector.size(), actualText.size());
+		}
 	};
 }

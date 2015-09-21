@@ -27,3 +27,5 @@
 
 #define ON true
 #define OFF false
+
+using namespace std;
