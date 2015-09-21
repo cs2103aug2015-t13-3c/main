@@ -3,6 +3,10 @@
 #ifndef IO_H_
 #define IO_H_
 
+#include<vector>
+
+using namespace std;
+
 class IO{
 private:
 	bool isActive;
@@ -13,6 +17,8 @@ public:
 	~IO();
 
 	bool getStatus();
+
+	static vector<std::string> loadFile(string fileName);
 };
 
 #endif

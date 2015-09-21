@@ -1,5 +1,8 @@
 // @@author Aaron Chong Jun Hao
 
+#include"Command.h"
+#include"Task.h"
+
 #ifndef PARSER_H_
 #define PARSER_H_
 
