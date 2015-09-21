@@ -3,15 +3,55 @@
 #include "stdafx.h"
 #include "Logic.h"
 
+
+
 Logic::Logic() {
 	isActive = false;
-	sizeOfArray = 0;
 }
 
 Logic::Logic(bool status): isActive(status), io(ON) {}
 
 Logic::~Logic() {}
 
+bool Logic::getStatus() {
+	return isActive && canCallIO();
+}
+
+bool Logic::canCallIO() {
+	return io.getStatus();
+}
+
+int Logic::getSize() {
+	return taskStore.size();
+}
+
+std::vector<Task> Logic::getTaskStore() {
+	return taskStore;
+}
+
+std::vector<Task> Logic::getCurrentView() {
+	return currentView;
+}
+
+void Logic::addInfo(Add taskName) {
+	taskStore.push_back(taskName.getNewTask());
+}
+
+void Logic::deleteInfo(Delete idToDelete) {
+	vector<Task>::iterator iter;
+
+	int id;
+	id = idToDelete.getTaskToDelete();
+
+	for (iter = taskStore.begin(); iter < taskStore.end(); iter++) {
+		if (iter->getID() == id) {
+			taskStore.erase(iter);
+			break;
+		}
+	}
+}
+/*Keep for reference */
+/*
 bool Logic::getStatus() {
 	return isActive && canCallIO();
 }
@@ -233,3 +273,4 @@ std::string Logic::freeSlotSearch(int date, int time) {
 		return freeSlot.str();
 	}
 }
+*/

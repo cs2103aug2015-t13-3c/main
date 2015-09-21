@@ -89,7 +89,7 @@ public:
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
 
-	Day setEndDay(Day newEndDate);
+	bool setEndDay(Day newEndDay);
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
 };
