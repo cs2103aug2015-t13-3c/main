@@ -34,19 +34,53 @@ private:
 	bool isDone;
 	bool isPriority;
 	
-	Day day;
+	Day startDay;
+	int startDate; // YYMMDD, supports 2015-2099
+	int startTime; // HHMM, 24-hour format
 
-	int dateStart;// YYMMDD, supports 2015-2099
-	int dateEnd;
-	int timeFrom; // HHMM, 24-hour format
-	int timeTo;   // HHMM, 24-hour format
+	Day endDay;
+	int endDate;
+	int endTime;    // HHMM, 24-hour format
 
 public:
+	static int getRunningCount();
+	
 	Task();
 	~Task();
-	void setName(std::string restOfCommand="");
+	
+	// Getters
 	std::string getName();
-	std::string getRunningCount();
+	TaskType getType();
+	int getID();
+	std::string getLabel();
+
+	bool getDoneStatus();
+	bool getPriorityStatus();
+
+	Day getStartDay();
+	int getStartDate();
+	int getStartTime();
+
+	Day getEndDay();
+	int getEndDate();
+	int getEndTime();
+
+	// Setters
+	std::string setName();
+	TaskType setType();
+	int setID();
+	std::string setLabel();
+
+	bool toggleDone();
+	bool togglePriority();
+
+	Day setStartDay();
+	int setStartDate();
+	int setStartTime();
+
+	Day setEndDay();
+	int setEndDate();
+	int setEndTime();
 };
 
 #endif
