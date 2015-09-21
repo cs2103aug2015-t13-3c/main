@@ -86,9 +86,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\TextBuddy\Command.cpp" />
     <ClCompile Include="..\TextBuddy\IO.cpp" />
     <ClCompile Include="..\TextBuddy\Logic.cpp" />
     <ClCompile Include="..\TextBuddy\Parser.cpp" />
+    <ClCompile Include="..\TextBuddy\Task.cpp" />
     <ClCompile Include="..\TextBuddy\UI.cpp" />
     <ClCompile Include="IOTest.cpp" />
     <ClCompile Include="LogicTest.cpp" />
