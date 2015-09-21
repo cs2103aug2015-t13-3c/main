@@ -3,22 +3,30 @@
 #include "stdafx.h"
 #include "Task.h"
 
+int Task::runningCount = 0;
+
  Task::Task() {
-	isDone = false;
-	isFloating = true;
-	isPriority = false;
-	date = "";
-	time = "";
+	type = FLOATING;
+	uniqueID = runningCount++;
 	label = "";
+	
+	isDone = false;
+	isPriority = false;
+		
+	day = MON;
+	dateStart = 0; // YYMMDD, supports 2015-2099
+	dateEnd = 0;
+	timeFrom = 0;  // HHMM, 24-hour format
+	timeTo = 0;    // HHMM, 24-hour format
 }
 
 Task::~Task() {}
 
-void Task::setTaskName(std::string restOfCommand) {
-	taskName = restOfCommand;
+void Task::setName(std::string restOfCommand) {
+	name = restOfCommand;
 	return;
 }
 
-std::string Task::getTaskName() {
-	return taskName;
+std::string Task::getName() {
+	return name;
 }

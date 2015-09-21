@@ -100,7 +100,7 @@ Task Parser::parseTask(std::string restOfCommand) {
 
 		switch(inputMode) {
 		case NAME:
-			newTask.setTaskName(restOfCommand);
+			newTask.setName(restOfCommand);
 		case DATE:
 		case DAY:
 			//newTask.toggleFloating();

@@ -3,6 +3,8 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+#include "stdafx.h"
+
 enum FieldType {
 	NAME,
 	DATE,
@@ -69,8 +71,8 @@ public:
 
 	bool getStatus();
 	static std::string parseFileName(char* argv[]);
-	static Command parseCommand(std::string userCommand);
-	static Task parseTask(std::string restOfCommand);
+	Command parseCommand(std::string userCommand);
+	Task parseTask(std::string restOfCommand);
 };
 
 #endif
