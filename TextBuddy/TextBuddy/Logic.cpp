@@ -44,7 +44,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 	int id;
 	id = idToDelete.getTaskToDelete();
 
-	for (iter = taskStore.begin(); iter < taskStore.end(); iter++) {
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getID() == id) {
 			taskStore.erase(iter);
 			break;
@@ -61,7 +61,7 @@ bool Logic::modifyInfo(Modify toModify) {
 
 	taskIter = taskStore.begin();
 	//tries to match ID of toModify with taskStore
-	while ((taskIter->getID() != tempTask.getID()) && (taskIter < taskStore.end())) {
+	while ((taskIter->getID() != tempTask.getID()) && (taskIter != taskStore.end())) {
 		taskIter++;
 	}
 
@@ -69,7 +69,7 @@ bool Logic::modifyInfo(Modify toModify) {
 		std::vector<FieldType> tempField = toModify.getFieldsToModify();
 		vector<FieldType>::iterator fieldIter;
 
-		for (fieldIter = tempField.begin(); fieldIter < tempField.end(); fieldIter++) {
+		for (fieldIter = tempField.begin(); fieldIter != tempField.end(); ++fieldIter) {
 			switch (*fieldIter) {
 			case NAME :
 				taskIter->setName(tempTask.getName());
