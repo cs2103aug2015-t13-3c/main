@@ -33,11 +33,12 @@ std::vector<Task> Logic::getCurrentView() {
 	return currentView;
 }
 
-void Logic::addInfo(Add taskName) {
+bool Logic::addInfo(Add taskName) {
 	taskStore.push_back(taskName.getNewTask());
+	return true;
 }
 
-void Logic::deleteInfo(Delete idToDelete) {
+bool Logic::deleteInfo(Delete idToDelete) {
 	vector<Task>::iterator iter;
 
 	int id;
@@ -49,6 +50,58 @@ void Logic::deleteInfo(Delete idToDelete) {
 			break;
 		}
 	}
+
+	return true;
+}
+
+bool Logic::modifyInfo(Modify toModify) {
+
+	vector<Task>::iterator taskIter;
+	Task tempTask = toModify.getTempTask();
+
+	taskIter = taskStore.begin();
+	//tries to match ID of toModify with taskStore
+	while ((taskIter->getID() != tempTask.getID()) && (taskIter < taskStore.end())) {
+		taskIter++;
+	}
+
+	if (taskIter->getID() == tempTask.getID()) {
+		std::vector<FieldType> tempField = toModify.getFieldsToModify();
+		vector<FieldType>::iterator fieldIter;
+
+		for (fieldIter = tempField.begin(); fieldIter < tempField.end(); fieldIter++) {
+			switch (*fieldIter) {
+			case NAME :
+				taskIter->setName(tempTask.getName());
+				break;
+			case START_DATE :
+				taskIter->setStartDate(tempTask.getStartDate());
+				break;
+			case END_DATE :
+				taskIter->setEndDate(tempTask.getEndDate());
+				break;
+			case START_DAY:
+				taskIter->setStartDay(tempTask.getStartDay());
+				break;
+			case END_DAY :
+				taskIter->setEndDay(tempTask.getEndDay());
+				break;
+			case START_TIME :
+				taskIter->setStartTime(tempTask.getStartTime());
+				break;
+			case END_TIME :
+				taskIter->setEndTime(tempTask.getEndTime());
+				break;
+			default:
+				std::cout << "Error in fetching field name" << std::endl;
+				break;
+			}
+		}
+		return true;
+	} else {
+		return false;
+	}
+
 }
 /*Keep for reference */
 /*

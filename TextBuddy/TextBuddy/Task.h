@@ -11,11 +11,12 @@ enum TaskType {
 
 enum FieldType {
 	NAME,
-	DATE,
-	DAY,
-	TIME_AT,
-	TIME_FROM,
-	TIME_TO,
+	START_DAY,
+	END_DAY,
+	START_DATE,
+	END_DATE,
+	START_TIME,
+	END_TIME,
 	PRIORITY,
 	LABEL
 };

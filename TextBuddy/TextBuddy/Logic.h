@@ -27,8 +27,9 @@ public:
 	int getSize();
 	std::vector<Task> getTaskStore();
 	std::vector<Task> getCurrentView();
-	void addInfo(Add taskName);
-	void deleteInfo(Delete idToDelete);
+	bool addInfo(Add taskName);
+	bool deleteInfo(Delete idToDelete);
+	bool modifyInfo(Modify toModify);
 };
 
 /* Keep for reference*/

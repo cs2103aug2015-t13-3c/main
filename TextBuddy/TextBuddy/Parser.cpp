@@ -99,26 +99,44 @@ Task Parser::parseTask(std::string restOfCommand) {
 		}
 
 		switch(inputMode) {
+//enum FieldType has changed
+/*
 		case NAME:
 			newTask.setName(restOfCommand);
-		case DATE:
-		case DAY:
+		case START_DATE :
+			break;
+		case END_DATE :
+			break;
+		case START_DAY:
+			break;
+		case END_DAY :
+			break;
+		case START_TIME :
+			break;
+		case END_TIME :
+			break;
+*/
+
+/*
+			case DATE:
+			case DAY:
 			//newTask.toggleFloating();
 			//newTask.setDate(inputString);
-		case TIME_AT:
+			case TIME_AT:
 			//newTask.setTimeAt(inputString);
-		case TIME_FROM:
+			case TIME_FROM:
 			//newTask.setTimeFrom(inputString);
-		case TIME_TO:
+			case TIME_TO:
 			//newTask.setTimeTo(inputString);
-		case PRIORITY:
+			case PRIORITY:
 			//newTask.togglePriority();
-		case LABEL:
+			case LABEL:
 			//newTask.setLabel(inputString);
 		default:
 			break;
+*/
 		}
-
+/*
 		if(equalsIgnoreCase(*curr, FIELD_DATE)) {
 			inputMode = DATE;
 		} else if(equalsIgnoreCase(*curr, FIELD_DAY)) {
@@ -134,6 +152,7 @@ Task Parser::parseTask(std::string restOfCommand) {
 		} else if(equalsIgnoreCase(*curr, FIELD_LABEL)) {
 			inputMode = LABEL;
 		}
+*/
 	}
 
 	return newTask;
