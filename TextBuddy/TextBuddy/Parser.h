@@ -23,13 +23,14 @@ private:
 	static const std::string COMMAND_EXIT;
 
 	// These are the possible field types for tasks
-	static const std::string FIELD_DATE;
-	static const std::string FIELD_DAY;
+	static const std::string FIELD_DATE_BY;
+	static const std::string FIELD_DATE_ON;
 	static const std::string FIELD_TIME_AT;
 	static const std::string FIELD_TIME_FROM;
 	static const std::string FIELD_TIME_TO;
 	static const std::string FIELD_PRIORITY;
 	static const std::string FIELD_LABEL;
+	static int runningCount;
 
 	// These are the locations at which various parameters appear
 	static const int PARAM_POSITION_TASK = 0;
@@ -38,14 +39,12 @@ private:
 	// This is the return value for invalid numbers
 	static const int INVALID_NUMBER_FORMAT = -1;
 
-	// These handle task parameters
-	static std::string parseDate(std::vector<std::string>);
-	static std::string parseTime(std::vector<std::string>);
-
 	// These functions support user methods
+	std::string vecToString(std::vector<std::string> inputString);
+	bool containsAny(std::string targetWord, std::string searchWords);
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
+	// static std::vector<std::string> splitParameters(std::string commandParametersString);
 	static bool isPositiveAndValidInt(std::string s);
-	static std::vector<std::string> splitParameters(std::string commandParametersString);
 	static std::string getFirstWord(std::string userCommand);
 	static std::string removeFirstWord(std::string userCommand);
 
@@ -63,6 +62,12 @@ public:
 	static std::string parseFileName(char* argv[]);
 	Command parseCommand(std::string userCommand);
 	Task parseTask(std::string restOfCommand);
+
+	// These handle task parameters
+	int parseDate(std::vector<std::string> inputString);
+	int parseTime(std::vector<std::string> inputString);
+	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
+	static std::vector<std::string> splitParameters(std::string commandParametersString);
 };
 
 #endif

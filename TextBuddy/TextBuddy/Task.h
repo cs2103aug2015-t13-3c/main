@@ -28,9 +28,9 @@ enum Month {
 };
 
 enum Day {
+	SUN,
 	MON, TUE, WED,
 	THU, FRI, SAT,
-	SUN
 };
 
 class Task {
@@ -89,7 +89,7 @@ public:
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
 
-	Day setEndDay(Day newEndDate);
+	bool setEndDay(Day newEndDate);
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
 };

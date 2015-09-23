@@ -1,6 +1,7 @@
 // @@author Aaron Chong Jun Hao
 
 #include "stdafx.h"
+#include <ctime>
 #include "Parser.h"
 
 Parser::Parser() {
@@ -28,8 +29,8 @@ const std::string Parser::COMMAND_SORT_ALL = "sort";
 const std::string Parser::COMMAND_EXIT = "exit";
 
 // These are the possible field types
-const std::string Parser::FIELD_DATE = "by";
-const std::string Parser::FIELD_DAY = "on";
+const std::string Parser::FIELD_DATE_BY = "by";
+const std::string Parser::FIELD_DATE_ON = "on";
 const std::string Parser::FIELD_TIME_AT = "at";
 const std::string Parser::FIELD_TIME_FROM = "from";
 const std::string Parser::FIELD_TIME_TO = "to";
@@ -83,28 +84,32 @@ Command Parser::parseCommand(std::string userCommand) {
 
 Task Parser::parseTask(std::string restOfCommand) {
 	std::vector<std::string> userInput = splitParameters(restOfCommand);
-	std::vector<std::string>::iterator curr;
+	std::vector<std::string>::iterator curr = userInput.begin();
 	Task newTask;
 	FieldType inputMode = NAME;
-	std::string inputString = "";
+	std::vector<std::string> inputString;
 
 	while(curr != userInput.end()) {
-		while(!equalsIgnoreCase(*curr, FIELD_DATE)
-			&& !equalsIgnoreCase(*curr, FIELD_DAY)
+		while(!equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			&& !equalsIgnoreCase(*curr, FIELD_DATE_ON)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_AT)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_FROM)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_TO)
 			&& !equalsIgnoreCase(*curr, FIELD_LABEL)) {
-				inputString += *curr;
+				inputString.push_back(*curr);
 		}
+
+		int newEndDate = 0;
 
 		switch(inputMode) {
 		case NAME:
-			newTask.setName(restOfCommand);
+			newTask.setName(vecToString(inputString));
 		case DATE:
 		case DAY:
-			//newTask.toggleFloating();
-			//newTask.setDate(inputString);
+			// if got from, newTask.setType(EVENT);
+			// else newTask.setType(TODO);
+			newEndDate = parseDate(inputString);
+			newTask.setEndDate(newEndDate);
 		case TIME_AT:
 			//newTask.setTimeAt(inputString);
 		case TIME_FROM:
@@ -119,10 +124,9 @@ Task Parser::parseTask(std::string restOfCommand) {
 			break;
 		}
 
-		if(equalsIgnoreCase(*curr, FIELD_DATE)) {
-			inputMode = DATE;
-		} else if(equalsIgnoreCase(*curr, FIELD_DAY)) {
-			inputMode = DAY;
+		if(equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			|| equalsIgnoreCase(*curr, FIELD_DATE_ON)) {
+				inputMode = DATE;
 		} else if(equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
 			inputMode = TIME_AT;
 		} else if(equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
@@ -139,6 +143,129 @@ Task Parser::parseTask(std::string restOfCommand) {
 	return newTask;
 }
 
+std::string Parser::vecToString(std::vector<std::string> inputString) {
+	std::string newString;
+	std::vector<std::string>::iterator curr;
+	for(curr=inputString.begin(); curr!=inputString.end(); ) {
+		newString += *curr;
+		if(++curr != inputString.end()) {
+			newString += " ";
+		}
+	}
+	return newString;
+}
+
+
+// Processes dates in the forms:
+// - this/next DDD
+// - DD MMM/MMMM
+int Parser::parseDate(std::vector<std::string> inputString) {
+	std::vector<std::string>::iterator curr;
+	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
+		std::transform((*curr).begin(), (*curr).end(), (*curr).begin(), ::tolower);
+	}
+	int newDate = 0;	
+
+	time_t t = time(0); // get time now
+	struct tm now;
+	localtime_s(&now,&t);
+	int year =	now.tm_year - 100; // tm_year: years since 1990
+	int month =	now.tm_mon + 1;    // tm_mon:  Jan starts at 0
+	int date =	now.tm_mday;
+	Day day =	(Day)(now.tm_wday);
+	// int sec =	now->tm_sec;
+	// int min =	now->tm_min;
+	// int hour =	now->tm_hour;
+
+	curr = inputString.begin();
+	if(*curr == "tmr" || *curr == "tomorrow") {
+		date++;
+		curr++;
+	} else if(*curr == "this") {
+		curr++;
+	} else if(*curr == "next") {
+		date += 7;
+		curr++;
+	}
+
+	if(curr!=inputString.end()) {
+		if(containsAny(*curr,"sun sunday")) {
+			date += (int)SUN - (int)day;
+			curr++;
+		} else if(containsAny(*curr,"mon monday")) {
+			date += (int)MON - (int)day;
+			curr++;
+		} else if(containsAny(*curr,"tue tues tuesday")) {
+			date += (int)TUE - (int)day;
+			curr++;
+		} else if(containsAny(*curr,"wed wednesday")) {
+			date += (int)WED - (int)day;
+			curr++;
+		} else if(containsAny(*curr,"thu thur thurs thursday")) {
+			date += (int)THU - (int)day;
+			curr++;
+		} else if(containsAny(*curr,"fri friday")) {
+			date += (int)FRI - (int)day;
+			curr++;
+		} else if(containsAny(*curr,"sat saturday")) {
+			date += (int)SAT - (int)day;
+			curr++;
+		}
+	}
+
+	int maxDays;
+	bool isLeap = ((year%4==0 && year%100!=0) || year%400==0);
+	switch(month) {
+	case 1:
+	case 3:
+	case 5:
+	case 7:
+	case 8:
+	case 10:
+	case 12:
+		maxDays = 31;
+		break;
+	case 4:
+	case 6:
+	case 9:
+	case 11:
+		maxDays = 30;
+		break;
+	case 2:
+		if(isLeap) {
+			maxDays = 29;
+		} else {
+			maxDays = 28;
+		}
+	default:
+		break;
+	}
+
+	if(date>maxDays) {
+		month++;
+		date-=maxDays;
+	}
+
+	if(curr == inputString.end()) {
+		newDate = year*10000 + month*100 + date;
+		// newTime = hour*10000 + min*100 + sec;
+	}
+
+	return newDate;
+}
+
+bool Parser::containsAny(std::string targetWord, std::string searchWords) {
+	std::vector<std::string> vecSearchWords = splitParameters(searchWords);
+	std::vector<std::string>::iterator curr;
+	
+	for(curr=vecSearchWords.begin(); curr!=vecSearchWords.end(); curr++) {
+		if(targetWord == *curr) {
+			return true;
+		}
+	}
+
+	return false;
+}
 
 // Internal methods
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)

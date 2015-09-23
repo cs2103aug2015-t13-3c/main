@@ -18,7 +18,7 @@ namespace TextBuddyTests
 			Assert::AreEqual(true,status);
 		}
 
-		TEST_METHOD(AddAndReturnInfoTest) {
+		TEST_METHOD(Logic_AddAndReturnInfoTest) {
 			Logic testLogic;
 			
 			Assert::AreEqual(std::string("Nothing to return."), testLogic.returnInfo(2));
@@ -30,7 +30,7 @@ namespace TextBuddyTests
 			Assert::AreEqual(std::string("Hello World!|150918|1357|151018|1457"), testLogic.returnInfo(2));
 		}
 
-		TEST_METHOD(DeleteInfoTest) {
+		TEST_METHOD(Logic_DeleteInfoTest) {
 			Logic testLogic;
 
 			testLogic.addInfo(std::string("abc"), 150718, 1157, 150818, 1257);
@@ -42,7 +42,7 @@ namespace TextBuddyTests
 
 		}
 
-		TEST_METHOD(SortTest) {
+		TEST_METHOD(Logic_SortTest) {
 			Logic testLogic;
 
 			testLogic.addInfo(std::string("abc"), 150718, 1357, 150818, 1257);
@@ -54,7 +54,7 @@ namespace TextBuddyTests
 			Assert::AreEqual(std::string("Hello World!|150808|1057|151018|1457"), testLogic.returnInfo(1));
 		}
 
-		TEST_METHOD(freeSlotSearch) {
+		TEST_METHOD(Logic_freeSlotSearch) {
 			Logic testLogic;
 			std::string freeSlot;
 
@@ -79,7 +79,7 @@ namespace TextBuddyTests
 			Assert::AreEqual(std::string("140718|1357"), freeSlot);
 		}
 
-		TEST_METHOD(AddTimeTest) {
+		TEST_METHOD(Logic_AddTimeTest) {
 			Logic testLogic;
 			int number;
 
@@ -87,7 +87,7 @@ namespace TextBuddyTests
 			Assert::AreEqual(2300, number);
 		}
 
-		TEST_METHOD(ChangeInfoTest) {
+		TEST_METHOD(Logic_ChangeInfoTest) {
 			Logic testLogic;
 
 			testLogic.addInfo(std::string("abc"), 150718, 1157, 150818, 1257);
