@@ -45,7 +45,7 @@ private:
 
 	bool isDone;
 	bool isPriority;
-	
+
 	Day startDay;
 	int startDate; // YYMMDD, supports 2015-2099
 	int startTime; // HHMM, 24-hour format
@@ -56,10 +56,10 @@ private:
 
 public:
 	static int getRunningCount();
-	
+
 	Task();
 	~Task();
-	
+
 	// Getters
 	std::string getName();
 	TaskType getType();
@@ -90,11 +90,7 @@ public:
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
 
-<<<<<<< HEAD
-	bool setEndDay(Day newEndDate);
-=======
 	bool setEndDay(Day newEndDay);
->>>>>>> 22c66777f9b6fd43e6328a41ae12b9422b1804ca
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
 };
