@@ -8,7 +8,7 @@ namespace TextBuddyTests
 	TEST_CLASS(LogicTest)
 	{
 	public:
-		
+		/*
 		TEST_METHOD(Logic_getStatus)
 		{
 			Logic logic(ON);
@@ -97,6 +97,6 @@ namespace TextBuddyTests
 
 			testLogic.changeInfo(std::string("Bye World!"), 151126, 1300, 151126, 1500, 3);
 			Assert::AreEqual(std::string("Bye World!|151126|1300|151126|1500"), testLogic.returnInfo(3));
-		}
+		}*/
 	};
 }

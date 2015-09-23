@@ -11,11 +11,12 @@ enum TaskType {
 
 enum FieldType {
 	NAME,
-	DATE,
-	DAY,
-	TIME_AT,
-	TIME_FROM,
-	TIME_TO,
+	START_DAY,
+	END_DAY,
+	START_DATE,
+	END_DATE,
+	START_TIME,
+	END_TIME,
 	PRIORITY,
 	LABEL
 };
@@ -89,7 +90,11 @@ public:
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
 
+<<<<<<< HEAD
 	bool setEndDay(Day newEndDate);
+=======
+	bool setEndDay(Day newEndDay);
+>>>>>>> 22c66777f9b6fd43e6328a41ae12b9422b1804ca
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
 };

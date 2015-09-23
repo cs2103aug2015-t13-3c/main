@@ -3,15 +3,108 @@
 #include "stdafx.h"
 #include "Logic.h"
 
+
+
 Logic::Logic() {
 	isActive = false;
-	sizeOfArray = 0;
 }
 
 Logic::Logic(bool status): isActive(status), io(ON) {}
 
 Logic::~Logic() {}
 
+bool Logic::getStatus() {
+	return isActive && canCallIO();
+}
+
+bool Logic::canCallIO() {
+	return io.getStatus();
+}
+
+int Logic::getSize() {
+	return taskStore.size();
+}
+
+std::vector<Task> Logic::getTaskStore() {
+	return taskStore;
+}
+
+std::vector<Task> Logic::getCurrentView() {
+	return currentView;
+}
+
+bool Logic::addInfo(Add taskName) {
+	taskStore.push_back(taskName.getNewTask());
+	return true;
+}
+
+bool Logic::deleteInfo(Delete idToDelete) {
+	vector<Task>::iterator iter;
+
+	int id;
+	id = idToDelete.getTaskToDelete();
+
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
+		if (iter->getID() == id) {
+			taskStore.erase(iter);
+			break;
+		}
+	}
+
+	return true;
+}
+
+bool Logic::modifyInfo(Modify toModify) {
+
+	vector<Task>::iterator taskIter;
+	Task tempTask = toModify.getTempTask();
+
+	taskIter = taskStore.begin();
+	//tries to match ID of toModify with taskStore
+	while ((taskIter->getID() != tempTask.getID()) && (taskIter != taskStore.end())) {
+		taskIter++;
+	}
+
+	if (taskIter->getID() == tempTask.getID()) {
+		std::vector<FieldType> tempField = toModify.getFieldsToModify();
+		vector<FieldType>::iterator fieldIter;
+
+		for (fieldIter = tempField.begin(); fieldIter != tempField.end(); ++fieldIter) {
+			switch (*fieldIter) {
+			case NAME :
+				taskIter->setName(tempTask.getName());
+				break;
+			case START_DATE :
+				taskIter->setStartDate(tempTask.getStartDate());
+				break;
+			case END_DATE :
+				taskIter->setEndDate(tempTask.getEndDate());
+				break;
+			case START_DAY:
+				taskIter->setStartDay(tempTask.getStartDay());
+				break;
+			case END_DAY :
+				taskIter->setEndDay(tempTask.getEndDay());
+				break;
+			case START_TIME :
+				taskIter->setStartTime(tempTask.getStartTime());
+				break;
+			case END_TIME :
+				taskIter->setEndTime(tempTask.getEndTime());
+				break;
+			default:
+				std::cout << "Error in fetching field name" << std::endl;
+				break;
+			}
+		}
+		return true;
+	} else {
+		return false;
+	}
+
+}
+/*Keep for reference */
+/*
 bool Logic::getStatus() {
 	return isActive && canCallIO();
 }
@@ -233,3 +326,4 @@ std::string Logic::freeSlotSearch(int date, int time) {
 		return freeSlot.str();
 	}
 }
+*/

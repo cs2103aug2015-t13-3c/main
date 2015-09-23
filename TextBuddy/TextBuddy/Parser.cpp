@@ -102,7 +102,10 @@ Task Parser::parseTask(std::string restOfCommand) {
 		int newEndDate = 0;
 
 		switch(inputMode) {
+//enum FieldType has changed
+/*
 		case NAME:
+<<<<<<< HEAD
 			newTask.setName(vecToString(inputString));
 		case DATE:
 		case DAY:
@@ -111,22 +114,54 @@ Task Parser::parseTask(std::string restOfCommand) {
 			newEndDate = parseDate(inputString);
 			newTask.setEndDate(newEndDate);
 		case TIME_AT:
+=======
+			newTask.setName(restOfCommand);
+		case START_DATE :
+			break;
+		case END_DATE :
+			break;
+		case START_DAY:
+			break;
+		case END_DAY :
+			break;
+		case START_TIME :
+			break;
+		case END_TIME :
+			break;
+*/
+
+/*
+			case DATE:
+			case DAY:
+			//newTask.toggleFloating();
+			//newTask.setDate(inputString);
+			case TIME_AT:
+>>>>>>> 22c66777f9b6fd43e6328a41ae12b9422b1804ca
 			//newTask.setTimeAt(inputString);
-		case TIME_FROM:
+			case TIME_FROM:
 			//newTask.setTimeFrom(inputString);
-		case TIME_TO:
+			case TIME_TO:
 			//newTask.setTimeTo(inputString);
-		case PRIORITY:
+			case PRIORITY:
 			//newTask.togglePriority();
-		case LABEL:
+			case LABEL:
 			//newTask.setLabel(inputString);
 		default:
 			break;
+*/
 		}
+<<<<<<< HEAD
 
 		if(equalsIgnoreCase(*curr, FIELD_DATE_BY)
 			|| equalsIgnoreCase(*curr, FIELD_DATE_ON)) {
 				inputMode = DATE;
+=======
+/*
+		if(equalsIgnoreCase(*curr, FIELD_DATE)) {
+			inputMode = DATE;
+		} else if(equalsIgnoreCase(*curr, FIELD_DAY)) {
+			inputMode = DAY;
+>>>>>>> 22c66777f9b6fd43e6328a41ae12b9422b1804ca
 		} else if(equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
 			inputMode = TIME_AT;
 		} else if(equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
@@ -138,6 +173,7 @@ Task Parser::parseTask(std::string restOfCommand) {
 		} else if(equalsIgnoreCase(*curr, FIELD_LABEL)) {
 			inputMode = LABEL;
 		}
+*/
 	}
 
 	return newTask;
