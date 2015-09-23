@@ -4,7 +4,7 @@
 #include "Logic.h"
 
 
-
+                                                                               
 Logic::Logic() {
 	isActive = false;
 }
