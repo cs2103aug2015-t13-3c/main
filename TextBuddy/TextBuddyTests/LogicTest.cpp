@@ -3,14 +3,11 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace TextBuddyTests
-{
-	TEST_CLASS(LogicTest)
-	{
+namespace TextBuddyTests {
+	TEST_CLASS(LogicTest) {
 	public:
-		/*
-		TEST_METHOD(Logic_getStatus)
-		{
+		
+		TEST_METHOD(Logic_getStatus) {
 			Logic logic(ON);
 
 			bool status = logic.getStatus();
@@ -18,6 +15,71 @@ namespace TextBuddyTests
 			Assert::AreEqual(true,status);
 		}
 
+		TEST_METHOD(Logic_addTaskDeleteTask) {
+			Logic logic;
+
+			//add
+
+			Task taskOne;
+			taskOne.setName("Sentence one.");
+			Add thisTask;
+			thisTask.setNewTask(taskOne);	//adds taskOne onto taskStore
+			logic.addInfo(thisTask);
+
+			std::vector<Task> copyTask;
+
+			copyTask = logic.getTaskStore();
+
+			std::vector<Task>::iterator iter;
+
+			iter = copyTask.begin();
+
+			Assert::AreEqual(std::string("Sentence one."), iter->getName());
+
+			Task taskTwo;
+			taskTwo.setName("Sentence two.");
+			thisTask.setNewTask(taskTwo);
+			logic.addInfo(thisTask);
+
+			copyTask = logic.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+
+			Assert::AreEqual(std::string("Sentence two."),iter->getName());
+
+			//delete
+
+			Delete index;
+			index.setTaskToDelete(0);
+			logic.deleteInfo(index);
+
+			copyTask = logic.getTaskStore();
+			iter = copyTask.begin();
+			Assert::AreEqual(std::string("Sentence two."),iter->getName());
+		}
+
+		TEST_METHOD(Logic_matchPhrase) {
+			Logic logic;
+			bool isTrue;
+
+			isTrue = logic.matchPhrase("hi", "high");
+			Assert::AreEqual(true, isTrue);
+			
+			isTrue = logic.matchPhrase("hi", "thigh");
+			Assert::AreEqual(true, isTrue);
+			
+			isTrue = logic.matchPhrase("high", "high");
+			Assert::AreEqual(true, isTrue);
+			
+			isTrue = logic.matchPhrase("hi", "h1gh");
+			Assert::AreEqual(false, isTrue);
+			
+			isTrue = logic.matchPhrase("thigh", "high");
+			Assert::AreEqual(false, isTrue);
+			
+		}
+
+		/*
 		TEST_METHOD(Logic_AddAndReturnInfoTest) {
 			Logic testLogic;
 			
