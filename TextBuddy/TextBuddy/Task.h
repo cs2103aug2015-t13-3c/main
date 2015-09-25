@@ -22,6 +22,7 @@ enum FieldType {
 };
 
 enum Month {
+	INVALID_MONTH,
 	JAN, FEB, MAR,
 	APR, MAY, JUN,
 	JUL, AUG, SEP,
@@ -32,6 +33,7 @@ enum Day {
 	SUN,
 	MON, TUE, WED,
 	THU, FRI, SAT,
+	INVALID_DAY
 };
 
 class Task {
