@@ -55,7 +55,6 @@ bool Logic::deleteInfo(Delete idToDelete) {
 }
 
 bool Logic::modifyInfo(Modify toModify) {
-
 	vector<Task>::iterator taskIter;
 	Task tempTask = toModify.getTempTask();
 
@@ -103,6 +102,59 @@ bool Logic::modifyInfo(Modify toModify) {
 	}
 
 }
+
+bool Logic::matchPhrase(std::string phr, std::string str) {
+	int j;
+	int k;
+	int strSize;
+
+	strSize = str.size();
+
+	for (int i = 0; i < strSize; i++) {
+		j = i;
+		k = 0;
+		if (str[j] == phr[k]) {
+			while (str[j] == phr[k]) {
+				j++;
+				k++;
+
+				if (k == phr.size()) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+//searches name for a phrase match, returns IDs of all matching tasks
+std::string Logic::searchInfo(Search toSearch) {
+	ostringstream indexString;
+	std::string searchPhrase;
+	std::string taskName;
+	std::string returnString;
+	int id;
+
+	searchPhrase = toSearch.getSearchPhrase();
+
+	std::vector<Task>::iterator iter;
+
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
+		taskName = iter->getName();
+
+		if (matchPhrase(searchPhrase, taskName) == true) {
+			id = iter->getID();
+			indexString << id << ",";
+		}
+	}
+
+	returnString = indexString.str();
+	returnString.pop_back();
+	return returnString;
+}
+
+
+
 /*Keep for reference */
 /*
 bool Logic::getStatus() {

@@ -30,6 +30,10 @@ public:
 	bool addInfo(Add taskName);
 	bool deleteInfo(Delete idToDelete);
 	bool modifyInfo(Modify toModify);
+	std::string searchInfo(Search toSearch);
+	
+	bool matchPhrase(std::string phr, std::string str);
+	
 };
 
 /* Keep for reference*/

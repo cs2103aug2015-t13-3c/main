@@ -40,6 +40,7 @@ private:
 	Task newTask;
 public:
 	Task getNewTask();
+	void setNewTask(Task aTask); //testing
 };
 
 class Delete: public Command {
@@ -47,6 +48,7 @@ private:
 	int taskToDelete;
 public:
 	int getTaskToDelete();
+	void setTaskToDelete(int index); //testing
 };
 
 class Modify: public Command {
@@ -63,6 +65,7 @@ private:
 	std::string searchPhrase;
 public:
 	std::string getSearchPhrase();
+	void setSearchPhrase(std::string phr); //testing
 };
 
 #endif

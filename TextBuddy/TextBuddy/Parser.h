@@ -42,6 +42,9 @@ private:
 	// These functions support user methods
 	std::string vecToString(std::vector<std::string> inputString);
 	bool containsAny(std::string targetWord, std::string searchWords);
+	int findMaxDays(Month month, int year=2015);
+	Month findMonth(std::string monthString);
+	Day findDay(std::string dayString);
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 	// static std::vector<std::string> splitParameters(std::string commandParametersString);
 	static bool isPositiveAndValidInt(std::string s);

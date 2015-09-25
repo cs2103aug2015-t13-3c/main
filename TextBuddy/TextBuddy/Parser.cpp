@@ -155,103 +155,87 @@ std::string Parser::vecToString(std::vector<std::string> inputString) {
 }
 
 
-// Processes dates in the forms:
-// - this/next DDD
-// - DD MMM/MMMM
+// Processes dates in these formats:
+// - DDD/DDDD
+// - this/next DDD/DDDD
+// - DD MM/MMM/MMMM
+// Week is defined as Sunday to Saturday
+// Returns 0 if invalid date
 int Parser::parseDate(std::vector<std::string> inputString) {
+	if(inputString.empty()) {
+		return 0;
+	}
+
 	std::vector<std::string>::iterator curr;
 	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
 		std::transform((*curr).begin(), (*curr).end(), (*curr).begin(), ::tolower);
 	}
-	int newDate = 0;	
+	int newDate = 0;
+	int maxDays = 0;
 
-	time_t t = time(0); // get time now
+	time_t t = time(0); // get current time
 	struct tm now;
 	localtime_s(&now,&t);
-	int year =	now.tm_year - 100; // tm_year: years since 1990
-	int month =	now.tm_mon + 1;    // tm_mon:  Jan starts at 0
-	int date =	now.tm_mday;
-	Day day =	(Day)(now.tm_wday);
-	// int sec =	now->tm_sec;
-	// int min =	now->tm_min;
-	// int hour =	now->tm_hour;
+	int year = now.tm_year - 100; // get current year, tm_year: years since 1990
 
 	curr = inputString.begin();
-	if(*curr == "tmr" || *curr == "tomorrow") {
-		date++;
+	if(!((*curr).empty()) && (*curr).find_first_not_of("0123456789")==std::string::npos) {
+		int dateInput = parseInt(*curr);
 		curr++;
-	} else if(*curr == "this") {
-		curr++;
-	} else if(*curr == "next") {
-		date += 7;
-		curr++;
-	}
 
-	if(curr!=inputString.end()) {
-		if(containsAny(*curr,"sun sunday")) {
-			date += (int)SUN - (int)day;
+		Month monthInput = findMonth(*curr);
+		if(monthInput != INVALID_MONTH) {
+			maxDays = findMaxDays(monthInput);
+		}
+
+		if(0<dateInput && dateInput<=maxDays) {
+			newDate = year*10000 + (int)monthInput*100 + dateInput;
+		}
+
+	} else {
+		Month month =	(Month)(now.tm_mon + 1); // tm_mon:  Jan starts at 0
+		Day day =		  (Day)(now.tm_wday);
+		int date =				now.tm_mday;
+
+		if(*curr == "tmr" || *curr == "tomorrow") {
+			date++;
 			curr++;
-		} else if(containsAny(*curr,"mon monday")) {
-			date += (int)MON - (int)day;
+		} else if(*curr == "this") {
 			curr++;
-		} else if(containsAny(*curr,"tue tues tuesday")) {
-			date += (int)TUE - (int)day;
-			curr++;
-		} else if(containsAny(*curr,"wed wednesday")) {
-			date += (int)WED - (int)day;
-			curr++;
-		} else if(containsAny(*curr,"thu thur thurs thursday")) {
-			date += (int)THU - (int)day;
-			curr++;
-		} else if(containsAny(*curr,"fri friday")) {
-			date += (int)FRI - (int)day;
-			curr++;
-		} else if(containsAny(*curr,"sat saturday")) {
-			date += (int)SAT - (int)day;
+		} else if(*curr == "next") {
+			date += 7;
 			curr++;
 		}
-	}
 
-	int maxDays;
-	bool isLeap = ((year%4==0 && year%100!=0) || year%400==0);
-	switch(month) {
-	case 1:
-	case 3:
-	case 5:
-	case 7:
-	case 8:
-	case 10:
-	case 12:
-		maxDays = 31;
-		break;
-	case 4:
-	case 6:
-	case 9:
-	case 11:
-		maxDays = 30;
-		break;
-	case 2:
-		if(isLeap) {
-			maxDays = 29;
-		} else {
-			maxDays = 28;
+		if(curr!=inputString.end()) {
+			Day newDay = findDay(*curr);
+			if(newDay != INVALID_DAY) {
+				date += (int)newDay - (int)day;
+				curr++;
+			}
 		}
-	default:
-		break;
-	}
 
-	if(date>maxDays) {
-		month++;
-		date-=maxDays;
-	}
+		if(curr == inputString.end()) {
+			maxDays = findMaxDays(month,year);
+			if(date>maxDays) {
+				month = (Month)(((int)month)+1);
+				date-=maxDays;
+			}
 
-	if(curr == inputString.end()) {
-		newDate = year*10000 + month*100 + date;
-		// newTime = hour*10000 + min*100 + sec;
+			Month maxMonth=DEC;
+			if(month>maxMonth) {
+				year++;
+				month = (Month)((int)month-(int)maxMonth);
+			}
+
+			newDate = year*10000 + (int)month*100 + date;
+		}
 	}
 
 	return newDate;
 }
+
+// Internal methods
 
 bool Parser::containsAny(std::string targetWord, std::string searchWords) {
 	std::vector<std::string> vecSearchWords = splitParameters(searchWords);
@@ -266,7 +250,88 @@ bool Parser::containsAny(std::string targetWord, std::string searchWords) {
 	return false;
 }
 
-// Internal methods
+int Parser::findMaxDays(Month month, int year) { // default year is 2015
+	int maxDays;
+	bool isLeap;
+	switch(month) {
+	case JAN:
+	case MAR:
+	case MAY:
+	case JUL:
+	case AUG:
+	case OCT:
+	case DEC:
+		maxDays = 31;
+		break;
+	case APR:
+	case JUN:
+	case SEP:
+	case NOV:
+		maxDays = 30;
+		break;
+	case FEB:
+		isLeap = ((year%4==0 && year%100!=0) || year%400==0);
+		if(isLeap) {
+			maxDays = 29;
+		} else {
+			maxDays = 28;
+		}
+	default:
+		break;
+	}
+	return maxDays;
+}
+
+Month Parser::findMonth(std::string monthString) {
+	Month monthInput = INVALID_MONTH;
+	if(containsAny(monthString,"1 jan january")) {
+		monthInput = JAN;
+	} else if(containsAny(monthString,"2 feb february")) {
+		monthInput = FEB;
+	} else if(containsAny(monthString,"3 mar march")) {
+		monthInput = MAR;
+	} else if(containsAny(monthString,"4 apr april")) {
+		monthInput = APR;
+	} else if(containsAny(monthString,"5 may")) {
+		monthInput = MAY;
+	} else if(containsAny(monthString,"6 jun june")) {
+		monthInput = JUN;
+	} else if(containsAny(monthString,"7 jul july")) {
+		monthInput = JUL;
+	} else if(containsAny(monthString,"8 aug august")) {
+		monthInput = AUG;
+	} else if(containsAny(monthString,"9 sep sept september")) {
+		monthInput = SEP;
+	} else if(containsAny(monthString,"10 oct october")) {
+		monthInput = OCT;
+	} else if(containsAny(monthString,"11 nov november")) {
+		monthInput = NOV;
+	} else if(containsAny(monthString,"12 dec december")) {
+		monthInput = DEC;
+	}
+	return monthInput;
+}
+
+Day Parser::findDay(std::string dayString) {
+	Day newDay = INVALID_DAY;
+	if(containsAny(dayString,"sun sunday")) {
+		newDay = SUN;
+	} else if(containsAny(dayString,"mon monday")) {
+		newDay = MON;
+	} else if(containsAny(dayString,"tue tues tuesday")) {
+		newDay = TUE;
+	} else if(containsAny(dayString,"wed wednesday")) {
+		newDay = WED;
+	} else if(containsAny(dayString,"thu thur thurs thursday")) {
+		newDay = THU;
+	} else if(containsAny(dayString,"fri friday")) {
+		newDay = FRI;
+	} else if(containsAny(dayString,"sat saturday")) {
+		newDay = SAT;
+	}
+	return newDay;
+}
+
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 
 bool Parser::isPositiveAndValidInt(std::string s) {
