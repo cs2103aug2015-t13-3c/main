@@ -62,10 +62,10 @@ namespace TextBuddyTests {
 			Logic logic;
 			bool isTrue;
 
-			isTrue = logic.matchPhrase("hi", "high");
+			isTrue = logic.matchPhrase("Hi", "high");
 			Assert::AreEqual(true, isTrue);
 			
-			isTrue = logic.matchPhrase("hi", "thigh");
+			isTrue = logic.matchPhrase("hi", "thIgh");
 			Assert::AreEqual(true, isTrue);
 			
 			isTrue = logic.matchPhrase("high", "high");
