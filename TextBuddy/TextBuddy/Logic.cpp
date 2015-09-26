@@ -107,7 +107,10 @@ bool Logic::matchPhrase(std::string phr, std::string str) {
 	int j;
 	int k;
 	int strSize;
-
+	
+	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+	std::transform(phr.begin(), phr.end(), phr.begin(), ::tolower);
+	
 	strSize = str.size();
 
 	for (int i = 0; i < strSize; i++) {
