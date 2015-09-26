@@ -5,16 +5,18 @@
 #include "Parser.h"
 
 Parser::Parser() {
-	isActive = false;
+	// isActive = false;
 }
-
-Parser::Parser(bool status): isActive(status) {}
 
 Parser::~Parser() {}
 
+/*
+Parser::Parser(bool status): isActive(status) {}
+
 bool Parser::getStatus() {
-	return isActive;
+return isActive;
 }
+*/
 
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
@@ -45,9 +47,7 @@ std::string Parser::parseFileName(char* argv[]) {
 	std::string newFileName = argv[1];
 	std::size_t fileExtensionPos = newFileName.size() - FILE_EXTENSION.size();
 	if(argv[1] + fileExtensionPos == FILE_EXTENSION) 	{
-
 		newFileName = argv[1];
-
 	} else {
 		newFileName = argv[1] + FILE_EXTENSION;
 	}
@@ -153,7 +153,6 @@ std::string Parser::vecToString(std::vector<std::string> inputString) {
 	}
 	return newString;
 }
-
 
 // Processes dates in these formats:
 // - DDD/DDDD

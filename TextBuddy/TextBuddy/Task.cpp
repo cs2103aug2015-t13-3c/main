@@ -56,8 +56,8 @@ bool Task::setType(TaskType newType) {
 }
 /*
 bool Task::setID(int newID) {
-	uniqueID = newID;
-	return true;
+uniqueID = newID;
+return true;
 }
 */
 bool Task::setLabel(std::string newLabel) {

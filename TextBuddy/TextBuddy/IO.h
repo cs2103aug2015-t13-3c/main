@@ -7,16 +7,15 @@
 
 using namespace std;
 
-class IO{
+class IO {
 private:
-	bool isActive;
+	// bool isActive;
 
 public:
 	IO();
-	IO(bool status);
 	~IO();
-
-	bool getStatus();
+	// IO(bool status);
+	// bool getStatus();
 
 	static vector<std::string> loadFile(string fileName);
 };
