@@ -9,14 +9,14 @@ namespace TextBuddyTests
 	{
 	public:
 		
-		TEST_METHOD(IO_getStatus)
+		/*TEST_METHOD(IO_getStatus)
 		{
 			IO io(ON);
 
 			bool status = io.getStatus();
 
 			Assert::AreEqual(true,status);
-		}
+		}*/
 
 		TEST_METHOD(IO_loadFile_emptyFile)
 		{

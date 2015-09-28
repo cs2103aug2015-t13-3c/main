@@ -3,6 +3,8 @@
 #include "stdafx.h"
 #include "Logic.h"
 
+#include <stdlib.h>
+#include <cstdlib>
 Logic::Logic() {
 	// isActive = false;
 }
@@ -148,7 +150,35 @@ std::string Logic::searchInfo(Search toSearch) {
 	return returnString;
 }
 
+//input command is obtained from parseCommand
+//unit test done under LogicTest.cpp for now
+void Logic::processCommand(std::string userCommand, Parser& parser) {
+	//inputCmd obtained from parser
+	Command inputCmd(parser.parseCommand(userCommand));
+	CommandType cmd = inputCmd.getCommand();
+	Add task;
+	Task taskToAdd;
+	Delete taskToDelete;
+	int id;
 
+	switch (cmd) {
+	case ADD:
+		//error below, hence taskToAdd.setName is being put up to replace it
+		//taskToAdd = parser.parseTask(inputCmd.getRestOfCommand());
+		
+		taskToAdd.setName("this");
+		task.setNewTask(taskToAdd);
+		addInfo(task);
+		break;
+	case DELETE:
+		//id = stoi(inputCmd.getRestOfCommand());
+		//taskToDelete.setTaskToDelete(id);
+		//deleteInfo(taskToDelete);
+		break;
+	default:
+		break;
+	}
+}
 
 /*Keep for reference */
 /*

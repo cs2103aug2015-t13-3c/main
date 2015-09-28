@@ -6,8 +6,9 @@
 #include "IO.h"
 #include "Command.h"
 #include "Task.h"
-
+#include "Parser.h"
 #include <string>
+#include <stdlib.h>
 #include <iostream>
 #include <sstream>
 
@@ -34,6 +35,7 @@ public:
 
 	bool matchPhrase(std::string phr, std::string str);
 
+	void processCommand(std::string userCommand, Parser& parser);
 };
 
 /* Keep for reference*/

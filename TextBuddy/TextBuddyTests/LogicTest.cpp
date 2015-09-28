@@ -7,13 +7,13 @@ namespace TextBuddyTests {
 	TEST_CLASS(LogicTest) {
 	public:
 		
-		TEST_METHOD(Logic_getStatus) {
+		/*TEST_METHOD(Logic_getStatus) {
 			Logic logic(ON);
 
 			bool status = logic.getStatus();
 
 			Assert::AreEqual(true,status);
-		}
+		}*/
 
 		TEST_METHOD(Logic_addTaskDeleteTask) {
 			Logic logic;
@@ -79,6 +79,36 @@ namespace TextBuddyTests {
 			
 		}
 
+		
+		TEST_METHOD(Logic_processInfo) {
+			Logic logic;
+			Parser parser;
+			Command inputCmd(ADD, "this", "ADD this");
+
+			logic.processCommand(std::string("Add this"), parser);
+			std::vector<Task> copyTask;
+
+			copyTask = logic.getTaskStore();
+
+			std::vector<Task>::iterator iter;
+
+			iter = copyTask.begin();
+
+			Assert::AreEqual(std::string("this"), iter->getName());
+
+			Task taskTwo;
+			Add thisTask;
+			taskTwo.setName("Sentence two.");
+			thisTask.setNewTask(taskTwo);
+			logic.addInfo(thisTask);
+
+			copyTask = logic.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+
+			Assert::AreEqual(std::string("Sentence two."),iter->getName());
+
+		}
 		/*
 		TEST_METHOD(Logic_AddAndReturnInfoTest) {
 			Logic testLogic;

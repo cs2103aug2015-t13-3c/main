@@ -104,6 +104,7 @@ Task Parser::parseTask(std::string restOfCommand) {
 		switch(inputMode) {
 		case NAME:
 			newTask.setName(vecToString(inputString));
+			break;
 		case START_DATE :
 		case END_DATE :
 		case START_DAY:

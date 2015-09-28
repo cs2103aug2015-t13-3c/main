@@ -14,12 +14,12 @@ namespace TextBuddyTests
 		std::vector<std::string> inputString;
 		int expected;
 
-		TEST_METHOD(Parser_getStatus)
+		/*TEST_METHOD(Parser_getStatus)
 		{
 			Parser parser(ON);
 			bool status = parser.getStatus();
 			Assert::AreEqual(true,status);
-		}
+		}*/
 
 		TEST_METHOD(Parser_parseDate)
 		{

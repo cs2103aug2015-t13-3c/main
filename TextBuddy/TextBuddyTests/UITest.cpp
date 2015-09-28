@@ -9,14 +9,14 @@ namespace TextBuddyTests
 	{
 	public:
 		
-		TEST_METHOD(UI_getStatus)
+		/*TEST_METHOD(UI_getStatus)
 		{
 			UI ui(ON);
 
 			bool status = ui.getStatus();
 
 			Assert::AreEqual(true,status);
-		}
+		}*/
 
 	};
 }

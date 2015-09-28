@@ -12,6 +12,7 @@
 #include "stdafx.h"
 #include "UI.h"
 
+
 int main(int argc, char* argv[]) {
 	UI textBuddy(argc,argv);
 	bool isNotExit = true;
@@ -26,6 +27,7 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
+
 
 // ==================================================
 //                      TO DELETE
