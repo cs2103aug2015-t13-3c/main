@@ -78,14 +78,14 @@ namespace TextBuddyTests {
 			Assert::AreEqual(false, isTrue);
 			
 		}
-
 		
 		TEST_METHOD(Logic_processInfo) {
 			Logic logic;
 			Parser parser;
-			Command inputCmd(ADD, "this", "ADD this");
 
+			//add
 			logic.processCommand(std::string("Add this"), parser);
+			logic.processCommand(std::string("Add that"), parser);
 			std::vector<Task> copyTask;
 
 			copyTask = logic.getTaskStore();
@@ -95,18 +95,9 @@ namespace TextBuddyTests {
 			iter = copyTask.begin();
 
 			Assert::AreEqual(std::string("this"), iter->getName());
-
-			Task taskTwo;
-			Add thisTask;
-			taskTwo.setName("Sentence two.");
-			thisTask.setNewTask(taskTwo);
-			logic.addInfo(thisTask);
-
-			copyTask = logic.getTaskStore();
-			iter = copyTask.begin();
 			++iter;
 
-			Assert::AreEqual(std::string("Sentence two."),iter->getName());
+			Assert::AreEqual(std::string("that"),iter->getName());
 
 		}
 		/*

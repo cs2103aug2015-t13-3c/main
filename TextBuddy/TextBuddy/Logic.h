@@ -35,7 +35,7 @@ public:
 
 	bool matchPhrase(std::string phr, std::string str);
 
-	void processCommand(std::string userCommand, Parser& parser);
+	std::string processCommand(std::string userCommand, Parser& parser);
 };
 
 /* Keep for reference*/

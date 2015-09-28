@@ -50,7 +50,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 
 bool Logic::modifyInfo(Modify toModify) {
 	vector<Task>::iterator taskIter;
-	Task tempTask = toModify.getTempTask();
+	Task tempTask = toModify.getTempTask();		//doing this will increase runningcount?
 
 	taskIter = taskStore.begin();
 	//tries to match ID of toModify with taskStore
@@ -152,32 +152,37 @@ std::string Logic::searchInfo(Search toSearch) {
 
 //input command is obtained from parseCommand
 //unit test done under LogicTest.cpp for now
-void Logic::processCommand(std::string userCommand, Parser& parser) {
+std::string Logic::processCommand(std::string userCommand, Parser& parser) {
 	//inputCmd obtained from parser
 	Command inputCmd(parser.parseCommand(userCommand));
 	CommandType cmd = inputCmd.getCommand();
 	Add task;
 	Task taskToAdd;
 	Delete taskToDelete;
-	//int id;
+	Search searchPhrase;
+	std::string output = "*";
+	int id;
 
 	switch (cmd) {
 	case ADD:
-		//error below, hence taskToAdd.setName is being put up to replace it
 		taskToAdd = parser.parseTask(inputCmd.getRestOfCommand());
-		
-		//taskToAdd.setName("this");
 		task.setNewTask(taskToAdd);
 		addInfo(task);
 		break;
 	case DELETE:
-		//id = stoi(inputCmd.getRestOfCommand());
-		//taskToDelete.setTaskToDelete(id);
-		//deleteInfo(taskToDelete);
+		//error due to ID issue because my method requires temp tasks to be created, increasing runningCount 
+		id = stoi(inputCmd.getRestOfCommand());
+		taskToDelete.setTaskToDelete(id);
+		deleteInfo(taskToDelete);
 		break;
+	case SEARCH:
+		//error due to ID issue
+		searchPhrase.setSearchPhrase(inputCmd.getRestOfCommand());
+		output = searchInfo(searchPhrase);
 	default:
 		break;
 	}
+	return output;
 }
 
 /*Keep for reference */

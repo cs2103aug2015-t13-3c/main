@@ -4,14 +4,13 @@
 * Version Info: V0.1
 *
 * @@author Aaron Chong Jun Hao
-* @@author Chin Boon Kiat
+* @@author Chin Kiat Boon
 * @@author Ng Ren Zhi
 * @@author Soon Hao Ye
 */
 
 #include "stdafx.h"
 #include "UI.h"
-
 
 int main(int argc, char* argv[]) {
 	UI textBuddy(argc,argv);
