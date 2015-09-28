@@ -90,15 +90,18 @@ Task Parser::parseTask(std::string restOfCommand) {
 	std::vector<std::string> inputString;
 
 	while(curr != userInput.end()) {
-		while(!equalsIgnoreCase(*curr, FIELD_DATE_BY)
+		while(curr != userInput.end()
+			&& !equalsIgnoreCase(*curr, FIELD_DATE_BY)
 			&& !equalsIgnoreCase(*curr, FIELD_DATE_ON)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_AT)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_FROM)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_TO)
 			&& !equalsIgnoreCase(*curr, FIELD_LABEL)) {
 				inputString.push_back(*curr);
+				curr++;
 		}
 
+		int newStartDate = 0;
 		int newEndDate = 0;
 
 		switch(inputMode) {
@@ -106,25 +109,35 @@ Task Parser::parseTask(std::string restOfCommand) {
 			newTask.setName(vecToString(inputString));
 			break;
 		case START_DATE :
-		case END_DATE :
 		case START_DAY:
+			newTask.setType(EVENT);
+			newStartDate = parseDate(inputString);
+			newTask.setStartDate(newStartDate);
+			break;
+		case END_DATE :
 		case END_DAY :
-			// if got from, newTask.setType(EVENT);
-			// else newTask.setType(TODO);
+			if(newTask.getType() == FLOATING) {
+				newTask.setType(TODO);
+			}
 			newEndDate = parseDate(inputString);
 			newTask.setEndDate(newEndDate);
 			break;
 		case START_TIME :
 		case END_TIME :
+			break;
 		case PRIORITY:
-			//newTask.togglePriority();
+			newTask.togglePriority();
+			break;
 		case LABEL:
-			//newTask.setLabel(inputString);
+			newTask.setLabel(vecToString(inputString));
+			break;
 		default:
 			break;
 		}
 
-		if(equalsIgnoreCase(*curr, FIELD_DATE_BY)
+		if(curr == userInput.end()) {
+			break;
+		} else if(equalsIgnoreCase(*curr, FIELD_DATE_BY)
 			|| equalsIgnoreCase(*curr, FIELD_DATE_ON)) {
 				inputMode = END_DATE;
 		} else if(equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
@@ -138,6 +151,7 @@ Task Parser::parseTask(std::string restOfCommand) {
 		} else if(equalsIgnoreCase(*curr, FIELD_LABEL)) {
 			inputMode = LABEL;
 		}
+		curr++;
 	}
 
 	return newTask;
@@ -234,6 +248,7 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 
 	return newDate;
 }
+
 
 // Internal methods
 
@@ -406,4 +421,26 @@ std::string Parser::replace(std::string a, std::string b, std::string c) {
 		if(pos != -1) a.replace(pos, b.length(), c);
 	} while (pos != -1);
 	return a;
+}
+
+// Temporary methods for unit testing
+std::string Parser::taskToBuffer(Task task) {
+	const int MAX_BYTES = 2550;
+	char buffer[MAX_BYTES] = "";
+
+	sprintf_s(buffer, "%s%s\n"/*"%s%d\n%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n"/*11 outputs*/,
+		"Name: ",		task.getName().c_str()/*,
+		"Type: ",		task.getType(),
+		"Label: ",		task.getLabel().c_str(),
+		"Done: ",		task.getDoneStatus(),
+		"Priority: ",	task.getPriorityStatus(),
+		"Start Day: ",	task.getStartDay(),
+		"Start Date: ",	task.getStartDate(),
+		"Start Time: ",	task.getStartTime(),
+		"End Day: ",	task.getEndDay(),
+		"End Date: ",	task.getEndDate(),
+		"End Time: ",	task.getEndTime()*/
+		);
+
+	return buffer;
 }

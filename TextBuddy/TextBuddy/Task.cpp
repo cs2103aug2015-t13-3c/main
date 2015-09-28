@@ -6,6 +6,7 @@
 int Task::runningCount = 0;
 
 Task::Task() {
+	name = "";
 	type = FLOATING;
 	uniqueID = runningCount++;
 	label = "";
@@ -13,11 +14,11 @@ Task::Task() {
 	isDone = false;
 	isPriority = false;
 
-	startDay = MON;
+	startDay = SUN;
 	startDate = 0; // YYMMDD, supports 2015-2099
 	startTime = 0; // HHMM, 24-hour format
 
-	endDay = MON;
+	endDay = SUN;
 	endDate = 0;
 	endTime = 0;
 }
@@ -45,8 +46,8 @@ int Task::getEndTime() {return endTime;}
 
 // Setters, return true if successful
 
-bool Task::setName(std::string restOfCommand) {
-	name = restOfCommand;
+bool Task::setName(std::string newName) {
+	name = newName;
 	return true;
 }
 
@@ -54,12 +55,12 @@ bool Task::setType(TaskType newType) {
 	type = newType;
 	return true;
 }
-/*
+
 bool Task::setID(int newID) {
 uniqueID = newID;
 return true;
 }
-*/
+
 bool Task::setLabel(std::string newLabel) {
 	label = newLabel;
 	return true;

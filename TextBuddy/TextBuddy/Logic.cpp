@@ -159,14 +159,14 @@ void Logic::processCommand(std::string userCommand, Parser& parser) {
 	Add task;
 	Task taskToAdd;
 	Delete taskToDelete;
-	int id;
+	//int id;
 
 	switch (cmd) {
 	case ADD:
 		//error below, hence taskToAdd.setName is being put up to replace it
-		//taskToAdd = parser.parseTask(inputCmd.getRestOfCommand());
+		taskToAdd = parser.parseTask(inputCmd.getRestOfCommand());
 		
-		taskToAdd.setName("this");
+		//taskToAdd.setName("this");
 		task.setNewTask(taskToAdd);
 		addInfo(task);
 		break;

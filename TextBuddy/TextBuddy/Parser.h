@@ -40,7 +40,7 @@ private:
 	static const int INVALID_NUMBER_FORMAT = -1;
 
 	// These functions support user methods
-	static std::string vecToString(std::vector<std::string> inputString);
+	// static std::string vecToString(std::vector<std::string> inputString);
 	static bool containsAny(std::string targetWord, std::string searchWords);
 	static int findMaxDays(Month month, int year=2015);
 	static Month findMonth(std::string monthString);
@@ -71,6 +71,10 @@ public:
 	static int parseTime(std::vector<std::string> inputString);
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 	static std::vector<std::string> splitParameters(std::string commandParametersString);
+
+	// Temporary methods for unit testing
+	static std::string vecToString(std::vector<std::string> inputString);
+	static std::string taskToBuffer(Task taskToConvert);
 };
 
 #endif
