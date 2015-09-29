@@ -15,6 +15,7 @@
 class Logic {
 private:
 	// bool isActive;
+	Parser parser;
 	IO io;
 	std::vector<Task> taskStore;
 	std::vector<Task> currentView;
@@ -37,7 +38,7 @@ public:
 	std::string searchInfo(Search toSearch);
 
 	bool matchPhrase(std::string phr, std::string str);		
-	std::string processCommand(std::string userCommand, Parser& parser);
+	std::string processCommand(std::string userCommand);
 };
 
 /* Keep for reference*/

@@ -84,8 +84,8 @@ namespace TextBuddyTests {
 			Parser parser;
 
 			//add
-			logic.processCommand(std::string("Add this"), parser);
-			logic.processCommand(std::string("Add that"), parser);
+			logic.processCommand(std::string("Add this"));
+			logic.processCommand(std::string("Add that"));
 			std::vector<Task> copyTask;
 
 			copyTask = logic.getTaskStore();
@@ -100,7 +100,7 @@ namespace TextBuddyTests {
 			Assert::AreEqual(std::string("that"),iter->getName());
 
 			//delete
-			logic.processCommand(std::string("Delete 1"), parser);
+			logic.processCommand(std::string("Delete 1"));
 			copyTask = logic.getTaskStore();
 			iter = copyTask.begin();
 			Assert::AreEqual(std::string("that"), iter->getName());

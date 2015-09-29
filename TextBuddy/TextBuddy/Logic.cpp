@@ -176,7 +176,7 @@ std::string Logic::searchInfo(Search toSearch) {
 
 //input command is obtained from parseCommand
 //returns string of IDs with search, returns "*" for add/delete
-std::string Logic::processCommand(std::string userCommand, Parser& parser) {
+std::string Logic::processCommand(std::string userCommand) {
 	//inputCmd obtained from parser
 	Command inputCmd(parser.parseCommand(userCommand));
 	CommandType cmd = inputCmd.getCommand();
