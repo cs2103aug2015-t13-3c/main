@@ -72,9 +72,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MainExe\MainExe.vcxproj">
-      <Project>{3b246068-53d6-4f4b-9ece-1ef8ee4171ef}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\TextBuddy\TextBuddy.vcxproj">
       <Project>{fdc1c2e8-403d-4502-9ef0-cc40b3ccf970}</Project>
     </ProjectReference>

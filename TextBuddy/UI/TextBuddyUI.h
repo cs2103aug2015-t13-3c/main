@@ -14,87 +14,35 @@ namespace UserInterface {
 	using namespace System::Drawing;
 	using namespace System::Threading;
 
-	/// <summary>
-	/// Summary for TextBuddyUI
-	/// </summary>
-	public ref class TextBuddyUI : public System::Windows::Forms::Form
-	{
-	private:
-		//TODO : INITIALIZE LOGIC OBJECT
+	public ref class TextBuddyUI : public System::Windows::Forms::Form {
 
 	public:
-		TextBuddyUI(void)
-		{
+		TextBuddyUI(void) {
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
-			
+			logic = new Logic();
 		}
 
 	protected:
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		~TextBuddyUI()
-		{
-			if (components)
-			{
+		~TextBuddyUI() {
+			if (components) {
 				delete components;
-				
+				delete logic;
 			}
-		//	attachThread->Abort();
-		//	hotKeyThread->Abort();
 		}
 	private:
 		System::Windows::Forms::TextBox^  input;
-		Thread^ attachThread;
-		Thread^ hotKeyThread;
+	private: System::Windows::Forms::RichTextBox^  display;
 
-	private: System::Windows::Forms::TextBox^  feedback;
-	protected:
-
-	private:
-		void attachThreadToOtherApps() {
-			while (true) {
-				DWORD foreThread = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
-				DWORD appThread = GetCurrentThreadId();
-				//	const DWORD SW_SHOW = 5;
-
-				if (foreThread != appThread) {
-					AttachThreadInput(foreThread, appThread, true);
-					//		BringWindowToTop(hWnd);
-					//		ShowWindow(hWnd, SW_SHOW);
-				}
-			}
-		}
-
-		void forceWindowPopUp() {
-			while (true) {
-				MSG msg;
-				if (GetMessage(&msg, nullptr, 0, 0)) {
-					if (true) {
-						MessageBox::Show("hotkey!");
-						SetForegroundWindow(static_cast<HWND>(Handle.ToPointer()));
-					}
-				}
-			}
-		}
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+		System::Windows::Forms::TextBox^  feedback;
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		void InitializeComponent(void)
-		{
+
+		/// Required method for Designer support - do not modify	
+		void InitializeComponent(void) {
 			this->input = (gcnew System::Windows::Forms::TextBox());
 			this->feedback = (gcnew System::Windows::Forms::TextBox());
+			this->display = (gcnew System::Windows::Forms::RichTextBox());
 			this->SuspendLayout();
 			// 
 			// input
@@ -120,6 +68,14 @@ namespace UserInterface {
 			this->feedback->Size = System::Drawing::Size(422, 13);
 			this->feedback->TabIndex = 1;
 			// 
+			// display
+			// 
+			this->display->Location = System::Drawing::Point(13, 13);
+			this->display->Name = L"display";
+			this->display->Size = System::Drawing::Size(421, 381);
+			this->display->TabIndex = 2;
+			this->display->Text = L"";
+			// 
 			// TextBuddyUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -127,6 +83,7 @@ namespace UserInterface {
 			this->BackColor = System::Drawing::SystemColors::Control;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->ClientSize = System::Drawing::Size(449, 440);
+			this->Controls->Add(this->display);
 			this->Controls->Add(this->input);
 			this->Controls->Add(this->feedback);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
@@ -138,14 +95,40 @@ namespace UserInterface {
 
 		}
 #pragma endregion
-	private: System::Void input_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-		if (e->KeyCode == Keys::Return) {
-			// call logic
 
-			//get input
+// author : Soon Hao Ye
+
+	private:
+		std::string* userInput;
+		std::string* userFeedback_cppString;
+		Logic* logic ;
+
+	private:
+		
+		void getInput() {
+			//convert CLR/C++ String to C++ std::string
 			msclr::interop::marshal_context context;
-			std::string userInput = context.marshal_as<std::string>(input->Text);
+			userInput = new std::string(context.marshal_as<std::string>(input->Text));
 			input->Clear();
+		}
+
+		void processAndExecute() {
+			userFeedback_cppString = new std::string;
+			*userFeedback_cppString = logic->processCommand(*userInput);
+			String^ userFeedback = gcnew String(userFeedback_cppString->c_str());
+			display->AppendText(userFeedback);
+			delete userInput;
+		}
+
+
+//=======================EVENT HANDLERS=======================================
+
+	// get input and calls logic when return key is pressed
+	private: System::Void input_KeyDown(System::Object^  sender, 
+				 System::Windows::Forms::KeyEventArgs^  e) {
+		if (e->KeyCode == Keys::Return) { //if user presses 'Return' key
+			getInput();
+			processAndExecute();
 		}
 	}
 
