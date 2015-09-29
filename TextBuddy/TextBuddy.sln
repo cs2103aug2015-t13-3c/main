@@ -5,6 +5,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextBuddy", "TextBuddy\Text
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextBuddyTests", "TextBuddyTests\TextBuddyTests.vcxproj", "{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "UI\UI.vcxproj", "{6F466EAC-A8B9-4298-AB26-869D6A59BB17}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MainExe", "MainExe\MainExe.vcxproj", "{3B246068-53D6-4F4B-9ECE-1EF8EE4171EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +23,14 @@ Global
 		{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}.Debug|Win32.Build.0 = Debug|Win32
 		{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}.Release|Win32.ActiveCfg = Release|Win32
 		{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}.Release|Win32.Build.0 = Release|Win32
+		{6F466EAC-A8B9-4298-AB26-869D6A59BB17}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6F466EAC-A8B9-4298-AB26-869D6A59BB17}.Debug|Win32.Build.0 = Debug|Win32
+		{6F466EAC-A8B9-4298-AB26-869D6A59BB17}.Release|Win32.ActiveCfg = Release|Win32
+		{6F466EAC-A8B9-4298-AB26-869D6A59BB17}.Release|Win32.Build.0 = Release|Win32
+		{3B246068-53D6-4F4B-9ECE-1EF8EE4171EF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3B246068-53D6-4F4B-9ECE-1EF8EE4171EF}.Debug|Win32.Build.0 = Debug|Win32
+		{3B246068-53D6-4F4B-9ECE-1EF8EE4171EF}.Release|Win32.ActiveCfg = Release|Win32
+		{3B246068-53D6-4F4B-9ECE-1EF8EE4171EF}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

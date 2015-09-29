@@ -27,3 +27,38 @@ std::string Command::getRestOfCommand() {
 std::string Command::getUserInput() {
 	return userInput;
 }
+
+void Add::setNewTask(Task aTask) {
+	newTask = aTask;
+	return;
+}
+
+Task Add::getNewTask() {
+	return newTask;
+}
+
+void Delete::setTaskToDelete(int index) {
+	taskToDelete = index;
+	return;
+}
+
+int Delete::getTaskToDelete() {
+	return taskToDelete;
+}
+
+std::vector<FieldType> Modify::getFieldsToModify() {
+	return fieldsToModify;
+}
+
+Task Modify::getTempTask() {
+	return tempTask;
+}
+
+std::string Search::getSearchPhrase() {
+	return searchPhrase;
+}
+
+void Search::setSearchPhrase(std::string phr) {
+	searchPhrase = phr;
+	return;
+}

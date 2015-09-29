@@ -11,16 +11,18 @@ enum TaskType {
 
 enum FieldType {
 	NAME,
-	DATE,
-	DAY,
-	TIME_AT,
-	TIME_FROM,
-	TIME_TO,
+	START_DAY,
+	END_DAY,
+	START_DATE,
+	END_DATE,
+	START_TIME,
+	END_TIME,
 	PRIORITY,
 	LABEL
 };
 
 enum Month {
+	INVALID_MONTH,
 	JAN, FEB, MAR,
 	APR, MAY, JUN,
 	JUL, AUG, SEP,
@@ -28,9 +30,10 @@ enum Month {
 };
 
 enum Day {
+	SUN,
 	MON, TUE, WED,
 	THU, FRI, SAT,
-	SUN
+	INVALID_DAY
 };
 
 class Task {
@@ -44,7 +47,7 @@ private:
 
 	bool isDone;
 	bool isPriority;
-	
+
 	Day startDay;
 	int startDate; // YYMMDD, supports 2015-2099
 	int startTime; // HHMM, 24-hour format
@@ -55,10 +58,10 @@ private:
 
 public:
 	static int getRunningCount();
-	
+
 	Task();
 	~Task();
-	
+
 	// Getters
 	std::string getName();
 	TaskType getType();
@@ -89,7 +92,7 @@ public:
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
 
-	Day setEndDay(Day newEndDate);
+	bool setEndDay(Day newEndDay);
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
 };

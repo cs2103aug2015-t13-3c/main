@@ -7,15 +7,15 @@
 #include<vector>
 
 class IO{
+
 private:
-	bool isActive;
+	// bool isActive;
 
 public:
 	IO();
-	IO(bool status);
 	~IO();
-
-	bool getStatus();
+	// IO(bool status);
+	// bool getStatus();
 
 	static std::vector<Task> loadFile(std::string fileName);
 	static bool saveFile(std::string fileName, std::vector<Task>);

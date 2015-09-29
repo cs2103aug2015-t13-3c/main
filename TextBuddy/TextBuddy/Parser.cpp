@@ -1,19 +1,22 @@
 // @@author Aaron Chong Jun Hao
 
 #include "stdafx.h"
+#include <ctime>
 #include "Parser.h"
 
 Parser::Parser() {
-	isActive = false;
+	// isActive = false;
 }
-
-Parser::Parser(bool status): isActive(status) {}
 
 Parser::~Parser() {}
 
+/*
+Parser::Parser(bool status): isActive(status) {}
+
 bool Parser::getStatus() {
-	return isActive;
+return isActive;
 }
+*/
 
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
@@ -28,8 +31,8 @@ const std::string Parser::COMMAND_SORT_ALL = "sort";
 const std::string Parser::COMMAND_EXIT = "exit";
 
 // These are the possible field types
-const std::string Parser::FIELD_DATE = "by";
-const std::string Parser::FIELD_DAY = "on";
+const std::string Parser::FIELD_DATE_BY = "by";
+const std::string Parser::FIELD_DATE_ON = "on";
 const std::string Parser::FIELD_TIME_AT = "at";
 const std::string Parser::FIELD_TIME_FROM = "from";
 const std::string Parser::FIELD_TIME_TO = "to";
@@ -44,9 +47,7 @@ std::string Parser::parseFileName(char* argv[]) {
 	std::string newFileName = argv[1];
 	std::size_t fileExtensionPos = newFileName.size() - FILE_EXTENSION.size();
 	if(argv[1] + fileExtensionPos == FILE_EXTENSION) 	{
-
 		newFileName = argv[1];
-
 	} else {
 		newFileName = argv[1] + FILE_EXTENSION;
 	}
@@ -83,64 +84,269 @@ Command Parser::parseCommand(std::string userCommand) {
 
 Task Parser::parseTask(std::string restOfCommand) {
 	std::vector<std::string> userInput = splitParameters(restOfCommand);
-	std::vector<std::string>::iterator curr;
+	std::vector<std::string>::iterator curr = userInput.begin();
 	Task newTask;
 	FieldType inputMode = NAME;
-	std::string inputString = "";
+	std::vector<std::string> inputString;
 
 	while(curr != userInput.end()) {
-		while(!equalsIgnoreCase(*curr, FIELD_DATE)
-			&& !equalsIgnoreCase(*curr, FIELD_DAY)
+		while(curr != userInput.end()
+			&& !equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			&& !equalsIgnoreCase(*curr, FIELD_DATE_ON)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_AT)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_FROM)
 			&& !equalsIgnoreCase(*curr, FIELD_TIME_TO)
 			&& !equalsIgnoreCase(*curr, FIELD_LABEL)) {
-				inputString += *curr;
+				inputString.push_back(*curr);
+				curr++;
 		}
+
+		int newStartDate = 0;
+		int newEndDate = 0;
 
 		switch(inputMode) {
 		case NAME:
-			newTask.setName(restOfCommand);
-		case DATE:
-		case DAY:
-			//newTask.toggleFloating();
-			//newTask.setDate(inputString);
-		case TIME_AT:
-			//newTask.setTimeAt(inputString);
-		case TIME_FROM:
-			//newTask.setTimeFrom(inputString);
-		case TIME_TO:
-			//newTask.setTimeTo(inputString);
+			newTask.setName(vecToString(inputString));
+			break;
+		case START_DATE :
+		case START_DAY:
+			newTask.setType(EVENT);
+			newStartDate = parseDate(inputString);
+			newTask.setStartDate(newStartDate);
+			break;
+		case END_DATE :
+		case END_DAY :
+			if(newTask.getType() == FLOATING) {
+				newTask.setType(TODO);
+			}
+			newEndDate = parseDate(inputString);
+			newTask.setEndDate(newEndDate);
+			break;
+		case START_TIME :
+		case END_TIME :
+			break;
 		case PRIORITY:
-			//newTask.togglePriority();
+			newTask.togglePriority();
+			break;
 		case LABEL:
-			//newTask.setLabel(inputString);
+			newTask.setLabel(vecToString(inputString));
+			break;
 		default:
 			break;
 		}
 
-		if(equalsIgnoreCase(*curr, FIELD_DATE)) {
-			inputMode = DATE;
-		} else if(equalsIgnoreCase(*curr, FIELD_DAY)) {
-			inputMode = DAY;
-		} else if(equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
-			inputMode = TIME_AT;
+		if(curr == userInput.end()) {
+			break;
+		} else if(equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			|| equalsIgnoreCase(*curr, FIELD_DATE_ON)) {
+				inputMode = END_DATE;
 		} else if(equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
-			inputMode = TIME_FROM;
+			inputMode = START_TIME;
+		} else if(equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
+			inputMode = END_TIME;
 		} else if(equalsIgnoreCase(*curr, FIELD_TIME_TO)) {
-			inputMode = TIME_TO;
-		} else if(equalsIgnoreCase(*curr, FIELD_TIME_TO)) {
+			inputMode = END_TIME;
+		} else if(equalsIgnoreCase(*curr, FIELD_PRIORITY)) {
 			inputMode = PRIORITY;
 		} else if(equalsIgnoreCase(*curr, FIELD_LABEL)) {
 			inputMode = LABEL;
 		}
+		curr++;
 	}
 
 	return newTask;
 }
 
+std::string Parser::vecToString(std::vector<std::string> inputString) {
+	std::string newString;
+	std::vector<std::string>::iterator curr;
+	for(curr=inputString.begin(); curr!=inputString.end(); ) {
+		newString += *curr;
+		if(++curr != inputString.end()) {
+			newString += " ";
+		}
+	}
+	return newString;
+}
+
+// Processes dates in these formats:
+// - DDD/DDDD
+// - this/next DDD/DDDD
+// - DD MM/MMM/MMMM
+// Week is defined as Sunday to Saturday
+// Returns 0 if invalid date
+int Parser::parseDate(std::vector<std::string> inputString) {
+	if(inputString.empty()) {
+		return 0;
+	}
+
+	std::vector<std::string>::iterator curr;
+	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
+		std::transform((*curr).begin(), (*curr).end(), (*curr).begin(), ::tolower);
+	}
+	int newDate = 0;
+	int maxDays = 0;
+
+	time_t t = time(0); // get current time
+	struct tm now;
+	localtime_s(&now,&t);
+	int year = now.tm_year - 100; // get current year, tm_year: years since 1990
+
+	curr = inputString.begin();
+	if(!((*curr).empty()) && (*curr).find_first_not_of("0123456789")==std::string::npos) {
+		int dateInput = parseInt(*curr);
+		curr++;
+
+		Month monthInput = findMonth(*curr);
+		if(monthInput != INVALID_MONTH) {
+			maxDays = findMaxDays(monthInput);
+		}
+
+		if(0<dateInput && dateInput<=maxDays) {
+			newDate = year*10000 + (int)monthInput*100 + dateInput;
+		}
+
+	} else {
+		Month month =	(Month)(now.tm_mon + 1); // tm_mon:  Jan starts at 0
+		Day day =		  (Day)(now.tm_wday);
+		int date =				now.tm_mday;
+
+		if(*curr == "tmr" || *curr == "tomorrow") {
+			date++;
+			curr++;
+		} else if(*curr == "this") {
+			curr++;
+		} else if(*curr == "next") {
+			date += 7;
+			curr++;
+		}
+
+		if(curr!=inputString.end()) {
+			Day newDay = findDay(*curr);
+			if(newDay != INVALID_DAY) {
+				date += (int)newDay - (int)day;
+				curr++;
+			}
+		}
+
+		if(curr == inputString.end()) {
+			maxDays = findMaxDays(month,year);
+			if(date>maxDays) {
+				month = (Month)(((int)month)+1);
+				date-=maxDays;
+			}
+
+			Month maxMonth=DEC;
+			if(month>maxMonth) {
+				year++;
+				month = (Month)((int)month-(int)maxMonth);
+			}
+
+			newDate = year*10000 + (int)month*100 + date;
+		}
+	}
+
+	return newDate;
+}
+
 
 // Internal methods
+
+bool Parser::containsAny(std::string targetWord, std::string searchWords) {
+	std::vector<std::string> vecSearchWords = splitParameters(searchWords);
+	std::vector<std::string>::iterator curr;
+
+	for(curr=vecSearchWords.begin(); curr!=vecSearchWords.end(); curr++) {
+		if(targetWord == *curr) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+int Parser::findMaxDays(Month month, int year) { // default year is 2015
+	int maxDays;
+	bool isLeap;
+	switch(month) {
+	case JAN:
+	case MAR:
+	case MAY:
+	case JUL:
+	case AUG:
+	case OCT:
+	case DEC:
+		maxDays = 31;
+		break;
+	case APR:
+	case JUN:
+	case SEP:
+	case NOV:
+		maxDays = 30;
+		break;
+	case FEB:
+		isLeap = ((year%4==0 && year%100!=0) || year%400==0);
+		if(isLeap) {
+			maxDays = 29;
+		} else {
+			maxDays = 28;
+		}
+	default:
+		break;
+	}
+	return maxDays;
+}
+
+Month Parser::findMonth(std::string monthString) {
+	Month monthInput = INVALID_MONTH;
+	if(containsAny(monthString,"1 jan january")) {
+		monthInput = JAN;
+	} else if(containsAny(monthString,"2 feb february")) {
+		monthInput = FEB;
+	} else if(containsAny(monthString,"3 mar march")) {
+		monthInput = MAR;
+	} else if(containsAny(monthString,"4 apr april")) {
+		monthInput = APR;
+	} else if(containsAny(monthString,"5 may")) {
+		monthInput = MAY;
+	} else if(containsAny(monthString,"6 jun june")) {
+		monthInput = JUN;
+	} else if(containsAny(monthString,"7 jul july")) {
+		monthInput = JUL;
+	} else if(containsAny(monthString,"8 aug august")) {
+		monthInput = AUG;
+	} else if(containsAny(monthString,"9 sep sept september")) {
+		monthInput = SEP;
+	} else if(containsAny(monthString,"10 oct october")) {
+		monthInput = OCT;
+	} else if(containsAny(monthString,"11 nov november")) {
+		monthInput = NOV;
+	} else if(containsAny(monthString,"12 dec december")) {
+		monthInput = DEC;
+	}
+	return monthInput;
+}
+
+Day Parser::findDay(std::string dayString) {
+	Day newDay = INVALID_DAY;
+	if(containsAny(dayString,"sun sunday")) {
+		newDay = SUN;
+	} else if(containsAny(dayString,"mon monday")) {
+		newDay = MON;
+	} else if(containsAny(dayString,"tue tues tuesday")) {
+		newDay = TUE;
+	} else if(containsAny(dayString,"wed wednesday")) {
+		newDay = WED;
+	} else if(containsAny(dayString,"thu thur thurs thursday")) {
+		newDay = THU;
+	} else if(containsAny(dayString,"fri friday")) {
+		newDay = FRI;
+	} else if(containsAny(dayString,"sat saturday")) {
+		newDay = SAT;
+	}
+	return newDay;
+}
+
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 
 bool Parser::isPositiveAndValidInt(std::string s) {
@@ -215,4 +421,26 @@ std::string Parser::replace(std::string a, std::string b, std::string c) {
 		if(pos != -1) a.replace(pos, b.length(), c);
 	} while (pos != -1);
 	return a;
+}
+
+// Temporary methods for unit testing
+std::string Parser::taskToBuffer(Task task) {
+	const int MAX_BYTES = 2550;
+	char buffer[MAX_BYTES] = "";
+
+	sprintf_s(buffer, "%s%s\n"/*"%s%d\n%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n"/*11 outputs*/,
+		"Name: ",		task.getName().c_str()/*,
+		"Type: ",		task.getType(),
+		"Label: ",		task.getLabel().c_str(),
+		"Done: ",		task.getDoneStatus(),
+		"Priority: ",	task.getPriorityStatus(),
+		"Start Day: ",	task.getStartDay(),
+		"Start Date: ",	task.getStartDate(),
+		"Start Time: ",	task.getStartTime(),
+		"End Day: ",	task.getEndDay(),
+		"End Date: ",	task.getEndDate(),
+		"End Time: ",	task.getEndTime()*/
+		);
+
+	return buffer;
 }

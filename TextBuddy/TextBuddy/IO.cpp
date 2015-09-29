@@ -4,16 +4,14 @@
 #include "IO.h"
 
 IO::IO() {
-	isActive = false;
+	// isActive = false;
 }
-
-IO::IO(bool status): isActive(status) {}
 
 IO::~IO() {}
 
-bool IO::getStatus() {
-	return isActive;
-}
+// ==================================================
+//                      METHODS
+// ==================================================
 
 std::vector<Task> loadFile(std::string fileName) {
 	std::ifstream newFile(fileName);
