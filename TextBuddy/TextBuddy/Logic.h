@@ -19,6 +19,9 @@ private:
 	std::vector<Task> taskStore;
 	std::vector<Task> currentView;
 
+	bool copyView();
+	int getIdOfIndex(int userIndex);
+
 public:
 	Logic();
 	~Logic();
@@ -33,8 +36,7 @@ public:
 	bool modifyInfo(Modify toModify);
 	std::string searchInfo(Search toSearch);
 
-	bool matchPhrase(std::string phr, std::string str);
-
+	bool matchPhrase(std::string phr, std::string str);		
 	std::string processCommand(std::string userCommand, Parser& parser);
 };
 

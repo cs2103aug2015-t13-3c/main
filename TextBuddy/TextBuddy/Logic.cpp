@@ -27,11 +27,60 @@ std::vector<Task> Logic::getCurrentView() {
 	return currentView;
 }
 
-bool Logic::addInfo(Add taskName) {
-	taskStore.push_back(taskName.getNewTask());
+//for now, currentView is set to be the same as taskStore
+bool Logic::copyView() {
+	currentView = taskStore;
 	return true;
 }
 
+bool Logic::matchPhrase(std::string phr, std::string str) {
+	int j;
+	int k;
+	int strSize;
+	
+	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+	std::transform(phr.begin(), phr.end(), phr.begin(), ::tolower);
+	
+	strSize = str.size();
+
+	for (int i = 0; i < strSize; i++) {
+		j = i;
+		k = 0;
+		if (str[j] == phr[k]) {
+			while (str[j] == phr[k]) {
+				j++;
+				k++;
+
+				if (k == phr.size()) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+//returns the uniqueID of the task pointed to by userIndex
+//for deleting taskStore by referring to tasks in currentView
+int Logic::getIdOfIndex(int userIndex) {
+	int id;
+	std::vector<Task>::iterator iter = currentView.begin();
+
+	for (int i = 1; i < userIndex; i++) {
+		++iter;
+	}
+
+	id = iter->getID();
+	return id;
+}
+
+bool Logic::addInfo(Add taskName) {
+	taskStore.push_back(taskName.getNewTask());
+	copyView();
+	return true;
+}
+
+//searches for Task to delete using ID
 bool Logic::deleteInfo(Delete idToDelete) {
 	vector<Task>::iterator iter;
 
@@ -45,6 +94,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 		}
 	}
 
+	copyView();
 	return true;
 }
 
@@ -89,39 +139,13 @@ bool Logic::modifyInfo(Modify toModify) {
 				std::cout << "Error in fetching field name" << std::endl;
 				break;
 			}
+			copyView();
 		}
 		return true;
 	} else {
 		return false;
 	}
 
-}
-
-bool Logic::matchPhrase(std::string phr, std::string str) {
-	int j;
-	int k;
-	int strSize;
-	
-	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-	std::transform(phr.begin(), phr.end(), phr.begin(), ::tolower);
-	
-	strSize = str.size();
-
-	for (int i = 0; i < strSize; i++) {
-		j = i;
-		k = 0;
-		if (str[j] == phr[k]) {
-			while (str[j] == phr[k]) {
-				j++;
-				k++;
-
-				if (k == phr.size()) {
-					return true;
-				}
-			}
-		}
-	}
-	return false;
 }
 
 //searches name for a phrase match, returns IDs of all matching tasks
@@ -151,7 +175,7 @@ std::string Logic::searchInfo(Search toSearch) {
 }
 
 //input command is obtained from parseCommand
-//unit test done under LogicTest.cpp for now
+//returns string of IDs with search, returns "*" for add/delete
 std::string Logic::processCommand(std::string userCommand, Parser& parser) {
 	//inputCmd obtained from parser
 	Command inputCmd(parser.parseCommand(userCommand));
@@ -161,7 +185,9 @@ std::string Logic::processCommand(std::string userCommand, Parser& parser) {
 	Delete taskToDelete;
 	Search searchPhrase;
 	std::string output = "*";
-	int id;
+
+	int userIndex;						//userIndex in currentView
+	int id;								//id for both currentView and taskStore
 
 	switch (cmd) {
 	case ADD:
@@ -170,13 +196,14 @@ std::string Logic::processCommand(std::string userCommand, Parser& parser) {
 		addInfo(task);
 		break;
 	case DELETE:
-		//error due to ID issue because my method requires temp tasks to be created, increasing runningCount 
-		id = stoi(inputCmd.getRestOfCommand());
+		//userIndex refers to the nth task of currentView presented to user
+		//eg. delete 1 means deleting the first task
+		userIndex = stoi(inputCmd.getRestOfCommand());
+		id = getIdOfIndex(userIndex);
 		taskToDelete.setTaskToDelete(id);
 		deleteInfo(taskToDelete);
 		break;
 	case SEARCH:
-		//error due to ID issue
 		searchPhrase.setSearchPhrase(inputCmd.getRestOfCommand());
 		output = searchInfo(searchPhrase);
 	default:

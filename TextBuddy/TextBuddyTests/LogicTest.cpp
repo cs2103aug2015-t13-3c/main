@@ -99,6 +99,14 @@ namespace TextBuddyTests {
 
 			Assert::AreEqual(std::string("that"),iter->getName());
 
+			//delete
+			logic.processCommand(std::string("Delete 1"), parser);
+			copyTask = logic.getTaskStore();
+			iter = copyTask.begin();
+			Assert::AreEqual(std::string("that"), iter->getName());
+			
+
+
 		}
 		/*
 		TEST_METHOD(Logic_AddAndReturnInfoTest) {
