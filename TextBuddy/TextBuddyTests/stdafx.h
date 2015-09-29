@@ -15,6 +15,8 @@
 #include "Logic.h"
 #include "Parser.h"
 #include "UI.h"
+#include "Task.h"
+#include "Command.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -27,5 +29,3 @@
 
 #define ON true
 #define OFF false
-
-using namespace std;

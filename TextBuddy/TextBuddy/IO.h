@@ -3,9 +3,8 @@
 #ifndef IO_H_
 #define IO_H_
 
+#include"Task.h"
 #include<vector>
-
-using namespace std;
 
 class IO{
 private:
@@ -18,7 +17,26 @@ public:
 
 	bool getStatus();
 
-	static vector<std::string> loadFile(string fileName);
-};
+	static std::vector<Task> loadFile(std::string fileName);
+	static bool saveFile(std::string fileName, std::vector<Task>);
+
+	//======== getter / setter methods for test==========
+	static std::vector<std::string> getText(std::string fileName) {
+		std::ifstream inputFile(fileName);
+		std::vector<std::string> textVector;
+
+		while(!inputFile.eof()) {
+			std::string line;
+			getline(inputFile,line);
+
+			if(line != "") {
+				textVector.push_back(line);
+			}
+		}
+
+		inputFile.close();
+		return textVector;
+	}
+
 
 #endif

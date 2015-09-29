@@ -15,10 +15,14 @@ bool IO::getStatus() {
 	return isActive;
 }
 
-vector<string> IO::loadFile(string fileName) {
-	ifstream newFile(fileName);
+std::vector<Task> loadFile(std::string fileName) {
+	std::ifstream newFile(fileName);
 
-	vector<string> textVector;
+	std::vector<Task> taskVector;
 
-	return textVector;
+	return taskVector;
+}
+
+static bool saveFile(std::string fileName, std::vector<Task>) {
+
 }
