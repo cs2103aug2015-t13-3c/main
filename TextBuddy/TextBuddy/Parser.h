@@ -59,8 +59,6 @@ private:
 public:
 	Parser();
 	~Parser();
-	// Parser(bool status);
-	// bool getStatus();
 
 	static std::string parseFileName(char* argv[]);
 	Command parseCommand(std::string userCommand);

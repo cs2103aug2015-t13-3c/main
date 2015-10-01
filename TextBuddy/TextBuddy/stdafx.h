@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 
+#include "Utilities.h"
 #include "Command.h"
 #include "Task.h"
 

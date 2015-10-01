@@ -4,19 +4,9 @@
 #include <ctime>
 #include "Parser.h"
 
-Parser::Parser() {
-	// isActive = false;
-}
+Parser::Parser() {}
 
 Parser::~Parser() {}
-
-/*
-Parser::Parser(bool status): isActive(status) {}
-
-bool Parser::getStatus() {
-return isActive;
-}
-*/
 
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
