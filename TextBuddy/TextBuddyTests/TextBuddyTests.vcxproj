@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{AFFFDC6C-F59F-44F4-8A41-C3B8BDCEF4AF}</ProjectGuid>
+    <ProjectGuid>{0CAC4A04-0AAD-43E1-A873-457EAC9B69F4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TextBuddyTests</RootNamespace>
   </PropertyGroup>
@@ -52,7 +52,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\TextBuddy;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Hao Ye\Documents\Visual Studio 2012\Projects\TextBuddy\TextBuddy;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
@@ -86,12 +86,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\TextBuddy\Command.cpp" />
-    <ClCompile Include="..\TextBuddy\IO.cpp" />
-    <ClCompile Include="..\TextBuddy\Logic.cpp" />
-    <ClCompile Include="..\TextBuddy\Parser.cpp" />
-    <ClCompile Include="..\TextBuddy\Task.cpp" />
-    <ClCompile Include="..\TextBuddy\UI.cpp" />
     <ClCompile Include="IOTest.cpp" />
     <ClCompile Include="LogicTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
@@ -99,11 +93,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="UITest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TextBuddy\TextBuddy.vcxproj">
-      <Project>{fdc1c2e8-403d-4502-9ef0-cc40b3ccf970}</Project>
+      <Project>{53a52011-62d5-4d89-bf4d-00af52446d5b}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

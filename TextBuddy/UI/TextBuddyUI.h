@@ -116,8 +116,9 @@ namespace UserInterface {
 			userFeedback_cppString = new std::string;
 			*userFeedback_cppString = logic->processCommand(*userInput);
 			String^ userFeedback = gcnew String(userFeedback_cppString->c_str());
-			display->AppendText(userFeedback);
+			display->AppendText(userFeedback + "\r\n");
 			delete userInput;
+			delete userFeedback_cppString;
 		}
 
 

@@ -21,12 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextBuddyUI.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="TextBuddyUI.resx">
-      <Filter>Resource Files</Filter>
-    </EmbeddedResource>
   </ItemGroup>
 </Project>

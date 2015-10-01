@@ -14,7 +14,6 @@
 #include "IO.h"
 #include "Logic.h"
 #include "Parser.h"
-#include "UI.h"
 
 #include <iostream>
 #include <stdio.h>
