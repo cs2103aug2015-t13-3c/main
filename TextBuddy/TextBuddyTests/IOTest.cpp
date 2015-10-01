@@ -93,7 +93,7 @@ namespace TextBuddyTests
 				"0"
 			};
 			
-			for(int i = 0; i < actualText.size(); i++) {
+			for(unsigned int i = 0; i < actualText.size(); i++) {
 				Assert::AreEqual(expectedText[i], actualText[i]);
 			}
 			

@@ -19,9 +19,9 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 	std::vector<Task> taskVector;
 	Task newTask;
 
-		if(!fileIsOpen(inputFile)) {
+	if(!fileIsOpen(inputFile)) {
 		return taskVector;
-		}
+	}
 
 	while(!inputFile.eof()) {
 		newTask = getTask(inputFile);
@@ -41,27 +41,27 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 		return false;
 	}
 
-	for(int i = 0; i < taskVector.size(); i++) {
-	Task task = taskVector[i];
+	for(unsigned int i = 0; i < taskVector.size(); i++) {
+		Task task = taskVector[i];
 
-	std::string taskName = task.getName();
-	std::string taskType = enumTypeToString(task.getType());
-	std::string taskID = std::to_string(task.getID());
-	std::string taskLabel = task.getLabel();
-	std::string taskDoneStatus = boolToIntString(task.getDoneStatus());
-	std::string taskPriorityStatus = boolToIntString(task.getPriorityStatus());
-	std::string taskStartDay = enumDaytoString(task.getStartDay());
-	std::string taskStartDate = std::to_string(task.getStartDate());
-	std::string taskStartTime = std::to_string(task.getStartTime());
-	std::string taskEndDay = enumDaytoString(task.getEndDay());
-	std::string taskEndDate = std::to_string(task.getEndDate());
-	std::string taskEndTime = std::to_string(task.getEndTime());
+		std::string taskName = task.getName();
+		std::string taskType = enumTypeToString(task.getType());
+		std::string taskID = std::to_string(task.getID());
+		std::string taskLabel = task.getLabel();
+		std::string taskDoneStatus = boolToIntString(task.getDoneStatus());
+		std::string taskPriorityStatus = boolToIntString(task.getPriorityStatus());
+		std::string taskStartDay = enumDaytoString(task.getStartDay());
+		std::string taskStartDate = std::to_string(task.getStartDate());
+		std::string taskStartTime = std::to_string(task.getStartTime());
+		std::string taskEndDay = enumDaytoString(task.getEndDay());
+		std::string taskEndDate = std::to_string(task.getEndDate());
+		std::string taskEndTime = std::to_string(task.getEndTime());
 
-	std::string taskText = taskName + "\n" + taskType + "\n" + taskID + "\n" + taskLabel + "\n" + taskDoneStatus
-		+ "\n" + taskPriorityStatus + "\n" + taskStartDay + "\n" + taskStartDate + "\n" + taskStartTime + "\n" + 
-		taskEndDay + "\n" + taskEndDate + "\n" + taskEndTime + "\n";
+		std::string taskText = taskName + "\n" + taskType + "\n" + taskID + "\n" + taskLabel + "\n" + taskDoneStatus
+			+ "\n" + taskPriorityStatus + "\n" + taskStartDay + "\n" + taskStartDate + "\n" + taskStartTime + "\n" + 
+			taskEndDay + "\n" + taskEndDate + "\n" + taskEndTime + "\n";
 
-	newfile << taskText;
+		newfile << taskText;
 	}
 	newfile.close();
 
@@ -105,7 +105,7 @@ Task IO::getTask(std::ifstream& inputFile) {
 }
 
 
-		//Overloaded function
+//Overloaded function
 bool IO::fileIsOpen(std::ifstream& inputFile)
 {
 	if(inputFile.is_open())	{
@@ -140,7 +140,7 @@ TaskType IO::stringToEnumType(std::string line) {
 }
 Day IO::stringToEnumDay(std::string line) {
 	Day day = INVALID_DAY;
-	
+
 	if (line == "SUN") {
 		day = SUN;
 	} else if (line == "MON") {
@@ -158,7 +158,7 @@ Day IO::stringToEnumDay(std::string line) {
 	} else if (line == "INVALID_DAY") {
 		day = INVALID_DAY;
 	}
-	
+
 	return day;
 }
 std::string IO::enumTypeToString(TaskType type) {

@@ -1,7 +1,6 @@
 // @@author Aaron Chong Jun Hao
 
 #include "stdafx.h"
-#include "Task.h"
 
 int Task::runningCount = 0;
 

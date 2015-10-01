@@ -5,18 +5,15 @@
 #pragma once
 
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 #include <fstream>
 #include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <algorithm>
 #include <string>
 #include <vector>
 
-#include "Utilities.h"
-#include "Command.h"
 #include "Task.h"
-
-#define ON true
-#define OFF false
+#include "Command.h"
+#include "Utilities.h"

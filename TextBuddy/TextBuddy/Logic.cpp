@@ -82,7 +82,7 @@ bool Logic::addInfo(Add taskName) {
 
 //searches for Task to delete using ID
 bool Logic::deleteInfo(Delete idToDelete) {
-	vector<Task>::iterator iter;
+	std::vector<Task>::iterator iter;
 
 	int id;
 	id = idToDelete.getTaskToDelete();
@@ -99,7 +99,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 }
 
 bool Logic::modifyInfo(Modify toModify) {
-	vector<Task>::iterator taskIter;
+	std::vector<Task>::iterator taskIter;
 	Task tempTask = toModify.getTempTask();		//doing this will increase runningcount?
 
 	taskIter = taskStore.begin();
@@ -110,7 +110,7 @@ bool Logic::modifyInfo(Modify toModify) {
 
 	if (taskIter->getID() == tempTask.getID()) {
 		std::vector<FieldType> tempField = toModify.getFieldsToModify();
-		vector<FieldType>::iterator fieldIter;
+		std::vector<FieldType>::iterator fieldIter;
 
 		for (fieldIter = tempField.begin(); fieldIter != tempField.end(); ++fieldIter) {
 			switch (*fieldIter) {
@@ -150,7 +150,7 @@ bool Logic::modifyInfo(Modify toModify) {
 
 //searches name for a phrase match, returns IDs of all matching tasks
 std::string Logic::searchInfo(Search toSearch) {
-	ostringstream indexString;
+	std::ostringstream indexString;
 	std::string searchPhrase;
 	std::string taskName;
 	std::string returnString;

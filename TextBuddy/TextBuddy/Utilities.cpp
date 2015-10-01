@@ -2,7 +2,6 @@
 // @@author Ng Ren Zhi
 
 #include "stdafx.h"
-#include "Utilities.h"
 
 Utilities::Utilities() {}
 
@@ -12,12 +11,22 @@ Utilities::~Utilities() {}
 //      USED IN MULTIPLE ARCHITECTURE COMPONENTS
 // ==================================================
 
-// Empty
+int Utilities::stringToInt(std::string str) {
+	char c;
+	int i = 0;
+	std::stringstream ss(str);
+	ss >> i;
+	if(ss.fail() || ss.get(c)) {
+		return INVALID_NUMBER_FORMAT;
+	} else {
+		return i;
+	}
+}
 
-
-// ==================================================
-//                   USED IN PARSER
-// ==================================================
+std::string Utilities::stringToLower(std::string str) {
+	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+	return str;
+}
 
 std::string Utilities::taskToBuffer(Task task) {
 	const int MAX_BYTES = 2550;
@@ -40,10 +49,136 @@ std::string Utilities::taskToBuffer(Task task) {
 	return buffer;
 }
 
+std::string Utilities::vecToString(std::vector<std::string> inputString) {
+	std::string newString;
+	std::vector<std::string>::iterator curr;
+	for(curr=inputString.begin(); curr!=inputString.end(); ) {
+		newString += *curr;
+		if(++curr != inputString.end()) {
+			newString += " ";
+		}
+	}
+	return newString;
+}
+
+Day Utilities::stringToEnumDay(std::string line) {
+	Day day = INVALID_DAY;
+
+	if (line == "SUN") {
+		day = SUN;
+	} else if (line == "MON") {
+		day = MON;
+	} else if (line == "TUE") {
+		day = TUE;
+	} else if (line == "WED") {
+		day = WED;
+	} else if (line == "THU") {
+		day = THU;
+	} else if (line == "FRI") {
+		day = FRI;
+	} else if (line == "SAT") {
+		day = SAT;
+	} else if (line == "INVALID_DAY") {
+		day = INVALID_DAY;
+	}
+
+	return day;
+}
+
+TaskType Utilities::stringToEnumType(std::string line) {
+	TaskType type;
+
+	if(line == "FLOATING") {
+		type = FLOATING;
+	} else if (line == "EVENT") {
+		type = EVENT;
+	} else if (line == "TODO") {
+		type = TODO;
+	}
+
+	return type;
+}
+
+std::string Utilities::boolToIntString(bool boolean) {
+	if(boolean) {
+		return "1";
+	} else {
+		return "0";
+	}
+}
+
+std::string Utilities::enumDayToString(Day day) {
+	std::string dayString;
+	switch(day) {
+	case SUN:
+		dayString = "SUN";
+		break;
+	case MON:
+		dayString = "MON";
+		break;
+	case TUE:
+		dayString = "TUE";
+		break;
+	case WED:
+		dayString = "WED";
+		break;
+	case THU:
+		dayString = "THU";
+		break;
+	case FRI:
+		dayString = "FRI";
+		break;
+	case SAT:
+		dayString = "SAT";
+		break;
+	case INVALID_DAY:
+		dayString = "INVALID_DAY";
+		break;
+
+	}
+
+	return dayString;
+}
+
+std::string Utilities::enumTypeToString(TaskType type) {
+	std::string typeString;
+	switch(type) {
+	case FLOATING:
+		typeString = "FLOATING";
+		break;
+	case EVENT:
+		typeString = "EVENT";
+		break;
+	case TODO:
+		typeString = "TODO";
+		break;
+	}
+
+	return typeString;
+}
+
+
+// ==================================================
+//                USED IN PARSER ONLY
+// ==================================================
+
+bool Utilities::containsAny(std::string targetWord, std::string searchWords) {
+	std::vector<std::string> vecSearchWords = splitParameters(searchWords);
+	std::vector<std::string>::iterator curr;
+
+	for(curr=vecSearchWords.begin(); curr!=vecSearchWords.end(); curr++) {
+		if(targetWord == *curr) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 
-bool Utilities::isPositiveAndValidInt(std::string s) {
-	int i = parseInt(s);
+bool Utilities::isPositiveNonZeroInt(std::string s) {
+	int i = stringToInt(s);
 
 	if(i == INVALID_NUMBER_FORMAT || i <= 0 ) {
 		return false;
@@ -52,14 +187,17 @@ bool Utilities::isPositiveAndValidInt(std::string s) {
 	}
 }
 
-// This method only splits strings based on delimiter space
-std::vector<std::string> Utilities::splitParameters(std::string commandParametersString) {
-	std::vector<std::string> tokens;
-	std::istringstream iss(commandParametersString);
-	std::copy(std::istream_iterator<std::string>(iss),
-		std::istream_iterator<std::string>(),
-		std::back_inserter<std::vector<std::string>>(tokens));
-	return tokens;
+bool Utilities::equalsIgnoreCase(const std::string& str1, const std::string& str2) {
+	if(str1.size() != str2.size()) {
+		return false;
+	} else {
+		for (std::string::const_iterator c1 = str1.begin(), c2 = str2.begin(); c1 != str1.end(); ++c1 , ++c2) {
+			if(tolower(*c1) != tolower(*c2)) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 std::string Utilities::getFirstWord(std::string userCommand) {
@@ -82,31 +220,6 @@ std::string Utilities::removeSpaces(const std::string& s, const std::string& del
 	}
 }
 
-bool Utilities::equalsIgnoreCase(const std::string& str1, const std::string& str2) {
-	if(str1.size() != str2.size()) {
-		return false;
-	} else {
-		for (std::string::const_iterator c1 = str1.begin(), c2 = str2.begin(); c1 != str1.end(); ++c1 , ++c2) {
-			if(tolower(*c1) != tolower(*c2)) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-int Utilities::parseInt(std::string str) {
-	char c;
-	int i = 0;
-	std::stringstream ss(str);
-	ss >> i;
-	if(ss.fail() || ss.get(c)) {
-		return INVALID_NUMBER_FORMAT;
-	} else {
-		return i;
-	}
-}
-
 std::string Utilities::replace(std::string a, std::string b, std::string c) {
 	int pos;
 	do {
@@ -116,8 +229,12 @@ std::string Utilities::replace(std::string a, std::string b, std::string c) {
 	return a;
 }
 
-
-// ==================================================
-//                     USED IN IO
-// ==================================================
-
+// This method only splits strings based on delimiter space
+std::vector<std::string> Utilities::splitParameters(std::string commandParametersString) {
+	std::vector<std::string> tokens;
+	std::istringstream iss(commandParametersString);
+	std::copy(std::istream_iterator<std::string>(iss),
+		std::istream_iterator<std::string>(),
+		std::back_inserter<std::vector<std::string>>(tokens));
+	return tokens;
+}

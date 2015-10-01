@@ -3,18 +3,11 @@
 #ifndef IO_H_
 #define IO_H_
 
-#include<string>
-#include<vector>
-#include<fstream>
-#include<iostream>
-
-using namespace std;
-
-#include"Task.h"
+#include "stdafx.h"
+#include "Task.h"
 
 class IO {
 private:
-	// bool isActive;
 	static bool fileIsOpen(std::ifstream& inputFile);
 	static bool fileIsOpen(std::ofstream& outputFile);
 	static std::string enumTypeToString(TaskType type);
@@ -23,11 +16,10 @@ private:
 	static TaskType stringToEnumType(std::string line);
 	static Day stringToEnumDay(std::string line);
 	static Task getTask(std::ifstream& inputFile);
+
 public:
 	IO();
 	~IO();
-	// IO(bool status);
-	// bool getStatus();
 
 	static std::vector<Task> loadFile(std::string fileName);
 	static bool saveFile(std::string fileName, std::vector<Task> taskVector);
