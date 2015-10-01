@@ -1,11 +1,10 @@
 // @@author Aaron Chong Jun Hao
 
-#include "stdafx.h"
 #include <ctime>
+#include "stdafx.h"
 #include "Parser.h"
 
 Parser::Parser() {}
-
 Parser::~Parser() {}
 
 // This defines the file extension used by TextBuddy

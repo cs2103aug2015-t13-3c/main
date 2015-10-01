@@ -3,10 +3,7 @@
 #include "stdafx.h"
 #include "IO.h"
 
-IO::IO() {
-	// isActive = false;
-}
-
+IO::IO() {}
 IO::~IO() {}
 
 // ==================================================
@@ -41,19 +38,20 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 		return false;
 	}
 
+	Utilities u;
 	for(unsigned int i = 0; i < taskVector.size(); i++) {
 		Task task = taskVector[i];
 
 		std::string taskName = task.getName();
-		std::string taskType = enumTypeToString(task.getType());
+		std::string taskType = u.enumTypeToString(task.getType());
 		std::string taskID = std::to_string(task.getID());
 		std::string taskLabel = task.getLabel();
-		std::string taskDoneStatus = boolToIntString(task.getDoneStatus());
-		std::string taskPriorityStatus = boolToIntString(task.getPriorityStatus());
-		std::string taskStartDay = enumDaytoString(task.getStartDay());
+		std::string taskDoneStatus = u.boolToIntString(task.getDoneStatus());
+		std::string taskPriorityStatus = u.boolToIntString(task.getPriorityStatus());
+		std::string taskStartDay = u.enumDayToString(task.getStartDay());
 		std::string taskStartDate = std::to_string(task.getStartDate());
 		std::string taskStartTime = std::to_string(task.getStartTime());
-		std::string taskEndDay = enumDaytoString(task.getEndDay());
+		std::string taskEndDay = u.enumDayToString(task.getEndDay());
 		std::string taskEndDate = std::to_string(task.getEndDate());
 		std::string taskEndTime = std::to_string(task.getEndTime());
 
@@ -70,13 +68,14 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 
 Task IO::getTask(std::ifstream& inputFile) {
 	Task task;
+	Utilities u;
 	bool success = true;
 	std::string line;
 
 	getline(inputFile,line);
 	success = task.setName(line);
 	getline(inputFile,line);
-	success = task.setType(stringToEnumType(line));
+	success = task.setType(u.stringToEnumType(line));
 	getline(inputFile,line);
 	success = task.setID(stoi(line));
 	getline(inputFile,line);
@@ -88,14 +87,14 @@ Task IO::getTask(std::ifstream& inputFile) {
 	*/
 
 	getline(inputFile,line);
-	success = task.setStartDay(stringToEnumDay(line));
+	success = task.setStartDay(u.stringToEnumDay(line));
 	getline(inputFile,line);
 	success = task.setStartDate(stoi(line));
 	getline(inputFile,line);
 	success = task.setStartTime(stoi(line));
 
 	getline(inputFile,line);
-	success = task.setEndDay(stringToEnumDay(line));
+	success = task.setEndDay(u.stringToEnumDay(line));
 	getline(inputFile,line);
 	success = task.setEndDate(stoi(line));
 	getline(inputFile,line);
@@ -105,7 +104,7 @@ Task IO::getTask(std::ifstream& inputFile) {
 }
 
 
-//Overloaded function
+// Overloaded function
 bool IO::fileIsOpen(std::ifstream& inputFile)
 {
 	if(inputFile.is_open())	{
@@ -115,6 +114,7 @@ bool IO::fileIsOpen(std::ifstream& inputFile)
 		return false;
 	}
 }
+
 bool IO::fileIsOpen(std::ofstream& outputFile)
 {
 	if(outputFile.is_open())	{
@@ -125,116 +125,10 @@ bool IO::fileIsOpen(std::ofstream& outputFile)
 	}
 }
 
-TaskType IO::stringToEnumType(std::string line) {
-	TaskType type;
-
-	if(line == "FLOATING") {
-		type = FLOATING;
-	} else if (line == "EVENT") {
-		type = EVENT;
-	} else if (line == "TODO") {
-		type = TODO;
-	}
-
-	return type;
-}
-Day IO::stringToEnumDay(std::string line) {
-	Day day = INVALID_DAY;
-
-	if (line == "SUN") {
-		day = SUN;
-	} else if (line == "MON") {
-		day = MON;
-	} else if (line == "TUE") {
-		day = TUE;
-	} else if (line == "WED") {
-		day = WED;
-	} else if (line == "THU") {
-		day = THU;
-	} else if (line == "FRI") {
-		day = FRI;
-	} else if (line == "SAT") {
-		day = SAT;
-	} else if (line == "INVALID_DAY") {
-		day = INVALID_DAY;
-	}
-
-	return day;
-}
-std::string IO::enumTypeToString(TaskType type) {
-	std::string typeString;
-	switch(type) {
-	case FLOATING:
-		typeString = "FLOATING";
-		break;
-	case EVENT:
-		typeString = "EVENT";
-		break;
-	case TODO:
-		typeString = "TODO";
-		break;
-	}
-
-	return typeString;
-}
-std::string IO::enumDaytoString(Day day) {
-	std::string dayString;
-	switch(day) {
-	case SUN:
-		dayString = "SUN";
-		break;
-	case MON:
-		dayString = "MON";
-		break;
-	case TUE:
-		dayString = "TUE";
-		break;
-	case WED:
-		dayString = "WED";
-		break;
-	case THU:
-		dayString = "THU";
-		break;
-	case FRI:
-		dayString = "FRI";
-		break;
-	case SAT:
-		dayString = "SAT";
-		break;
-	case INVALID_DAY:
-		dayString = "INVALID_DAY";
-		break;
-
-	}
-
-	return dayString;
-}
-std::string IO::boolToIntString(bool boolean) {
-	if(boolean) {
-		return "1";
-	} else {
-		return "0";
-	}
-}
-
-
-enum Enum{ Banana, Orange, Apple } ;
+enum Enum { Banana, Orange, Apple } ;
 static const char * EnumStrings[] = { "bananas & monkeys", "Round and orange", "APPLE" };
 
 const char * getTextForEnum( int enumVal )
 {
 	return EnumStrings[enumVal];
 }
-
-
-// ==================================================
-//                      TO DELETE
-// ==================================================
-
-/*
-IO::IO(bool status): isActive(status) {}
-
-bool IO::getStatus() {
-return isActive;
-}
-*/

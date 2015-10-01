@@ -4,17 +4,13 @@
 #define IO_H_
 
 #include "stdafx.h"
-#include "Task.h"
 
 class IO {
 private:
+	Utilities u;
+
 	static bool fileIsOpen(std::ifstream& inputFile);
 	static bool fileIsOpen(std::ofstream& outputFile);
-	static std::string enumTypeToString(TaskType type);
-	static std::string boolToIntString(bool boolean);
-	static std::string enumDaytoString(Day day);
-	static TaskType stringToEnumType(std::string line);
-	static Day stringToEnumDay(std::string line);
 	static Task getTask(std::ifstream& inputFile);
 
 public:

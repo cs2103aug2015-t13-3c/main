@@ -3,12 +3,7 @@
 #include "stdafx.h"
 #include "Logic.h"
 
-#include <stdlib.h>
-#include <cstdlib>
-Logic::Logic() {
-	// isActive = false;
-}
-
+Logic::Logic() {}
 Logic::~Logic() {}
 
 // ==================================================
@@ -27,7 +22,7 @@ std::vector<Task> Logic::getCurrentView() {
 	return currentView;
 }
 
-//for now, currentView is set to be the same as taskStore
+// For now, currentView is set to be the same as taskStore
 bool Logic::copyView() {
 	currentView = taskStore;
 	return true;
@@ -60,8 +55,8 @@ bool Logic::matchPhrase(std::string phr, std::string str) {
 	return false;
 }
 
-//returns the uniqueID of the task pointed to by userIndex
-//for deleting taskStore by referring to tasks in currentView
+// Returns the uniqueID of the task pointed to by userIndex
+// For deleting taskStore by referring to tasks in currentView
 int Logic::getIdOfIndex(int userIndex) {
 	int id;
 	std::vector<Task>::iterator iter = currentView.begin();
@@ -80,7 +75,7 @@ bool Logic::addInfo(Add taskName) {
 	return true;
 }
 
-//searches for Task to delete using ID
+// Searches for Task to delete using ID
 bool Logic::deleteInfo(Delete idToDelete) {
 	std::vector<Task>::iterator iter;
 
@@ -148,7 +143,7 @@ bool Logic::modifyInfo(Modify toModify) {
 
 }
 
-//searches name for a phrase match, returns IDs of all matching tasks
+// Searches name for a phrase match, returns IDs of all matching tasks
 std::string Logic::searchInfo(Search toSearch) {
 	std::ostringstream indexString;
 	std::string searchPhrase;
@@ -174,8 +169,8 @@ std::string Logic::searchInfo(Search toSearch) {
 	return returnString;
 }
 
-//input command is obtained from parseCommand
-//returns string of IDs with search, returns "*" for add/delete
+// Input command is obtained from parseCommand
+// Returns string of IDs with search, returns "*" for add/delete
 std::string Logic::processCommand(std::string userCommand) {
 	//inputCmd obtained from parser
 	Command inputCmd(parser.parseCommand(userCommand));
@@ -214,7 +209,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	return output;
 }
 
-/*Keep for reference */
+/* Keep for reference */
 /*
 bool Logic::getStatus() {
 return isActive && canCallIO();
@@ -436,21 +431,5 @@ freeTime = addTime(infoArray[i].endTime, 1);
 freeSlot << freeDate << "|" << freeTime;
 return freeSlot.str();
 }
-}
-*/
-
-// ==================================================
-//                      TO DELETE
-// ==================================================
-
-/*
-Logic::Logic(bool status): isActive(status), io(ON) {}
-
-bool Logic::getStatus() {
-return isActive && canCallIO();
-}
-
-bool Logic::canCallIO() {
-return io.getStatus();
 }
 */

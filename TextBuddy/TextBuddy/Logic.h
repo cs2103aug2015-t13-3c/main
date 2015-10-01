@@ -4,17 +4,10 @@
 #define LOGIC_H_
 
 #include "IO.h"
-#include "Command.h"
-#include "Task.h"
 #include "Parser.h"
-#include <string>
-#include <stdlib.h>
-#include <iostream>
-#include <sstream>
 
 class Logic {
 private:
-	// bool isActive;
 	Parser parser;
 	IO io;
 	std::vector<Task> taskStore;
@@ -26,9 +19,7 @@ private:
 public:
 	Logic();
 	~Logic();
-	// Logic(bool status);
-	// bool getStatus();
-	// bool canCallIO();
+
 	int getSize();
 	std::vector<Task> getTaskStore();
 	std::vector<Task> getCurrentView();

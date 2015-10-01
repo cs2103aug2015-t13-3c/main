@@ -4,7 +4,6 @@
 #include "stdafx.h"
 
 Utilities::Utilities() {}
-
 Utilities::~Utilities() {}
 
 // ==================================================

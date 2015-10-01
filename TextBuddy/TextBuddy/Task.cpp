@@ -24,6 +24,7 @@ Task::Task() {
 
 Task::~Task() {}
 
+
 // Getters
 
 int Task::getRunningCount() {
@@ -42,6 +43,7 @@ int Task::getStartTime() {return startTime;}
 Day Task::getEndDay() {return endDay;}
 int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
+
 
 // Setters, return true if successful
 

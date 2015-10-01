@@ -19,6 +19,7 @@ Command::~Command() {}
 CommandType Command::getCommand() {
 	return cmd;
 }
+
 std::string Command::getRestOfCommand() {
 	return restOfCommand;
 }

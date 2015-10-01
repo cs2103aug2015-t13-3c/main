@@ -54,7 +54,7 @@ private:
 
 	Day endDay;
 	int endDate;
-	int endTime;    // HHMM, 24-hour format
+	int endTime;   // HHMM, 24-hour format
 
 public:
 	static int getRunningCount();
@@ -79,7 +79,7 @@ public:
 	int getEndDate();
 	int getEndTime();
 
-	// Setters, return if successful
+	// Setters, return true if successful
 	bool setName(std::string newName);
 	bool setType(TaskType newType);
 	bool setID(int newID);
