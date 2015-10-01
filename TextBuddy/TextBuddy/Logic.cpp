@@ -184,12 +184,13 @@ std::string Logic::processCommand(std::string userCommand) {
 	Task taskToAdd;
 	Delete taskToDelete;
 	Search searchPhrase;
-	std::string output = "*";
+	std::string output = "ok";
 
 	int userIndex;						//userIndex in currentView
 	int id;								//id for both currentView and taskStore
 
 	switch (cmd) {
+
 	case ADD:
 		taskToAdd = parser.parseTask(inputCmd.getRestOfCommand());
 		task.setNewTask(taskToAdd);
@@ -206,6 +207,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	case SEARCH:
 		searchPhrase.setSearchPhrase(inputCmd.getRestOfCommand());
 		output = searchInfo(searchPhrase);
+		break;
 	default:
 		break;
 	}

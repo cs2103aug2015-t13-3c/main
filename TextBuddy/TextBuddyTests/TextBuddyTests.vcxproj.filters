@@ -26,6 +26,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="UITest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -44,13 +45,15 @@
     <ClCompile Include="ParserTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+=======
+>>>>>>> 73083b87d319bc34ca0056c6bc6b758a330eff8a
     <ClCompile Include="LogicTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\TextBuddy\Task.cpp">
+    <ClCompile Include="ParserTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\TextBuddy\Command.cpp">
+    <ClCompile Include="IOTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\TextBuddy\IO.cpp">
