@@ -14,6 +14,12 @@
 #include "IO.h"
 #include "Logic.h"
 #include "Parser.h"
+<<<<<<< HEAD
+#include "UI.h"
+#include "Task.h"
+#include "Command.h"
+=======
+>>>>>>> 73083b87d319bc34ca0056c6bc6b758a330eff8a
 
 #include <iostream>
 #include <stdio.h>
@@ -26,5 +32,3 @@
 
 #define ON true
 #define OFF false
-
-using namespace std;

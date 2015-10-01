@@ -13,22 +13,14 @@ IO::~IO() {}
 //                      METHODS
 // ==================================================
 
-vector<string> IO::loadFile(string fileName) {
-	ifstream newFile(fileName);
+std::vector<Task> loadFile(std::string fileName) {
+	std::ifstream newFile(fileName);
 
-	vector<string> textVector;
+	std::vector<Task> taskVector;
 
-	return textVector;
+	return taskVector;
 }
 
-// ==================================================
-//                      TO DELETE
-// ==================================================
+static bool saveFile(std::string fileName, std::vector<Task>) {
 
-/*
-IO::IO(bool status): isActive(status) {}
-
-bool IO::getStatus() {
-return isActive;
 }
-*/
