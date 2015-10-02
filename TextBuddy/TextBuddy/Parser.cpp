@@ -13,6 +13,7 @@ const std::string Parser::FILE_EXTENSION = ".txt";
 // These are the possible command types
 const std::string Parser::COMMAND_ADD = "add";
 const std::string Parser::COMMAND_DELETE = "delete";
+const std::string Parser::COMMAND_MODIFY = "modify";
 const std::string Parser::COMMAND_SEARCH = "search";
 const std::string Parser::COMMAND_CLEAR_ALL = "clear";
 const std::string Parser::COMMAND_DISPLAY_ALL = "display";
@@ -43,26 +44,117 @@ std::string Parser::parseFileName(char* argv[]) {
 	return newFileName;
 }
 
+CommandType Parser::extractCmdType(std::string cmdString) {
+	CommandType cmd;
+	Utilities u;
+
+	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
+		cmd = ADD;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
+		cmd = DELETE;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
+		cmd = SEARCH;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
+		cmd = CLEAR_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
+		cmd = DISPLAY_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
+		cmd = SORT_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
+		cmd = EXIT;
+	} else {
+		cmd = INVALID;
+	}
+
+	return cmd;
+}
+
+Command Parser::parse(std::string userInput) {
+	// userInput = u.removeSpaces(userInput);
+	std::string cmdString = u.getFirstWord(userInput);
+	std::string restOfInput = u.removeFirstWord(userInput);
+
+	CommandType cmdType = extractCmdType(cmdString);
+	Command* cmd;
+	switch(cmdType) {
+	case ADD:
+		try {
+			if(restOfInput=="") {
+				throw "No task to add";
+			}
+			cmd = new Add;
+			Task task = parseTask(restOfInput);
+			cmd->setNewTask(task);
+
+		}
+		catch(std::string NullString) {
+			std::cerr << NullString << std::endl;
+		}
+		break;
+	case DELETE:
+		try {
+			cmd = new Delete;
+			int deleteID = u.stringToInt(restOfInput);
+			cmd->setTaskToDelete(deleteID);
+		}
+		catch(std::string InvalidIntString) {
+			std::cerr << InvalidIntString << std::endl;
+		}
+		break;
+	case MODIFY:
+		try {
+			cmd = new Modify;
+		}
+		catch(std::string e) {
+
+		}
+		break;
+	case SEARCH:
+		try {
+			cmd = new Search;
+		}
+		catch(std::string e) {
+
+		}
+		break;
+	case CLEAR_ALL:
+		cmd->setCmdType(CLEAR_ALL);
+		break;
+	case DISPLAY_ALL:
+		cmd->setCmdType(DISPLAY_ALL);
+		break;
+	case SORT_ALL:
+		cmd->setCmdType(SORT_ALL);
+		break;
+	case EXIT:
+		exit(0);
+	default:
+		break;
+	}
+
+	return *cmd;
+}
+
 Command Parser::parseCommand(std::string userCommand) {
 	userCommand = u.removeSpaces(userCommand);
-	std::string commandString = u.getFirstWord(userCommand);
+	std::string cmdString = u.getFirstWord(userCommand);
 
 	Command cmd;
 	CommandType newCommand;
 
-	if(u.equalsIgnoreCase(commandString, COMMAND_ADD))	{
+	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
 		newCommand = ADD;
-	} else if(u.equalsIgnoreCase(commandString, COMMAND_DELETE)) {
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
 		newCommand = DELETE;
-	} else if(u.equalsIgnoreCase(commandString, COMMAND_SEARCH)) {
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
 		newCommand = SEARCH;
-	} else if(u.equalsIgnoreCase(commandString, COMMAND_CLEAR_ALL)) {
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
 		newCommand = CLEAR_ALL;
-	} else if(u.equalsIgnoreCase(commandString, COMMAND_DISPLAY_ALL)) {
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
 		newCommand = DISPLAY_ALL;
-	} else if(u.equalsIgnoreCase(commandString, COMMAND_SORT_ALL)) {
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
 		newCommand = SORT_ALL;
-	} else if(u.equalsIgnoreCase(commandString, COMMAND_EXIT)) {
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
 		newCommand = EXIT;
 	} else {
 		newCommand = INVALID;

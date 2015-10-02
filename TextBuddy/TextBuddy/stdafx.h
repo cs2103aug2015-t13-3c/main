@@ -8,8 +8,9 @@
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 
+#include <cassert>
 #include <algorithm>
 #include <string>
 #include <vector>

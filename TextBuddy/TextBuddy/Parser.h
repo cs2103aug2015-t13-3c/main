@@ -13,6 +13,7 @@ private:
 	// These are the possible command types
 	static const std::string COMMAND_ADD;
 	static const std::string COMMAND_DELETE;
+	static const std::string COMMAND_MODIFY;
 	static const std::string COMMAND_SEARCH;
 	static const std::string COMMAND_CLEAR_ALL;
 	static const std::string COMMAND_DISPLAY_ALL;
@@ -44,6 +45,7 @@ public:
 	Task parseTask(std::string restOfCommand);
 
 	// These functions support user methods
+	static CommandType extractCmdType(std::string cmdString);
 	static int findMaxDays(Month month, int year=2015);
 	static Month findMonth(std::string monthString);
 	static Day findDay(std::string dayString);
