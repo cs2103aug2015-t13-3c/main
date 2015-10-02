@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "Parser.h"
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

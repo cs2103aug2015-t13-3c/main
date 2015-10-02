@@ -13,27 +13,38 @@ private:
 	// This is the return value for invalid numbers
 	static const int INVALID_NUMBER_FORMAT = -1;
 
+	// These are the possible command types
+	static const std::string COMMAND_ADD;
+	static const std::string COMMAND_DELETE;
+	static const std::string COMMAND_MODIFY;
+	static const std::string COMMAND_SEARCH;
+	static const std::string COMMAND_CLEAR_ALL;
+	static const std::string COMMAND_DISPLAY_ALL;
+	static const std::string COMMAND_SORT_ALL;
+	static const std::string COMMAND_EXIT;
+
 public:
 	Utilities();
 	~Utilities();
 
 	// Converters used in multiple architecture components
 	static std::string	stringToLower(std::string str);
-	
+
+	static CommandType	stringToCmdType(std::string str);
 	static int			stringToInt(std::string str);
-	static Day			stringToEnumDay(std::string dayString);
-	static Month		stringToEnumMonth(std::string monthString);
-	static TaskType		stringToEnumType(std::string line);
+	static Day			stringToDay(std::string dayString);
+	static Month		stringToMonth(std::string monthString);
+	static TaskType		stringToTaskType(std::string line);
 
 	static std::string	boolToIntString(bool boolean);
-	static std::string	enumDayToString(Day day);
-	static std::string	enumTypeToString(TaskType type);
+	static std::string	dayToString(Day day);
 	static std::string	taskToString(Task taskToConvert);
+	static std::string	taskTypeToString(TaskType type);
 	static std::string	vecToString(std::vector<std::string> inputString);
-	
 
-	// Used in Parser only
+	// Useful methods
 	static bool			containsAny(std::string targetWord, std::string searchWords);
+
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 	static bool			isPositiveNonZeroInt(std::string s);
 	static bool			equalsIgnoreCase(const std::string& str1, const std::string& str2);

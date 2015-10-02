@@ -21,6 +21,8 @@
 #include <string>
 #include <vector>
 
+#include "Task.h"
+#include "Command.h"
 #include "Utilities.h"
 
 #include "IO.h"

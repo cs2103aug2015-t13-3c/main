@@ -1,10 +1,19 @@
 // @@author Aaron Chong Jun Hao
-// @@author Ng Ren Zhi
 
 #include "stdafx.h"
 
 Utilities::Utilities() {}
 Utilities::~Utilities() {}
+
+// These are the possible command types
+const std::string Utilities::COMMAND_ADD = "add";
+const std::string Utilities::COMMAND_DELETE = "delete";
+const std::string Utilities::COMMAND_MODIFY = "modify";
+const std::string Utilities::COMMAND_SEARCH = "search";
+const std::string Utilities::COMMAND_CLEAR_ALL = "clear";
+const std::string Utilities::COMMAND_DISPLAY_ALL = "display";
+const std::string Utilities::COMMAND_SORT_ALL = "sort";
+const std::string Utilities::COMMAND_EXIT = "exit";
 
 // ==================================================
 //  CONVERTERS FOR MULTIPLE ARCHITECTURE COMPONENTS
@@ -29,7 +38,32 @@ int Utilities::stringToInt(std::string str) {
 	}
 }
 
-Day Utilities::stringToEnumDay(std::string dayString) {
+CommandType Utilities::stringToCmdType(std::string cmdString) {
+	CommandType cmd;
+	Utilities u;
+
+	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
+		cmd = ADD;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
+		cmd = DELETE;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
+		cmd = SEARCH;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
+		cmd = CLEAR_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
+		cmd = DISPLAY_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
+		cmd = SORT_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
+		cmd = EXIT;
+	} else {
+		cmd = INVALID;
+	}
+
+	return cmd;
+}
+
+Day Utilities::stringToDay(std::string dayString) {
 	Day day = INVALID_DAY;
 
 	if(containsAny(dayString,"sun sunday")) {
@@ -51,7 +85,7 @@ Day Utilities::stringToEnumDay(std::string dayString) {
 	return day;
 }
 
-Month Utilities::stringToEnumMonth(std::string monthString) {
+Month Utilities::stringToMonth(std::string monthString) {
 	Utilities u;
 
 	Month monthInput = INVALID_MONTH;
@@ -83,7 +117,7 @@ Month Utilities::stringToEnumMonth(std::string monthString) {
 	return monthInput;
 }
 
-TaskType Utilities::stringToEnumType(std::string line) {
+TaskType Utilities::stringToTaskType(std::string line) {
 	TaskType type;
 
 	if(line == "FLOATING") {
@@ -107,7 +141,7 @@ std::string Utilities::boolToIntString(bool boolean) {
 	}
 }
 
-std::string Utilities::enumDayToString(Day day) {
+std::string Utilities::dayToString(Day day) {
 	std::string dayString;
 	switch(day) {
 	case SUN:
@@ -140,23 +174,6 @@ std::string Utilities::enumDayToString(Day day) {
 	return dayString;
 }
 
-std::string Utilities::enumTypeToString(TaskType type) {
-	std::string typeString;
-	switch(type) {
-	case FLOATING:
-		typeString = "FLOATING";
-		break;
-	case EVENT:
-		typeString = "EVENT";
-		break;
-	case TODO:
-		typeString = "TODO";
-		break;
-	}
-
-	return typeString;
-}
-
 std::string Utilities::taskToString(Task task) {
 	const int MAX_BYTES = 2550;
 	char buffer[MAX_BYTES] = "";
@@ -178,6 +195,23 @@ std::string Utilities::taskToString(Task task) {
 	return buffer;
 }
 
+std::string Utilities::taskTypeToString(TaskType type) {
+	std::string typeString;
+	switch(type) {
+	case FLOATING:
+		typeString = "FLOATING";
+		break;
+	case EVENT:
+		typeString = "EVENT";
+		break;
+	case TODO:
+		typeString = "TODO";
+		break;
+	}
+
+	return typeString;
+}
+
 std::string Utilities::vecToString(std::vector<std::string> inputString) {
 	std::string newString;
 	std::vector<std::string>::iterator curr;
@@ -192,7 +226,7 @@ std::string Utilities::vecToString(std::vector<std::string> inputString) {
 
 
 // ==================================================
-//                USED IN PARSER ONLY
+//                   USEFUL METHODS
 // ==================================================
 
 bool Utilities::containsAny(std::string targetWord, std::string searchWords) {

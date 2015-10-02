@@ -10,16 +10,6 @@ Parser::~Parser() {}
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
 
-// These are the possible command types
-const std::string Parser::COMMAND_ADD = "add";
-const std::string Parser::COMMAND_DELETE = "delete";
-const std::string Parser::COMMAND_MODIFY = "modify";
-const std::string Parser::COMMAND_SEARCH = "search";
-const std::string Parser::COMMAND_CLEAR_ALL = "clear";
-const std::string Parser::COMMAND_DISPLAY_ALL = "display";
-const std::string Parser::COMMAND_SORT_ALL = "sort";
-const std::string Parser::COMMAND_EXIT = "exit";
-
 // These are the possible field types
 const std::string Parser::FIELD_DATE_BY = "by";
 const std::string Parser::FIELD_DATE_ON = "on";
@@ -46,11 +36,12 @@ std::string Parser::parseFileName(char* argv[]) {
 
 Command Parser::parse(std::string userInput) {
 	// userInput = u.removeSpaces(userInput);
-	std::string cmdString = u.getFirstWord(userInput);
+	std::string cmdString	= u.getFirstWord(userInput);
+	CommandType cmdType		= u.stringToCmdType(cmdString);
+
+	Command* cmd = new Command;
 	std::string restOfInput = u.removeFirstWord(userInput);
 
-	CommandType cmdType = extractCmdType(cmdString);
-	Command* cmd = new Command;
 	switch(cmdType) {
 	case ADD:
 		try {
@@ -123,31 +114,13 @@ Command Parser::parse(std::string userInput) {
 }
 
 Command Parser::parseCommand(std::string userCommand) {
-	userCommand = u.removeSpaces(userCommand);
-	std::string cmdString = u.getFirstWord(userCommand);
+	// userCommand = u.removeSpaces(userCommand);
+	std::string cmdString	= u.getFirstWord(userCommand);
+	std::string restOfInput = u.removeFirstWord(userCommand);
+	CommandType newCommand	= u.stringToCmdType(cmdString);
 
-	Command cmd;
-	CommandType newCommand;
-
-	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
-		newCommand = ADD;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
-		newCommand = DELETE;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
-		newCommand = SEARCH;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
-		newCommand = CLEAR_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
-		newCommand = DISPLAY_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
-		newCommand = SORT_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
-		newCommand = EXIT;
-	} else {
-		newCommand = INVALID;
-	}
-
-	return Command(newCommand,u.removeFirstWord(userCommand),userCommand);
+	Command cmd(newCommand,restOfInput,userCommand);
+	return cmd;
 }
 
 Task Parser::parseTask(std::string restOfCommand) {
@@ -225,6 +198,38 @@ Task Parser::parseTask(std::string restOfCommand) {
 	return newTask;
 }
 
+int Parser::findMaxDays(Month month, int year) { // default year is 2015
+	int maxDays = 0;
+	bool isLeap;
+	switch(month) {
+	case JAN:
+	case MAR:
+	case MAY:
+	case JUL:
+	case AUG:
+	case OCT:
+	case DEC:
+		maxDays = 31;
+		break;
+	case APR:
+	case JUN:
+	case SEP:
+	case NOV:
+		maxDays = 30;
+		break;
+	case FEB:
+		isLeap = ((year%4==0 && year%100!=0) || year%400==0);
+		if(isLeap) {
+			maxDays = 29;
+		} else {
+			maxDays = 28;
+		}
+	default:
+		break;
+	}
+	return maxDays;
+}
+
 // Processes dates in these formats:
 // - DDD/DDDD
 // - this/next DDD/DDDD
@@ -256,7 +261,7 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 		int dateInput = u.stringToInt(*curr);
 		curr++;
 
-		Month monthInput = u.stringToEnumMonth(*curr);
+		Month monthInput = u.stringToMonth(*curr);
 		if(monthInput != INVALID_MONTH) {
 			maxDays = findMaxDays(monthInput);
 		}
@@ -281,7 +286,7 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 		}
 
 		if(curr!=inputString.end()) {
-			Day newDay = u.stringToEnumDay(*curr);
+			Day newDay = u.stringToDay(*curr);
 			if(newDay != INVALID_DAY) {
 				date += (int)newDay - (int)day;
 				curr++;
@@ -309,64 +314,4 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 	}
 
 	return newDate;
-}
-
-
-// Internal methods
-
-CommandType Parser::extractCmdType(std::string cmdString) {
-	CommandType cmd;
-	Utilities u;
-
-	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
-		cmd = ADD;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
-		cmd = DELETE;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
-		cmd = SEARCH;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
-		cmd = CLEAR_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
-		cmd = DISPLAY_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
-		cmd = SORT_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
-		cmd = EXIT;
-	} else {
-		cmd = INVALID;
-	}
-
-	return cmd;
-}
-
-int Parser::findMaxDays(Month month, int year) { // default year is 2015
-	int maxDays = 0;
-	bool isLeap;
-	switch(month) {
-	case JAN:
-	case MAR:
-	case MAY:
-	case JUL:
-	case AUG:
-	case OCT:
-	case DEC:
-		maxDays = 31;
-		break;
-	case APR:
-	case JUN:
-	case SEP:
-	case NOV:
-		maxDays = 30;
-		break;
-	case FEB:
-		isLeap = ((year%4==0 && year%100!=0) || year%400==0);
-		if(isLeap) {
-			maxDays = 29;
-		} else {
-			maxDays = 28;
-		}
-	default:
-		break;
-	}
-	return maxDays;
 }

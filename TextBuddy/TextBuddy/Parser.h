@@ -10,16 +10,6 @@ private:
 	// This defines the file extension used by TextBuddy
 	static const std::string FILE_EXTENSION;
 
-	// These are the possible command types
-	static const std::string COMMAND_ADD;
-	static const std::string COMMAND_DELETE;
-	static const std::string COMMAND_MODIFY;
-	static const std::string COMMAND_SEARCH;
-	static const std::string COMMAND_CLEAR_ALL;
-	static const std::string COMMAND_DISPLAY_ALL;
-	static const std::string COMMAND_SORT_ALL;
-	static const std::string COMMAND_EXIT;
-
 	// These are the possible field types for tasks
 	static const std::string FIELD_DATE_BY;
 	static const std::string FIELD_DATE_ON;
@@ -44,9 +34,7 @@ public:
 	Task parseTask(std::string restOfCommand);
 
 	// These functions support user methods
-	static CommandType extractCmdType(std::string cmdString);
 	static int findMaxDays(Month month, int year=2015);
-	static Day extractDay(std::string dayString);
 
 	// These handle task parameters
 	static int parseDate(std::vector<std::string> inputString);
