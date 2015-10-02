@@ -23,12 +23,14 @@ namespace TextBuddyTests
 		TEST_METHOD(Parser_parseDate)
 		{
 			// Invalid Input
-			expectedInt = 0;
-			/*
+
+			const int INVALID_DATE_FORMAT = -1;
+			expectedInt = INVALID_DATE_FORMAT;
+			
 			userInput = "";
 			inputString = u.splitParameters(userInput);
-			Assert::AreEqual(expected,p.parseDate(inputString));
-			*/
+			Assert::AreEqual(expectedInt,p.parseDate(inputString));
+			
 			userInput = "invalid";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
@@ -47,8 +49,8 @@ namespace TextBuddyTests
 			userInput = "31 dec";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-
-			expectedInt = 150929;
+			
+			expectedInt = 151003;
 			userInput = "tmr";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
@@ -57,8 +59,8 @@ namespace TextBuddyTests
 			userInput = "sat";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-
-			expectedInt = 150928;
+			
+			expectedInt = INVALID_DATE_FORMAT;
 			userInput = "this mon";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
@@ -86,7 +88,7 @@ namespace TextBuddyTests
 			expectedString = "Name: little brown fox\n";
 			userInput = "little brown fox";
 			tempTask = p.parseTask(userInput);
-			Assert::AreEqual(expectedString,u.taskToBuffer(tempTask));
+			Assert::AreEqual(expectedString,u.taskToString(tempTask));
 		}
 
 	};

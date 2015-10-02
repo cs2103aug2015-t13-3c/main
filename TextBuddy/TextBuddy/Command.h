@@ -36,6 +36,7 @@ public:
 	virtual void setNewTask(Task task);					// Add
 	virtual void setTaskToDelete(int index);			// Delete
 	virtual std::vector<FieldType> getFieldsToModify();	// Modify
+	virtual void setTempTask(Task task);				// Modify
 	virtual void setSearchPhrase(std::string phr);		// Search
 };
 
@@ -68,6 +69,7 @@ public:
 	~Modify();
 	std::vector<FieldType> getFieldsToModify() override;
 	Task getTempTask();
+	void setTempTask(Task task) override;
 };
 
 class Search: public Command {

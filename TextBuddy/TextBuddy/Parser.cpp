@@ -44,38 +44,13 @@ std::string Parser::parseFileName(char* argv[]) {
 	return newFileName;
 }
 
-CommandType Parser::extractCmdType(std::string cmdString) {
-	CommandType cmd;
-	Utilities u;
-
-	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
-		cmd = ADD;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
-		cmd = DELETE;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
-		cmd = SEARCH;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
-		cmd = CLEAR_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
-		cmd = DISPLAY_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
-		cmd = SORT_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
-		cmd = EXIT;
-	} else {
-		cmd = INVALID;
-	}
-
-	return cmd;
-}
-
 Command Parser::parse(std::string userInput) {
 	// userInput = u.removeSpaces(userInput);
 	std::string cmdString = u.getFirstWord(userInput);
 	std::string restOfInput = u.removeFirstWord(userInput);
 
 	CommandType cmdType = extractCmdType(cmdString);
-	Command* cmd;
+	Command* cmd = new Command;
 	switch(cmdType) {
 	case ADD:
 		try {
@@ -85,14 +60,16 @@ Command Parser::parse(std::string userInput) {
 			cmd = new Add;
 			Task task = parseTask(restOfInput);
 			cmd->setNewTask(task);
-
 		}
-		catch(std::string NullString) {
-			std::cerr << NullString << std::endl;
+		catch(std::string NullTaskString) {
+			std::cerr << NullTaskString << std::endl;
 		}
 		break;
 	case DELETE:
 		try {
+			if(!u.isPositiveNonZeroInt(restOfInput)) {
+				throw "Invalid integer string";
+			}
 			cmd = new Delete;
 			int deleteID = u.stringToInt(restOfInput);
 			cmd->setTaskToDelete(deleteID);
@@ -103,18 +80,28 @@ Command Parser::parse(std::string userInput) {
 		break;
 	case MODIFY:
 		try {
+			if(restOfInput=="") {
+				throw "No fields to modify";
+			}
 			cmd = new Modify;
+			Task task = parseTask(restOfInput);
+			cmd->setTempTask(task);
 		}
-		catch(std::string e) {
-
+		catch(std::string NullModifyString) {
+			std::cerr << NullModifyString << std::endl;
 		}
 		break;
 	case SEARCH:
 		try {
+			if(restOfInput=="") {
+				throw "No search phrase";
+			}
 			cmd = new Search;
+			std::string searchPhrase;
+			cmd->setSearchPhrase(searchPhrase);
 		}
-		catch(std::string e) {
-
+		catch(std::string NullSearchString) {
+			std::cerr << NullSearchString << std::endl;
 		}
 		break;
 	case CLEAR_ALL:
@@ -182,8 +169,8 @@ Task Parser::parseTask(std::string restOfCommand) {
 				curr++;
 		}
 
-		int newStartDate = 0;
-		int newEndDate = 0;
+		int newStartDate;
+		int newEndDate;
 
 		switch(inputMode) {
 		case NAME:
@@ -248,14 +235,15 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 	Utilities u;
 
 	if(inputString.empty()) {
-		return 0;
+		return INVALID_DATE_FORMAT;
 	}
 
 	std::vector<std::string>::iterator curr;
 	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
 		*curr = u.stringToLower(*curr);
 	}
-	int newDate = 0;
+
+	int newDate = INVALID_DATE_FORMAT;
 	int maxDays = 0;
 
 	time_t t = time(0); // get current time
@@ -265,16 +253,15 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 
 	curr = inputString.begin();
 	if(!((*curr).empty()) && (*curr).find_first_not_of("0123456789")==std::string::npos) {
-		Utilities u;
 		int dateInput = u.stringToInt(*curr);
 		curr++;
 
-		Month monthInput = findMonth(*curr);
+		Month monthInput = u.stringToEnumMonth(*curr);
 		if(monthInput != INVALID_MONTH) {
 			maxDays = findMaxDays(monthInput);
 		}
 
-		if(0<dateInput && dateInput<=maxDays) {
+		if(1<=dateInput && dateInput<=maxDays) {
 			newDate = year*10000 + (int)monthInput*100 + dateInput;
 		}
 
@@ -294,7 +281,7 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 		}
 
 		if(curr!=inputString.end()) {
-			Day newDay = findDay(*curr);
+			Day newDay = u.stringToEnumDay(*curr);
 			if(newDay != INVALID_DAY) {
 				date += (int)newDay - (int)day;
 				curr++;
@@ -314,7 +301,10 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 				month = (Month)((int)month-(int)maxMonth);
 			}
 
+			// Check that valid date
+			if(1<=date && date<=maxDays) {
 			newDate = year*10000 + (int)month*100 + date;
+			}
 		}
 	}
 
@@ -324,8 +314,33 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 
 // Internal methods
 
+CommandType Parser::extractCmdType(std::string cmdString) {
+	CommandType cmd;
+	Utilities u;
+
+	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
+		cmd = ADD;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
+		cmd = DELETE;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
+		cmd = SEARCH;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
+		cmd = CLEAR_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
+		cmd = DISPLAY_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
+		cmd = SORT_ALL;
+	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
+		cmd = EXIT;
+	} else {
+		cmd = INVALID;
+	}
+
+	return cmd;
+}
+
 int Parser::findMaxDays(Month month, int year) { // default year is 2015
-	int maxDays;
+	int maxDays = 0;
 	bool isLeap;
 	switch(month) {
 	case JAN:
@@ -354,58 +369,4 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 		break;
 	}
 	return maxDays;
-}
-
-Month Parser::findMonth(std::string monthString) {
-	Utilities u;
-
-	Month monthInput = INVALID_MONTH;
-	if(u.containsAny(monthString,"1 jan january")) {
-		monthInput = JAN;
-	} else if(u.containsAny(monthString,"2 feb february")) {
-		monthInput = FEB;
-	} else if(u.containsAny(monthString,"3 mar march")) {
-		monthInput = MAR;
-	} else if(u.containsAny(monthString,"4 apr april")) {
-		monthInput = APR;
-	} else if(u.containsAny(monthString,"5 may")) {
-		monthInput = MAY;
-	} else if(u.containsAny(monthString,"6 jun june")) {
-		monthInput = JUN;
-	} else if(u.containsAny(monthString,"7 jul july")) {
-		monthInput = JUL;
-	} else if(u.containsAny(monthString,"8 aug august")) {
-		monthInput = AUG;
-	} else if(u.containsAny(monthString,"9 sep sept september")) {
-		monthInput = SEP;
-	} else if(u.containsAny(monthString,"10 oct october")) {
-		monthInput = OCT;
-	} else if(u.containsAny(monthString,"11 nov november")) {
-		monthInput = NOV;
-	} else if(u.containsAny(monthString,"12 dec december")) {
-		monthInput = DEC;
-	}
-	return monthInput;
-}
-
-Day Parser::findDay(std::string dayString) {
-	Utilities u;
-
-	Day newDay = INVALID_DAY;
-	if(u.containsAny(dayString,"sun sunday")) {
-		newDay = SUN;
-	} else if(u.containsAny(dayString,"mon monday")) {
-		newDay = MON;
-	} else if(u.containsAny(dayString,"tue tues tuesday")) {
-		newDay = TUE;
-	} else if(u.containsAny(dayString,"wed wednesday")) {
-		newDay = WED;
-	} else if(u.containsAny(dayString,"thu thur thurs thursday")) {
-		newDay = THU;
-	} else if(u.containsAny(dayString,"fri friday")) {
-		newDay = FRI;
-	} else if(u.containsAny(dayString,"sat saturday")) {
-		newDay = SAT;
-	}
-	return newDay;
 }

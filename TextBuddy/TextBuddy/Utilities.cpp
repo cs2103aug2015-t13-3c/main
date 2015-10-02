@@ -7,8 +7,15 @@ Utilities::Utilities() {}
 Utilities::~Utilities() {}
 
 // ==================================================
-//      USED IN MULTIPLE ARCHITECTURE COMPONENTS
+//  CONVERTERS FOR MULTIPLE ARCHITECTURE COMPONENTS
 // ==================================================
+
+std::string Utilities::stringToLower(std::string str) {
+	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+	return str;
+}
+
+// String to other types
 
 int Utilities::stringToInt(std::string str) {
 	char c;
@@ -22,66 +29,58 @@ int Utilities::stringToInt(std::string str) {
 	}
 }
 
-std::string Utilities::stringToLower(std::string str) {
-	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-	return str;
-}
-
-std::string Utilities::taskToBuffer(Task task) {
-	const int MAX_BYTES = 2550;
-	char buffer[MAX_BYTES] = "";
-
-	sprintf_s(buffer, "%s%s\n"/*"%s%d\n%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n"/*11 outputs*/,
-		"Name: ",		task.getName().c_str()/*,
-		"Type: ",		task.getType(),
-		"Label: ",		task.getLabel().c_str(),
-		"Done: ",		task.getDoneStatus(),
-		"Priority: ",	task.getPriorityStatus(),
-		"Start Day: ",	task.getStartDay(),
-		"Start Date: ",	task.getStartDate(),
-		"Start Time: ",	task.getStartTime(),
-		"End Day: ",	task.getEndDay(),
-		"End Date: ",	task.getEndDate(),
-		"End Time: ",	task.getEndTime()*/
-		);
-
-	return buffer;
-}
-
-std::string Utilities::vecToString(std::vector<std::string> inputString) {
-	std::string newString;
-	std::vector<std::string>::iterator curr;
-	for(curr=inputString.begin(); curr!=inputString.end(); ) {
-		newString += *curr;
-		if(++curr != inputString.end()) {
-			newString += " ";
-		}
-	}
-	return newString;
-}
-
-Day Utilities::stringToEnumDay(std::string line) {
+Day Utilities::stringToEnumDay(std::string dayString) {
 	Day day = INVALID_DAY;
 
-	if (line == "SUN") {
+	if(containsAny(dayString,"sun sunday")) {
 		day = SUN;
-	} else if (line == "MON") {
+	} else if(containsAny(dayString,"mon monday")) {
 		day = MON;
-	} else if (line == "TUE") {
+	} else if(containsAny(dayString,"tue tues tuesday")) {
 		day = TUE;
-	} else if (line == "WED") {
+	} else if(containsAny(dayString,"wed wednesday")) {
 		day = WED;
-	} else if (line == "THU") {
+	} else if(containsAny(dayString,"thu thur thurs thursday")) {
 		day = THU;
-	} else if (line == "FRI") {
+	} else if(containsAny(dayString,"fri friday")) {
 		day = FRI;
-	} else if (line == "SAT") {
+	} else if(containsAny(dayString,"sat saturday")) {
 		day = SAT;
-	} else if (line == "INVALID_DAY") {
-		day = INVALID_DAY;
 	}
 
 	return day;
+}
+
+Month Utilities::stringToEnumMonth(std::string monthString) {
+	Utilities u;
+
+	Month monthInput = INVALID_MONTH;
+	if(u.containsAny(monthString,"1 jan january")) {
+		monthInput = JAN;
+	} else if(u.containsAny(monthString,"2 feb february")) {
+		monthInput = FEB;
+	} else if(u.containsAny(monthString,"3 mar march")) {
+		monthInput = MAR;
+	} else if(u.containsAny(monthString,"4 apr april")) {
+		monthInput = APR;
+	} else if(u.containsAny(monthString,"5 may")) {
+		monthInput = MAY;
+	} else if(u.containsAny(monthString,"6 jun june")) {
+		monthInput = JUN;
+	} else if(u.containsAny(monthString,"7 jul july")) {
+		monthInput = JUL;
+	} else if(u.containsAny(monthString,"8 aug august")) {
+		monthInput = AUG;
+	} else if(u.containsAny(monthString,"9 sep sept september")) {
+		monthInput = SEP;
+	} else if(u.containsAny(monthString,"10 oct october")) {
+		monthInput = OCT;
+	} else if(u.containsAny(monthString,"11 nov november")) {
+		monthInput = NOV;
+	} else if(u.containsAny(monthString,"12 dec december")) {
+		monthInput = DEC;
+	}
+	return monthInput;
 }
 
 TaskType Utilities::stringToEnumType(std::string line) {
@@ -97,6 +96,8 @@ TaskType Utilities::stringToEnumType(std::string line) {
 
 	return type;
 }
+
+// Other types to string
 
 std::string Utilities::boolToIntString(bool boolean) {
 	if(boolean) {
@@ -156,12 +157,46 @@ std::string Utilities::enumTypeToString(TaskType type) {
 	return typeString;
 }
 
+std::string Utilities::taskToString(Task task) {
+	const int MAX_BYTES = 2550;
+	char buffer[MAX_BYTES] = "";
+
+	sprintf_s(buffer, "%s%s\n"/*"%s%d\n%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n"/*11 outputs*/,
+		"Name: ",		task.getName().c_str()/*,
+		"Type: ",		task.getType(),
+		"Label: ",		task.getLabel().c_str(),
+		"Done: ",		task.getDoneStatus(),
+		"Priority: ",	task.getPriorityStatus(),
+		"Start Day: ",	task.getStartDay(),
+		"Start Date: ",	task.getStartDate(),
+		"Start Time: ",	task.getStartTime(),
+		"End Day: ",	task.getEndDay(),
+		"End Date: ",	task.getEndDate(),
+		"End Time: ",	task.getEndTime()*/
+		);
+
+	return buffer;
+}
+
+std::string Utilities::vecToString(std::vector<std::string> inputString) {
+	std::string newString;
+	std::vector<std::string>::iterator curr;
+	for(curr=inputString.begin(); curr!=inputString.end(); ) {
+		newString += *curr;
+		if(++curr != inputString.end()) {
+			newString += " ";
+		}
+	}
+	return newString;
+}
+
 
 // ==================================================
 //                USED IN PARSER ONLY
 // ==================================================
 
 bool Utilities::containsAny(std::string targetWord, std::string searchWords) {
+	searchWords = stringToLower(searchWords);
 	std::vector<std::string> vecSearchWords = splitParameters(searchWords);
 	std::vector<std::string>::iterator curr;
 

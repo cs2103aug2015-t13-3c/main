@@ -11,9 +11,6 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
-#include "IO.h"
-#include "Logic.h"
-#include "Parser.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -24,7 +21,8 @@
 #include <string>
 #include <vector>
 
-#define ON true
-#define OFF false
+#include "Utilities.h"
 
-using namespace std;
+#include "IO.h"
+#include "Logic.h"
+#include "Parser.h"

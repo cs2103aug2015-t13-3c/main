@@ -30,9 +30,8 @@ private:
 	static const std::string FIELD_LABEL;
 	static int runningCount;
 
-	// These are the locations at which various parameters appear
-	// static const int PARAM_POSITION_TASK = 0;
-	// static const int PARAM_POSITION_TASK_NUMBER = 0;
+	// This is the return value for invalid numbers
+	static const int INVALID_DATE_FORMAT = -1;
 
 public:
 	Parser();
@@ -47,8 +46,7 @@ public:
 	// These functions support user methods
 	static CommandType extractCmdType(std::string cmdString);
 	static int findMaxDays(Month month, int year=2015);
-	static Month findMonth(std::string monthString);
-	static Day findDay(std::string dayString);
+	static Day extractDay(std::string dayString);
 
 	// These handle task parameters
 	static int parseDate(std::vector<std::string> inputString);

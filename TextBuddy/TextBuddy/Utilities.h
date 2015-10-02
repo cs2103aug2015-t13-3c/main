@@ -6,6 +6,8 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
+#include "Task.h"
+
 class Utilities {
 private:
 	// This is the return value for invalid numbers
@@ -16,16 +18,18 @@ public:
 	~Utilities();
 
 	// Converters used in multiple architecture components
-	static int			stringToInt(std::string str);
 	static std::string	stringToLower(std::string str);
-	static std::string	vecToString(std::vector<std::string> inputString);
-	static std::string	taskToBuffer(Task taskToConvert);
 	
-	static Day			stringToEnumDay(std::string line);
+	static int			stringToInt(std::string str);
+	static Day			stringToEnumDay(std::string dayString);
+	static Month		stringToEnumMonth(std::string monthString);
 	static TaskType		stringToEnumType(std::string line);
+
 	static std::string	boolToIntString(bool boolean);
 	static std::string	enumDayToString(Day day);
 	static std::string	enumTypeToString(TaskType type);
+	static std::string	taskToString(Task taskToConvert);
+	static std::string	vecToString(std::vector<std::string> inputString);
 	
 
 	// Used in Parser only

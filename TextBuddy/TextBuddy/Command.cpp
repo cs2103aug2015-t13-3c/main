@@ -47,6 +47,8 @@ std::vector<FieldType> Command::getFieldsToModify() {
 	return dummy;
 }
 
+void Command::setTempTask(Task task) {}
+
 void Command::setSearchPhrase(std::string phr) {}
 
 // ==================================================
@@ -94,6 +96,11 @@ std::vector<FieldType> Modify::getFieldsToModify() {
 
 Task Modify::getTempTask() {
 	return tempTask;
+}
+
+void Modify::setTempTask(Task task) {
+	tempTask = task;
+	return;
 }
 
 // ==================================================
