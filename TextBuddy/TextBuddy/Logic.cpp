@@ -169,6 +169,40 @@ std::string Logic::searchInfo(Search toSearch) {
 	return returnString;
 }
 
+//the list is separated by commas
+bool Logic::amendView(std::string listOfIds) {
+	std::string idToken;
+	int id;
+	int index;
+	std::vector<Task>::iterator iter;
+
+	currentView.clear();
+
+
+	while (listOfIds != "") {
+		index = listOfIds.find(",");
+
+		if (index == -1) {
+			idToken = listOfIds;
+			listOfIds = "";
+		} else {
+			idToken = listOfIds.substr(0, index);
+			listOfIds = listOfIds.substr(index+1);
+		}
+		
+		id = stoi(idToken);
+
+		iter = taskStore.begin();
+		for (iter = taskStore.begin() ; iter != taskStore.end(); ++iter) {
+			if (id == iter->getID()) {
+				currentView.push_back(*iter);
+			}
+		}
+	}
+
+	return true;
+}
+
 // Input command is obtained from parseCommand
 // Returns string of IDs with search, returns "*" for add/delete
 std::string Logic::processCommand(std::string userCommand) {
@@ -183,6 +217,10 @@ std::string Logic::processCommand(std::string userCommand) {
 
 	int userIndex;						//userIndex in currentView
 	int id;								//id for both currentView and taskStore
+	
+	//for temporary method to return string of names followed by commas	
+	std::ostringstream tempOutput;
+	std::vector<Task>::iterator iter;
 
 	switch (cmd) {
 
@@ -200,8 +238,21 @@ std::string Logic::processCommand(std::string userCommand) {
 		deleteInfo(taskToDelete);
 		break;
 	case SEARCH:
+		//currently search returns string of names
+		//currentView is also amended, can refer to items from currentView after every processInfo cmd
+		//eg. add/delete will display new list under UI
+		//if it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 		searchPhrase.setSearchPhrase(inputCmd.getRestOfCommand());
 		output = searchInfo(searchPhrase);
+		amendView(output);
+
+		//temporary method to return string of names followed by commas
+		for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
+			tempOutput << iter->getName() << ",";
+		}
+		
+		output = tempOutput.str();
+		output.erase(output.size()-1);
 		break;
 	default:
 		break;

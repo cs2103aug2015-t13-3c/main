@@ -27,6 +27,8 @@ public:
 	bool deleteInfo(Delete idToDelete);
 	bool modifyInfo(Modify toModify);
 	std::string searchInfo(Search toSearch);
+	//amends currentView to store searched elements
+	bool amendView(std::string listOfIds);
 
 	bool matchPhrase(std::string phr, std::string str);		
 	std::string processCommand(std::string userCommand);
