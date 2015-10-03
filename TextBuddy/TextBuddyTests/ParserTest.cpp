@@ -25,11 +25,11 @@ namespace TextBuddyTests
 
 			const int INVALID_DATE_FORMAT = -1;
 			expectedInt = INVALID_DATE_FORMAT;
-			
+
 			userInput = "";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-			
+
 			userInput = "invalid";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
@@ -48,7 +48,7 @@ namespace TextBuddyTests
 			userInput = "31 dec";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-			
+
 			expectedInt = 151003;
 			userInput = "tmr";
 			inputString = u.splitParameters(userInput);
@@ -58,7 +58,7 @@ namespace TextBuddyTests
 			userInput = "sat";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-			
+
 			expectedInt = INVALID_DATE_FORMAT;
 			userInput = "this mon";
 			inputString = u.splitParameters(userInput);
@@ -90,5 +90,100 @@ namespace TextBuddyTests
 			Assert::AreEqual(expectedString,u.taskToString(tempTask));
 		}
 
+		TEST_METHOD(Parser_parseTime) {
+
+			// Invalid time formats
+			expectedInt = -1;
+
+			userInput = "invalid";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "0";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "0.";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = ".0";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "0.0";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "0.1";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "2400";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "2360";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "24.00";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "23.60";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+			
+			userInput = "23.59 am";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			userInput = "23.59 pm";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+			
+			// Valid time formats
+
+			expectedInt = 100;
+			userInput = "100";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+			
+			expectedInt = 2359;
+			userInput = "23.59";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+			
+			expectedInt = 0;
+			userInput = "12 am";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+			
+			expectedInt = 0;
+			userInput = "12.00 am";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+			
+			expectedInt = 100;
+			userInput = "1.00 am";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			expectedInt = 1159;
+			userInput = "11.59 am";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+
+			expectedInt = 1200;
+			userInput = "12 pm";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+			
+			expectedInt = 1200;
+			userInput = "12.00 pm";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseTime(inputString));
+		}
 	};
 }

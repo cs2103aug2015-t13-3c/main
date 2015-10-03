@@ -22,6 +22,7 @@ private:
 
 	// This is the return value for invalid numbers
 	static const int INVALID_DATE_FORMAT = -1;
+	static const int INVALID_TIME_FORMAT = -1;
 
 public:
 	Parser();

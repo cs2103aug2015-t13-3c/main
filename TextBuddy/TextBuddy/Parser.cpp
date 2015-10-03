@@ -56,6 +56,7 @@ Command Parser::parse(std::string userInput) {
 			std::cerr << NullTaskString << std::endl;
 		}
 		break;
+
 	case DELETE:
 		try {
 			if(!u.isPositiveNonZeroInt(restOfInput)) {
@@ -69,6 +70,7 @@ Command Parser::parse(std::string userInput) {
 			std::cerr << InvalidIntString << std::endl;
 		}
 		break;
+
 	case MODIFY:
 		try {
 			if(restOfInput=="") {
@@ -82,6 +84,7 @@ Command Parser::parse(std::string userInput) {
 			std::cerr << NullModifyString << std::endl;
 		}
 		break;
+
 	case SEARCH:
 		try {
 			if(restOfInput=="") {
@@ -95,17 +98,22 @@ Command Parser::parse(std::string userInput) {
 			std::cerr << NullSearchString << std::endl;
 		}
 		break;
+
 	case CLEAR_ALL:
 		cmd->setCmdType(CLEAR_ALL);
 		break;
+
 	case DISPLAY_ALL:
 		cmd->setCmdType(DISPLAY_ALL);
 		break;
+
 	case SORT_ALL:
 		cmd->setCmdType(SORT_ALL);
 		break;
+
 	case EXIT:
 		exit(0);
+
 	default:
 		break;
 	}
@@ -235,16 +243,16 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 // - this/next DDD/DDDD
 // - DD MM/MMM/MMMM
 // Week is defined as Sunday to Saturday
-// Returns 0 if invalid date
-int Parser::parseDate(std::vector<std::string> inputString) {
+// Returns -1 if invalid date
+int Parser::parseDate(std::vector<std::string> dateString) {
 	Utilities u;
 
-	if(inputString.empty()) {
+	if(dateString.empty()) {
 		return INVALID_DATE_FORMAT;
 	}
 
 	std::vector<std::string>::iterator curr;
-	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
+	for(curr=dateString.begin(); curr!=dateString.end(); curr++) {
 		*curr = u.stringToLower(*curr);
 	}
 
@@ -256,7 +264,7 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 	localtime_s(&now,&t);
 	int year = now.tm_year - 100; // get current year, tm_year: years since 1990
 
-	curr = inputString.begin();
+	curr = dateString.begin();
 	if(!((*curr).empty()) && (*curr).find_first_not_of("0123456789")==std::string::npos) {
 		int dateInput = u.stringToInt(*curr);
 		curr++;
@@ -285,7 +293,7 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 			curr++;
 		}
 
-		if(curr!=inputString.end()) {
+		if(curr!=dateString.end()) {
 			Day newDay = u.stringToDay(*curr);
 			if(newDay != INVALID_DAY) {
 				date += (int)newDay - (int)day;
@@ -293,7 +301,7 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 			}
 		}
 
-		if(curr == inputString.end()) {
+		if(curr == dateString.end()) {
 			maxDays = findMaxDays(month,year);
 			if(date>maxDays) {
 				month = (Month)(((int)month)+1);
@@ -308,10 +316,84 @@ int Parser::parseDate(std::vector<std::string> inputString) {
 
 			// Check that valid date
 			if(1<=date && date<=maxDays) {
-			newDate = year*10000 + (int)month*100 + date;
+				newDate = year*10000 + (int)month*100 + date;
 			}
 		}
 	}
 
 	return newDate;
+}
+
+// Processes times in these formats:
+// - HH    AM/PM (default: assume AM)
+// - HH.MM AM/PM (default: assume AM)
+// - HHMM        (24-hour)
+// Returns -1 if invalid date
+int Parser::parseTime(std::vector<std::string> timeString) {
+	Utilities u;
+	int time;
+	std::string hourString;
+	int hour;
+	std::string minString;
+	int min = 0;
+
+	if(timeString.empty()) {
+		return INVALID_TIME_FORMAT;
+	}
+
+	std::vector<std::string>::iterator curr = timeString.begin();
+	if(!u.isPositiveNonZeroInt(*curr)) {
+		// HH.MM AM/PM
+		size_t iSemiColon = (*curr).find('.');
+		if(iSemiColon == std::string::npos) {
+			return INVALID_TIME_FORMAT;
+		} else {
+			hourString = (*curr).substr(0, iSemiColon);
+			minString = (*curr).substr(iSemiColon + 1);
+			hour = u.stringToInt(hourString);
+			min = u.stringToInt(minString);
+			if(!u.isPositiveNonZeroInt(hourString) || hour >= 24 || min >= 60) {
+				return INVALID_TIME_FORMAT;
+			}
+		}
+	} else {
+		time = u.stringToInt(*curr);
+		if(time < 13) {
+			// HH AM/PM
+			hour = time;
+		} else if(time <= 2359) {
+			// HHMM
+			hour = time/100;
+			min  = time%100;
+			if(hour >= 24 || min >= 60) {
+				return INVALID_TIME_FORMAT;
+			}
+		} else {
+			return INVALID_TIME_FORMAT;
+		}
+	}
+	
+	curr++;
+	if(curr != timeString.end()) {
+		if(u.containsAny(*curr,"am") && hour <= 12) {
+			if(hour == 12) {
+				hour -= 12;
+			}
+		} else if(u.containsAny(*curr,"pm") && hour <= 12) {
+			if(hour < 12) {
+				hour += 12;
+			}
+		} else {
+			return INVALID_TIME_FORMAT;
+		}
+		curr++;
+	}
+	
+	if(curr == timeString.end()) {
+		time = hour*100 + min;
+	} else {
+		return INVALID_TIME_FORMAT;
+	}
+
+	return time;
 }

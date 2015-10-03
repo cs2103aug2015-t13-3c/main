@@ -21,19 +21,19 @@ enum FieldType {
 	LABEL
 };
 
+enum Day {
+	SUN,
+	MON, TUE, WED,
+	THU, FRI, SAT,
+	INVALID_DAY
+};
+
 enum Month {
 	INVALID_MONTH,
 	JAN, FEB, MAR,
 	APR, MAY, JUN,
 	JUL, AUG, SEP,
 	OCT, NOV, DEC
-};
-
-enum Day {
-	SUN,
-	MON, TUE, WED,
-	THU, FRI, SAT,
-	INVALID_DAY
 };
 
 class Task {

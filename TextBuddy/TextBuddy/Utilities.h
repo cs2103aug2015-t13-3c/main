@@ -1,7 +1,6 @@
 // @@author Aaron Chong Jun Hao
-// @@author Ng Ren Zhi
 
-// Sort methods by return type, then alphabetical order
+// Methods are listed in order of return type, then alphabetical order
 
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
@@ -44,7 +43,6 @@ public:
 
 	// Useful methods
 	static bool			containsAny(std::string targetWord, std::string searchWords);
-
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 	static bool			isPositiveNonZeroInt(std::string s);
 	static bool			equalsIgnoreCase(const std::string& str1, const std::string& str2);
