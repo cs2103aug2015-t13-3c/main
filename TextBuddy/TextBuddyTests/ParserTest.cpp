@@ -19,6 +19,8 @@ namespace TextBuddyTests
 		int expectedInt;
 		Task tempTask;
 
+		// Note: As parseDate() takes in regex like "this Monday",
+		//       test cases are only valid for ONE week each time!
 		TEST_METHOD(Parser_parseDate)
 		{
 			// Invalid Input
@@ -49,22 +51,25 @@ namespace TextBuddyTests
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
-			expectedInt = 151003;
+			// Change to appropriate date for tomorrow before running this test
+			/*
+			expectedInt = 151005;
 			userInput = "tmr";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
+			*/
 
-			expectedInt = 151003;
+			expectedInt = 151010;
 			userInput = "sat";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
-			expectedInt = INVALID_DATE_FORMAT;
+			expectedInt = 151005;
 			userInput = "this mon";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
-			expectedInt = 151004;
+			expectedInt = 151011;
 			userInput = "next sun";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
@@ -134,7 +139,7 @@ namespace TextBuddyTests
 			userInput = "23.60";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
-			
+
 			userInput = "23.59 am";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
@@ -142,29 +147,29 @@ namespace TextBuddyTests
 			userInput = "23.59 pm";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
-			
+
 			// Valid time formats
 
 			expectedInt = 100;
 			userInput = "100";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
-			
+
 			expectedInt = 2359;
 			userInput = "23.59";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
-			
+
 			expectedInt = 0;
 			userInput = "12 am";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
-			
+
 			expectedInt = 0;
 			userInput = "12.00 am";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
-			
+
 			expectedInt = 100;
 			userInput = "1.00 am";
 			inputString = u.splitParameters(userInput);
@@ -179,7 +184,7 @@ namespace TextBuddyTests
 			userInput = "12 pm";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
-			
+
 			expectedInt = 1200;
 			userInput = "12.00 pm";
 			inputString = u.splitParameters(userInput);

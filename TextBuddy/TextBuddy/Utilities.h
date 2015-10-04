@@ -7,20 +7,20 @@
 
 #include "Task.h"
 
+// These are the possible command types
+const std::string COMMAND_ADD = "add";
+const std::string COMMAND_DELETE = "delete";
+const std::string COMMAND_MODIFY = "modify";
+const std::string COMMAND_SEARCH = "search";
+const std::string COMMAND_CLEAR_ALL = "clear";
+const std::string COMMAND_DISPLAY_ALL = "display";
+const std::string COMMAND_SORT_ALL = "sort";
+const std::string COMMAND_EXIT = "exit";
+
 class Utilities {
 private:
 	// This is the return value for invalid numbers
 	static const int INVALID_NUMBER_FORMAT = -1;
-
-	// These are the possible command types
-	static const std::string COMMAND_ADD;
-	static const std::string COMMAND_DELETE;
-	static const std::string COMMAND_MODIFY;
-	static const std::string COMMAND_SEARCH;
-	static const std::string COMMAND_CLEAR_ALL;
-	static const std::string COMMAND_DISPLAY_ALL;
-	static const std::string COMMAND_SORT_ALL;
-	static const std::string COMMAND_EXIT;
 
 public:
 	Utilities();
@@ -33,7 +33,9 @@ public:
 	static int			stringToInt(std::string str);
 	static Day			stringToDay(std::string dayString);
 	static Month		stringToMonth(std::string monthString);
+	static FieldType	stringToFieldType(std::string fieldString);
 	static TaskType		stringToTaskType(std::string line);
+	static std::vector<std::string> splitParameters(std::string commandParametersString);
 
 	static std::string	boolToIntString(bool boolean);
 	static std::string	dayToString(Day day);
@@ -50,7 +52,6 @@ public:
 	static std::string	removeFirstWord(std::string userCommand);
 	static std::string	removeSpaces(const std::string& s, const std::string& delimiters = " \f\n\r\t\v" );
 	static std::string	replace(std::string a, std::string b, std::string c);
-	static std::vector<std::string> splitParameters(std::string commandParametersString);
 
 };
 

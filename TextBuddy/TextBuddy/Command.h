@@ -32,12 +32,9 @@ public:
 	std::string getRestOfCommand();
 	std::string getUserInput();
 
-	void setCmdType(CommandType cmdType);				// Used for CLEAR_ALL, DISPLAY_ALL, SORT_ALL
-	virtual void setNewTask(Task task);					// Add
-	virtual void setTaskToDelete(int index);			// Delete
-	virtual std::vector<FieldType> getFieldsToModify();	// Modify
-	virtual void setTempTask(Task task);				// Modify
-	virtual void setSearchPhrase(std::string phr);		// Search
+	// Used for CLEAR_ALL, DISPLAY_ALL, SORT_ALL
+	void setCmdType(CommandType cmdType);
+
 };
 
 class Add: public Command {
@@ -47,29 +44,35 @@ public:
 	Add();
 	~Add();
 	Task getNewTask();
-	void setNewTask(Task aTask) override; //testing
+	void setNewTask(Task aTask); //testing
 };
 
 class Delete: public Command {
 private:
-	int taskToDelete;
+	int deleteID;
 public:
 	Delete();
 	~Delete();
-	int getTaskToDelete();
-	void setTaskToDelete(int index) override; //testing
+	int getDeleteID();
+	void setDeleteID(int index); //testing
 };
 
 class Modify: public Command {
 private:
+	int modifyID;
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 public:
 	Modify();
 	~Modify();
-	std::vector<FieldType> getFieldsToModify() override;
+	int getModifyID();
+	std::vector<FieldType> getFieldsToModify();
 	Task getTempTask();
-	void setTempTask(Task task) override;
+	void setModifyID(int index);
+	void setFieldsToModify(std::vector<FieldType> fields);
+	void setTempTask(Task task);
+	
+	
 };
 
 class Search: public Command {
@@ -79,7 +82,7 @@ public:
 	Search();
 	~Search();
 	std::string getSearchPhrase();
-	void setSearchPhrase(std::string phr) override; //testing
+	void setSearchPhrase(std::string phr); //testing
 };
 
 #endif

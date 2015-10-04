@@ -39,18 +39,6 @@ void Command::setCmdType(CommandType cmdType) {
 	return;
 }
 
-void Command::setNewTask(Task task) {}
-void Command::setTaskToDelete(int index) {}
-
-std::vector<FieldType> Command::getFieldsToModify() {
-	std::vector<FieldType> dummy;
-	return dummy;
-}
-
-void Command::setTempTask(Task task) {}
-
-void Command::setSearchPhrase(std::string phr) {}
-
 // ==================================================
 //                        ADD
 // ==================================================
@@ -74,13 +62,13 @@ Task Add::getNewTask() {
 Delete::Delete() : Command(DELETE) {}
 Delete::~Delete() {}
 
-void Delete::setTaskToDelete(int index) {
-	taskToDelete = index;
-	return;
+int Delete::getDeleteID() {
+	return deleteID;
 }
 
-int Delete::getTaskToDelete() {
-	return taskToDelete;
+void Delete::setDeleteID(int index) {
+	deleteID = index;
+	return;
 }
 
 // ==================================================
@@ -90,8 +78,22 @@ int Delete::getTaskToDelete() {
 Modify::Modify() : Command(MODIFY) {}
 Modify::~Modify() {}
 
+int Modify::getModifyID() {
+	return modifyID;
+}
+
+void Modify::setModifyID(int index) {
+	modifyID = index;
+	return;
+}
+
 std::vector<FieldType> Modify::getFieldsToModify() {
 	return fieldsToModify;
+}
+
+void Modify::setFieldsToModify(std::vector<FieldType> fields) {
+	fieldsToModify = fields;
+	return;
 }
 
 Task Modify::getTempTask() {

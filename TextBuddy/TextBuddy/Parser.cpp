@@ -10,18 +10,11 @@ Parser::~Parser() {}
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
 
-// These are the possible field types
-const std::string Parser::FIELD_DATE_BY = "by";
-const std::string Parser::FIELD_DATE_ON = "on";
-const std::string Parser::FIELD_TIME_AT = "at";
-const std::string Parser::FIELD_TIME_FROM = "from";
-const std::string Parser::FIELD_TIME_TO = "to";
-const std::string Parser::FIELD_PRIORITY = "star";
-const std::string Parser::FIELD_LABEL = ":";
-
 // ==================================================
 //                      METHODS
 // ==================================================
+
+// This is the API
 
 std::string Parser::parseFileName(char* argv[]) {
 	std::string newFileName = argv[1];
@@ -39,18 +32,26 @@ Command Parser::parse(std::string userInput) {
 	std::string cmdString	= u.getFirstWord(userInput);
 	CommandType cmdType		= u.stringToCmdType(cmdString);
 
-	Command* cmd = new Command;
 	std::string restOfInput = u.removeFirstWord(userInput);
+
+	// Generic command pointer for return value
+	Command* cmd = new Command;
+	// Create pointers first, rather than objects
+	Add* addCmd;
+	Delete* deleteCmd;
+	Modify* modifyCmd;
+	Search* searchCmd;
 
 	switch(cmdType) {
 	case ADD:
-		try {
+			try {
 			if(restOfInput=="") {
 				throw "No task to add";
 			}
-			cmd = new Add;
+			addCmd = new Add;
 			Task task = parseTask(restOfInput);
-			cmd->setNewTask(task);
+			addCmd->setNewTask(task);
+			cmd = addCmd;
 		}
 		catch(std::string NullTaskString) {
 			std::cerr << NullTaskString << std::endl;
@@ -62,9 +63,10 @@ Command Parser::parse(std::string userInput) {
 			if(!u.isPositiveNonZeroInt(restOfInput)) {
 				throw "Invalid integer string";
 			}
-			cmd = new Delete;
+			deleteCmd = new Delete;
 			int deleteID = u.stringToInt(restOfInput);
-			cmd->setTaskToDelete(deleteID);
+			deleteCmd->setDeleteID(deleteID);
+			cmd = deleteCmd;
 		}
 		catch(std::string InvalidIntString) {
 			std::cerr << InvalidIntString << std::endl;
@@ -76,9 +78,18 @@ Command Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No fields to modify";
 			}
-			cmd = new Modify;
+			modifyCmd = new Modify;
+			int modifyID = u.stringToInt(u.getFirstWord(userInput));
+			modifyCmd->setModifyID(modifyID);
+
+			restOfInput = u.removeFirstWord(restOfInput);
+			std::vector<FieldType> fields = extractFields(restOfInput);
+			modifyCmd->setFieldsToModify(fields);
+
 			Task task = parseTask(restOfInput);
-			cmd->setTempTask(task);
+			modifyCmd->setTempTask(task);
+
+			cmd = modifyCmd;
 		}
 		catch(std::string NullModifyString) {
 			std::cerr << NullModifyString << std::endl;
@@ -90,9 +101,10 @@ Command Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No search phrase";
 			}
-			cmd = new Search;
+			searchCmd = new Search;
 			std::string searchPhrase;
-			cmd->setSearchPhrase(searchPhrase);
+			searchCmd->setSearchPhrase(searchPhrase);
+			cmd = searchCmd;
 		}
 		catch(std::string NullSearchString) {
 			std::cerr << NullSearchString << std::endl;
@@ -100,14 +112,17 @@ Command Parser::parse(std::string userInput) {
 		break;
 
 	case CLEAR_ALL:
+		cmd = new Command;
 		cmd->setCmdType(CLEAR_ALL);
 		break;
 
 	case DISPLAY_ALL:
+		cmd = new Command;
 		cmd->setCmdType(DISPLAY_ALL);
 		break;
 
 	case SORT_ALL:
+		cmd = new Command;
 		cmd->setCmdType(SORT_ALL);
 		break;
 
@@ -206,6 +221,29 @@ Task Parser::parseTask(std::string restOfCommand) {
 	return newTask;
 }
 
+
+// These functions support user methods
+
+std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
+	std::vector<std::string> vecInput = u.splitParameters(restOfInput);
+	std::vector<std::string>::iterator curr = vecInput.begin();
+	std::vector<FieldType> fields;
+
+	if(u.stringToFieldType(restOfInput) == INVALID_FIELD) {
+		fields.push_back(NAME);
+	}
+
+	while(curr != vecInput.end()) {
+		FieldType newField = u.stringToFieldType(*curr);
+		if(newField != INVALID_FIELD) {
+			fields.push_back(newField);
+		}
+		curr++;
+	}
+
+	return fields;
+}
+
 int Parser::findMaxDays(Month month, int year) { // default year is 2015
 	int maxDays = 0;
 	bool isLeap;
@@ -238,6 +276,9 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 	return maxDays;
 }
 
+
+// These handle task parameters
+
 // Processes dates in these formats:
 // - DDD/DDDD
 // - this/next DDD/DDDD
@@ -245,8 +286,6 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 // Week is defined as Sunday to Saturday
 // Returns -1 if invalid date
 int Parser::parseDate(std::vector<std::string> dateString) {
-	Utilities u;
-
 	if(dateString.empty()) {
 		return INVALID_DATE_FORMAT;
 	}
@@ -330,7 +369,6 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 // - HHMM        (24-hour)
 // Returns -1 if invalid date
 int Parser::parseTime(std::vector<std::string> timeString) {
-	Utilities u;
 	int time;
 	std::string hourString;
 	int hour;

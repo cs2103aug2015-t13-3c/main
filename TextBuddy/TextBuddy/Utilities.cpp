@@ -5,16 +5,6 @@
 Utilities::Utilities() {}
 Utilities::~Utilities() {}
 
-// These are the possible command types
-const std::string Utilities::COMMAND_ADD = "add";
-const std::string Utilities::COMMAND_DELETE = "delete";
-const std::string Utilities::COMMAND_MODIFY = "modify";
-const std::string Utilities::COMMAND_SEARCH = "search";
-const std::string Utilities::COMMAND_CLEAR_ALL = "clear";
-const std::string Utilities::COMMAND_DISPLAY_ALL = "display";
-const std::string Utilities::COMMAND_SORT_ALL = "sort";
-const std::string Utilities::COMMAND_EXIT = "exit";
-
 // ==================================================
 //  CONVERTERS FOR MULTIPLE ARCHITECTURE COMPONENTS
 // ==================================================
@@ -117,8 +107,32 @@ Month Utilities::stringToMonth(std::string monthString) {
 	return monthInput;
 }
 
+FieldType Utilities::stringToFieldType(std::string fieldString) {
+	FieldType field;
+
+	if(equalsIgnoreCase(fieldString,FIELD_LABEL)) {
+		field = LABEL;
+	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY)) {
+		field = PRIORITY;
+	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_FROM)) {
+		field = START_TIME;
+	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
+		field = END_DATE;
+	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
+		field = END_DATE;
+	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
+		field = END_TIME;
+	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_TO)) {
+		field = END_TIME;
+	} else {
+		field = INVALID_FIELD;
+	}
+
+	return field;
+}
+
 TaskType Utilities::stringToTaskType(std::string line) {
-	TaskType type;
+	TaskType type = FLOATING;
 
 	if(line == "FLOATING") {
 		type = FLOATING;
@@ -130,6 +144,17 @@ TaskType Utilities::stringToTaskType(std::string line) {
 
 	return type;
 }
+
+// This converts std::string to std::vector<std::string> based on delimiter space
+std::vector<std::string> Utilities::splitParameters(std::string commandParametersString) {
+	std::vector<std::string> tokens;
+	std::istringstream iss(commandParametersString);
+	std::copy(std::istream_iterator<std::string>(iss),
+		std::istream_iterator<std::string>(),
+		std::back_inserter<std::vector<std::string>>(tokens));
+	return tokens;
+}
+
 
 // Other types to string
 
@@ -180,17 +205,17 @@ std::string Utilities::taskToString(Task task) {
 
 	sprintf_s(buffer, "%s%s\n"/*"%s%d\n%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n"/*11 outputs*/,
 		"Name: ",		task.getName().c_str()/*,
-		"Type: ",		task.getType(),
-		"Label: ",		task.getLabel().c_str(),
-		"Done: ",		task.getDoneStatus(),
-		"Priority: ",	task.getPriorityStatus(),
-		"Start Day: ",	task.getStartDay(),
-		"Start Date: ",	task.getStartDate(),
-		"Start Time: ",	task.getStartTime(),
-		"End Day: ",	task.getEndDay(),
-		"End Date: ",	task.getEndDate(),
-		"End Time: ",	task.getEndTime()*/
-		);
+											  "Type: ",		task.getType(),
+											  "Label: ",		task.getLabel().c_str(),
+											  "Done: ",		task.getDoneStatus(),
+											  "Priority: ",	task.getPriorityStatus(),
+											  "Start Day: ",	task.getStartDay(),
+											  "Start Date: ",	task.getStartDate(),
+											  "Start Time: ",	task.getStartTime(),
+											  "End Day: ",	task.getEndDay(),
+											  "End Date: ",	task.getEndDate(),
+											  "End Time: ",	task.getEndTime()*/
+											  );
 
 	return buffer;
 }
@@ -295,14 +320,4 @@ std::string Utilities::replace(std::string a, std::string b, std::string c) {
 		if(pos != -1) a.replace(pos, b.length(), c);
 	} while (pos != -1);
 	return a;
-}
-
-// This method only splits strings based on delimiter space
-std::vector<std::string> Utilities::splitParameters(std::string commandParametersString) {
-	std::vector<std::string> tokens;
-	std::istringstream iss(commandParametersString);
-	std::copy(std::istream_iterator<std::string>(iss),
-		std::istream_iterator<std::string>(),
-		std::back_inserter<std::vector<std::string>>(tokens));
-	return tokens;
 }
