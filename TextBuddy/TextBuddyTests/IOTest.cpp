@@ -9,40 +9,49 @@ namespace TextBuddyTests
 	TEST_CLASS(LoadFileTest)
 	{
 	public:
-		
+
 		TEST_METHOD(IO_loadFile_emptyFile)
-		{/*
-		// Empty file should load empty vector
-		std::vector<Task> emptyVector;
-		IO::saveFile("TEXT.txt", emptyVector);
-		std::vector<Task> actualVector = IO::loadFile("TEXT.txt");
-		
-		Assert::AreEqual(emptyVector.size(), actualVector.size());
-		*/
+		{
+			std::ifstream inputFile("JSONText.txt");
+			std::string hardstring = "[ 1,2,3 ]";
+
+			std::string inputFileText((std::istreambuf_iterator<char>(inputFile)),
+				std::istreambuf_iterator<char>());
+
+			Assert::AreEqual(hardstring, inputFileText);
+			//Assert::AreEqual(hardcode, Text);
+			// Empty file should load empty vector
+			/*
+			std::vector<Task> emptyVector;
+			//IO::saveFile("TEXT.txt", emptyVector);
+			std::vector<Task> actualVector = IO::loadFile("JSONText.txt");
+
+			Assert::AreEqual(emptyVector.size(), actualVector.size());
+			*/
 		}
 
 		TEST_METHOD(IO_loadFile_fileDoesntExist)
 		{
 
-		// Empty file should load empty vector
-		std::vector<Task> actualVector = IO::loadFile("");
-		std::vector<Task> emptyVector;
+			// Empty file should load empty vector
+			std::vector<Task> actualVector = IO::loadFile("");
+			std::vector<Task> emptyVector;
 
-		Assert::AreEqual(emptyVector.size(), actualVector.size());
+			Assert::AreEqual(emptyVector.size(), actualVector.size());
 
 		}
 
 		TEST_METHOD(IO_loadFile_loadGibberish)
 		{
 
-		// Empty file should load empty vector
-		std::vector<Task> actualVector = IO::loadFile("");
-		std::vector<Task> emptyVector;
+			// Empty file should load empty vector
+			std::vector<Task> actualVector = IO::loadFile("");
+			std::vector<Task> emptyVector;
 
-		Assert::AreEqual(emptyVector.size(), actualVector.size());
+			Assert::AreEqual(emptyVector.size(), actualVector.size());
 
 		}
-		
+
 	};
 
 	//============= SaveFileTest ====================
@@ -92,11 +101,11 @@ namespace TextBuddyTests
 				"0",
 				"0"
 			};
-			
+
 			for(unsigned int i = 0; i < actualText.size(); i++) {
 				Assert::AreEqual(expectedText[i], actualText[i]);
 			}
-			
+
 		}
 	};
 
