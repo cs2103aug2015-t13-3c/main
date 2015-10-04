@@ -38,7 +38,6 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 		return false;
 	}
 
-	Utilities u;
 	for(unsigned int i = 0; i < taskVector.size(); i++) {
 		Task task = taskVector[i];
 
@@ -68,7 +67,6 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 
 Task IO::getTask(std::ifstream& inputFile) {
 	Task task;
-	Utilities u;
 	bool success = true;
 	std::string line;
 

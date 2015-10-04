@@ -3,24 +3,6 @@
 #ifndef TASK_H_
 #define TASK_H_
 
-enum TaskType {
-	FLOATING,
-	EVENT,
-	TODO
-};
-
-enum FieldType {
-	NAME,
-	START_DAY,
-	END_DAY,
-	START_DATE,
-	END_DATE,
-	START_TIME,
-	END_TIME,
-	PRIORITY,
-	LABEL
-};
-
 enum Day {
 	SUN,
 	MON, TUE, WED,
@@ -35,6 +17,34 @@ enum Month {
 	JUL, AUG, SEP,
 	OCT, NOV, DEC
 };
+
+enum FieldType {
+	NAME,
+	START_DAY,
+	START_DATE,
+	START_TIME,
+	END_DAY,
+	END_DATE,
+	END_TIME,
+	LABEL,
+	PRIORITY,
+	INVALID_FIELD,
+};
+
+enum TaskType {
+	FLOATING,
+	EVENT,
+	TODO
+};
+
+// These are the possible field types for tasks
+const std::string FIELD_LABEL = ":";
+const std::string FIELD_PRIORITY = "star";
+const std::string FIELD_DATE_BY = "by";
+const std::string FIELD_DATE_ON = "on";
+const std::string FIELD_TIME_AT = "at";
+const std::string FIELD_TIME_FROM = "from";
+const std::string FIELD_TIME_TO = "to";
 
 class Task {
 private:

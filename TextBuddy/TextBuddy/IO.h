@@ -7,7 +7,7 @@
 
 class IO {
 private:
-	Utilities u;
+	static Utilities u;
 
 	static bool fileIsOpen(std::ifstream& inputFile);
 	static bool fileIsOpen(std::ofstream& outputFile);

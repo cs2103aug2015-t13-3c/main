@@ -50,7 +50,7 @@ namespace TextBuddyTests {
 			//delete
 
 			Delete index;
-			index.setTaskToDelete(0);
+			index.setDeleteID(0);
 			logic.deleteInfo(index);
 
 			copyTask = logic.getTaskStore();

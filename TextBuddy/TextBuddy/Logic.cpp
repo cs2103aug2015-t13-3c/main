@@ -80,7 +80,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 	std::vector<Task>::iterator iter;
 
 	int id;
-	id = idToDelete.getTaskToDelete();
+	id = idToDelete.getDeleteID();
 
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getID() == id) {
@@ -234,7 +234,7 @@ std::string Logic::processCommand(std::string userCommand) {
 		//eg. delete 1 means deleting the first task
 		userIndex = stoi(inputCmd.getRestOfCommand());
 		id = getIdOfIndex(userIndex);
-		taskToDelete.setTaskToDelete(id);
+		taskToDelete.setDeleteID(id);
 		deleteInfo(taskToDelete);
 		break;
 	case SEARCH:
