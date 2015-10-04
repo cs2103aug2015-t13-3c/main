@@ -95,15 +95,33 @@ bool Logic::deleteInfo(Delete idToDelete) {
 
 bool Logic::modifyInfo(Modify toModify) {
 	std::vector<Task>::iterator taskIter;
-	Task tempTask = toModify.getTempTask();		//doing this will increase runningcount?
+	Task tempTask = toModify.getTempTask();
+	//id stored in toModify refers to the (index+1)th element shown in currentView()
+	int index = toModify.getModifyID() - 1;
+	int id;
 
-	taskIter = taskStore.begin();
-	//tries to match ID of toModify with taskStore
-	while ((taskIter->getID() != tempTask.getID()) && (taskIter != taskStore.end())) {
-		taskIter++;
+	taskIter = currentView.begin();
+	//obtains id from the element of currentView that the user intends to amend
+	for (int i = 1; i <= index; i++) {
+		if (taskIter != currentView.end()) {
+				++taskIter;
+		} else {
+			return false;				//error since index put in exceeds the currentView capacity(
+		}								//error for exceeding upper bound of acceptable inputs
 	}
 
-	if (taskIter->getID() == tempTask.getID()) {
+	if (index > 0) {
+		id = taskIter->getID();
+	} else {
+		return false;					//error for index going below the lower bound of acceptable inputs
+	}
+	//matches id obtained from currentView with id in taskstore
+	taskIter = taskStore.begin();
+	while ((taskIter != taskStore.end()) && (taskIter->getID() != id)) {
+		++taskIter;
+	}
+
+	if (taskIter->getID() == id) {
 		std::vector<FieldType> tempField = toModify.getFieldsToModify();
 		std::vector<FieldType>::iterator fieldIter;
 
@@ -236,6 +254,9 @@ std::string Logic::processCommand(std::string userCommand) {
 		id = getIdOfIndex(userIndex);
 		taskToDelete.setDeleteID(id);
 		deleteInfo(taskToDelete);
+		break;
+	case MODIFY:
+		//not implemented yet
 		break;
 	case SEARCH:
 		//currently search returns string of names

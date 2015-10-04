@@ -47,6 +47,37 @@ namespace TextBuddyTests {
 
 			Assert::AreEqual(std::string("Sentence two."),iter->getName());
 
+			Task taskThree;
+			taskThree.setName("Sentence three.");
+			thisTask.setNewTask(taskThree);
+			logic.addInfo(thisTask);
+
+			copyTask = logic.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+			++iter;
+			Assert::AreEqual(std::string("Sentence three."),iter->getName());
+
+			//modify
+
+			Modify modTask;
+			std::vector<FieldType> testVector;
+			testVector.push_back(NAME);
+			modTask.setModifyID(2);
+			modTask.setFieldsToModify(testVector);
+
+			taskThree.setName("Changed.");
+			modTask.setTempTask(taskThree);
+
+			logic.modifyInfo(modTask);
+			copyTask = logic.getTaskStore();
+			iter = copyTask.begin();
+			Assert::AreEqual(std::string("Sentence one."), iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("Changed."),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("Sentence three."),iter->getName());
+
 			//delete
 
 			Delete index;
