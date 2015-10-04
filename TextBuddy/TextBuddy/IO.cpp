@@ -36,28 +36,12 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 	Value& item = document["TextBuddy Items"];
 
 	for(SizeType i = 0; i < item.Size(); i++) {
-	Task newTask = extractTaskFromJSONObject(item);
-	taskVector.push_back(newTask);
+		Task newTask = extractTaskFromJsonObject(item[i]);
+		taskVector.push_back(newTask);
 	}
-	/*
-	std::ifstream inputFile(fileName);
-
-	std::vector<Task> taskVector;
-	Task newTask;
-
-	if(!fileIsOpen(inputFile)) {
-	return taskVector;
-	}
-
-	while(!inputFile.eof()) {
-	newTask = getTask(inputFile);
-	taskVector.push_back(newTask);
-	}
-
+	
 	inputFile.close();
-	*/
-
-
+		
 	return taskVector;
 }
 
@@ -97,6 +81,30 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 	return false;
 }
 
+Task IO::extractTaskFromJsonObject(Value& item) {
+	Task newTask;
+
+	try {
+		extractName(newTask, item);
+		extractType(newTask, item);
+		extractID(newTask, item);
+		extractLabel(newTask, item);
+		extractDone(newTask, item);
+		extractPriority(newTask, item);
+		extractStartDay(newTask, item);
+		extractStartDate(newTask, item);
+		extractStartTime(newTask, item);
+		extractEndDay(newTask, item);
+		extractEndDate(newTask, item);
+		extractEndTime(newTask, item);
+	} catch (std::string error) {
+		std::cout << "Error occured: " << error << "\n";
+	}
+
+	return newTask;
+}
+
+
 Task IO::getTask(std::ifstream& inputFile) {
 	Task task;
 	bool success = true;
@@ -125,6 +133,122 @@ Task IO::getTask(std::ifstream& inputFile) {
 	success = task.setEndTime(stoi(line[11]));
 
 	return task;
+}
+
+
+
+//============ Task Attributes Extraction Methods ===========
+
+void IO::extractName(Task &newTask, Value &item) {
+	std::string name = item["name"].GetString();
+	bool success = newTask.setName(name);
+
+	if(!success) {
+		throw "NameNotFound";
+	}
+}
+void IO::extractType(Task &newTask, Value &item) {
+	std::string typeString = item["type"].GetString();
+	TaskType type = Utilities::stringToTaskType(typeString);
+	bool success = newTask.setType(type);
+
+	if(!success) {
+		throw "TypeNotFound";
+	}
+}
+void IO::extractID(Task &newTask, Value &item) {
+	int ID = item["uniqueID"].GetInt();
+	bool success = newTask.setID(ID);
+
+	if(!success) {
+		throw "IDNotFound";
+	}
+}
+void IO::extractLabel(Task &newTask, Value &item) {
+	std::string label = item["label"].GetString();
+	bool success = newTask.setLabel(label);
+
+	if(!success) {
+		throw "LabelNotFound";
+	}
+}
+void IO::extractDone(Task &newTask, Value &item) {
+	bool isDone = item["isDone"].GetBool();
+	//bool success = false;
+	if(isDone) {
+		newTask.toggleDone();
+	}
+
+	//TODO: how to throw exception for GetBool
+	/*
+	if(!success) {
+	throw "IDNotFound";
+	}
+	*/
+}
+void IO::extractPriority(Task &newTask, Value &item) {
+	bool isPriority = item["isPriority"].GetBool();
+	//bool success = false;
+	if(isPriority) {
+		newTask.togglePriority();
+	}
+
+	//TODO: how to throw exception for GetBool
+	/*
+	if(!success) {
+	throw "IDNotFound";
+	}
+	*/
+}
+void IO::extractStartDay(Task &newTask, Value &item) {
+	std::string dayString = item["startDay"].GetString();
+	Day day = Utilities::stringToDay(dayString);
+	bool success = newTask.setStartDay(day);
+
+	if(!success) {
+		throw "StartDayNotFound";
+	}
+}
+void IO::extractStartDate(Task &newTask, Value &item) {
+	int date = item["startDate"].GetInt();
+	bool success = newTask.setStartDate(date);
+
+	if(!success) {
+		throw "StartDateNotFound";
+	}
+}
+void IO::extractStartTime(Task &newTask, Value &item) {
+	int time = item["startTime"].GetInt();
+	bool success = newTask.setStartTime(time);
+
+	if(!success) {
+		throw "StartTimeNotFound";
+	}
+}
+void IO::extractEndDay(Task &newTask, Value &item) {
+	std::string dayString = item["endDay"].GetString();
+	Day day = Utilities::stringToDay(dayString);
+	bool success = newTask.setEndDay(day);
+
+	if(!success) {
+		throw "EndDayNotFound";
+	}
+}
+void IO::extractEndDate(Task &newTask, Value &item) {
+	int date = item["endDate"].GetInt();
+	bool success = newTask.setEndDate(date);
+
+	if(!success) {
+		throw "EndDateNotFound";
+	}
+}
+void IO::extractEndTime(Task &newTask, Value &item)  {
+	int time = item["endTime"].GetInt();
+	bool success = newTask.setEndTime(time);
+
+	if(!success) {
+		throw "EndTimeNotFound";
+	}
 }
 
 
