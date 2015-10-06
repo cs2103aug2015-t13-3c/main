@@ -23,7 +23,7 @@ public:
 
 	// This is the API
 	static std::string parseFileName(char* argv[]);
-	static Command parse(std::string userInput);
+	static Command* parse(std::string userInput);
 	static Command parseCommand(std::string userCommand);
 	static Task parseTask(std::string restOfCommand);
 

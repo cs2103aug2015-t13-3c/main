@@ -19,12 +19,138 @@ namespace TextBuddyTests
 		int expectedInt;
 		Task tempTask;
 
+		TEST_METHOD(Parser_parse) {
+			
+			// Test for ADD
+			expectedString = "Name: A partridge in a pear tree\n";
+			userInput = "add A partridge in a pear tree";
+			
+
+			/*
+			// Test for DELETE
+			expectedInt = 1;
+			userInput = "delete 1";
+			*/
+
+			/*
+			// Test for MODIFY
+			expectedInt = 1;
+			userInput = "modify 1 name Two turtle doves";
+			expectedString = "Name: Two turtle doves\n";
+			*/
+
+			/*
+			// Test for SEARCH
+			expectedString = "answerToLife";
+			userInput = "search answerToLife";
+			*/
+
+			/*
+			// Test for CLEAR_ALL
+			userInput = "clear";
+			*/
+
+			/*
+			// Test for DISPLAY_ALL
+			userInput = "display";
+			*/
+
+			/*
+			// Test for SORT_ALL
+			userInput = "sort";
+			*/
+
+			/*
+			// Test for EXIT
+			userInput = "exit";
+			*/
+
+			/*
+			// Test for INVALID
+			userInput = "invalid";
+			*/
+
+			// ==================================================
+			//         IMPLEMENTING PARSE() TO BE TESTED
+			// ==================================================
+			Command* cmd = p.parse(userInput);
+
+			// For switch()
+			CommandType cmdType = cmd->getCommand();
+			// Declare objects outside switch()
+			Task task;
+			int taskID;
+			std::vector<FieldType> fieldsToModify;
+			std::string searchPhrase;
+			
+			// This shows a possible implementation for Logic::processCommand()
+			switch(cmdType) {
+			case ADD:
+				task = ((Add*)cmd)->getNewTask();
+				break;
+			case DELETE:
+				taskID = ((Delete*)cmd)->getDeleteID();
+				break;
+			case MODIFY:
+				taskID = ((Modify*)cmd)->getModifyID();
+				fieldsToModify = ((Modify*)cmd)->getFieldsToModify();
+				task = ((Modify*)cmd)->getTempTask();
+				break;
+			case SEARCH:
+				searchPhrase = ((Search*)cmd)->getSearchPhrase();
+				break;
+			case CLEAR_ALL:
+				// Clear tasks
+				break;
+			case DISPLAY_ALL:
+				// Display tasks
+				break;
+			case SORT_ALL:
+				// Sort tasks
+				break;
+			case EXIT:
+				// Exit program
+				break;
+			case INVALID:
+				// Return error message to UI
+				break;
+			}
+
+			// ==================================================
+			//          TEST-ASSERTING OUTPUT OF PARSE()
+			// ==================================================
+			switch(cmdType) {
+			case ADD:
+				// Assert::AreEqual(expectedString,cmd->getUserInput());
+				Assert::AreEqual(expectedString,u.taskToString(task));
+				break;
+			case DELETE:
+				Assert::AreEqual(expectedInt,taskID);
+				break;
+			case MODIFY:
+				Assert::AreEqual(expectedInt,taskID);
+				// Assert::AreEqual(expectedString,fieldVecToString(fieldsToModify);
+				Assert::AreEqual(expectedString,u.taskToString(task));
+				break;
+			case SEARCH:
+				Assert::AreEqual(expectedString,searchPhrase);
+				break;
+
+				// Methods with nothing to test
+			case CLEAR_ALL:
+			case DISPLAY_ALL:
+			case SORT_ALL:
+			case EXIT:
+			case INVALID:
+				break;
+			}
+		}
+
 		// Note: As parseDate() takes in regex like "this Monday",
 		//       test cases are only valid for ONE week each time!
 		TEST_METHOD(Parser_parseDate)
 		{
-			// Invalid Input
-
+			// Invalid date formats
 			const int INVALID_DATE_FORMAT = -1;
 			expectedInt = INVALID_DATE_FORMAT;
 
@@ -44,7 +170,7 @@ namespace TextBuddyTests
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
-			// Valid input
+			// Valid date formats
 
 			expectedInt = 151231;
 			userInput = "31 dec";
@@ -75,20 +201,8 @@ namespace TextBuddyTests
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 		}
 
-		TEST_METHOD(Parser_vecToString)
-		{
-			Parser p;
-
-			expectedString = "little brown fox";
-			userInput = "little brown fox";
-			inputString = u.splitParameters(userInput);
-			Assert::AreEqual(expectedString,u.vecToString(inputString));
-		}
-
 		TEST_METHOD(Parser_parseTask)
 		{
-			Parser p;
-
 			expectedString = "Name: little brown fox\n";
 			userInput = "little brown fox";
 			tempTask = p.parseTask(userInput);
@@ -190,5 +304,15 @@ namespace TextBuddyTests
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
 		}
+
+
+		// TEST_METHOD(Utilities_vecToString)
+		/*{
+		expectedString = "little brown fox";
+		userInput = "little brown fox";
+		inputString = u.splitParameters(userInput);
+		Assert::AreEqual(expectedString,u.vecToString(inputString));
+		}
+		*/
 	};
 }

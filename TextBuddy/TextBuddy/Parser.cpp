@@ -27,20 +27,22 @@ std::string Parser::parseFileName(char* argv[]) {
 	return newFileName;
 }
 
-Command Parser::parse(std::string userInput) {
+Command* Parser::parse(std::string userInput) {
 	// userInput = u.removeSpaces(userInput);
 	std::string cmdString	= u.getFirstWord(userInput);
 	CommandType cmdType		= u.stringToCmdType(cmdString);
 
 	std::string restOfInput = u.removeFirstWord(userInput);
 
-	// Generic command pointer for return value
-	Command* cmd = new Command;
-	// Create pointers first, rather than objects
+	// Declare pointers first, rather than objects
 	Add* addCmd;
 	Delete* deleteCmd;
 	Modify* modifyCmd;
 	Search* searchCmd;
+	ClearAll* clearCmd;
+	DisplayAll* displayCmd;
+	SortAll* sortCmd;
+	Exit* exitCmd;
 
 	switch(cmdType) {
 	case ADD:
@@ -48,10 +50,10 @@ Command Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No task to add";
 			}
-			addCmd = new Add;
+			addCmd = new Add(userInput); // userInput included for testing
 			Task task = parseTask(restOfInput);
 			addCmd->setNewTask(task);
-			cmd = addCmd;
+			return addCmd;
 		}
 		catch(std::string NullTaskString) {
 			std::cerr << NullTaskString << std::endl;
@@ -66,7 +68,7 @@ Command Parser::parse(std::string userInput) {
 			deleteCmd = new Delete;
 			int deleteID = u.stringToInt(restOfInput);
 			deleteCmd->setDeleteID(deleteID);
-			cmd = deleteCmd;
+			return deleteCmd;
 		}
 		catch(std::string InvalidIntString) {
 			std::cerr << InvalidIntString << std::endl;
@@ -78,18 +80,12 @@ Command Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No fields to modify";
 			}
-			modifyCmd = new Modify;
-			int modifyID = u.stringToInt(u.getFirstWord(userInput));
-			modifyCmd->setModifyID(modifyID);
-
-			restOfInput = u.removeFirstWord(restOfInput);
-			std::vector<FieldType> fields = extractFields(restOfInput);
-			modifyCmd->setFieldsToModify(fields);
-
-			Task task = parseTask(restOfInput);
-			modifyCmd->setTempTask(task);
-
-			cmd = modifyCmd;
+			int modifyID = u.stringToInt(u.getFirstWord(restOfInput));
+			std::string tempTaskString = u.removeFirstWord(restOfInput);
+			std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
+			Task tempTask = parseTask(tempTaskString);
+			modifyCmd = new Modify(modifyID,fieldsToModify,tempTask);
+			return modifyCmd;
 		}
 		catch(std::string NullModifyString) {
 			std::cerr << NullModifyString << std::endl;
@@ -102,9 +98,9 @@ Command Parser::parse(std::string userInput) {
 				throw "No search phrase";
 			}
 			searchCmd = new Search;
-			std::string searchPhrase;
+			std::string searchPhrase = restOfInput;
 			searchCmd->setSearchPhrase(searchPhrase);
-			cmd = searchCmd;
+			return searchCmd;
 		}
 		catch(std::string NullSearchString) {
 			std::cerr << NullSearchString << std::endl;
@@ -112,28 +108,29 @@ Command Parser::parse(std::string userInput) {
 		break;
 
 	case CLEAR_ALL:
-		cmd = new Command;
-		cmd->setCmdType(CLEAR_ALL);
-		break;
+		clearCmd = new ClearAll;
+		return clearCmd;
+		// break;
 
 	case DISPLAY_ALL:
-		cmd = new Command;
-		cmd->setCmdType(DISPLAY_ALL);
-		break;
+		displayCmd = new DisplayAll;
+		return displayCmd;
 
 	case SORT_ALL:
-		cmd = new Command;
-		cmd->setCmdType(SORT_ALL);
-		break;
+		sortCmd = new SortAll;
+		return sortCmd;
 
 	case EXIT:
-		exit(0);
+		exitCmd = new Exit;
+		return exitCmd;
 
-	default:
+	case INVALID:
 		break;
 	}
 
-	return *cmd;
+	// Invalid command
+	Command* cmd = new Command;
+	return cmd;
 }
 
 Command Parser::parseCommand(std::string userCommand) {
@@ -155,6 +152,7 @@ Task Parser::parseTask(std::string restOfCommand) {
 
 	while(curr != userInput.end()) {
 		while(curr != userInput.end()
+			&& !u.equalsIgnoreCase(*curr, FIELD_NAME)
 			&& !u.equalsIgnoreCase(*curr, FIELD_DATE_BY)
 			&& !u.equalsIgnoreCase(*curr, FIELD_DATE_ON)
 			&& !u.equalsIgnoreCase(*curr, FIELD_TIME_AT)
@@ -270,7 +268,7 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 		} else {
 			maxDays = 28;
 		}
-	default:
+	case INVALID_MONTH:
 		break;
 	}
 	return maxDays;
