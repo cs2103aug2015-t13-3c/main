@@ -28,10 +28,11 @@ namespace TextBuddyTests
 		TEST_METHOD(IO_loadFile_emptyFile)
 		{
 			// Empty file should load empty vector
+			IO io;
 
 			std::vector<Task> emptyVector;
-			IO::saveFile("TEXT.txt", emptyVector);
-			std::vector<Task> actualVector = IO::loadFile("TEXT.txt");
+			io.saveFile("TEXT.txt", emptyVector);
+			std::vector<Task> actualVector = io.loadFile("TEXT.txt");
 
 			Assert::AreEqual(emptyVector.size(), actualVector.size());
 
@@ -39,8 +40,9 @@ namespace TextBuddyTests
 
 		TEST_METHOD(IO_loadFile_fileDoesntExist)
 		{
+			IO io;
 			// Empty file should load empty vector
-			std::vector<Task> actualVector = IO::loadFile("");
+			std::vector<Task> actualVector = io.loadFile("");
 			std::vector<Task> emptyVector;
 
 			Assert::AreEqual(emptyVector.size(), actualVector.size());
@@ -49,9 +51,9 @@ namespace TextBuddyTests
 
 		TEST_METHOD(IO_loadFile_loadGibberish)
 		{
-
+			IO io;
 			// Empty file should load empty vector
-			std::vector<Task> actualVector = IO::loadFile("");
+			std::vector<Task> actualVector = io.loadFile("");
 			std::vector<Task> emptyVector;
 
 			Assert::AreEqual(emptyVector.size(), actualVector.size());
@@ -60,12 +62,13 @@ namespace TextBuddyTests
 
 		TEST_METHOD(IO_loadFile_oneTask)
 		{
+			IO io;
 			std::vector<Task> textVector;
 			Task newTask;
 			textVector.push_back(newTask);
-			IO::saveFile("TEXT.txt", textVector);
+			io.saveFile("TEXT.txt", textVector);
 
-			std::vector<Task> actualVector = IO::loadFile("TEXT.txt");
+			std::vector<Task> actualVector = io.loadFile("TEXT.txt");
 
 			Assert::AreEqual(textVector.size(), actualVector.size());
 
@@ -97,14 +100,15 @@ namespace TextBuddyTests
 
 		TEST_METHOD(IO_loadFile_threeTasks)
 		{
+			IO io;
 			std::vector<Task> textVector;
 			Task newTask;
 			textVector.push_back(newTask);
 			textVector.push_back(newTask);
 			textVector.push_back(newTask);
-			IO::saveFile("TEXT.txt", textVector);
+			io.saveFile("TEXT.txt", textVector);
 
-			std::vector<Task> actualVector = IO::loadFile("TEXT.txt");
+			std::vector<Task> actualVector = io.loadFile("TEXT.txt");
 
 			Assert::AreEqual(textVector.size(), actualVector.size());
 
@@ -143,21 +147,23 @@ namespace TextBuddyTests
 
 		TEST_METHOD(IO_saveFile_fileDoesntExist)
 		{
+			IO io;
 			// Cannot open file to save
 			std::vector<Task> emptyVector;
-			bool success = IO::saveFile("", emptyVector);
+			bool success = io.saveFile("", emptyVector);
 
 			Assert::AreEqual(false, success);
 		}
 
 		TEST_METHOD(IO_saveFile_noText)
 		{
+			IO io;
 			std::vector<Task> emptyVector;
 			std::string expectedText[] = {"{","\"TextBuddy Items\":", "[","]","}"};
 
-			bool success = IO::saveFile("Text.txt", emptyVector);
+			bool success = io.saveFile("Text.txt", emptyVector);
 
-			std::vector<std::string> actualText = IO::getText("Text.txt");
+			std::vector<std::string> actualText = io.getText("Text.txt");
 
 			//NOTE: vecToString method doesnt work
 			//std::vector<std::string> actualTextVector = IO::getText("Text.txt");
@@ -170,12 +176,13 @@ namespace TextBuddyTests
 
 		TEST_METHOD(IO_saveFile_oneLine)
 		{
+			IO io;
 			std::vector<Task> textVector;
 			Task newTask;
 			textVector.push_back(newTask);
 
-			bool success = IO::saveFile("Text.txt", textVector);
-			std::vector<std::string> actualText = IO::getText("Text.txt");
+			bool success = io.saveFile("Text.txt", textVector);
+			std::vector<std::string> actualText = io.getText("Text.txt");
 
 			std::string expectedText[] = {
 				"{",
@@ -210,14 +217,15 @@ namespace TextBuddyTests
 
 		TEST_METHOD(IO_saveFile_threeLines)
 		{
+			IO io;
 			std::vector<Task> textVector;
 			Task newTask;
 			textVector.push_back(newTask);
 			textVector.push_back(newTask);
 			textVector.push_back(newTask);
 
-			bool success = IO::saveFile("Text.txt", textVector);
-			std::vector<std::string> actualText = IO::getText("Text.txt");
+			bool success = io.saveFile("Text.txt", textVector);
+			std::vector<std::string> actualText = io.getText("Text.txt");
 
 			std::string expectedText[] = {
 				"{",
