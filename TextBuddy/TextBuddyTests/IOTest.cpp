@@ -72,10 +72,19 @@ namespace TextBuddyTests
 		TEST_METHOD(IO_saveFile_noText)
 		{
 			std::vector<Task> emptyVector;
+			std::string expectedText[] = {"\"TextBuddy Items\":", "[","]"};
+
 			bool success = IO::saveFile("Text.txt", emptyVector);
+
 			std::vector<std::string> actualText = IO::getText("Text.txt");
 
-			Assert::AreEqual(emptyVector.size(), actualText.size());
+			//NOTE: vecToString method doesnt work
+			//std::vector<std::string> actualTextVector = IO::getText("Text.txt");
+			//std::string actualText = Utilities::vecToString(actualTextVector);
+
+			for(unsigned int i = 0; i < actualText.size(); i++) {
+				Assert::AreEqual(expectedText[i], actualText[i]);
+			}
 		}
 
 		TEST_METHOD(IO_saveFile_oneLine)
@@ -88,18 +97,23 @@ namespace TextBuddyTests
 			std::vector<std::string> actualText = IO::getText("Text.txt");
 
 			std::string expectedText[] = {
-				"",
-				"FLOATING",
-				"1",
-				"",
-				"0",
-				"0",
-				"SUN",
-				"0",
-				"0",
-				"SUN",
-				"0",
-				"0"
+				"\"TextBuddy Items\":",
+				"[",
+				"{",
+				"\"name\": \"\"",
+				"\"type\": \"FLOATING\"",
+				"\"uniqueID\": \"1\"",
+				"\"label\": \"\"",
+				"\"isDone\": \"false\"",
+				"\"isPriority\": \"\"",
+				"\"startDay\": \"SUN\"",
+				"\"startDate\": \"0\"",
+				"\"startTime\": \"0\"",
+				"\"endDay\": \"SUN\"",
+				"\"endDate\": \"0\"",
+				"\"endTime\": \"0\"",
+				"}",
+				"]"
 			};
 
 			for(unsigned int i = 0; i < actualText.size(); i++) {
@@ -108,6 +122,72 @@ namespace TextBuddyTests
 
 		}
 
+		TEST_METHOD(IO_saveFile_threeLines)
+		{
+			std::vector<Task> textVector;
+			Task newTask;
+			textVector.push_back(newTask);
+			textVector.push_back(newTask);
+			textVector.push_back(newTask);
+
+			bool success = IO::saveFile("Text.txt", textVector);
+			std::vector<std::string> actualText = IO::getText("Text.txt");
+
+			std::string expectedText[] = {
+				"\"TextBuddy Items\":",
+				"[",
+				"{",
+				"\"name\": \"\"",
+				"\"type\": \"FLOATING\"",
+				"\"uniqueID\": \"1\"",
+				"\"label\": \"\"",
+				"\"isDone\": \"false\"",
+				"\"isPriority\": \"\"",
+				"\"startDay\": \"SUN\"",
+				"\"startDate\": \"0\"",
+				"\"startTime\": \"0\"",
+				"\"endDay\": \"SUN\"",
+				"\"endDate\": \"0\"",
+				"\"endTime\": \"0\"",
+				"}",
+				",",
+				"{",
+				"\"name\": \"\"",
+				"\"type\": \"FLOATING\"",
+				"\"uniqueID\": \"1\"",
+				"\"label\": \"\"",
+				"\"isDone\": \"false\"",
+				"\"isPriority\": \"\"",
+				"\"startDay\": \"SUN\"",
+				"\"startDate\": \"0\"",
+				"\"startTime\": \"0\"",
+				"\"endDay\": \"SUN\"",
+				"\"endDate\": \"0\"",
+				"\"endTime\": \"0\"",
+				"}",
+				",",
+				"{",
+				"\"name\": \"\"",
+				"\"type\": \"FLOATING\"",
+				"\"uniqueID\": \"1\"",
+				"\"label\": \"\"",
+				"\"isDone\": \"false\"",
+				"\"isPriority\": \"\"",
+				"\"startDay\": \"SUN\"",
+				"\"startDate\": \"0\"",
+				"\"startTime\": \"0\"",
+				"\"endDay\": \"SUN\"",
+				"\"endDate\": \"0\"",
+				"\"endTime\": \"0\"",
+				"}",
+				"]"
+			};
+
+			for(unsigned int i = 0; i < actualText.size(); i++) {
+				Assert::AreEqual(expectedText[i], actualText[i]);
+			}
+
+		}
 	};
 
 }

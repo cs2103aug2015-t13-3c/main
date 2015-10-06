@@ -160,11 +160,11 @@ std::vector<std::string> Utilities::splitParameters(std::string commandParameter
 
 // Other types to string
 
-std::string Utilities::boolToIntString(bool boolean) {
+std::string Utilities::boolToString(bool boolean) {
 	if(boolean) {
-		return "1";
+		return "true";
 	} else {
-		return "0";
+		return "false";
 	}
 }
 
@@ -238,6 +238,7 @@ std::string Utilities::taskTypeToString(TaskType type) {
 	return typeString;
 }
 
+//NOTE TO AARON: method doesnt work in IOTest.cpp
 std::string Utilities::vecToString(std::vector<std::string> inputString) {
 	std::string newString;
 	std::vector<std::string>::iterator curr;

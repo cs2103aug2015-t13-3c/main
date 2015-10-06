@@ -16,6 +16,7 @@ private:
 	static bool fileIsOpen(std::ofstream& outputFile);
 	static Task getTask(std::ifstream& inputFile);
 	static Task extractTaskFromJsonObject(Value& item);
+	static void writeTaskIntoJsonFormat(std::ofstream &newFile, Task task);
 
 	static void extractName(Task &newTask, Value &item);
 	static void extractType(Task &newTask, Value &item);
@@ -29,6 +30,37 @@ private:
 	static void extractEndDay(Task &newTask, Value &item);
 	static void extractEndDate(Task &newTask, Value &item);
 	static void extractEndTime(Task &newTask, Value &item);
+
+	static void initialiseJsonText(std::ofstream& newfile);
+	static void closeJsonText(std::ofstream& newfile);
+	static std::string insertOpenParanthese();
+	static std::string insertCloseParanthese();
+	static std::string writeNameAttribute(Task task);
+	static std::string writeTypeAttribute(Task task);
+	static std::string writeIDAttribute(Task task);
+	static std::string writeLabelAttribute(Task task);
+	static std::string writeIsDoneAttribute(Task task);
+	static std::string writeIsPriorityAttribute(Task task);
+	static std::string writeStartDayAttribute(Task task);
+	static std::string writeStartDateAttribute(Task task);
+	static std::string writeStartTimeAttribute(Task task);
+	static std::string writeEndDayAttribute(Task task);
+	static std::string writeEndDateAttribute(Task task);
+	static std::string writeEndTimeAttribute(Task task);
+
+	static std::string retrieveName(Task task);
+	static std::string retrieveType(Task task);
+	static std::string retrieveID(Task task);
+	static std::string retrieveLabel(Task task);
+	static std::string retrieveIsDone(Task task);
+	static std::string retrieveIsPriority(Task task);
+	static std::string retrieveStartDay(Task task);
+	static std::string retrieveStartDate(Task task);
+	static std::string retrieveStartTime(Task task);
+	static std::string retrieveEndDay(Task task);
+	static std::string retrieveEndDate(Task task);
+	static std::string retrieveEndTime(Task task);
+
 
 public:
 	IO();

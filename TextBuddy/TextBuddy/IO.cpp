@@ -13,6 +13,12 @@ IO::~IO() {}
 //                      METHODS
 // ==================================================
 
+
+
+//================= PUBLIC METHODS ======================
+
+// Loads file and extracts JSON text into a task vector
+// throws an assert if file contents are invalid
 std::vector<Task> IO::loadFile(std::string fileName) {
 	std::ifstream inputFile(fileName);
 	std::string inputFileString((std::istreambuf_iterator<char>(inputFile)),
@@ -23,13 +29,11 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 		return taskVector;
 	}
 
-	const char* inputFileText = inputFileString.c_str(); // <-- this is the error!!!
+	const char* inputFileText = inputFileString.c_str();
 
 	Document document;
 	document.Parse(inputFileText);
 
-	//assert(document.IsArray());
-	//assert(document.IsArray());
 	assert(document.IsObject());
 	assert(document["TextBuddy Items"].IsArray());
 
@@ -54,32 +58,24 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 		return false;
 	}
 
+	initialiseJsonText(newfile);
+
 	for(unsigned int i = 0; i < taskVector.size(); i++) {
 		Task task = taskVector[i];
-
-		std::string taskName = task.getName();
-		std::string taskType = u.taskTypeToString(task.getType());
-		std::string taskID = std::to_string(task.getID());
-		std::string taskLabel = task.getLabel();
-		std::string taskDoneStatus = u.boolToIntString(task.getDoneStatus());
-		std::string taskPriorityStatus = u.boolToIntString(task.getPriorityStatus());
-		std::string taskStartDay = u.dayToString(task.getStartDay());
-		std::string taskStartDate = std::to_string(task.getStartDate());
-		std::string taskStartTime = std::to_string(task.getStartTime());
-		std::string taskEndDay = u.dayToString(task.getEndDay());
-		std::string taskEndDate = std::to_string(task.getEndDate());
-		std::string taskEndTime = std::to_string(task.getEndTime());
-
-		std::string taskText = taskName + "\n" + taskType + "\n" + taskID + "\n" + taskLabel + "\n" + taskDoneStatus
-			+ "\n" + taskPriorityStatus + "\n" + taskStartDay + "\n" + taskStartDate + "\n" + taskStartTime + "\n" + 
-			taskEndDay + "\n" + taskEndDate + "\n" + taskEndTime + "\n";
-
-		newfile << taskText;
+		writeTaskIntoJsonFormat(newfile,task);
+		
+		if(i+1 < taskVector.size()) {
+			newfile << ",\n";
+		}
 	}
+
+	closeJsonText(newfile);
 	newfile.close();
 
 	return false;
 }
+
+//=============== PRIVATE METHODS ===================
 
 Task IO::extractTaskFromJsonObject(Value& item) {
 	Task newTask;
@@ -104,6 +100,26 @@ Task IO::extractTaskFromJsonObject(Value& item) {
 	return newTask;
 }
 
+void IO::writeTaskIntoJsonFormat(std::ofstream &newFile, Task task) {
+	newFile << insertOpenParanthese();
+
+	newFile << writeNameAttribute(task);
+	newFile << writeTypeAttribute(task);
+	newFile << writeIDAttribute(task);
+	newFile << writeLabelAttribute(task) << "\n";
+	newFile << writeIsDoneAttribute(task);
+	newFile << writeIsPriorityAttribute(task) << "\n";
+	newFile << writeStartDayAttribute(task);
+	newFile << writeStartDateAttribute(task);
+	newFile << writeStartTimeAttribute(task) << "\n";
+	newFile << writeEndDayAttribute(task);
+	newFile << writeEndDateAttribute(task);
+	newFile << writeEndTimeAttribute(task);
+
+	newFile << insertCloseParanthese();
+
+	return;
+}
 
 Task IO::getTask(std::ifstream& inputFile) {
 	Task task;
@@ -252,6 +268,184 @@ void IO::extractEndTime(Task &newTask, Value &item)  {
 }
 
 
+
+//======= Retrieve Task Attributes and Write to File Methods =======
+
+	std::string IO::insertOpenParanthese() {
+		return "\t{\n";
+	}
+	std::string IO::insertCloseParanthese() {
+		return "\t}\n";
+	}
+	std::string IO::writeNameAttribute(Task task) {
+		std::string nameString;
+
+		nameString = "\t\t\"name\": ";
+		nameString += retrieveName(task);
+
+		return nameString;
+	}
+	std::string IO::writeTypeAttribute(Task task) {
+		std::string typeString;
+
+		typeString = "\t\t\"type\": ";
+		typeString += retrieveType(task);
+
+		return typeString;
+	}
+	std::string IO::writeIDAttribute(Task task) {
+		std::string IDString;
+
+		IDString = "\t\t\"uniqueID\": ";
+		IDString += retrieveID(task);
+
+		return IDString;
+	}
+	std::string IO::writeLabelAttribute(Task task) {
+		std::string labelString;
+
+		labelString = "\t\t\"label\": ";
+		labelString += retrieveLabel(task);
+
+		return labelString;
+	}
+	std::string IO::writeIsDoneAttribute(Task task) {
+		std::string isDoneString;
+
+		isDoneString = "\t\t\"isDone\": ";
+		isDoneString += retrieveIsDone(task);
+
+		return isDoneString;
+	}
+	std::string IO::writeIsPriorityAttribute(Task task) {
+		std::string isPriorityString;
+
+		isPriorityString = "\t\t\"isPriority\": ";
+		isPriorityString += retrieveIsPriority(task);
+
+		return isPriorityString;
+	}
+	std::string IO::writeStartDayAttribute(Task task) {
+		std::string startDayString;
+
+		startDayString = "\t\t\"startDay\": ";
+		startDayString += retrieveStartDay(task);
+
+		return startDayString;
+	}
+	std::string IO::writeStartDateAttribute(Task task) {
+		std::string startDateString;
+
+		startDateString = "\t\t\"startDate\": ";
+		startDateString += retrieveStartDate(task);
+
+		return startDateString;
+	}
+	std::string IO::writeStartTimeAttribute(Task task) {
+		std::string startTimeString;
+
+		startTimeString = "\t\t\"startTime\": ";
+		startTimeString += retrieveStartTime(task);
+
+		return startTimeString;
+	}
+	std::string IO::writeEndDayAttribute(Task task) {
+		std::string EndDayString;
+
+		EndDayString = "\t\t\"EndDay\": ";
+		EndDayString += retrieveEndDay(task);
+
+		return EndDayString;
+	}
+	std::string IO::writeEndDateAttribute(Task task) {
+		std::string EndDateString;
+
+		EndDateString = "\t\t\"EndDate\": ";
+		EndDateString += retrieveEndDate(task);
+
+		return EndDateString;
+	}
+	std::string IO::writeEndTimeAttribute(Task task) {
+		std::string EndTimeString;
+
+		EndTimeString = "\t\t\"EndTime\": ";
+		EndTimeString += retrieveEndTime(task);
+
+		return EndTimeString;
+	}
+
+
+	std::string IO::retrieveName(Task task) {
+		std::string string;
+		string = "\"" + task.getName() + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveType(Task task) {
+		std::string string;
+		TaskType type = task.getType();
+		string = "\"" + Utilities::taskTypeToString(type) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveID(Task task) {
+		std::string string;
+		int ID = task.getID();
+		string = "\"" + std::to_string(ID) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveLabel(Task task) {
+		std::string string;
+		string = "\"" + task.getLabel() + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveIsDone(Task task) {
+		std::string string;
+		bool status = task.getDoneStatus();
+		string = "\"" + Utilities::boolToString(status) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveIsPriority(Task task) {
+		std::string string;
+		bool status = task.getPriorityStatus();
+		string = "\"" + Utilities::boolToString(status) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveStartDay(Task task) {
+		std::string string;
+		Day day = task.getStartDay();
+		string = "\"" + Utilities::dayToString(day) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveStartDate(Task task) {
+		std::string string;
+		int date = task.getStartDate();
+		string = "\"" + std::to_string(date) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveStartTime(Task task) {
+		std::string string;
+		int time = task.getStartTime();
+		string = "\"" + std::to_string(time) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveEndDay(Task task) {
+		std::string string;
+		Day day = task.getEndDay();
+		string = "\"" + Utilities::dayToString(day) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveEndDate(Task task) {
+		std::string string;
+		int date = task.getEndDate();
+		string = "\"" + std::to_string(date) + "\"\n";
+		return string;
+	}
+	std::string IO::retrieveEndTime(Task task) {
+		std::string string;
+		int time = task.getEndTime();
+		string = "\"" + std::to_string(time) + "\"\n";
+		return string;
+	}
+
 // Overloaded function
 bool IO::fileIsOpen(std::ifstream& inputFile)
 {
@@ -273,10 +467,11 @@ bool IO::fileIsOpen(std::ofstream& outputFile)
 	}
 }
 
-enum Enum { Banana, Orange, Apple } ;
-static const char * EnumStrings[] = { "bananas & monkeys", "Round and orange", "APPLE" };
-
-const char * getTextForEnum( int enumVal )
-{
-	return EnumStrings[enumVal];
-}
+	void IO::initialiseJsonText(std::ofstream& newfile) {
+		newfile << "\"TextBuddy Items\":\n[\n";
+		return;
+	}
+	void IO::closeJsonText(std::ofstream& newfile) {
+		newfile << "]";
+		return;
+	}

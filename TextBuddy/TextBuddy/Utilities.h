@@ -37,7 +37,7 @@ public:
 	static TaskType		stringToTaskType(std::string line);
 	static std::vector<std::string> splitParameters(std::string commandParametersString);
 
-	static std::string	boolToIntString(bool boolean);
+	static std::string	boolToString(bool boolean);
 	static std::string	dayToString(Day day);
 	static std::string	taskToString(Task taskToConvert);
 	static std::string	taskTypeToString(TaskType type);
