@@ -157,6 +157,7 @@ namespace TextBuddyTests {
 
 
 		}
+		
 		/*
 		TEST_METHOD(Logic_AddAndReturnInfoTest) {
 			Logic testLogic;

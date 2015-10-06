@@ -3,10 +3,10 @@
 #include "stdafx.h"
 
 // ==================================================
-//                 COMMAND (OUTDATED)
+//                      COMMAND
 // ==================================================
 
-Command::Command() {}
+// Command::Command() {}
 
 Command::Command(CommandType newCommand, std::string restOfUserCommand, std::string inputString) {
 	cmd = newCommand;
@@ -29,21 +29,11 @@ std::string Command::getUserInput() {
 }
 
 // ==================================================
-//                 COMMAND (ABSTRACT)
-// ==================================================
-
-// Used for CLEAR_ALL, DISPLAY_ALL, SORT_ALL
-void Command::setCmdType(CommandType cmdType) {
-	assert(cmdType==CLEAR_ALL || cmdType==DISPLAY_ALL || cmdType==SORT_ALL);
-	cmd = cmdType;
-	return;
-}
-
-// ==================================================
 //                        ADD
 // ==================================================
 
 Add::Add() : Command(ADD) {}
+Add::Add(std::string userInput) : Command(ADD,"",userInput) {}
 Add::~Add() {}
 
 void Add::setNewTask(Task aTask) {
@@ -76,28 +66,37 @@ void Delete::setDeleteID(int index) {
 // ==================================================
 
 Modify::Modify() : Command(MODIFY) {}
+
+Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
+	modifyID = taskID;
+	fieldsToModify = fields;
+	tempTask = task;
+}
+
 Modify::~Modify() {}
 
 int Modify::getModifyID() {
 	return modifyID;
 }
 
+std::vector<FieldType> Modify::getFieldsToModify() {
+	return fieldsToModify;
+}
+
+Task Modify::getTempTask() {
+	return tempTask;
+}
+
+// Obsolete methods, only used for testing
+
 void Modify::setModifyID(int index) {
 	modifyID = index;
 	return;
 }
 
-std::vector<FieldType> Modify::getFieldsToModify() {
-	return fieldsToModify;
-}
-
 void Modify::setFieldsToModify(std::vector<FieldType> fields) {
 	fieldsToModify = fields;
 	return;
-}
-
-Task Modify::getTempTask() {
-	return tempTask;
 }
 
 void Modify::setTempTask(Task task) {
@@ -120,3 +119,31 @@ void Search::setSearchPhrase(std::string phr) {
 	searchPhrase = phr;
 	return;
 }
+
+// ==================================================
+//                     CLEAR_ALL
+// ==================================================
+
+ClearAll::ClearAll() : Command(CLEAR_ALL) {}
+ClearAll::~ClearAll() {}
+
+// ==================================================
+//                    DISPLAY_ALL
+// ==================================================
+
+DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {}
+DisplayAll::~DisplayAll() {}
+
+// ==================================================
+//                      SORT_ALL
+// ==================================================
+
+SortAll::SortAll() : Command(SORT_ALL) {}
+SortAll::~SortAll() {}
+
+// ==================================================
+//                        EXIT
+// ==================================================
+
+Exit::Exit() : Command(EXIT) {}
+Exit::~Exit() {}

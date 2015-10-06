@@ -24,17 +24,13 @@ private:
 	std::string userInput;
 
 public:
-	Command();
-	Command(CommandType newCommand, std::string restOfUserCommand="", std::string inputString="");
-	virtual ~Command();
+	// Command();
+	Command(CommandType newCommand=INVALID, std::string restOfUserCommand="", std::string inputString="");
+	~Command();
 
 	CommandType getCommand();
 	std::string getRestOfCommand();
 	std::string getUserInput();
-
-	// Used for CLEAR_ALL, DISPLAY_ALL, SORT_ALL
-	void setCmdType(CommandType cmdType);
-
 };
 
 class Add: public Command {
@@ -42,9 +38,10 @@ private:
 	Task newTask;
 public:
 	Add();
+	Add(std::string userInput);
 	~Add();
 	Task getNewTask();
-	void setNewTask(Task aTask); //testing
+	void setNewTask(Task aTask);
 };
 
 class Delete: public Command {
@@ -54,7 +51,7 @@ public:
 	Delete();
 	~Delete();
 	int getDeleteID();
-	void setDeleteID(int index); //testing
+	void setDeleteID(int index);
 };
 
 class Modify: public Command {
@@ -64,6 +61,7 @@ private:
 	Task tempTask;
 public:
 	Modify();
+	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	~Modify();
 	int getModifyID();
 	std::vector<FieldType> getFieldsToModify();
@@ -71,8 +69,6 @@ public:
 	void setModifyID(int index);
 	void setFieldsToModify(std::vector<FieldType> fields);
 	void setTempTask(Task task);
-	
-	
 };
 
 class Search: public Command {
@@ -82,7 +78,33 @@ public:
 	Search();
 	~Search();
 	std::string getSearchPhrase();
-	void setSearchPhrase(std::string phr); //testing
+	void setSearchPhrase(std::string phr);
+};
+
+// Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, EXIT
+
+class ClearAll: public Command {
+public:
+	ClearAll();
+	~ClearAll();
+};
+
+class DisplayAll: public Command {
+public:
+	DisplayAll();
+	~DisplayAll();
+};
+
+class SortAll: public Command {
+public:
+	SortAll();
+	~SortAll();
+};
+
+class Exit: public Command {
+public:
+	Exit();
+	~Exit();
 };
 
 #endif

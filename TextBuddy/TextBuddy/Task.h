@@ -38,6 +38,7 @@ enum TaskType {
 };
 
 // These are the possible field types for tasks
+const std::string FIELD_NAME = "name";
 const std::string FIELD_LABEL = ":";
 const std::string FIELD_PRIORITY = "star";
 const std::string FIELD_DATE_BY = "by";
