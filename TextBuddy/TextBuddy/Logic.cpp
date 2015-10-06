@@ -62,10 +62,18 @@ int Logic::getIdOfIndex(int userIndex) {
 	std::vector<Task>::iterator iter = currentView.begin();
 
 	for (int i = 1; i < userIndex; i++) {
-		++iter;
+		if (iter != currentView.end()) {
+				++iter;
+		} else {
+			return false;				//error since index put in exceeds the currentView capacity
+		}								//error for exceeding upper bound of acceptable inputs
 	}
 
-	id = iter->getID();
+	if (userIndex >= 1) {
+		id = iter->getID();
+	} else {
+		return false;					//error for index going below the lower bound of acceptable inputs
+	}
 	return id;
 }
 
@@ -76,17 +84,21 @@ bool Logic::addInfo(Add taskName) {
 }
 
 // Searches for Task to delete using ID
+// Deleting is done according to the order of elements on currentView
 bool Logic::deleteInfo(Delete idToDelete) {
 	std::vector<Task>::iterator iter;
-
 	int id;
-	id = idToDelete.getDeleteID();
+	int index;
+	index = idToDelete.getDeleteID();
+	id = getIdOfIndex(index);
 
-	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
-		if (iter->getID() == id) {
-			taskStore.erase(iter);
-			break;
-		}
+	iter = taskStore.begin();
+	while ((iter != taskStore.end()) && (iter->getID() != id)) {
+		++iter;
+	}
+	
+	if (iter->getID() == id) {
+		taskStore.erase(iter);
 	}
 
 	copyView();
@@ -96,25 +108,11 @@ bool Logic::deleteInfo(Delete idToDelete) {
 bool Logic::modifyInfo(Modify toModify) {
 	std::vector<Task>::iterator taskIter;
 	Task tempTask = toModify.getTempTask();
-	//id stored in toModify refers to the (index+1)th element shown in currentView()
-	int index = toModify.getModifyID() - 1;
+	
+	int index = toModify.getModifyID();
 	int id;
-
-	taskIter = currentView.begin();
-	//obtains id from the element of currentView that the user intends to amend
-	for (int i = 1; i <= index; i++) {
-		if (taskIter != currentView.end()) {
-				++taskIter;
-		} else {
-			return false;				//error since index put in exceeds the currentView capacity(
-		}								//error for exceeding upper bound of acceptable inputs
-	}
-
-	if (index > 0) {
-		id = taskIter->getID();
-	} else {
-		return false;					//error for index going below the lower bound of acceptable inputs
-	}
+	id = getIdOfIndex(index);
+	
 	//matches id obtained from currentView with id in taskstore
 	taskIter = taskStore.begin();
 	while ((taskIter != taskStore.end()) && (taskIter->getID() != id)) {
@@ -227,10 +225,10 @@ std::string Logic::processCommand(std::string userCommand) {
 	//inputCmd obtained from parser
 	Command inputCmd(parser.parseCommand(userCommand));
 	CommandType cmd = inputCmd.getCommand();
-	Add task;
-	Task taskToAdd;
-	Delete taskToDelete;
-	Search searchPhrase;
+	Add* taskToAdd;
+	Delete* taskToDelete;
+	Modify* taskToModify;
+	Search* searchPhrase;
 	std::string output = "ok";
 
 	int userIndex;						//userIndex in currentView
@@ -240,31 +238,31 @@ std::string Logic::processCommand(std::string userCommand) {
 	std::ostringstream tempOutput;
 	std::vector<Task>::iterator iter;
 
+	Command* command = parser.parse(userCommand);
+
 	switch (cmd) {
 
 	case ADD:
-		taskToAdd = parser.parseTask(inputCmd.getRestOfCommand());
-		task.setNewTask(taskToAdd);
-		addInfo(task);
+		taskToAdd = ((Add*)command);
+		addInfo(*taskToAdd);
 		break;
 	case DELETE:
 		//userIndex refers to the nth task of currentView presented to user
 		//eg. delete 1 means deleting the first task
-		userIndex = stoi(inputCmd.getRestOfCommand());
-		id = getIdOfIndex(userIndex);
-		taskToDelete.setDeleteID(id);
-		deleteInfo(taskToDelete);
+		taskToDelete = ((Delete*)command);
+		deleteInfo(*taskToDelete);
 		break;
 	case MODIFY:
-		//not implemented yet
+		taskToModify = ((Modify*)command);
+		modifyInfo(*taskToModify);
 		break;
 	case SEARCH:
 		//currently search returns string of names
 		//currentView is also amended, can refer to items from currentView after every processInfo cmd
 		//eg. add/delete will display new list under UI
 		//if it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
-		searchPhrase.setSearchPhrase(inputCmd.getRestOfCommand());
-		output = searchInfo(searchPhrase);
+		searchPhrase = ((Search*)command);
+		output = searchInfo(*searchPhrase);
 		amendView(output);
 
 		//temporary method to return string of names followed by commas

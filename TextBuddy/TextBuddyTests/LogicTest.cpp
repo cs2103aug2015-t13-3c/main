@@ -35,7 +35,7 @@ namespace TextBuddyTests {
 			iter = copyTask.begin();
 
 			Assert::AreEqual(std::string("Sentence one."), iter->getName());
-
+			
 			Task taskTwo;
 			taskTwo.setName("Sentence two.");
 			thisTask.setNewTask(taskTwo);
@@ -57,7 +57,7 @@ namespace TextBuddyTests {
 			++iter;
 			++iter;
 			Assert::AreEqual(std::string("Sentence three."),iter->getName());
-
+			
 			//modify
 
 			Modify modTask;
@@ -77,16 +77,6 @@ namespace TextBuddyTests {
 			Assert::AreEqual(std::string("Changed."),iter->getName());
 			++iter;
 			Assert::AreEqual(std::string("Sentence three."),iter->getName());
-
-			//delete
-
-			Delete index;
-			index.setDeleteID(0);
-			logic.deleteInfo(index);
-
-			copyTask = logic.getTaskStore();
-			iter = copyTask.begin();
-			//Assert::AreEqual(std::string("Sentence two."),iter->getName());
 		}
 
 		TEST_METHOD(Logic_matchPhrase) {
@@ -143,10 +133,21 @@ namespace TextBuddyTests {
 
 			Assert::AreEqual(std::string("then"), iter->getName());
 			
+			//modify
+			logic.processCommand(std::string("Modify 1 changed."));
+			copyTask = logic.getTaskStore();
+			iter = copyTask.begin();
+			Assert::AreEqual(std::string("changed."), iter->getName());
+			++iter;
+
+			Assert::AreEqual(std::string("then"), iter->getName());
+
+			logic.processCommand(std::string("Modify 1 that"));
+
 			//search
 			std::string output = logic.processCommand(std::string("Search th"));	
 			Assert::AreEqual(std::string("that,then"), output);
-
+			
 
 			copyTask = logic.getCurrentView();
 			iter = copyTask.begin();
@@ -154,7 +155,6 @@ namespace TextBuddyTests {
 
 			++iter;
 			Assert::AreEqual(std::string("then"), iter->getName());
-
 
 		}
 		
