@@ -257,6 +257,7 @@ std::string Utilities::vecToString(std::vector<std::string> inputString) {
 // ==================================================
 
 bool Utilities::containsAny(std::string targetWord, std::string searchWords) {
+	targetWord = stringToLower(targetWord);
 	searchWords = stringToLower(searchWords);
 	std::vector<std::string> vecSearchWords = splitParameters(searchWords);
 	std::vector<std::string>::iterator curr;

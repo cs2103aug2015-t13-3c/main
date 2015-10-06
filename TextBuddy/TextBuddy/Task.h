@@ -106,6 +106,8 @@ public:
 	bool setEndDay(Day newEndDay);
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
+
+	static bool tasksAreEqual(Task task1, Task task2);
 };
 
 #endif

@@ -106,3 +106,45 @@ bool Task::setEndTime(int newEndTime) {
 	endTime = newEndTime;
 	return true;
 }
+
+//for testing
+bool Task::tasksAreEqual(Task task1, Task task2) {
+	if(task1.getDoneStatus() != task2.getDoneStatus()) {
+		return false;
+	}
+	if(task1.getEndDay() != task2.getEndDay()) {
+		return false;
+	}
+	if(task1.getEndDate() != task2.getEndDate()) {
+		return false;
+	}
+	if(task1.getEndTime() != task2.getEndTime()) {
+		return false;
+	}
+	if(task1.getID() != task2.getID()) {
+		return false;
+	}
+	if(task1.getLabel() != task2.getLabel()) {
+		return false;
+	}
+	if(task1.getName() != task2.getName()) {
+		return false;
+	}
+	if(task1.getPriorityStatus() != task2.getPriorityStatus()) {
+		return false;
+	}
+	if(task1.getStartDate() != task2.getStartDate()) {
+		return false;
+	}
+	if(task1.getStartDay() != task2.getStartDay()) {
+		return false;
+	}
+	if(task1.getStartTime() != task2.getStartTime()) {
+		return false;
+	}
+	if(task1.getType() != task2.getType()) {
+		return false;
+	}
+
+	return true;
+}

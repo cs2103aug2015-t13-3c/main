@@ -14,7 +14,6 @@ private:
 
 	static bool fileIsOpen(std::ifstream& inputFile);
 	static bool fileIsOpen(std::ofstream& outputFile);
-	static Task getTask(std::ifstream& inputFile);
 	static Task extractTaskFromJsonObject(Value& item);
 	static void writeTaskIntoJsonFormat(std::ofstream &newFile, Task task);
 
