@@ -14,6 +14,17 @@ int Logic::getSize() {
 	return taskStore.size();
 }
 
+bool Logic::saveFile(std::string fileName) {
+	io.saveFile(fileName, taskStore);
+	return true;
+}
+
+bool Logic::loadFile(std::string fileName) {
+	taskStore = io.loadFile(fileName);
+	copyView();
+	return true;
+}
+
 std::vector<Task> Logic::getTaskStore() {
 	return taskStore;
 }
