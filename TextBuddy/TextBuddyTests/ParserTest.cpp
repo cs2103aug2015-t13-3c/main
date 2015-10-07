@@ -22,8 +22,8 @@ namespace TextBuddyTests
 		TEST_METHOD(Parser_parse) {
 			
 			// Test for ADD
-			expectedString = "Name: A partridge in a pear tree\n";
-			userInput = "add A partridge in a pear tree";
+			expectedString = "Name: A partridge in a pear tree\nEnd Day: FRI\nEnd Date: 151009\n";
+			userInput = "add A partridge in a pear tree by fri";
 			
 
 			/*
@@ -201,9 +201,17 @@ namespace TextBuddyTests
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 		}
 
+		TEST_METHOD(Parser_parseDay)
+		{
+			expectedString = "FRI";
+			userInput = "fri";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedString,u.dayToString(p.parseDay(p.parseDate(inputString))));
+		}
+
 		TEST_METHOD(Parser_parseTask)
 		{
-			expectedString = "Name: little brown fox\n";
+			expectedString = "Name: little brown fox\nEnd Day: SUN\nEnd Date: 0\n";
 			userInput = "little brown fox";
 			tempTask = p.parseTask(userInput);
 			Assert::AreEqual(expectedString,u.taskToString(tempTask));

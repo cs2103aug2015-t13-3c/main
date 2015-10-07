@@ -46,7 +46,7 @@ Command* Parser::parse(std::string userInput) {
 
 	switch(cmdType) {
 	case ADD:
-			try {
+		try {
 			if(restOfInput=="") {
 				throw "No task to add";
 			}
@@ -150,7 +150,14 @@ Task Parser::parseTask(std::string restOfCommand) {
 	FieldType inputMode = NAME;
 	std::vector<std::string> inputString;
 
+	int newStartDate;
+	Day newStartDay;
+	int newEndDate;
+	Day newEndDay;
+
 	while(curr != userInput.end()) {
+		inputString.clear();
+
 		while(curr != userInput.end()
 			&& !u.equalsIgnoreCase(*curr, FIELD_NAME)
 			&& !u.equalsIgnoreCase(*curr, FIELD_DATE_BY)
@@ -163,9 +170,6 @@ Task Parser::parseTask(std::string restOfCommand) {
 				curr++;
 		}
 
-		int newStartDate;
-		int newEndDate;
-
 		switch(inputMode) {
 		case NAME:
 			newTask.setName(u.vecToString(inputString));
@@ -174,7 +178,10 @@ Task Parser::parseTask(std::string restOfCommand) {
 		case START_DAY:
 			newTask.setType(EVENT);
 			newStartDate = parseDate(inputString);
+			newStartDay = parseDay(newStartDate);
+			
 			newTask.setStartDate(newStartDate);
+			newTask.setStartDay(newStartDay);
 			break;
 		case END_DATE :
 		case END_DAY :
@@ -182,7 +189,10 @@ Task Parser::parseTask(std::string restOfCommand) {
 				newTask.setType(TODO);
 			}
 			newEndDate = parseDate(inputString);
+			newEndDay = parseDay(newEndDate);
+
 			newTask.setEndDate(newEndDate);
+			newTask.setEndDay(newEndDay);
 			break;
 		case START_TIME :
 		case END_TIME :
@@ -361,6 +371,29 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 	return newDate;
 }
 
+// Processes dates in these formats:
+// - DDD/DDDD
+// - this/next DDD/DDDD
+// - DD MM/MMM/MMMM
+// Week is defined as Sunday to Saturday
+// Returns -1 if invalid date
+Day Parser::parseDay(int date) {
+	// To-do: Check if valid date
+
+	int year = date/10000 + 2000;
+	int month = (date/100)%100;
+	int day = date%100;
+
+	tm timeStruct = {};
+	timeStruct.tm_year = year - 1900;
+	timeStruct.tm_mon = month - 1;
+	timeStruct.tm_mday = day;
+	timeStruct.tm_hour = 12;		//  To avoid any doubts about summer time, etc.
+	mktime(&timeStruct);
+	return (Day)timeStruct.tm_wday; //  0...6 for Sunday...Saturday
+}
+
+
 // Processes times in these formats:
 // - HH    AM/PM (default: assume AM)
 // - HH.MM AM/PM (default: assume AM)
@@ -408,7 +441,7 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 			return INVALID_TIME_FORMAT;
 		}
 	}
-	
+
 	curr++;
 	if(curr != timeString.end()) {
 		if(u.containsAny(*curr,"am") && hour <= 12) {
@@ -424,7 +457,7 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 		}
 		curr++;
 	}
-	
+
 	if(curr == timeString.end()) {
 		time = hour*100 + min;
 	} else {

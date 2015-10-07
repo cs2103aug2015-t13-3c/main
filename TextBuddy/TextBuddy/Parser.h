@@ -32,8 +32,9 @@ public:
 	static int findMaxDays(Month month, int year=2015);
 
 	// These handle task parameters
-	static int parseDate(std::vector<std::string> inputString);
-	static int parseTime(std::vector<std::string> inputString);
+	static int parseDate(std::vector<std::string> dateString);
+	static Day parseDay(int date);
+	static int parseTime(std::vector<std::string> timeString);
 };
 
 #endif
