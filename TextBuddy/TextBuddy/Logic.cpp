@@ -253,7 +253,9 @@ Feedback Logic::processCommand(std::string userCommand) {
 	Command* command = parser.parse(userCommand);
 
 	switch (cmd) {
-
+	case DISPLAY_ALL:
+		currentView = taskStore;
+		feedback.setUpdateView(true);
 	case ADD:
 		addTask = ((Add*)command);
 		addInfo(*addTask);
@@ -265,10 +267,12 @@ Feedback Logic::processCommand(std::string userCommand) {
 		//eg. delete 1 means deleting the first task
 		taskToDelete = ((Delete*)command);
 		deleteInfo(*taskToDelete);
+		feedback.setUpdateView(true);
 		break;
 	case MODIFY:
 		taskToModify = ((Modify*)command);
 		modifyInfo(*taskToModify);
+		feedback.setUpdateView(true);
 		break;
 	case SEARCH:
 		//currently search returns string of names
