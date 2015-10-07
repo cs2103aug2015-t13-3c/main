@@ -49,9 +49,11 @@ namespace UserInterface {
 			// 
 			this->input->AcceptsReturn = true;
 			this->input->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->input->Location = System::Drawing::Point(0, 420);
+			this->input->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
+			this->input->Location = System::Drawing::Point(0, 418);
 			this->input->Name = L"input";
-			this->input->Size = System::Drawing::Size(449, 20);
+			this->input->Size = System::Drawing::Size(449, 22);
 			this->input->TabIndex = 0;
 			this->input->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::input_KeyDown);
 			// 
@@ -59,20 +61,20 @@ namespace UserInterface {
 			// 
 			this->feedback->BackColor = System::Drawing::SystemColors::InfoText;
 			this->feedback->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->feedback->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+			this->feedback->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->feedback->ForeColor = System::Drawing::Color::Green;
-			this->feedback->Location = System::Drawing::Point(12, 400);
+			this->feedback->Location = System::Drawing::Point(0, 392);
 			this->feedback->Name = L"feedback";
 			this->feedback->ReadOnly = true;
-			this->feedback->Size = System::Drawing::Size(422, 13);
+			this->feedback->Size = System::Drawing::Size(449, 20);
 			this->feedback->TabIndex = 1;
 			// 
 			// display
 			// 
-			this->display->Location = System::Drawing::Point(13, 13);
+			this->display->Location = System::Drawing::Point(0, 0);
 			this->display->Name = L"display";
-			this->display->Size = System::Drawing::Size(421, 381);
+			this->display->Size = System::Drawing::Size(449, 384);
 			this->display->TabIndex = 2;
 			this->display->Text = L"";
 			// 
@@ -80,7 +82,7 @@ namespace UserInterface {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::SystemColors::Control;
+			this->BackColor = System::Drawing::Color::Azure;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->ClientSize = System::Drawing::Size(449, 440);
 			this->Controls->Add(this->display);
@@ -89,6 +91,7 @@ namespace UserInterface {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
 			this->Name = L"TextBuddyUI";
+			this->Opacity = 0.8;
 			this->Text = L"TextBuddyUI";
 			this->ResumeLayout(false);
 			this->PerformLayout();
