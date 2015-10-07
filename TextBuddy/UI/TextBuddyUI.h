@@ -31,18 +31,31 @@ namespace UserInterface {
 		}
 	private:
 		System::Windows::Forms::TextBox^  input;
-	private: System::Windows::Forms::RichTextBox^  display;
+
 
 		System::Windows::Forms::TextBox^  feedback;
-		System::ComponentModel::Container ^components;
+
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  ID;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  dateAndTime;
+
+
+
+
+			 System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 
 		/// Required method for Designer support - do not modify	
 		void InitializeComponent(void) {
+			System::Windows::Forms::DataGridView^  display;
 			this->input = (gcnew System::Windows::Forms::TextBox());
 			this->feedback = (gcnew System::Windows::Forms::TextBox());
-			this->display = (gcnew System::Windows::Forms::RichTextBox());
+			this->ID = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dateAndTime = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			display = (gcnew System::Windows::Forms::DataGridView());
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// input
@@ -72,11 +85,42 @@ namespace UserInterface {
 			// 
 			// display
 			// 
-			this->display->Location = System::Drawing::Point(0, 0);
-			this->display->Name = L"display";
-			this->display->Size = System::Drawing::Size(449, 384);
-			this->display->TabIndex = 2;
-			this->display->Text = L"";
+			display->AllowUserToAddRows = false;
+			display->AllowUserToDeleteRows = false;
+			display->AllowUserToResizeColumns = false;
+			display->AllowUserToResizeRows = false;
+			display->BackgroundColor = System::Drawing::Color::White;
+			display->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
+			display->CellBorderStyle = System::Windows::Forms::DataGridViewCellBorderStyle::None;
+			display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->ID, this->description, 
+				this->dateAndTime});
+			display->Location = System::Drawing::Point(0, 0);
+			display->Name = L"display";
+			display->ReadOnly = true;
+			display->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::DisableResizing;
+			display->ScrollBars = System::Windows::Forms::ScrollBars::None;
+			display->Size = System::Drawing::Size(449, 384);
+			display->TabIndex = 3;
+			// 
+			// ID
+			// 
+			this->ID->HeaderText = L"ID";
+			this->ID->Name = L"ID";
+			this->ID->ReadOnly = true;
+			this->ID->Width = 50;
+			// 
+			// description
+			// 
+			this->description->HeaderText = L"Description";
+			this->description->Name = L"description";
+			this->description->ReadOnly = true;
+			// 
+			// dateAndTime
+			// 
+			this->dateAndTime->HeaderText = L"Date/Time";
+			this->dateAndTime->Name = L"dateAndTime";
+			this->dateAndTime->ReadOnly = true;
 			// 
 			// TextBuddyUI
 			// 
@@ -85,14 +129,15 @@ namespace UserInterface {
 			this->BackColor = System::Drawing::Color::Azure;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->ClientSize = System::Drawing::Size(449, 440);
-			this->Controls->Add(this->display);
 			this->Controls->Add(this->input);
 			this->Controls->Add(this->feedback);
+			this->Controls->Add(display);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
 			this->Name = L"TextBuddyUI";
 			this->Opacity = 0.8;
 			this->Text = L"TextBuddyUI";
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -119,7 +164,7 @@ namespace UserInterface {
 			userFeedback_cppString = new std::string;
 			*userFeedback_cppString = logic->processCommand(*userInput);
 			String^ userFeedback = gcnew String(userFeedback_cppString->c_str());
-			display->AppendText(userFeedback + "\r\n");
+			//display->AppendText(userFeedback + "\r\n");
 			delete userInput;
 			delete userFeedback_cppString;
 		}
