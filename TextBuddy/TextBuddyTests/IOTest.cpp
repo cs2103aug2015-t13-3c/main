@@ -159,11 +159,11 @@ namespace TextBuddyTests
 		{
 			IO io;
 			std::vector<Task> emptyVector;
-			std::string expectedText[] = {"{","\"TextBuddy Items\":", "[","]","}"};
+			std::string expectedText[] = {"{","\t\"TextBuddy Items\":", "\t[","\t]","}"};
 
-			bool success = io.saveFile("Text.txt", emptyVector);
+			bool success = io.saveFile("TEXT.txt", emptyVector);
 
-			std::vector<std::string> actualText = io.getText("Text.txt");
+			std::vector<std::string> actualText = io.getText("TEXT.txt");
 
 			//NOTE: vecToString method doesnt work
 			//std::vector<std::string> actualTextVector = IO::getText("Text.txt");
@@ -181,33 +181,33 @@ namespace TextBuddyTests
 			Task newTask;
 			textVector.push_back(newTask);
 
-			bool success = io.saveFile("Text.txt", textVector);
-			std::vector<std::string> actualText = io.getText("Text.txt");
+			bool success = io.saveFile("TEXT.txt", textVector);
+			std::vector<std::string> actualText = io.getText("TEXT.txt");
 
 			std::string expectedText[] = {
 				"{",
-				"\"TextBuddy Items\":",
-				"[",
-				"{",
-				"\"name\": \"\",",
-				"\"type\": \"FLOATING\",",
-				"\"uniqueID\": 1,",
-				"\"label\": \"\",",
-				"\"isDone\": false,",
-				"\"isPriority\": \"\",",
-				"\"startDay\": \"SUN\",",
-				"\"startDate\": 0,",
-				"\"startTime\": 0,",
-				"\"endDay\": \"SUN\",",
-				"\"endDate\": 0,",
-				"\"endTime\": 0",
-				"}",
-				"]",
+				"\t\"TextBuddy Items\":",
+				"\t[",
+				"\t\t{",
+				"\t\t\t\"name\": \"\",",
+				"\t\t\t\"type\": \"FLOATING\",",
+				"\t\t\t\"uniqueID\": 6,",
+				"\t\t\t\"label\": \"\",",
+				"\t\t\t\"isDone\": false,",
+				"\t\t\t\"isPriority\": false,",
+				"\t\t\t\"startDay\": \"SUN\",",
+				"\t\t\t\"startDate\": 0,",
+				"\t\t\t\"startTime\": 0,",
+				"\t\t\t\"endDay\": \"SUN\",",
+				"\t\t\t\"endDate\": 0,",
+				"\t\t\t\"endTime\": 0",
+				"\t\t}",
+				"\t]",
 				"}"
 			};
 
 			//TODO: assert areEqual for diff vector sizes
-			//Assert::AreEqual(19, actualText.size());
+			Assert::AreEqual((size_t) 19, actualText.size());
 
 			for(unsigned int i = 0; i < actualText.size(); i++) {
 				Assert::AreEqual(expectedText[i], actualText[i]);
@@ -229,53 +229,53 @@ namespace TextBuddyTests
 
 			std::string expectedText[] = {
 				"{",
-				"\"TextBuddy Items\":",
-				"[",
-				"{",
-				"\"name\": \"\",",
-				"\"type\": \"FLOATING\",",
-				"\"uniqueID\": 1,",
-				"\"label\": \"\",",
-				"\"isDone\": false,",
-				"\"isPriority\": \"\",",
-				"\"startDay\": \"SUN\",",
-				"\"startDate\": 0,",
-				"\"startTime\": 0,",
-				"\"endDay\": \"SUN\",",
-				"\"endDate\": 0,",
-				"\"endTime\": 0",
-				"}",
-				",",
-				"{",
-				"\"name\": \"\",",
-				"\"type\": \"FLOATING\",",
-				"\"uniqueID\": 1,",
-				"\"label\": \"\",",
-				"\"isDone\": false,",
-				"\"isPriority\": \"\",",
-				"\"startDay\": \"SUN\",",
-				"\"startDate\": 0,",
-				"\"startTime\": 0,",
-				"\"endDay\": \"SUN\",",
-				"\"endDate\": 0,",
-				"\"endTime\": 0",
-				"}",
-				",",
-				"{",
-				"\"name\": \"\",",
-				"\"type\": \"FLOATING\",",
-				"\"uniqueID\": 1,",
-				"\"label\": \"\",",
-				"\"isDone\": false,",
-				"\"isPriority\": \"\",",
-				"\"startDay\": \"SUN\",",
-				"\"startDate\": 0,",
-				"\"startTime\": 0,",
-				"\"endDay\": \"SUN\",",
-				"\"endDate\": 0,",
-				"\"endTime\": 0",
-				"}",
-				"]",
+				"\t\"TextBuddy Items\":",
+				"\t[",
+				"\t\t{",
+				"\t\t\t\"name\": \"\",",
+				"\t\t\t\"type\": \"FLOATING\",",
+				"\t\t\t\"uniqueID\": 7,",
+				"\t\t\t\"label\": \"\",",
+				"\t\t\t\"isDone\": false,",
+				"\t\t\t\"isPriority\": false,",
+				"\t\t\t\"startDay\": \"SUN\",",
+				"\t\t\t\"startDate\": 0,",
+				"\t\t\t\"startTime\": 0,",
+				"\t\t\t\"endDay\": \"SUN\",",
+				"\t\t\t\"endDate\": 0,",
+				"\t\t\t\"endTime\": 0",
+				"\t\t}",
+				"\t\t,",
+				"\t\t{",
+				"\t\t\t\"name\": \"\",",
+				"\t\t\t\"type\": \"FLOATING\",",
+				"\t\t\t\"uniqueID\": 7,",
+				"\t\t\t\"label\": \"\",",
+				"\t\t\t\"isDone\": false,",
+				"\t\t\t\"isPriority\": false,",
+				"\t\t\t\"startDay\": \"SUN\",",
+				"\t\t\t\"startDate\": 0,",
+				"\t\t\t\"startTime\": 0,",
+				"\t\t\t\"endDay\": \"SUN\",",
+				"\t\t\t\"endDate\": 0,",
+				"\t\t\t\"endTime\": 0",
+				"\t\t}",
+				"\t\t,",
+				"\t\t{",
+				"\t\t\t\"name\": \"\",",
+				"\t\t\t\"type\": \"FLOATING\",",
+				"\t\t\t\"uniqueID\": 7,",
+				"\t\t\t\"label\": \"\",",
+				"\t\t\t\"isDone\": false,",
+				"\t\t\t\"isPriority\": false,",
+				"\t\t\t\"startDay\": \"SUN\",",
+				"\t\t\t\"startDate\": 0,",
+				"\t\t\t\"startTime\": 0,",
+				"\t\t\t\"endDay\": \"SUN\",",
+				"\t\t\t\"endDate\": 0,",
+				"\t\t\t\"endTime\": 0",
+				"\t\t}",
+				"\t]",
 				"}"
 			};
 

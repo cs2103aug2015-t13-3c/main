@@ -73,15 +73,16 @@ public:
 		std::ifstream inputFile(fileName);
 		std::vector<std::string> textVector;
 
+		assert(fileIsOpen(inputFile));
 
-		//while(!inputFile.eof()) {
+		while(!inputFile.eof()) {
 		std::string line;
 		getline(inputFile,line);
 
 		if(line != "") {
 			textVector.push_back(line);
 		}
-		//}
+		}
 
 		inputFile.close();
 		return textVector;
