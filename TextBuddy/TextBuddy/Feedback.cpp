@@ -9,6 +9,15 @@ Feedback::Feedback(std::string feedbackMessage, std::vector<Task> tasksToShow) {
 Feedback::Feedback() {
 }
 
+void Feedback::pushTask(Task newTask) {
+	tasksToShow.push_back(newTask);
+}
+
+void Feedback::setAddedMessage() {
+	Task addedTask = tasksToShow[0];
+	feedbackMessage = "added " + addedTask.getName() + "\r\n";
+}
+
 void Feedback::setUpdateView(bool trueOrFalse) {
 	this->updateView = trueOrFalse;
 }

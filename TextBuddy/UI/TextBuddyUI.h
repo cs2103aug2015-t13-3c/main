@@ -52,11 +52,11 @@ namespace UserInterface {
 		/// Required method for Designer support - do not modify	
 		void InitializeComponent(void) {
 			System::Windows::Forms::DataGridView^  display;
-			this->input = (gcnew System::Windows::Forms::TextBox());
-			this->feedback = (gcnew System::Windows::Forms::TextBox());
 			this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dateAndTime = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->input = (gcnew System::Windows::Forms::TextBox());
+			this->feedback = (gcnew System::Windows::Forms::TextBox());
 			display = (gcnew System::Windows::Forms::DataGridView());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->BeginInit();
 			this->SuspendLayout();
@@ -68,45 +68,19 @@ namespace UserInterface {
 			display->AllowUserToResizeColumns = false;
 			display->AllowUserToResizeRows = false;
 			display->BackgroundColor = System::Drawing::Color::White;
-			display->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
+			display->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			display->CellBorderStyle = System::Windows::Forms::DataGridViewCellBorderStyle::None;
 			display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id, this->description, 
 				this->dateAndTime});
-			display->Dock = System::Windows::Forms::DockStyle::Fill;
 			display->Location = System::Drawing::Point(0, 0);
 			display->Name = L"display";
 			display->ReadOnly = true;
 			display->RowHeadersVisible = false;
 			display->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::DisableResizing;
 			display->ScrollBars = System::Windows::Forms::ScrollBars::None;
-			display->Size = System::Drawing::Size(449, 440);
+			display->Size = System::Drawing::Size(449, 379);
 			display->TabIndex = 3;
-			// 
-			// input
-			// 
-			this->input->AcceptsReturn = true;
-			this->input->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->input->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(0)));
-			this->input->Location = System::Drawing::Point(0, 418);
-			this->input->Name = L"input";
-			this->input->Size = System::Drawing::Size(449, 22);
-			this->input->TabIndex = 0;
-			this->input->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::input_KeyDown);
-			// 
-			// feedback
-			// 
-			this->feedback->BackColor = System::Drawing::SystemColors::InfoText;
-			this->feedback->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->feedback->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(0)));
-			this->feedback->ForeColor = System::Drawing::Color::Green;
-			this->feedback->Location = System::Drawing::Point(0, 392);
-			this->feedback->Name = L"feedback";
-			this->feedback->ReadOnly = true;
-			this->feedback->Size = System::Drawing::Size(449, 20);
-			this->feedback->TabIndex = 1;
 			// 
 			// id
 			// 
@@ -132,11 +106,37 @@ namespace UserInterface {
 			this->dateAndTime->Resizable = System::Windows::Forms::DataGridViewTriState::False;
 			this->dateAndTime->Width = 110;
 			// 
+			// input
+			// 
+			this->input->AcceptsReturn = true;
+			this->input->Dock = System::Windows::Forms::DockStyle::Bottom;
+			this->input->Font = (gcnew System::Drawing::Font(L"Arial", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
+			this->input->Location = System::Drawing::Point(0, 418);
+			this->input->Name = L"input";
+			this->input->Size = System::Drawing::Size(449, 22);
+			this->input->TabIndex = 0;
+			this->input->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::input_KeyDown);
+			// 
+			// feedback
+			// 
+			this->feedback->BackColor = System::Drawing::Color::White;
+			this->feedback->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->feedback->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
+			this->feedback->ForeColor = System::Drawing::Color::Green;
+			this->feedback->Location = System::Drawing::Point(12, 385);
+			this->feedback->Multiline = true;
+			this->feedback->Name = L"feedback";
+			this->feedback->ReadOnly = true;
+			this->feedback->Size = System::Drawing::Size(425, 27);
+			this->feedback->TabIndex = 1;
+			// 
 			// TextBuddyUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::Azure;
+			this->BackColor = System::Drawing::Color::White;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->ClientSize = System::Drawing::Size(449, 440);
 			this->Controls->Add(this->input);
@@ -145,7 +145,6 @@ namespace UserInterface {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
 			this->Name = L"TextBuddyUI";
-			this->Opacity = 0.8;
 			this->Text = L"TextBuddyUI";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->EndInit();
 			this->ResumeLayout(false);
@@ -171,12 +170,16 @@ namespace UserInterface {
 		}
 
 		void processAndExecute() {
-			userFeedback_cppString = new std::string;
-			*userFeedback_cppString = logic->processCommand(*userInput);
+			feedback->Clear();
+		/*	userFeedback_cppString = new std::string;
+			Feedback results = logic->processCommand(*userInput);
 			String^ userFeedback = gcnew String(userFeedback_cppString->c_str());
-			//display->AppendText(userFeedback + "\r\n");
+			display->AppendText(userFeedback + "\r\n");
 			delete userInput;
 			delete userFeedback_cppString;
+			*/
+			Feedback results = logic->processCommand(*userInput);
+			feedback->Text = gcnew String((results.getFeedbackMessage()).c_str());
 		}
 
 

@@ -5,6 +5,7 @@
 
 #include "IO.h"
 #include "Parser.h"
+#include "Feedback.h"
 
 class Logic {
 private:
@@ -33,7 +34,7 @@ public:
 	bool amendView(std::string listOfIds);
 
 	bool matchPhrase(std::string phr, std::string str);		
-	std::string processCommand(std::string userCommand);
+	Feedback processCommand(std::string userCommand);
 };
 
 /* Keep for reference*/

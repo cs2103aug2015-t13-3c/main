@@ -232,15 +232,16 @@ bool Logic::amendView(std::string listOfIds) {
 
 // Input command is obtained from parseCommand
 // Returns string of IDs with search, returns "*" for add/delete
-std::string Logic::processCommand(std::string userCommand) {
+Feedback Logic::processCommand(std::string userCommand) {
 	//inputCmd obtained from parser
 	Command inputCmd(parser.parseCommand(userCommand));
 	CommandType cmd = inputCmd.getCommand();
-	Add* taskToAdd;
+	Add* addTask;
 	Delete* taskToDelete;
 	Modify* taskToModify;
 	Search* searchPhrase;
-	std::string output = "ok";
+	Feedback feedback;
+	std::string output;
 
 	int userIndex;						//userIndex in currentView
 	int id;								//id for both currentView and taskStore
@@ -254,8 +255,10 @@ std::string Logic::processCommand(std::string userCommand) {
 	switch (cmd) {
 
 	case ADD:
-		taskToAdd = ((Add*)command);
-		addInfo(*taskToAdd);
+		addTask = ((Add*)command);
+		addInfo(*addTask);
+		feedback.pushTask(addTask->getNewTask());
+		feedback.setAddedMessage();
 		break;
 	case DELETE:
 		//userIndex refers to the nth task of currentView presented to user
@@ -287,7 +290,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	default:
 		break;
 	}
-	return output;
+	return feedback;
 }
 
 /* Keep for reference */
