@@ -286,10 +286,14 @@ Feedback Logic::processCommand(std::string userCommand) {
 		
 		output = tempOutput.str();
 		output.erase(output.size()-1);
+
+		feedback.setSearchMessage(searchPhrase->getSearchPhrase());
+		feedback.setUpdateView(true);
 		break;
 	default:
 		break;
 	}
+	feedback.setTasksToShow(currentView);
 	return feedback;
 }
 

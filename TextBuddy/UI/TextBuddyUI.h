@@ -38,6 +38,7 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  dateAndTime;
 
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -45,7 +46,8 @@ namespace UserInterface {
 
 
 
-			 System::ComponentModel::Container ^components;
+
+
 
 #pragma region Windows Form Designer generated code
 
@@ -179,7 +181,19 @@ namespace UserInterface {
 			delete userFeedback_cppString;
 			*/
 			Feedback results = logic->processCommand(*userInput);
+			if(results.needToUpdateDisplay()) {
+				updateDisplay(results.getTaskToShow());
+			}
 			feedback->Text = gcnew String((results.getFeedbackMessage()).c_str());
+		}
+
+		void updateDisplay(std::vector<Task> tasks) {
+			DataGridView^ display = description->DataGridView ;
+			display->Rows->Clear();
+			for(int i=0 ; i<tasks.size() ; ++i) {
+				String^ name = gcnew String(tasks[i].getName().c_str());
+				display->Rows->Add((i+1).ToString(),name);
+			}
 		}
 
 

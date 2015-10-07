@@ -13,6 +13,14 @@ void Feedback::pushTask(Task newTask) {
 	tasksToShow.push_back(newTask);
 }
 
+void Feedback::setTasksToShow(std::vector<Task> tasksToShow) {
+	this->tasksToShow = tasksToShow;
+}
+
+void Feedback::setSearchMessage(std::string searchPhrase) {
+	feedbackMessage = "results for \"" + searchPhrase + "\"\r\n";
+}
+
 void Feedback::setAddedMessage() {
 	Task addedTask = tasksToShow[0];
 	feedbackMessage = "added " + addedTask.getName() + "\r\n";
@@ -26,7 +34,7 @@ std::string Feedback::getFeedbackMessage() {
 	return feedbackMessage;
 }
 
-std::vector<std::string> Feedback::getTaskToShow() {
+std::vector<std::string> Feedback::getTaskToShow_string() {
 	int size = tasksToShow.size();
 	std::vector<std::string> tasksAsStrings;
 	Utilities utility;
@@ -34,4 +42,12 @@ std::vector<std::string> Feedback::getTaskToShow() {
 		tasksAsStrings[i] = utility.taskToString(tasksToShow[i]);
 	}
 	return tasksAsStrings;
+}
+
+std::vector<Task> Feedback::getTaskToShow() {
+	return tasksToShow;
+}
+
+bool Feedback::needToUpdateDisplay() {
+	return updateView;
 }
