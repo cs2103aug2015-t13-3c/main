@@ -59,13 +59,11 @@ private:
 	bool isDone;
 	bool isPriority;
 
-	Day startDay;
 	int startDate; // YYMMDD, supports 2015-2099
 	int startTime; // HHMM, 24-hour format
 
-	Day endDay;
 	int endDate;
-	int endTime;   // HHMM, 24-hour format
+	int endTime;
 
 public:
 	static int getRunningCount();
@@ -83,11 +81,9 @@ public:
 	bool getDoneStatus();
 	bool getPriorityStatus();
 
-	Day getStartDay();
 	int getStartDate();
 	int getStartTime();
 
-	Day getEndDay();
 	int getEndDate();
 	int getEndTime();
 
@@ -100,11 +96,9 @@ public:
 	bool toggleDone();
 	bool togglePriority();
 
-	bool setStartDay(Day newStartDay);
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
 
-	bool setEndDay(Day newEndDay);
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
 };

@@ -171,12 +171,14 @@ namespace UserInterface {
 				feedback->ForeColor = Color::Red;
 			}
 			feedback->Text = gcnew String((results.getFeedbackMessage()).c_str());
+
+			logic->saveFile("Text.txt");
 		}
 
 		void updateDisplay(std::vector<Task> tasks) {
 			DataGridView^ display = description->DataGridView ;
 			display->Rows->Clear();
-			for(int i=0 ; i<tasks.size() ; ++i) {
+			for(unsigned int i=0 ; i<tasks.size() ; ++i) {
 				String^ name = gcnew String(tasks[i].getName().c_str());
 				display->Rows->Add((i+1).ToString(),name);
 			}

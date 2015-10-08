@@ -21,10 +21,10 @@ private:
 	void extractLabel(Task &newTask, Value &item);
 	void extractDone(Task &newTask, Value &item);
 	void extractPriority(Task &newTask, Value &item);
-	void extractStartDay(Task &newTask, Value &item);
+	// void extractStartDay(Task &newTask, Value &item);
 	void extractStartDate(Task &newTask, Value &item);
 	void extractStartTime(Task &newTask, Value &item);
-	void extractEndDay(Task &newTask, Value &item);
+	// void extractEndDay(Task &newTask, Value &item);
 	void extractEndDate(Task &newTask, Value &item);
 	void extractEndTime(Task &newTask, Value &item);
 
@@ -38,10 +38,10 @@ private:
 	std::string writeLabelAttribute(Task task);
 	std::string writeIsDoneAttribute(Task task);
 	std::string writeIsPriorityAttribute(Task task);
-	std::string writeStartDayAttribute(Task task);
+	// std::string writeStartDayAttribute(Task task);
 	std::string writeStartDateAttribute(Task task);
 	std::string writeStartTimeAttribute(Task task);
-	std::string writeEndDayAttribute(Task task);
+	// std::string writeEndDayAttribute(Task task);
 	std::string writeEndDateAttribute(Task task);
 	std::string writeEndTimeAttribute(Task task);
 
@@ -51,10 +51,10 @@ private:
 	std::string retrieveLabel(Task task);
 	std::string retrieveIsDone(Task task);
 	std::string retrieveIsPriority(Task task);
-	std::string retrieveStartDay(Task task);
+	// std::string retrieveStartDay(Task task);
 	std::string retrieveStartDate(Task task);
 	std::string retrieveStartTime(Task task);
-	std::string retrieveEndDay(Task task);
+	// std::string retrieveEndDay(Task task);
 	std::string retrieveEndDate(Task task);
 	std::string retrieveEndTime(Task task);
 

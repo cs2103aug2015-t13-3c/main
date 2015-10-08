@@ -3,7 +3,11 @@
 #include "stdafx.h"
 #include "Logic.h"
 
-Logic::Logic() {}
+Logic::Logic() {
+	taskStore = loadFile("Text.txt");
+	currentView = taskStore;
+}
+
 Logic::~Logic() {}
 
 // ==================================================
@@ -19,10 +23,10 @@ bool Logic::saveFile(std::string fileName) {
 	return true;
 }
 
-bool Logic::loadFile(std::string fileName) {
+std::vector<Task> Logic::loadFile(std::string fileName) {
 	taskStore = io.loadFile(fileName);
 	copyView();
-	return true;
+	return taskStore;
 }
 
 std::vector<Task> Logic::getTaskStore() {
@@ -144,12 +148,6 @@ bool Logic::modifyInfo(Modify toModify) {
 				break;
 			case END_DATE :
 				taskIter->setEndDate(tempTask.getEndDate());
-				break;
-			case START_DAY:
-				taskIter->setStartDay(tempTask.getStartDay());
-				break;
-			case END_DAY :
-				taskIter->setEndDay(tempTask.getEndDay());
 				break;
 			case START_TIME :
 				taskIter->setStartTime(tempTask.getStartTime());

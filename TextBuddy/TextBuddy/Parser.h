@@ -24,10 +24,12 @@ public:
 	// These support user methods
 	std::vector<FieldType> extractFields(std::string restOfInput);
 	int findMaxDays(Month month, int year=2015);
+	int findYear(std::string yearString="");
 
 	// These handle task parameters
 	int parseDate(std::vector<std::string> dateString);
-	Day parseDay(int date);
+	// Day parseDay(int date);
+	int parseDay(std::vector<std::string> dayString);
 	int parseTime(std::vector<std::string> timeString);
 };
 

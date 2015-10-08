@@ -135,10 +135,10 @@ public:
 		logic.processCommand(std::string("Modify 1 that"));
 
 		// Search
+		/*
 		std::string output = logic.processCommand(std::string("Search th"));	
 		Assert::AreEqual(std::string("that,then"), output);
-
-
+		*/
 		copyTask = logic.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("that"), iter->getName());

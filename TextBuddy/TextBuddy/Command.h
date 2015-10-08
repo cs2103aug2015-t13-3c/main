@@ -13,6 +13,7 @@ enum CommandType {
 	DISPLAY_ALL,
 	SORT_ALL,
 
+	SAVE,
 	EXIT,
 	INVALID
 };
@@ -81,7 +82,7 @@ public:
 	std::string getSearchPhrase();
 };
 
-// Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, EXIT
+// Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, SAVE, EXIT
 
 class ClearAll: public Command {
 public:
@@ -99,6 +100,12 @@ class SortAll: public Command {
 public:
 	SortAll();
 	~SortAll();
+};
+
+class Save: public Command {
+public:
+	Save();
+	~Save();
 };
 
 class Exit: public Command {

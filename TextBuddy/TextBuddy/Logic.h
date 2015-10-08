@@ -23,7 +23,7 @@ public:
 
 	int getSize();
 	bool saveFile(std::string fileName);
-	bool loadFile(std::string fileName);
+	std::vector<Task> loadFile(std::string fileName);
 	std::vector<Task> getTaskStore();
 	std::vector<Task> getCurrentView();
 	bool addInfo(Add taskName);
