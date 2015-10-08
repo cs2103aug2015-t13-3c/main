@@ -90,10 +90,10 @@ Task IO::extractTaskFromJsonObject(Value& item) {
 		extractLabel(newTask, item);
 		extractDone(newTask, item);
 		extractPriority(newTask, item);
-		extractStartDay(newTask, item);	// Assert fail
+		// extractStartDay(newTask, item);	// Assert fail
 		extractStartDate(newTask, item);
 		extractStartTime(newTask, item);
-		extractEndDay(newTask, item);	// Assert fail
+		// extractEndDay(newTask, item);	// Assert fail
 		extractEndDate(newTask, item);
 		extractEndTime(newTask, item);
 	} catch (std::string error) {
@@ -112,10 +112,10 @@ void IO::writeTaskIntoJsonFormat(std::ofstream &newFile, Task task) {
 	newFile << writeLabelAttribute(task) << "\n";
 	newFile << writeIsDoneAttribute(task);
 	newFile << writeIsPriorityAttribute(task) << "\n";
-	newFile << writeStartDayAttribute(task);
+	// newFile << writeStartDayAttribute(task);
 	newFile << writeStartDateAttribute(task);
 	newFile << writeStartTimeAttribute(task) << "\n";
-	newFile << writeEndDayAttribute(task);
+	// newFile << writeEndDayAttribute(task);
 	newFile << writeEndDateAttribute(task);
 	newFile << writeEndTimeAttribute(task);
 
@@ -192,7 +192,7 @@ void IO::extractPriority(Task &newTask, Value &item) {
 	}
 	*/
 }
-
+/*
 void IO::extractStartDay(Task &newTask, Value &item) {
 	std::string dayString = item["startDay"].GetString();
 	Day day = Utilities::stringToDay(dayString);
@@ -202,7 +202,7 @@ void IO::extractStartDay(Task &newTask, Value &item) {
 		throw "StartDayNotFound";
 	}
 }
-
+*/
 void IO::extractStartDate(Task &newTask, Value &item) {
 	int date = item["startDate"].GetInt();
 	bool success = newTask.setStartDate(date);
@@ -220,7 +220,7 @@ void IO::extractStartTime(Task &newTask, Value &item) {
 		throw "StartTimeNotFound";
 	}
 }
-
+/*
 void IO::extractEndDay(Task &newTask, Value &item) {
 	std::string dayString = item["endDay"].GetString();
 	Day day = Utilities::stringToDay(dayString);
@@ -230,7 +230,7 @@ void IO::extractEndDay(Task &newTask, Value &item) {
 		throw "EndDayNotFound";
 	}
 }
-
+*/
 void IO::extractEndDate(Task &newTask, Value &item) {
 	int date = item["endDate"].GetInt();
 	bool success = newTask.setEndDate(date);
@@ -313,7 +313,7 @@ std::string IO::writeIsPriorityAttribute(Task task) {
 
 	return isPriorityString;
 }
-
+/*
 std::string IO::writeStartDayAttribute(Task task) {
 	std::string startDayString;
 
@@ -322,7 +322,7 @@ std::string IO::writeStartDayAttribute(Task task) {
 
 	return startDayString;
 }
-
+*/
 std::string IO::writeStartDateAttribute(Task task) {
 	std::string startDateString;
 
@@ -340,7 +340,7 @@ std::string IO::writeStartTimeAttribute(Task task) {
 
 	return startTimeString;
 }
-
+/*
 std::string IO::writeEndDayAttribute(Task task) {
 	std::string EndDayString;
 
@@ -349,7 +349,7 @@ std::string IO::writeEndDayAttribute(Task task) {
 
 	return EndDayString;
 }
-
+*/
 std::string IO::writeEndDateAttribute(Task task) {
 	std::string EndDateString;
 
@@ -408,14 +408,14 @@ std::string IO::retrieveIsPriority(Task task) {
 	string = Utilities::boolToString(status) + ",\n";
 	return string;
 }
-
+/*
 std::string IO::retrieveStartDay(Task task) {
 	std::string string;
 	Day day = task.getStartDay();
 	string = "\"" + Utilities::dayToString(day) + "\",\n";
 	return string;
 }
-
+*/
 std::string IO::retrieveStartDate(Task task) {
 	std::string string;
 	int date = task.getStartDate();
@@ -429,14 +429,14 @@ std::string IO::retrieveStartTime(Task task) {
 	string = std::to_string(time) + ",\n";
 	return string;
 }
-
+/*
 std::string IO::retrieveEndDay(Task task) {
 	std::string string;
 	Day day = task.getEndDay();
 	string = "\"" + Utilities::dayToString(day) + "\",\n";
 	return string;
 }
-
+*/
 std::string IO::retrieveEndDate(Task task) {
 	std::string string;
 	int date = task.getEndDate();

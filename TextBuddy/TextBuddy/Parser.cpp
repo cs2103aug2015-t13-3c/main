@@ -61,7 +61,7 @@ Command* Parser::parse(std::string userInput) {
 			if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
 				throw "Invalid integer string";
 			}
-			
+
 			int deleteID = Utilities::stringToInt(restOfInput);
 			deleteCmd = new Delete(deleteID);
 			return deleteCmd;
@@ -134,10 +134,8 @@ Task Parser::parseTask(std::string restOfCommand) {
 	FieldType inputMode = NAME;
 	std::vector<std::string> inputString;
 
-	int newStartDate;
-	Day newStartDay;
-	int newEndDate;
-	Day newEndDay;
+	int newStartDate = INVALID_DATE_FORMAT;
+	int newEndDate = INVALID_DATE_FORMAT;
 
 	while(curr != userInput.end()) {
 		inputString.clear();
@@ -161,23 +159,20 @@ Task Parser::parseTask(std::string restOfCommand) {
 		case START_DATE :
 		case START_DAY:
 			newTask.setType(EVENT);
-			newStartDate = parseDate(inputString);
-			newStartDay = parseDay(newStartDate);
-			
-			newTask.setStartDate(newStartDate);
-			newTask.setStartDay(newStartDay);
+			if(    (newStartDate = parseDate(inputString)) != INVALID_DATE_FORMAT
+				|| (newStartDate = parseDay(inputString)) != INVALID_DATE_FORMAT) {
+					newTask.setStartDate(newStartDate);
+			}
 			break;
 		case END_DATE :
 		case END_DAY :
 			if(newTask.getType() == FLOATING) {
 				newTask.setType(TODO);
 			}
-			newEndDate = parseDate(inputString);
-			newEndDay = parseDay(newEndDate);
-
-			newTask.setEndDate(newEndDate);
-			newTask.setEndDay(newEndDay);
-			break;
+			if(    (newEndDate = parseDate(inputString)) != -1
+				|| (newEndDate = parseDay(inputString)) != -1) {
+					newTask.setEndDate(newEndDate);
+			}			break;
 		case START_TIME :
 		case END_TIME :
 			break;
@@ -268,11 +263,34 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 	return maxDays;
 }
 
+// Returns year in YY
+// Throws exception if invalid yearString
+int Parser::findYear(std::string yearString) {
+	time_t t = time(0); // get current time
+	struct tm now;
+	localtime_s(&now,&t);
+	int year = now.tm_year - 100; // get current year, tm_year: years since 1900
+
+	if(yearString == "") {
+		return year;
+	} else if(Utilities::isPositiveNonZeroInt(yearString)) {
+		if(Utilities::stringToInt(yearString) == year
+			|| Utilities::stringToInt(yearString) == 2000+year) {
+				return year;
+		} else if(Utilities::stringToInt(yearString) == year+1
+			|| Utilities::stringToInt(yearString) == 2000+year+1) {
+				return year+1;
+		}
+	} else {
+		throw("Invalid year string: "+yearString+"\n");
+	}
+	return year;
+}
 
 // These handle task parameters
 
 // Processes dates in these formats:
-// - DDD/DDDD
+// - DDD DDDD
 // - this/next DDD/DDDD
 // - DD MM/MMM/MMMM
 // Week is defined as Sunday to Saturday
@@ -286,72 +304,45 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 	for(curr=dateString.begin(); curr!=dateString.end(); curr++) {
 		*curr = Utilities::stringToLower(*curr);
 	}
-
-	int newDate = INVALID_DATE_FORMAT;
-	int maxDays = 0;
-
-	time_t t = time(0); // get current time
-	struct tm now;
-	localtime_s(&now,&t);
-	int year = now.tm_year - 100; // get current year, tm_year: years since 1990
-
 	curr = dateString.begin();
-	if(!((*curr).empty()) && (*curr).find_first_not_of("0123456789")==std::string::npos) {
-		int dateInput = Utilities::stringToInt(*curr);
+
+	int dateInput = 0;
+	Month monthInput = INVALID_MONTH;
+	int yearInput = 0;
+
+	int maxDays = 0;
+	int newDate = INVALID_DATE_FORMAT;
+
+	// Get dateInput
+	if(curr!=dateString.end() && Utilities::isInt(*curr)) {
+
+		dateInput = Utilities::stringToInt(*curr);
 		curr++;
 
-		Month monthInput = Utilities::stringToMonth(*curr);
-		if(monthInput != INVALID_MONTH) {
-			maxDays = findMaxDays(monthInput);
-		}
-
-		if(1<=dateInput && dateInput<=maxDays) {
-			newDate = year*10000 + (int)monthInput*100 + dateInput;
-		}
-
-	} else {
-		Month month =	(Month)(now.tm_mon + 1); // tm_mon:  Jan starts at 0
-		Day day =		  (Day)(now.tm_wday);
-		int date =				now.tm_mday;
-
-		if(*curr == "tmr" || *curr == "tomorrow") {
-			date++;
-			curr++;
-		} else if(*curr == "this") {
-			curr++;
-		} else if(*curr == "next") {
-			date += 7;
-			curr++;
-		}
-
+		// Get monthInput
 		if(curr!=dateString.end()) {
-			Day newDay = Utilities::stringToDay(*curr);
-			if(newDay != INVALID_DAY) {
-				date += (int)newDay - (int)day;
+			monthInput = Utilities::stringToMonth(*curr);
+			if(monthInput != INVALID_MONTH) {
+				maxDays = findMaxDays(monthInput);
+			}
+			curr++;
+
+			// Get yearInput
+			if(curr==dateString.end()) {
+				yearInput = findYear();
+			} else if(Utilities::isInt(*curr)) {
+				yearInput = findYear(*curr);
 				curr++;
-			}
-		}
-
-		if(curr == dateString.end()) {
-			maxDays = findMaxDays(month,year);
-			if(date>maxDays) {
-				month = (Month)(((int)month)+1);
-				date-=maxDays;
-			}
-
-			Month maxMonth=DEC;
-			if(month>maxMonth) {
-				year++;
-				month = (Month)((int)month-(int)maxMonth);
-			}
-
-			// Check that valid date
-			if(1<=date && date<=maxDays) {
-				newDate = year*10000 + (int)month*100 + date;
 			}
 		}
 	}
 
+	if(curr == dateString.end()
+		&& yearInput != 0
+		&& monthInput != INVALID_MONTH
+		&& (1<=dateInput && dateInput<=maxDays)) {
+			newDate = yearInput*10000 + (int)monthInput*100 + dateInput;
+	}
 	return newDate;
 }
 
@@ -361,22 +352,92 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 // - DD MM/MMM/MMMM
 // Week is defined as Sunday to Saturday
 // Returns -1 if invalid date
+/*
 Day Parser::parseDay(int date) {
-	// To-do: Check if valid date
+// To-do: Check if valid date
 
-	int year = date/10000 + 2000;
-	int month = (date/100)%100;
-	int day = date%100;
+int year = date/10000 + 2000;
+int month = (date/100)%100;
+int day = date%100;
 
-	tm timeStruct = {};
-	timeStruct.tm_year = year - 1900;
-	timeStruct.tm_mon = month - 1;
-	timeStruct.tm_mday = day;
-	timeStruct.tm_hour = 12;		//  To avoid any doubts about summer time, etc.
-	mktime(&timeStruct);
-	return (Day)timeStruct.tm_wday; //  0...6 for Sunday...Saturday
+tm timeStruct = {};
+timeStruct.tm_year = year - 1900;
+timeStruct.tm_mon = month - 1;
+timeStruct.tm_mday = day;
+timeStruct.tm_hour = 12;		//  To avoid any doubts about summer time, etc.
+mktime(&timeStruct);
+return (Day)timeStruct.tm_wday; //  0...6 for Sunday...Saturday
 }
+*/
 
+// Processes dates in these formats:
+// - DDD/DDDD
+// - this/next DDD/DDDD
+// - DD MM/MMM/MMMM
+// Week is defined as Sunday to Saturday
+// Returns -1 if invalid date
+int Parser::parseDay(std::vector<std::string> dayString) {
+	if(dayString.empty()) {
+		return INVALID_DATE_FORMAT;
+	}
+
+	std::vector<std::string>::iterator curr;
+	for(curr=dayString.begin(); curr!=dayString.end(); curr++) {
+		*curr = Utilities::stringToLower(*curr);
+	}
+	curr = dayString.begin();
+
+	int maxDays = 0;
+	int newDate = INVALID_DATE_FORMAT;
+
+	time_t t = time(0); // get current time
+	struct tm now;
+	localtime_s(&now,&t);
+	int year = now.tm_year - 100; // get current year, tm_year: years since 1990
+
+	Month month =	(Month)(now.tm_mon + 1); // tm_mon:  Jan starts at 0
+	Day day =		  (Day)(now.tm_wday);
+	int date =				now.tm_mday;
+
+	if(*curr == "tmr" || *curr == "tomorrow") {
+		date++;
+		curr++;
+	} else if(*curr == "this") {
+		curr++;
+	} else if(*curr == "next") {
+		date += 7;
+		curr++;
+	}
+
+	if(curr!=dayString.end()) {
+		Day newDay = Utilities::stringToDay(*curr);
+		if(newDay != INVALID_DAY) {
+			date += (int)newDay - (int)day;
+			curr++;
+		}
+	}
+
+	if(curr == dayString.end()) {
+		maxDays = findMaxDays(month,year);
+		if(date>maxDays) {
+			month = (Month)(((int)month)+1);
+			date-=maxDays;
+		}
+
+		Month maxMonth=DEC;
+		if(month>maxMonth) {
+			year++;
+			month = (Month)((int)month-(int)maxMonth);
+		}
+
+		// Check that valid date
+		if(1<=date && date<=maxDays) {
+			newDate = year*10000 + (int)month*100 + date;
+		}
+	}
+
+	return newDate;
+}
 
 // Processes times in these formats:
 // - HH    AM/PM (default: assume AM)

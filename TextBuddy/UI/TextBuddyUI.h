@@ -225,7 +225,8 @@ namespace UserInterface {
 		void updateDisplay(std::vector<Task> tasks) {
 			DataGridView^ display = description->DataGridView ;
 			display->Rows->Clear();
-			for(int i=0 ; i<tasks.size() ; ++i) {
+
+			for(unsigned int i=0 ; i<tasks.size() ; ++i) {
 				TaskType type = tasks[i].getType();
 				String^ name = gcnew String(tasks[i].getName().c_str());
 				display->Rows->Add((i+1).ToString(),name);

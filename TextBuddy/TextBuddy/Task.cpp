@@ -13,11 +13,9 @@ Task::Task() {
 	isDone = false;
 	isPriority = false;
 
-	startDay = SUN;
 	startDate = 0; // YYMMDD, supports 2015-2099
 	startTime = 0; // HHMM, 24-hour format
 
-	endDay = SUN;
 	endDate = 0;
 	endTime = 0;
 }
@@ -37,10 +35,8 @@ int Task::getID() {return uniqueID;}
 std::string Task::getLabel() {return label;}
 bool Task::getDoneStatus() {return isDone;}
 bool Task::getPriorityStatus() {return isPriority;}
-Day Task::getStartDay() {return startDay;}
 int Task::getStartDate() {return startDate;}
 int Task::getStartTime() {return startTime;}
-Day Task::getEndDay() {return endDay;}
 int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
 
@@ -77,11 +73,6 @@ bool Task::togglePriority() {
 	return true;
 }
 
-bool Task::setStartDay(Day newStartDay) {
-	startDay = newStartDay;
-	return true;
-}
-
 bool Task::setStartDate(int newStartDate) {
 	startDate = newStartDate;
 	return true;
@@ -89,11 +80,6 @@ bool Task::setStartDate(int newStartDate) {
 
 bool Task::setStartTime(int newStartTime) {
 	startTime = newStartTime;
-	return true;
-}
-
-bool Task::setEndDay(Day newEndDay) {
-	endDay = newEndDay;
 	return true;
 }
 
@@ -110,7 +96,6 @@ bool Task::setEndTime(int newEndTime) {
 // For testing
 bool Task::tasksAreEqual(Task task1, Task task2) {
 	if(    (task1.getDoneStatus() != task2.getDoneStatus())
-		|| (task1.getEndDay() != task2.getEndDay())
 		|| (task1.getEndDate() != task2.getEndDate())
 		|| (task1.getEndTime() != task2.getEndTime())
 		|| (task1.getID() != task2.getID())
@@ -118,7 +103,6 @@ bool Task::tasksAreEqual(Task task1, Task task2) {
 		|| (task1.getName() != task2.getName())
 		|| (task1.getPriorityStatus() != task2.getPriorityStatus())
 		|| (task1.getStartDate() != task2.getStartDate())
-		|| (task1.getStartDay() != task2.getStartDay())
 		|| (task1.getStartTime() != task2.getStartTime())
 		|| (task1.getType() != task2.getType())) {
 		return false;

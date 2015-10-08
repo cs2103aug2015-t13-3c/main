@@ -10,7 +10,6 @@ namespace TextBuddyTests
 	TEST_CLASS(ParserTest)
 	{
 	public:
-
 		// Initialise common variables to be used in tests
 		Utilities u;
 		Parser p;
@@ -22,11 +21,11 @@ namespace TextBuddyTests
 		Task tempTask;
 
 		TEST_METHOD(Parser_parse) {
-			
+
 			// Test for ADD
-			expectedString = "Name: A partridge in a pear tree\nEnd Day: FRI\nEnd Date: 151009\n";
+			expectedString = "Name: A partridge in a pear tree\nEnd Date: 151009\n";
 			userInput = "add A partridge in a pear tree by fri";
-			
+
 
 			/*
 			// Test for DELETE
@@ -84,7 +83,7 @@ namespace TextBuddyTests
 			int taskID;
 			std::vector<FieldType> fieldsToModify;
 			std::string searchPhrase;
-			
+
 			// This shows a possible implementation for Logic::processCommand()
 			switch(cmdType) {
 			case ADD:
@@ -167,54 +166,49 @@ namespace TextBuddyTests
 			userInput = "1 invalid";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-
-			userInput = "this invalid";
-			inputString = u.splitParameters(userInput);
-			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-
+			
 			// Valid date formats
-
 			expectedInt = 151231;
 			userInput = "31 dec";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
-			// Change to appropriate date for tomorrow before running this test
-			/*
-			expectedInt = 151005;
-			userInput = "tmr";
-			inputString = u.splitParameters(userInput);
-			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-			*/
-
-			expectedInt = 151010;
-			userInput = "sat";
+			userInput = "31 dec 15";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
-			expectedInt = 151005;
-			userInput = "this mon";
-			inputString = u.splitParameters(userInput);
-			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-
-			expectedInt = 151011;
-			userInput = "next sun";
-			inputString = u.splitParameters(userInput);
-			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 		}
 
 		TEST_METHOD(Parser_parseDay)
 		{
-			expectedString = "FRI";
-			userInput = "fri";
+			// Change to appropriate date for tomorrow before running this test
+			
+			expectedInt = 151009;
+			userInput = "tmr";
 			inputString = u.splitParameters(userInput);
-			Assert::AreEqual(expectedString,u.dayToString(p.parseDay(p.parseDate(inputString))));
+			Assert::AreEqual(expectedInt,p.parseDay(inputString));
+			
+
+			expectedInt = 151010;
+			userInput = "sat";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseDay(inputString));
+
+			expectedInt = 151005;
+			userInput = "this mon";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseDay(inputString));
+
+			expectedInt = 151011;
+			userInput = "next sun";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseDay(inputString));
 		}
 
 		TEST_METHOD(Parser_parseTask)
 		{
-			expectedString = "Name: little brown fox\nEnd Day: SUN\nEnd Date: 0\n";
-			userInput = "little brown fox";
+			expectedString = "Name: Sing a song\nEnd Date: 151231\n";
+			userInput = "Sing a song by 31 dec";
 			tempTask = p.parseTask(userInput);
 			Assert::AreEqual(expectedString,u.taskToString(tempTask));
 		}

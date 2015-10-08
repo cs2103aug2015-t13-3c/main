@@ -204,16 +204,14 @@ std::string Utilities::taskToString(Task task) {
 	const int MAX_BYTES = 2550;
 	char buffer[MAX_BYTES] = "";
 
-	sprintf_s(buffer, "%s%s\n%s%s\n%s%d\n",
+	sprintf_s(buffer, "%s%s\n%s%d\n",
 		"Name: ",		task.getName().c_str()/*,					// %s%s\n
 		"Type: ",		task.getType(),								// %s%d\n
 		"Label: ",		task.getLabel().c_str(),					// %s%s\n
 		"Done: ",		task.getDoneStatus(),						// %s%d\n
 		"Priority: ",	task.getPriorityStatus(),					// %s%d\n
-		"Start Day: ",	dayToString(task.getStartDay()).c_str(),	// %s%s\n
 		"Start Date: ",	task.getStartDate(),						// %s%d\n
 		"Start Time: ",	task.getStartTime()*/,						// %s%d\n
-		"End Day: ",	dayToString(task.getEndDay()).c_str(),		// %s%s\n
 		"End Date: ",	task.getEndDate()/*,						// %s%d\n
 		"End Time: ",	task.getEndTime()*/							// %s%d\n
 		);
@@ -270,6 +268,10 @@ bool Utilities::containsAny(std::string targetWord, std::string searchWords) {
 	}
 
 	return false;
+}
+
+bool Utilities::isInt(std::string intString) {
+	return !(intString.empty()) && intString.find_first_not_of("0123456789")==std::string::npos;
 }
 
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
