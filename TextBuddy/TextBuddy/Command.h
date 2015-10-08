@@ -20,28 +20,31 @@ enum CommandType {
 class Command {
 private:
 	CommandType cmd;
-	std::string restOfCommand;
 	std::string userInput;
-
 public:
 	// Command();
-	Command(CommandType newCommand=INVALID, std::string restOfUserCommand="", std::string inputString="");
+	Command(CommandType newCmd=INVALID, std::string rawInput="");
 	~Command();
 
 	CommandType getCommand();
-	std::string getRestOfCommand();
 	std::string getUserInput();
 };
+
+// ==================================================
+//                  DERIVED COMMANDS
+// ==================================================
 
 class Add: public Command {
 private:
 	Task newTask;
 public:
 	Add();
-	Add(std::string userInput);
+	Add(Task task, std::string rawInput="");
 	~Add();
 	Task getNewTask();
-	void setNewTask(Task aTask);
+
+	// NOTE TO KIAT BOON: Public setter (used in LogicTest.cpp) to be removed (Aaron)
+	void setNewTask(Task task);
 };
 
 class Delete: public Command {
@@ -49,9 +52,9 @@ private:
 	int deleteID;
 public:
 	Delete();
+	Delete(int taskID);
 	~Delete();
 	int getDeleteID();
-	void setDeleteID(int index);
 };
 
 class Modify: public Command {
@@ -66,9 +69,6 @@ public:
 	int getModifyID();
 	std::vector<FieldType> getFieldsToModify();
 	Task getTempTask();
-	void setModifyID(int index);
-	void setFieldsToModify(std::vector<FieldType> fields);
-	void setTempTask(Task task);
 };
 
 class Search: public Command {
@@ -76,9 +76,9 @@ private:
 	std::string searchPhrase;
 public:
 	Search();
+	Search(std::string phraseString);
 	~Search();
 	std::string getSearchPhrase();
-	void setSearchPhrase(std::string phr);
 };
 
 // Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, EXIT

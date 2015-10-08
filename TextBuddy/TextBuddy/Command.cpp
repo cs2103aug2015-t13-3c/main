@@ -8,20 +8,15 @@
 
 // Command::Command() {}
 
-Command::Command(CommandType newCommand, std::string restOfUserCommand, std::string inputString) {
-	cmd = newCommand;
-	restOfCommand = restOfUserCommand;
-	userInput = inputString;
+Command::Command(CommandType newCmd, std::string rawInput) {
+	cmd = newCmd;
+	userInput = rawInput;
 }
 
 Command::~Command() {}
 
 CommandType Command::getCommand() {
 	return cmd;
-}
-
-std::string Command::getRestOfCommand() {
-	return restOfCommand;
 }
 
 std::string Command::getUserInput() {
@@ -33,16 +28,20 @@ std::string Command::getUserInput() {
 // ==================================================
 
 Add::Add() : Command(ADD) {}
-Add::Add(std::string userInput) : Command(ADD,"",userInput) {}
-Add::~Add() {}
 
-void Add::setNewTask(Task aTask) {
-	newTask = aTask;
-	return;
+Add::Add(Task task, std::string userInput) : Command(ADD,userInput) {
+	newTask = task;	
 }
+
+Add::~Add() {}
 
 Task Add::getNewTask() {
 	return newTask;
+}
+
+void Add::setNewTask(Task task) {
+	newTask = task;
+	return;
 }
 
 // ==================================================
@@ -50,15 +49,15 @@ Task Add::getNewTask() {
 // ==================================================
 
 Delete::Delete() : Command(DELETE) {}
+
+Delete::Delete(int taskID) : Command(DELETE) {
+	deleteID = taskID;
+}
+
 Delete::~Delete() {}
 
 int Delete::getDeleteID() {
 	return deleteID;
-}
-
-void Delete::setDeleteID(int index) {
-	deleteID = index;
-	return;
 }
 
 // ==================================================
@@ -87,37 +86,20 @@ Task Modify::getTempTask() {
 	return tempTask;
 }
 
-// Obsolete methods, only used for testing
-
-void Modify::setModifyID(int index) {
-	modifyID = index;
-	return;
-}
-
-void Modify::setFieldsToModify(std::vector<FieldType> fields) {
-	fieldsToModify = fields;
-	return;
-}
-
-void Modify::setTempTask(Task task) {
-	tempTask = task;
-	return;
-}
-
 // ==================================================
 //                       SEARCH
 // ==================================================
 
 Search::Search() : Command(SEARCH) {}
+
+Search::Search(std::string phraseString) : Command(SEARCH) {
+	searchPhrase = phraseString;
+}
+
 Search::~Search() {}
 
 std::string Search::getSearchPhrase() {
 	return searchPhrase;
-}
-
-void Search::setSearchPhrase(std::string phr) {
-	searchPhrase = phr;
-	return;
 }
 
 // ==================================================

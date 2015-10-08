@@ -28,11 +28,8 @@ std::string Parser::parseFileName(char* argv[]) {
 }
 
 Command* Parser::parse(std::string userInput) {
-	// userInput = u.removeSpaces(userInput);
-	std::string cmdString	= u.getFirstWord(userInput);
-	CommandType cmdType		= u.stringToCmdType(cmdString);
-
-	std::string restOfInput = u.removeFirstWord(userInput);
+	CommandType cmdType		= Utilities::stringToCmdType(Utilities::getFirstWord(userInput));
+	std::string restOfInput = Utilities::removeFirstWord(userInput);
 
 	// Declare pointers first, rather than objects
 	Add* addCmd;
@@ -50,9 +47,8 @@ Command* Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No task to add";
 			}
-			addCmd = new Add(userInput); // userInput included for testing
 			Task task = parseTask(restOfInput);
-			addCmd->setNewTask(task);
+			addCmd = new Add(task,userInput); // userInput included for testing
 			return addCmd;
 		}
 		catch(std::string NullTaskString) {
@@ -62,12 +58,12 @@ Command* Parser::parse(std::string userInput) {
 
 	case DELETE:
 		try {
-			if(!u.isPositiveNonZeroInt(restOfInput)) {
+			if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
 				throw "Invalid integer string";
 			}
-			deleteCmd = new Delete;
-			int deleteID = u.stringToInt(restOfInput);
-			deleteCmd->setDeleteID(deleteID);
+			
+			int deleteID = Utilities::stringToInt(restOfInput);
+			deleteCmd = new Delete(deleteID);
 			return deleteCmd;
 		}
 		catch(std::string InvalidIntString) {
@@ -80,8 +76,8 @@ Command* Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No fields to modify";
 			}
-			int modifyID = u.stringToInt(u.getFirstWord(restOfInput));
-			std::string tempTaskString = u.removeFirstWord(restOfInput);
+			int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+			std::string tempTaskString = Utilities::removeFirstWord(restOfInput);
 			std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
 			Task tempTask = parseTask(tempTaskString);
 			modifyCmd = new Modify(modifyID,fieldsToModify,tempTask);
@@ -97,9 +93,8 @@ Command* Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No search phrase";
 			}
-			searchCmd = new Search;
 			std::string searchPhrase = restOfInput;
-			searchCmd->setSearchPhrase(searchPhrase);
+			searchCmd = new Search(searchPhrase);
 			return searchCmd;
 		}
 		catch(std::string NullSearchString) {
@@ -110,7 +105,6 @@ Command* Parser::parse(std::string userInput) {
 	case CLEAR_ALL:
 		clearCmd = new ClearAll;
 		return clearCmd;
-		// break;
 
 	case DISPLAY_ALL:
 		displayCmd = new DisplayAll;
@@ -129,22 +123,12 @@ Command* Parser::parse(std::string userInput) {
 	}
 
 	// Invalid command
-	Command* cmd = new Command;
-	return cmd;
-}
-
-Command Parser::parseCommand(std::string userCommand) {
-	// userCommand = u.removeSpaces(userCommand);
-	std::string cmdString	= u.getFirstWord(userCommand);
-	std::string restOfInput = u.removeFirstWord(userCommand);
-	CommandType newCommand	= u.stringToCmdType(cmdString);
-
-	Command cmd(newCommand,restOfInput,userCommand);
+	Command* cmd = new Command(INVALID,userInput);
 	return cmd;
 }
 
 Task Parser::parseTask(std::string restOfCommand) {
-	std::vector<std::string> userInput = u.splitParameters(restOfCommand);
+	std::vector<std::string> userInput = Utilities::splitParameters(restOfCommand);
 	std::vector<std::string>::iterator curr = userInput.begin();
 	Task newTask;
 	FieldType inputMode = NAME;
@@ -159,20 +143,20 @@ Task Parser::parseTask(std::string restOfCommand) {
 		inputString.clear();
 
 		while(curr != userInput.end()
-			&& !u.equalsIgnoreCase(*curr, FIELD_NAME)
-			&& !u.equalsIgnoreCase(*curr, FIELD_DATE_BY)
-			&& !u.equalsIgnoreCase(*curr, FIELD_DATE_ON)
-			&& !u.equalsIgnoreCase(*curr, FIELD_TIME_AT)
-			&& !u.equalsIgnoreCase(*curr, FIELD_TIME_FROM)
-			&& !u.equalsIgnoreCase(*curr, FIELD_TIME_TO)
-			&& !u.equalsIgnoreCase(*curr, FIELD_LABEL)) {
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_NAME)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_ON)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_AT)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_FROM)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_TO)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL)) {
 				inputString.push_back(*curr);
 				curr++;
 		}
 
 		switch(inputMode) {
 		case NAME:
-			newTask.setName(u.vecToString(inputString));
+			newTask.setName(Utilities::vecToString(inputString));
 			break;
 		case START_DATE :
 		case START_DAY:
@@ -201,7 +185,7 @@ Task Parser::parseTask(std::string restOfCommand) {
 			newTask.togglePriority();
 			break;
 		case LABEL:
-			newTask.setLabel(u.vecToString(inputString));
+			newTask.setLabel(Utilities::vecToString(inputString));
 			break;
 		default:
 			break;
@@ -209,18 +193,18 @@ Task Parser::parseTask(std::string restOfCommand) {
 
 		if(curr == userInput.end()) {
 			break;
-		} else if(u.equalsIgnoreCase(*curr, FIELD_DATE_BY)
-			|| u.equalsIgnoreCase(*curr, FIELD_DATE_ON)) {
+		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			|| Utilities::equalsIgnoreCase(*curr, FIELD_DATE_ON)) {
 				inputMode = END_DATE;
-		} else if(u.equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
+		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
 			inputMode = START_TIME;
-		} else if(u.equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
+		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
 			inputMode = END_TIME;
-		} else if(u.equalsIgnoreCase(*curr, FIELD_TIME_TO)) {
+		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_TIME_TO)) {
 			inputMode = END_TIME;
-		} else if(u.equalsIgnoreCase(*curr, FIELD_PRIORITY)) {
+		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_PRIORITY)) {
 			inputMode = PRIORITY;
-		} else if(u.equalsIgnoreCase(*curr, FIELD_LABEL)) {
+		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_LABEL)) {
 			inputMode = LABEL;
 		}
 		curr++;
@@ -233,16 +217,16 @@ Task Parser::parseTask(std::string restOfCommand) {
 // These functions support user methods
 
 std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
-	std::vector<std::string> vecInput = u.splitParameters(restOfInput);
+	std::vector<std::string> vecInput = Utilities::splitParameters(restOfInput);
 	std::vector<std::string>::iterator curr = vecInput.begin();
 	std::vector<FieldType> fields;
 
-	if(u.stringToFieldType(restOfInput) == INVALID_FIELD) {
+	if(Utilities::stringToFieldType(restOfInput) == INVALID_FIELD) {
 		fields.push_back(NAME);
 	}
 
 	while(curr != vecInput.end()) {
-		FieldType newField = u.stringToFieldType(*curr);
+		FieldType newField = Utilities::stringToFieldType(*curr);
 		if(newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}
@@ -300,7 +284,7 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 
 	std::vector<std::string>::iterator curr;
 	for(curr=dateString.begin(); curr!=dateString.end(); curr++) {
-		*curr = u.stringToLower(*curr);
+		*curr = Utilities::stringToLower(*curr);
 	}
 
 	int newDate = INVALID_DATE_FORMAT;
@@ -313,10 +297,10 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 
 	curr = dateString.begin();
 	if(!((*curr).empty()) && (*curr).find_first_not_of("0123456789")==std::string::npos) {
-		int dateInput = u.stringToInt(*curr);
+		int dateInput = Utilities::stringToInt(*curr);
 		curr++;
 
-		Month monthInput = u.stringToMonth(*curr);
+		Month monthInput = Utilities::stringToMonth(*curr);
 		if(monthInput != INVALID_MONTH) {
 			maxDays = findMaxDays(monthInput);
 		}
@@ -341,7 +325,7 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 		}
 
 		if(curr!=dateString.end()) {
-			Day newDay = u.stringToDay(*curr);
+			Day newDay = Utilities::stringToDay(*curr);
 			if(newDay != INVALID_DAY) {
 				date += (int)newDay - (int)day;
 				curr++;
@@ -411,7 +395,7 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 	}
 
 	std::vector<std::string>::iterator curr = timeString.begin();
-	if(!u.isPositiveNonZeroInt(*curr)) {
+	if(!Utilities::isPositiveNonZeroInt(*curr)) {
 		// HH.MM AM/PM
 		size_t iSemiColon = (*curr).find('.');
 		if(iSemiColon == std::string::npos) {
@@ -419,14 +403,14 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 		} else {
 			hourString = (*curr).substr(0, iSemiColon);
 			minString = (*curr).substr(iSemiColon + 1);
-			hour = u.stringToInt(hourString);
-			min = u.stringToInt(minString);
-			if(!u.isPositiveNonZeroInt(hourString) || hour >= 24 || min >= 60) {
+			hour = Utilities::stringToInt(hourString);
+			min = Utilities::stringToInt(minString);
+			if(!Utilities::isPositiveNonZeroInt(hourString) || hour >= 24 || min >= 60) {
 				return INVALID_TIME_FORMAT;
 			}
 		}
 	} else {
-		time = u.stringToInt(*curr);
+		time = Utilities::stringToInt(*curr);
 		if(time < 13) {
 			// HH AM/PM
 			hour = time;
@@ -444,11 +428,11 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 
 	curr++;
 	if(curr != timeString.end()) {
-		if(u.containsAny(*curr,"am") && hour <= 12) {
+		if(Utilities::containsAny(*curr,"am") && hour <= 12) {
 			if(hour == 12) {
 				hour -= 12;
 			}
-		} else if(u.containsAny(*curr,"pm") && hour <= 12) {
+		} else if(Utilities::containsAny(*curr,"pm") && hour <= 12) {
 			if(hour < 12) {
 				hour += 12;
 			}
