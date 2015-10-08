@@ -5,8 +5,6 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
-#include "Task.h"
-
 // These are the possible command types
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
@@ -52,7 +50,6 @@ public:
 	static std::string	removeFirstWord(std::string userCommand);
 	static std::string	removeSpaces(const std::string& s, const std::string& delimiters = " \f\n\r\t\v" );
 	static std::string	replace(std::string a, std::string b, std::string c);
-
 };
 
 #endif

@@ -1,3 +1,5 @@
+// @@author Aaron Chong Jun Hao
+
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
@@ -313,14 +315,5 @@ namespace TextBuddyTests
 			Assert::AreEqual(expectedInt,p.parseTime(inputString));
 		}
 
-
-		// TEST_METHOD(Utilities_vecToString)
-		/*{
-		expectedString = "little brown fox";
-		userInput = "little brown fox";
-		inputString = u.splitParameters(userInput);
-		Assert::AreEqual(expectedString,u.vecToString(inputString));
-		}
-		*/
 	};
 }

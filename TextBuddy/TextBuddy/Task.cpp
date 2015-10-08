@@ -7,7 +7,7 @@ int Task::runningCount = 0;
 Task::Task() {
 	name = "";
 	type = FLOATING;
-	uniqueID = runningCount++;
+	uniqueID = ++runningCount;
 	label = "";
 
 	isDone = false;
@@ -107,42 +107,20 @@ bool Task::setEndTime(int newEndTime) {
 	return true;
 }
 
-//for testing
+// For testing
 bool Task::tasksAreEqual(Task task1, Task task2) {
-	if(task1.getDoneStatus() != task2.getDoneStatus()) {
-		return false;
-	}
-	if(task1.getEndDay() != task2.getEndDay()) {
-		return false;
-	}
-	if(task1.getEndDate() != task2.getEndDate()) {
-		return false;
-	}
-	if(task1.getEndTime() != task2.getEndTime()) {
-		return false;
-	}
-	if(task1.getID() != task2.getID()) {
-		return false;
-	}
-	if(task1.getLabel() != task2.getLabel()) {
-		return false;
-	}
-	if(task1.getName() != task2.getName()) {
-		return false;
-	}
-	if(task1.getPriorityStatus() != task2.getPriorityStatus()) {
-		return false;
-	}
-	if(task1.getStartDate() != task2.getStartDate()) {
-		return false;
-	}
-	if(task1.getStartDay() != task2.getStartDay()) {
-		return false;
-	}
-	if(task1.getStartTime() != task2.getStartTime()) {
-		return false;
-	}
-	if(task1.getType() != task2.getType()) {
+	if(    (task1.getDoneStatus() != task2.getDoneStatus())
+		|| (task1.getEndDay() != task2.getEndDay())
+		|| (task1.getEndDate() != task2.getEndDate())
+		|| (task1.getEndTime() != task2.getEndTime())
+		|| (task1.getID() != task2.getID())
+		|| (task1.getLabel() != task2.getLabel())
+		|| (task1.getName() != task2.getName())
+		|| (task1.getPriorityStatus() != task2.getPriorityStatus())
+		|| (task1.getStartDate() != task2.getStartDate())
+		|| (task1.getStartDay() != task2.getStartDay())
+		|| (task1.getStartTime() != task2.getStartTime())
+		|| (task1.getType() != task2.getType())) {
 		return false;
 	}
 
