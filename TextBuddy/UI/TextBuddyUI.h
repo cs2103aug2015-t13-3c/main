@@ -178,7 +178,14 @@ namespace UserInterface {
 		void updateDisplay(std::vector<Task> tasks) {
 			DataGridView^ display = description->DataGridView ;
 			display->Rows->Clear();
+
 			for(unsigned int i=0 ; i<tasks.size() ; ++i) {
+				TaskType type = tasks[i].getType();
+				if(type == TODO) {
+
+				} else if (type == EVENT) {
+
+				}
 				String^ name = gcnew String(tasks[i].getName().c_str());
 				display->Rows->Add((i+1).ToString(),name);
 			}
