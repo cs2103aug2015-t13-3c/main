@@ -236,8 +236,8 @@ bool Logic::amendView(std::string listOfIds) {
 
 Feedback Logic::processCommand(std::string userCommand) {
 	//************ FOR UI PURPOSE *****************
-	Feedback feedback;	//added by haoye			
-	bool isFound = true; //addded by haoye
+	Feedback feedback;				
+	bool isFound = true; 
 	//**********************************************
 
 	Add* addTask;
