@@ -1,3 +1,5 @@
+// @@author Ng Ren Zhi
+
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
@@ -165,9 +167,11 @@ namespace TextBuddyTests
 
 			std::vector<std::string> actualText = io.getText("TEXT.txt");
 
-			//NOTE: vecToString method doesnt work
-			//std::vector<std::string> actualTextVector = IO::getText("Text.txt");
-			//std::string actualText = Utilities::vecToString(actualTextVector);
+			// NOTE: vecToString method doesnt work
+			// REPLY: Please see UtilitiesTest.cpp (Aaron)
+
+			// std::vector<std::string> actualTextVector = IO::getText("Text.txt");
+			// std::string actualText = Utilities::vecToString(actualTextVector);
 
 			for(unsigned int i = 0; i < actualText.size(); i++) {
 				Assert::AreEqual(expectedText[i], actualText[i]);
@@ -206,7 +210,7 @@ namespace TextBuddyTests
 				"}"
 			};
 
-			//TODO: assert areEqual for diff vector sizes
+			// TODO: assert areEqual for diff vector sizes
 			Assert::AreEqual((size_t) 19, actualText.size());
 
 			for(unsigned int i = 0; i < actualText.size(); i++) {

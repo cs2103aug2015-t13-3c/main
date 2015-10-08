@@ -10,17 +10,13 @@ IO::IO() {}
 IO::~IO() {}
 
 // ==================================================
-//                      METHODS
+//                   PUBLIC METHODS
 // ==================================================
 
-
-
-//================= PUBLIC METHODS ======================
-
-//TODO: Handle empty file / improper content exceptions
+// TODO: Handle empty file / improper content exceptions
 
 // Loads file and extracts JSON text into a task vector
-// throws an assert if file contents are invalid
+// Throws an assert() if file contents are invalid
 std::vector<Task> IO::loadFile(std::string fileName) {
 	std::ifstream inputFile(fileName);
 	std::string inputFileString((std::istreambuf_iterator<char>(inputFile)),
@@ -79,7 +75,10 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 	return false;
 }
 
-//=============== PRIVATE METHODS ===================
+
+// ==================================================
+//                   PRIVATE METHODS
+// ==================================================
 
 Task IO::extractTaskFromJsonObject(Value& item) {
 	Task newTask;
@@ -91,10 +90,10 @@ Task IO::extractTaskFromJsonObject(Value& item) {
 		extractLabel(newTask, item);
 		extractDone(newTask, item);
 		extractPriority(newTask, item);
-		extractStartDay(newTask, item); //assert fail
+		extractStartDay(newTask, item);	// Assert fail
 		extractStartDate(newTask, item);
 		extractStartTime(newTask, item);
-		extractEndDay(newTask, item); //assert fail
+		extractEndDay(newTask, item);	// Assert fail
 		extractEndDate(newTask, item);
 		extractEndTime(newTask, item);
 	} catch (std::string error) {
@@ -121,11 +120,8 @@ void IO::writeTaskIntoJsonFormat(std::ofstream &newFile, Task task) {
 	newFile << writeEndTimeAttribute(task);
 
 	newFile << insertCloseParanthese();
-
 	return;
 }
-
-
 
 
 //============ Task Attributes Extraction Methods ===========
@@ -138,6 +134,7 @@ void IO::extractName(Task &newTask, Value &item) {
 		throw "NameNotFound";
 	}
 }
+
 void IO::extractType(Task &newTask, Value &item) {
 	std::string typeString = item["type"].GetString();
 	TaskType type = Utilities::stringToTaskType(typeString);
@@ -147,6 +144,7 @@ void IO::extractType(Task &newTask, Value &item) {
 		throw "TypeNotFound";
 	}
 }
+
 void IO::extractID(Task &newTask, Value &item) {
 	int ID = item["uniqueID"].GetInt();
 	bool success = newTask.setID(ID);
@@ -155,6 +153,7 @@ void IO::extractID(Task &newTask, Value &item) {
 		throw "IDNotFound";
 	}
 }
+
 void IO::extractLabel(Task &newTask, Value &item) {
 	std::string label = item["label"].GetString();
 	bool success = newTask.setLabel(label);
@@ -163,34 +162,37 @@ void IO::extractLabel(Task &newTask, Value &item) {
 		throw "LabelNotFound";
 	}
 }
+
 void IO::extractDone(Task &newTask, Value &item) {
 	bool isDone = item["isDone"].GetBool();
-	//bool success = false;
+	// bool success = false;
 	if(isDone) {
 		newTask.toggleDone();
 	}
 
-	//TODO: how to throw exception for GetBool
+	// TODO: how to throw exception for GetBool
 	/*
 	if(!success) {
 	throw "IDNotFound";
 	}
 	*/
 }
+
 void IO::extractPriority(Task &newTask, Value &item) {
 	bool isPriority = item["isPriority"].GetBool();
-	//bool success = false;
+	// bool success = false;
 	if(isPriority) {
 		newTask.togglePriority();
 	}
 
-	//TODO: how to throw exception for GetBool
+	// TODO: how to throw exception for GetBool
 	/*
 	if(!success) {
 	throw "IDNotFound";
 	}
 	*/
 }
+
 void IO::extractStartDay(Task &newTask, Value &item) {
 	std::string dayString = item["startDay"].GetString();
 	Day day = Utilities::stringToDay(dayString);
@@ -200,6 +202,7 @@ void IO::extractStartDay(Task &newTask, Value &item) {
 		throw "StartDayNotFound";
 	}
 }
+
 void IO::extractStartDate(Task &newTask, Value &item) {
 	int date = item["startDate"].GetInt();
 	bool success = newTask.setStartDate(date);
@@ -208,6 +211,7 @@ void IO::extractStartDate(Task &newTask, Value &item) {
 		throw "StartDateNotFound";
 	}
 }
+
 void IO::extractStartTime(Task &newTask, Value &item) {
 	int time = item["startTime"].GetInt();
 	bool success = newTask.setStartTime(time);
@@ -216,6 +220,7 @@ void IO::extractStartTime(Task &newTask, Value &item) {
 		throw "StartTimeNotFound";
 	}
 }
+
 void IO::extractEndDay(Task &newTask, Value &item) {
 	std::string dayString = item["endDay"].GetString();
 	Day day = Utilities::stringToDay(dayString);
@@ -225,6 +230,7 @@ void IO::extractEndDay(Task &newTask, Value &item) {
 		throw "EndDayNotFound";
 	}
 }
+
 void IO::extractEndDate(Task &newTask, Value &item) {
 	int date = item["endDate"].GetInt();
 	bool success = newTask.setEndDate(date);
@@ -233,6 +239,7 @@ void IO::extractEndDate(Task &newTask, Value &item) {
 		throw "EndDateNotFound";
 	}
 }
+
 void IO::extractEndTime(Task &newTask, Value &item)  {
 	int time = item["endTime"].GetInt();
 	bool success = newTask.setEndTime(time);
@@ -243,15 +250,16 @@ void IO::extractEndTime(Task &newTask, Value &item)  {
 }
 
 
-
 //======= Retrieve Task Attributes and Write to File Methods =======
 
 std::string IO::insertOpenParanthese() {
 	return "\t\t{\n";
 }
+
 std::string IO::insertCloseParanthese() {
 	return "\t\t}\n";
 }
+
 std::string IO::writeNameAttribute(Task task) {
 	std::string nameString;
 
@@ -260,6 +268,7 @@ std::string IO::writeNameAttribute(Task task) {
 
 	return nameString;
 }
+
 std::string IO::writeTypeAttribute(Task task) {
 	std::string typeString;
 
@@ -268,6 +277,7 @@ std::string IO::writeTypeAttribute(Task task) {
 
 	return typeString;
 }
+
 std::string IO::writeIDAttribute(Task task) {
 	std::string IDString;
 
@@ -276,6 +286,7 @@ std::string IO::writeIDAttribute(Task task) {
 
 	return IDString;
 }
+
 std::string IO::writeLabelAttribute(Task task) {
 	std::string labelString;
 
@@ -284,6 +295,7 @@ std::string IO::writeLabelAttribute(Task task) {
 
 	return labelString;
 }
+
 std::string IO::writeIsDoneAttribute(Task task) {
 	std::string isDoneString;
 
@@ -292,6 +304,7 @@ std::string IO::writeIsDoneAttribute(Task task) {
 
 	return isDoneString;
 }
+
 std::string IO::writeIsPriorityAttribute(Task task) {
 	std::string isPriorityString;
 
@@ -300,6 +313,7 @@ std::string IO::writeIsPriorityAttribute(Task task) {
 
 	return isPriorityString;
 }
+
 std::string IO::writeStartDayAttribute(Task task) {
 	std::string startDayString;
 
@@ -308,6 +322,7 @@ std::string IO::writeStartDayAttribute(Task task) {
 
 	return startDayString;
 }
+
 std::string IO::writeStartDateAttribute(Task task) {
 	std::string startDateString;
 
@@ -316,6 +331,7 @@ std::string IO::writeStartDateAttribute(Task task) {
 
 	return startDateString;
 }
+
 std::string IO::writeStartTimeAttribute(Task task) {
 	std::string startTimeString;
 
@@ -324,6 +340,7 @@ std::string IO::writeStartTimeAttribute(Task task) {
 
 	return startTimeString;
 }
+
 std::string IO::writeEndDayAttribute(Task task) {
 	std::string EndDayString;
 
@@ -332,6 +349,7 @@ std::string IO::writeEndDayAttribute(Task task) {
 
 	return EndDayString;
 }
+
 std::string IO::writeEndDateAttribute(Task task) {
 	std::string EndDateString;
 
@@ -340,6 +358,7 @@ std::string IO::writeEndDateAttribute(Task task) {
 
 	return EndDateString;
 }
+
 std::string IO::writeEndTimeAttribute(Task task) {
 	std::string EndTimeString;
 
@@ -355,65 +374,76 @@ std::string IO::retrieveName(Task task) {
 	string = "\"" + task.getName() + "\",\n";
 	return string;
 }
+
 std::string IO::retrieveType(Task task) {
 	std::string string;
 	TaskType type = task.getType();
 	string = "\"" + Utilities::taskTypeToString(type) + "\",\n";
 	return string;
 }
+
 std::string IO::retrieveID(Task task) {
 	std::string string;
 	int ID = task.getID();
 	string = std::to_string(ID) + ",\n";
 	return string;
 }
+
 std::string IO::retrieveLabel(Task task) {
 	std::string string;
 	string = "\"" + task.getLabel() + "\",\n";
 	return string;
 }
+
 std::string IO::retrieveIsDone(Task task) {
 	std::string string;
 	bool status = task.getDoneStatus();
 	string = Utilities::boolToString(status) + ",\n";
 	return string;
 }
+
 std::string IO::retrieveIsPriority(Task task) {
 	std::string string;
 	bool status = task.getPriorityStatus();
 	string = Utilities::boolToString(status) + ",\n";
 	return string;
 }
+
 std::string IO::retrieveStartDay(Task task) {
 	std::string string;
 	Day day = task.getStartDay();
 	string = "\"" + Utilities::dayToString(day) + "\",\n";
 	return string;
 }
+
 std::string IO::retrieveStartDate(Task task) {
 	std::string string;
 	int date = task.getStartDate();
 	string = std::to_string(date) + ",\n";
 	return string;
 }
+
 std::string IO::retrieveStartTime(Task task) {
 	std::string string;
 	int time = task.getStartTime();
 	string = std::to_string(time) + ",\n";
 	return string;
 }
+
 std::string IO::retrieveEndDay(Task task) {
 	std::string string;
 	Day day = task.getEndDay();
 	string = "\"" + Utilities::dayToString(day) + "\",\n";
 	return string;
 }
+
 std::string IO::retrieveEndDate(Task task) {
 	std::string string;
 	int date = task.getEndDate();
 	string = std::to_string(date) + ",\n";
 	return string;
 }
+
 std::string IO::retrieveEndTime(Task task) {
 	std::string string;
 	int time = task.getEndTime();
@@ -421,23 +451,20 @@ std::string IO::retrieveEndTime(Task task) {
 	return string;
 }
 
-// Overloaded function
-bool IO::fileIsOpen(std::ifstream& inputFile)
-{
+
+// Overloaded functions
+bool IO::fileIsOpen(std::ifstream& inputFile) {
 	if(inputFile.is_open())	{
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
 
-bool IO::fileIsOpen(std::ofstream& outputFile)
-{
+bool IO::fileIsOpen(std::ofstream& outputFile) {
 	if(outputFile.is_open())	{
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -446,6 +473,7 @@ void IO::initialiseJsonText(std::ofstream& newfile) {
 	newfile << "{\n\t\"TextBuddy Items\":\n\t[\n";
 	return;
 }
+
 void IO::closeJsonText(std::ofstream& newfile) {
 	newfile << "\t]\n}";
 	return;

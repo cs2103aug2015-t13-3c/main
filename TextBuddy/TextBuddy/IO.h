@@ -10,8 +10,6 @@ using namespace rapidjson;
 
 class IO {
 private:
-	static Utilities u;
-
 	bool fileIsOpen(std::ifstream& inputFile);
 	bool fileIsOpen(std::ofstream& outputFile);
 	Task extractTaskFromJsonObject(Value& item);
@@ -60,7 +58,6 @@ private:
 	std::string retrieveEndDate(Task task);
 	std::string retrieveEndTime(Task task);
 
-
 public:
 	IO();
 	~IO();
@@ -68,7 +65,7 @@ public:
 	std::vector<Task> loadFile(std::string fileName);
 	bool saveFile(std::string fileName, std::vector<Task> taskVector);
 
-	//======== getter / setter methods for test==========
+	//======== Getter / Setter methods for testing ==========
 	std::vector<std::string> getText(std::string fileName) {
 		std::ifstream inputFile(fileName);
 		std::vector<std::string> textVector;
@@ -76,12 +73,12 @@ public:
 		assert(fileIsOpen(inputFile));
 
 		while(!inputFile.eof()) {
-		std::string line;
-		getline(inputFile,line);
+			std::string line;
+			getline(inputFile,line);
 
-		if(line != "") {
-			textVector.push_back(line);
-		}
+			if(line != "") {
+				textVector.push_back(line);
+			}
 		}
 
 		inputFile.close();

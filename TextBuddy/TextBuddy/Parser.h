@@ -5,15 +5,10 @@
 
 class Parser {
 private:
-	static Utilities u;
-
 	// This defines the file extension used by TextBuddy
 	static const std::string FILE_EXTENSION;
 
-	// This is the running counter to set uniqueID for tasks
-	static int runningCount;
-
-	// This is the return value for invalid numbers
+	// These are the return values for invalid parameters
 	static const int INVALID_DATE_FORMAT = -1;
 	static const int INVALID_TIME_FORMAT = -1;
 
@@ -22,19 +17,18 @@ public:
 	~Parser();
 
 	// This is the API
-	static std::string parseFileName(char* argv[]);
-	static Command* parse(std::string userInput);
-	static Command parseCommand(std::string userCommand);
-	static Task parseTask(std::string restOfCommand);
+	std::string parseFileName(char* argv[]);
+	Command* parse(std::string userInput);
+	Task parseTask(std::string restOfCommand);
 
 	// These support user methods
-	static std::vector<FieldType> extractFields(std::string restOfInput);
-	static int findMaxDays(Month month, int year=2015);
+	std::vector<FieldType> extractFields(std::string restOfInput);
+	int findMaxDays(Month month, int year=2015);
 
 	// These handle task parameters
-	static int parseDate(std::vector<std::string> dateString);
-	static Day parseDay(int date);
-	static int parseTime(std::vector<std::string> timeString);
+	int parseDate(std::vector<std::string> dateString);
+	Day parseDay(int date);
+	int parseTime(std::vector<std::string> timeString);
 };
 
 #endif

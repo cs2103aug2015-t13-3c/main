@@ -43,10 +43,10 @@ bool Logic::matchPhrase(std::string phr, std::string str) {
 	int j;
 	int k;
 	int strSize;
-	
+
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 	std::transform(phr.begin(), phr.end(), phr.begin(), ::tolower);
-	
+
 	strSize = str.size();
 
 	for (int i = 0; i < strSize; i++) {
@@ -74,7 +74,7 @@ int Logic::getIdOfIndex(int userIndex) {
 
 	for (int i = 1; i < userIndex; i++) {
 		if (iter != currentView.end()) {
-				++iter;
+			++iter;
 		} else {
 			return false;				//error since index put in exceeds the currentView capacity
 		}								//error for exceeding upper bound of acceptable inputs
@@ -107,7 +107,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 	while ((iter != taskStore.end()) && (iter->getID() != id)) {
 		++iter;
 	}
-	
+
 	if (iter->getID() == id) {
 		taskStore.erase(iter);
 	}
@@ -119,11 +119,11 @@ bool Logic::deleteInfo(Delete idToDelete) {
 bool Logic::modifyInfo(Modify toModify) {
 	std::vector<Task>::iterator taskIter;
 	Task tempTask = toModify.getTempTask();
-	
+
 	int index = toModify.getModifyID();
 	int id;
 	id = getIdOfIndex(index);
-	
+
 	//matches id obtained from currentView with id in taskstore
 	taskIter = taskStore.begin();
 	while ((taskIter != taskStore.end()) && (taskIter->getID() != id)) {
@@ -198,7 +198,7 @@ std::string Logic::searchInfo(Search toSearch) {
 	return returnString;
 }
 
-//the list is separated by commas
+// The list is separated by commas
 bool Logic::amendView(std::string listOfIds) {
 	std::string idToken;
 	int id;
@@ -218,7 +218,7 @@ bool Logic::amendView(std::string listOfIds) {
 			idToken = listOfIds.substr(0, index);
 			listOfIds = listOfIds.substr(index+1);
 		}
-		
+
 		id = stoi(idToken);
 
 		iter = taskStore.begin();
@@ -234,6 +234,12 @@ bool Logic::amendView(std::string listOfIds) {
 
 // Input command is obtained from parseCommand
 // Returns string of IDs with search, returns "*" for add/delete
+std::string Logic::processCommand(std::string userCommand) {
+	// inputCmd obtained from parser (removed by Aaron, see below)
+	// Command inputCmd(parser.parseCommand(userCommand));
+	// CommandType cmd = inputCmd.getCommand();
+	Add* taskToAdd;
+
 Feedback Logic::processCommand(std::string userCommand) {
 	//inputCmd obtained from parser
 	Command inputCmd(parser.parseCommand(userCommand));
@@ -246,60 +252,60 @@ Feedback Logic::processCommand(std::string userCommand) {
 	std::string output;
 	bool isFound = true;
 
-	int userIndex;						//userIndex in currentView
-	int id;								//id for both currentView and taskStore
-	
-	//for temporary method to return string of names followed by commas	
+	int userIndex;						// userIndex in currentView
+	int id;								// id for both currentView and taskStore
+
+	// For temporary method to return string of names followed by commas	
 	std::ostringstream tempOutput;
 	std::vector<Task>::iterator iter;
 
 	Command* command = parser.parse(userCommand);
 
+	// cmd obtained from command (added by Aaron, see above)
+	CommandType cmd = command->getCommand();
+
 	switch (cmd) {
 	case DISPLAY_ALL:
 		currentView = taskStore;
 		feedback.setUpdateView(true);
+
 	case ADD:
 		addTask = ((Add*)command);
 		addInfo(*addTask);
 		feedback.pushTask(addTask->getNewTask());
 		feedback.setAddedMessage();
 		break;
+
 	case DELETE:
-		//userIndex refers to the nth task of currentView presented to user
-		//eg. delete 1 means deleting the first task
+		// userIndex refers to the nth task of currentView presented to user
+		// eg. delete 1 means deleting the first task
 		taskToDelete = ((Delete*)command);
 		deleteInfo(*taskToDelete);
 		feedback.setUpdateView(true);
 		break;
+
 	case MODIFY:
 		taskToModify = ((Modify*)command);
 		modifyInfo(*taskToModify);
 		feedback.setUpdateView(true);
 		break;
+
 	case SEARCH:
-		//currently search returns string of names
-		//currentView is also amended, can refer to items from currentView after every processInfo cmd
-		//eg. add/delete will display new list under UI
-		//if it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
+		// Currently search returns string of names
+		// currentView is also amended, can refer to items from currentView after every processInfo cmd
+		// eg. add/delete will display new list under UI
+		// If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 		searchPhrase = ((Search*)command);
 		output = searchInfo(*searchPhrase);
 		amendView(output);
 
-		//temporary method to return string of names followed by commas
-/*		for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
-			tempOutput << iter->getName() << ",";
-		}
-		
-		output = tempOutput.str();
-		output.erase(output.size()-1);
-*/
 		if(output.empty()) {
 			isFound = false;
 		}
 		feedback.setSearchMessage(searchPhrase->getSearchPhrase(),isFound);
 		feedback.setUpdateView(isFound);
 		break;
+
 	default:
 		break;
 	}
@@ -309,15 +315,6 @@ Feedback Logic::processCommand(std::string userCommand) {
 
 /* Keep for reference */
 /*
-bool Logic::getStatus() {
-return isActive && canCallIO();
-}
-
-bool Logic::canCallIO()
-{
-return io.getStatus();
-}
-
 int Logic::getSize(void) {
 return sizeOfArray;
 }

@@ -238,7 +238,8 @@ std::string Utilities::taskTypeToString(TaskType type) {
 	return typeString;
 }
 
-//NOTE TO AARON: method doesnt work in IOTest.cpp
+// NOTE TO AARON: method doesn't work in IOTest.cpp
+// REPLY: Please see UtilitiesTest.cpp (Aaron)
 std::string Utilities::vecToString(std::vector<std::string> inputString) {
 	std::string newString;
 	std::vector<std::string>::iterator curr;
