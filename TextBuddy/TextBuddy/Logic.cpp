@@ -232,32 +232,23 @@ bool Logic::amendView(std::string listOfIds) {
 	return true;
 }
 
-// Input command is obtained from parseCommand
-// Returns string of IDs with search, returns "*" for add/delete
-std::string Logic::processCommand(std::string userCommand) {
-	// inputCmd obtained from parser (removed by Aaron, see below)
-	// Command inputCmd(parser.parseCommand(userCommand));
-	// CommandType cmd = inputCmd.getCommand();
-	Add* taskToAdd;
+
 
 Feedback Logic::processCommand(std::string userCommand) {
-	//inputCmd obtained from parser
-	Command inputCmd(parser.parseCommand(userCommand));
-	CommandType cmd = inputCmd.getCommand();
+	//************ FOR UI PURPOSE *****************
+	Feedback feedback;	//added by haoye			
+	bool isFound = true; //addded by haoye
+	//**********************************************
+
 	Add* addTask;
 	Delete* taskToDelete;
 	Modify* taskToModify;
 	Search* searchPhrase;
-	Feedback feedback;
-	std::string output;
-	bool isFound = true;
-
-	int userIndex;						// userIndex in currentView
-	int id;								// id for both currentView and taskStore
-
+	
 	// For temporary method to return string of names followed by commas	
 	std::ostringstream tempOutput;
 	std::vector<Task>::iterator iter;
+	std::string output;
 
 	Command* command = parser.parse(userCommand);
 
