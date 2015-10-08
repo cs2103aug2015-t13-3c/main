@@ -192,7 +192,9 @@ std::string Logic::searchInfo(Search toSearch) {
 	}
 
 	returnString = indexString.str();
-	returnString.pop_back();
+	if(!returnString.empty()) {
+		returnString.pop_back();
+	}
 	return returnString;
 }
 
@@ -242,6 +244,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 	Search* searchPhrase;
 	Feedback feedback;
 	std::string output;
+	bool isFound = true;
 
 	int userIndex;						//userIndex in currentView
 	int id;								//id for both currentView and taskStore
@@ -284,15 +287,18 @@ Feedback Logic::processCommand(std::string userCommand) {
 		amendView(output);
 
 		//temporary method to return string of names followed by commas
-		for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
+/*		for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
 			tempOutput << iter->getName() << ",";
 		}
 		
 		output = tempOutput.str();
 		output.erase(output.size()-1);
-
-		feedback.setSearchMessage(searchPhrase->getSearchPhrase());
-		feedback.setUpdateView(true);
+*/
+		if(output.empty()) {
+			isFound = false;
+		}
+		feedback.setSearchMessage(searchPhrase->getSearchPhrase(),isFound);
+		feedback.setUpdateView(isFound);
 		break;
 	default:
 		break;

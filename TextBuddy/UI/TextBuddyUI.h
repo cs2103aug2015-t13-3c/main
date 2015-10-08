@@ -31,23 +31,11 @@ namespace UserInterface {
 		}
 	private:
 		System::Windows::Forms::TextBox^  input;
-
-
 		System::Windows::Forms::TextBox^  feedback;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  id;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  dateAndTime;
-
-	private: System::ComponentModel::IContainer^  components;
-
-
-
-
-
-
-
-
-
+		System::Windows::Forms::DataGridViewTextBoxColumn^  id;
+		System::Windows::Forms::DataGridViewTextBoxColumn^  description;
+		System::Windows::Forms::DataGridViewTextBoxColumn^  dateAndTime;
+		System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
 
@@ -173,16 +161,12 @@ namespace UserInterface {
 
 		void processAndExecute() {
 			feedback->Clear();
-		/*	userFeedback_cppString = new std::string;
-			Feedback results = logic->processCommand(*userInput);
-			String^ userFeedback = gcnew String(userFeedback_cppString->c_str());
-			display->AppendText(userFeedback + "\r\n");
-			delete userInput;
-			delete userFeedback_cppString;
-			*/
 			Feedback results = logic->processCommand(*userInput);
 			if(results.needToUpdateDisplay()) {
 				updateDisplay(results.getTaskToShow());
+			}
+			if(results.isSuccess()) {
+
 			}
 			feedback->Text = gcnew String((results.getFeedbackMessage()).c_str());
 		}

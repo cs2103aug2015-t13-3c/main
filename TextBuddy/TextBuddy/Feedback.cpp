@@ -17,8 +17,12 @@ void Feedback::setTasksToShow(std::vector<Task> tasksToShow) {
 	this->tasksToShow = tasksToShow;
 }
 
-void Feedback::setSearchMessage(std::string searchPhrase) {
-	feedbackMessage = "results for \"" + searchPhrase + "\"\r\n";
+void Feedback::setSearchMessage(std::string searchPhrase, bool isFound) {
+	if(isFound) {
+		feedbackMessage = "results for \"" + searchPhrase + "\"\r\n";
+	} else {
+		feedbackMessage = "no results found for \"" + searchPhrase + "\"\r\n";
+	}
 }
 
 void Feedback::setAddedMessage() {
