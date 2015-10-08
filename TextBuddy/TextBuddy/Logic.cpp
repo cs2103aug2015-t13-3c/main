@@ -259,7 +259,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 	case DISPLAY_ALL:
 		currentView = taskStore;
 		feedback.setUpdateView(true);
-
+		break;
 	case ADD:
 		addTask = ((Add*)command);
 		addInfo(*addTask);

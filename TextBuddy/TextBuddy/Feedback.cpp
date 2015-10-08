@@ -62,3 +62,4 @@ bool Feedback::needToUpdateDisplay() {
 bool Feedback::isSuccess() {
 	return operationSucceeded;
 }
+
