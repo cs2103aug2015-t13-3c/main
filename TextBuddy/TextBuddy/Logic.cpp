@@ -237,10 +237,17 @@ std::string Logic::processCommand(std::string userCommand) {
 	// Command inputCmd(parser.parseCommand(userCommand));
 	// CommandType cmd = inputCmd.getCommand();
 	Add* taskToAdd;
+
+Feedback Logic::processCommand(std::string userCommand) {
+	//inputCmd obtained from parser
+	Command inputCmd(parser.parseCommand(userCommand));
+	CommandType cmd = inputCmd.getCommand();
+	Add* addTask;
 	Delete* taskToDelete;
 	Modify* taskToModify;
 	Search* searchPhrase;
-	std::string output = "ok";
+	Feedback feedback;
+	std::string output;
 
 	int userIndex;						// userIndex in currentView
 	int id;								// id for both currentView and taskStore
@@ -255,9 +262,15 @@ std::string Logic::processCommand(std::string userCommand) {
 	CommandType cmd = command->getCommand();
 
 	switch (cmd) {
+	case DISPLAY_ALL:
+		currentView = taskStore;
+		feedback.setUpdateView(true);
+
 	case ADD:
-		taskToAdd = ((Add*)command);
-		addInfo(*taskToAdd);
+		addTask = ((Add*)command);
+		addInfo(*addTask);
+		feedback.pushTask(addTask->getNewTask());
+		feedback.setAddedMessage();
 		break;
 
 	case DELETE:
@@ -265,11 +278,13 @@ std::string Logic::processCommand(std::string userCommand) {
 		// eg. delete 1 means deleting the first task
 		taskToDelete = ((Delete*)command);
 		deleteInfo(*taskToDelete);
+		feedback.setUpdateView(true);
 		break;
 
 	case MODIFY:
 		taskToModify = ((Modify*)command);
 		modifyInfo(*taskToModify);
+		feedback.setUpdateView(true);
 		break;
 
 	case SEARCH:
@@ -287,12 +302,16 @@ std::string Logic::processCommand(std::string userCommand) {
 		}
 		output = tempOutput.str();
 		output.erase(output.size()-1);
+
+		feedback.setSearchMessage(searchPhrase->getSearchPhrase());
+		feedback.setUpdateView(true);
 		break;
 
 	default:
 		break;
 	}
-	return output;
+	feedback.setTasksToShow(currentView);
+	return feedback;
 }
 
 /* Keep for reference */

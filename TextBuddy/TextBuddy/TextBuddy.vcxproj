@@ -63,6 +63,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
+    <ClInclude Include="Feedback.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Parser.h" />
@@ -72,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="Feedback.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Parser.cpp" />
