@@ -166,7 +166,9 @@ namespace UserInterface {
 				updateDisplay(results.getTaskToShow());
 			}
 			if(results.isSuccess()) {
-
+				feedback->ForeColor = Color::Green;
+			} else {
+				feedback->ForeColor = Color::Red;
 			}
 			feedback->Text = gcnew String((results.getFeedbackMessage()).c_str());
 		}

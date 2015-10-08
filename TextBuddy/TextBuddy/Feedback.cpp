@@ -19,13 +19,16 @@ void Feedback::setTasksToShow(std::vector<Task> tasksToShow) {
 
 void Feedback::setSearchMessage(std::string searchPhrase, bool isFound) {
 	if(isFound) {
+		operationSucceeded = true;
 		feedbackMessage = "results for \"" + searchPhrase + "\"\r\n";
 	} else {
+		operationSucceeded = false;
 		feedbackMessage = "no results found for \"" + searchPhrase + "\"\r\n";
 	}
 }
 
 void Feedback::setAddedMessage() {
+	operationSucceeded = true;
 	Task addedTask = tasksToShow[0];
 	feedbackMessage = "added " + addedTask.getName() + "\r\n";
 }
@@ -54,4 +57,8 @@ std::vector<Task> Feedback::getTaskToShow() {
 
 bool Feedback::needToUpdateDisplay() {
 	return updateView;
+}
+
+bool Feedback::isSuccess() {
+	return operationSucceeded;
 }
