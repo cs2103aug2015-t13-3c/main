@@ -230,8 +230,6 @@ bool Logic::amendView(std::string listOfIds) {
 	return true;
 }
 
-
-
 Feedback Logic::processCommand(std::string userCommand) {
 	//************ FOR UI PURPOSE *****************
 	Feedback feedback;				

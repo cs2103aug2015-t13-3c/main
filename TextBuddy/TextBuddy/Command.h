@@ -93,6 +93,16 @@ public:
 	std::string getSearchPhrase();
 };
 
+class Save: public Command {
+private:
+	std::string newFilePath;
+public:
+	Save(std::string filePath);
+	~Save();
+
+	std::string getFilePath();
+};
+
 // Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, SAVE, EXIT
 
 class ClearAll: public Command {
@@ -111,16 +121,6 @@ class SortAll: public Command {
 public:
 	SortAll();
 	~SortAll();
-};
-
-class Save: public Command {
-private:
-	std::string newFilePath;
-public:
-	Save(std::string filePath);
-	~Save();
-
-	std::string getFilePath();
 };
 
 class Exit: public Command {

@@ -362,30 +362,6 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 // - DD MM/MMM/MMMM
 // Week is defined as Sunday to Saturday
 // Returns -1 if invalid date
-/*
-Day Parser::parseDay(int date) {
-// To-do: Check if valid date
-
-int year = date/10000 + 2000;
-int month = (date/100)%100;
-int day = date%100;
-
-tm timeStruct = {};
-timeStruct.tm_year = year - 1900;
-timeStruct.tm_mon = month - 1;
-timeStruct.tm_mday = day;
-timeStruct.tm_hour = 12;		//  To avoid any doubts about summer time, etc.
-mktime(&timeStruct);
-return (Day)timeStruct.tm_wday; //  0...6 for Sunday...Saturday
-}
-*/
-
-// Processes dates in these formats:
-// - DDD/DDDD
-// - this/next DDD/DDDD
-// - DD MM/MMM/MMMM
-// Week is defined as Sunday to Saturday
-// Returns -1 if invalid date
 int Parser::parseDay(std::vector<std::string> dayString) {
 	if(dayString.empty()) {
 		return INVALID_DATE_FORMAT;

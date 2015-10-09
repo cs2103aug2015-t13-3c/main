@@ -18,5 +18,12 @@ namespace TextBuddyTests
 			std::vector<std::string> inputString = Utilities::splitParameters(userInput);
 			Assert::AreEqual(expectedString,Utilities::vecToString(inputString));
 		}
+
+				TEST_METHOD(Utilities_removeSpaces)
+		{
+			std::string expectedString = "add";
+			std::string userInput = " add ";
+			Assert::AreEqual(expectedString,Utilities::removeSpaces(userInput));
+		}
 	};
 }

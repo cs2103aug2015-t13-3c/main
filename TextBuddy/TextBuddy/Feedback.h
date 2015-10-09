@@ -1,3 +1,5 @@
+// @@author Soon Hao Ye
+
 #include "stdafx.h"
 #include "Utilities.h"
 
