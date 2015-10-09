@@ -15,8 +15,9 @@ public:
 	void setUpdateView(bool);
 	bool needToUpdateDisplay();
 	bool isSuccess();
-
+	bool isWarning();
 private:
+	bool warning;
 	bool updateView;
 	bool operationSucceeded;
 	std::string feedbackMessage;
