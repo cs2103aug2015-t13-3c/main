@@ -300,6 +300,17 @@ Feedback Logic::processCommand(std::string userCommand) {
 	return feedback;
 }
 
+std::vector<Task> Logic::getFloatingTasks() {
+	std::vector<Task>::iterator i;
+	std::vector<Task> floatingTasks;
+	for(i = taskStore.begin(); i<taskStore.end();++i) {
+		if(i->getType() == FLOATING) {
+			floatingTasks.push_back(*i);
+		}
+	}
+	return floatingTasks;
+}
+
 /* Keep for reference */
 /*
 int Logic::getSize(void) {

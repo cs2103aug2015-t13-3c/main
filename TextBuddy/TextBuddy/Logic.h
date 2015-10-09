@@ -35,6 +35,7 @@ public:
 
 	bool matchPhrase(std::string phr, std::string str);		
 	Feedback processCommand(std::string userCommand);
+	std::vector<Task> getFloatingTasks();
 };
 
 /* Keep for reference*/

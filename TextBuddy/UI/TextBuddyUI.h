@@ -355,7 +355,7 @@ private:
 				processAndExecute();
 			} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right){
 				highlightSyntax();
-				autoComplete();
+			//	autoComplete();
 			 }
 		 }
 };
