@@ -1,0 +1,84 @@
+{
+	"TextBuddy Items":
+	[
+		{
+			"name": "budget report",
+			"type": "TODO",
+			"uniqueID": 1,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 151011,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "buy milk",
+			"type": "FLOATING",
+			"uniqueID": 3,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "buy vegetables",
+			"type": "FLOATING",
+			"uniqueID": 5,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "buy meat",
+			"type": "FLOATING",
+			"uniqueID": 7,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "dinner with parents",
+			"type": "EVENT",
+			"uniqueID": 9,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+	]
+}

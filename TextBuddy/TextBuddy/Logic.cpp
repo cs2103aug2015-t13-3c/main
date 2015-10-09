@@ -235,7 +235,8 @@ Feedback Logic::processCommand(std::string userCommand) {
 	Feedback feedback;				
 	bool isFound = true; 
 	//**********************************************
-
+	
+	Command* command;
 	Add* addTask;
 	Delete* taskToDelete;
 	Modify* taskToModify;
@@ -246,8 +247,12 @@ Feedback Logic::processCommand(std::string userCommand) {
 	std::vector<Task>::iterator iter;
 	std::string output;
 
-	Command* command = parser.parse(userCommand);
-
+	try {
+		command = parser.parse(userCommand);
+	} catch(std::exception e) {
+		//TODO : set error message
+		return feedback;
+	}
 	// cmd obtained from command (added by Aaron, see above)
 	CommandType cmd = command->getCommand();
 
@@ -296,6 +301,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 	default:
 		break;
 	}
+	saveFile("Text.txt");
 	feedback.setTasksToShow(currentView);
 	return feedback;
 }
