@@ -19,7 +19,7 @@ public:
 	// This is the API
 	std::string parseFileName(char* argv[]);
 	Command* parse(std::string userInput);
-	Task parseTask(std::string restOfCommand);
+	Task* parseTask(std::string restOfCommand);
 
 	// These support user methods
 	std::vector<FieldType> extractFields(std::string restOfInput);
@@ -28,7 +28,6 @@ public:
 
 	// These handle task parameters
 	int parseDate(std::vector<std::string> dateString);
-	// Day parseDay(int date);
 	int parseDay(std::vector<std::string> dayString);
 	int parseTime(std::vector<std::string> timeString);
 };
