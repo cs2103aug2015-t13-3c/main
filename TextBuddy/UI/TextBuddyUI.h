@@ -36,8 +36,11 @@ namespace UserInterface {
 		TextBuddyUI(void) {
 			InitializeComponent();
 			logic = new Logic();
+			floatingTasks = nullptr;
+			floatingTaskIndex = 0;
 			input->Focus();
 			this->ActiveControl = input;
+			floatingTaskDisplay->SelectionAlignment = HorizontalAlignment::Center;
 			keywords = gcnew List<String^>();
 			keywords->Add(ADD);
 			keywords->Add(DEL);
@@ -59,6 +62,7 @@ namespace UserInterface {
 			if (components) {
 				delete components;
 				delete logic;
+				delete floatingTasks;
 			}
 		}
 
@@ -68,15 +72,18 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Label;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  dateAndTime;
-	private: System::Windows::Forms::RichTextBox^  richTextBox1;
+	private: System::Windows::Forms::RichTextBox^  floatingTaskDisplay;
+
 	private: System::ComponentModel::BackgroundWorker^  updateFloating;
 	private: System::ComponentModel::BackgroundWorker^  hotKey;
+	private: System::Windows::Forms::Timer^  updateFloatingTimer;
 	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
 
 		/// Required method for Designer support - do not modify	
 		void InitializeComponent(void) {
+			this->components = (gcnew System::ComponentModel::Container());
 			System::Windows::Forms::DataGridView^  display;
 			this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -84,9 +91,10 @@ namespace UserInterface {
 			this->dateAndTime = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->input = (gcnew System::Windows::Forms::RichTextBox());
 			this->feedback = (gcnew System::Windows::Forms::TextBox());
-			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
+			this->floatingTaskDisplay = (gcnew System::Windows::Forms::RichTextBox());
 			this->updateFloating = (gcnew System::ComponentModel::BackgroundWorker());
 			this->hotKey = (gcnew System::ComponentModel::BackgroundWorker());
+			this->updateFloatingTimer = (gcnew System::Windows::Forms::Timer(this->components));
 			display = (gcnew System::Windows::Forms::DataGridView());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->BeginInit();
 			this->SuspendLayout();
@@ -172,17 +180,27 @@ namespace UserInterface {
 			this->feedback->Size = System::Drawing::Size(501, 16);
 			this->feedback->TabIndex = 1;
 			// 
-			// richTextBox1
+			// floatingTaskDisplay
 			// 
-			this->richTextBox1->BackColor = System::Drawing::Color::White;
-			this->richTextBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->richTextBox1->Location = System::Drawing::Point(12, 0);
-			this->richTextBox1->Multiline = false;
-			this->richTextBox1->Name = L"richTextBox1";
-			this->richTextBox1->ReadOnly = true;
-			this->richTextBox1->Size = System::Drawing::Size(501, 20);
-			this->richTextBox1->TabIndex = 5;
-			this->richTextBox1->Text = L"";
+			this->floatingTaskDisplay->BackColor = System::Drawing::Color::White;
+			this->floatingTaskDisplay->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->floatingTaskDisplay->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
+			this->floatingTaskDisplay->ForeColor = System::Drawing::Color::Magenta;
+			this->floatingTaskDisplay->Location = System::Drawing::Point(12, 0);
+			this->floatingTaskDisplay->Multiline = false;
+			this->floatingTaskDisplay->Name = L"floatingTaskDisplay";
+			this->floatingTaskDisplay->ReadOnly = true;
+			this->floatingTaskDisplay->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::None;
+			this->floatingTaskDisplay->Size = System::Drawing::Size(501, 20);
+			this->floatingTaskDisplay->TabIndex = 5;
+			this->floatingTaskDisplay->Text = L"";
+			// 
+			// updateFloatingTimer
+			// 
+			this->updateFloatingTimer->Enabled = true;
+			this->updateFloatingTimer->Interval = 5000;
+			this->updateFloatingTimer->Tick += gcnew System::EventHandler(this, &TextBuddyUI::updateFloatingTimer_Tick);
 			// 
 			// TextBuddyUI
 			// 
@@ -191,7 +209,7 @@ namespace UserInterface {
 			this->BackColor = System::Drawing::Color::White;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->ClientSize = System::Drawing::Size(525, 440);
-			this->Controls->Add(this->richTextBox1);
+			this->Controls->Add(this->floatingTaskDisplay);
 			this->Controls->Add(this->input);
 			this->Controls->Add(this->feedback);
 			this->Controls->Add(display);
@@ -213,6 +231,8 @@ namespace UserInterface {
 		std::string* userInput;
 		std::string* userFeedback_cppString;
 		Logic* logic ;
+		std::vector<Task>* floatingTasks;
+		int floatingTaskIndex;
 		int cursorPosition;
 		String^ searchPhrase;
 		List<String^>^ keywords;
@@ -242,6 +262,7 @@ namespace UserInterface {
 			if(results.needToUpdateDisplay()) {
 				updateDisplay(results.getTaskToShow());
 			}
+			updateFloatingTasks();
 			configureMessageColor(&results);
 			printFeedBackMessage(results.getFeedbackMessage());
 			delete userInput;
@@ -342,6 +363,13 @@ namespace UserInterface {
 			}
 		}
 
+		void updateFloatingTasks() {
+			 if(floatingTasks != nullptr) {
+				delete floatingTasks;
+			 }
+			 floatingTasks = new std::vector<Task>(logic->getFloatingTasks());
+		}
+
 	//********************** EVENT HANDLERS ***********************************
 
 		//====================== MAIN FUNCTION ================================
@@ -358,5 +386,16 @@ private:
 			//	autoComplete();
 			 }
 		 }
+
+private: 
+	System::Void updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
+		if(floatingTasks != nullptr && !floatingTasks->empty()) {	
+				floatingTaskIndex = floatingTaskIndex % floatingTasks->size();
+				String^ title = gcnew String(
+					(*floatingTasks)[floatingTaskIndex].getName().c_str());
+				floatingTaskDisplay->Text = title;
+				++floatingTaskIndex;
+		}
+	}
 };
 }
