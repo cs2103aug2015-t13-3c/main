@@ -27,6 +27,12 @@ std::string Parser::parseFileName(char* argv[]) {
 	return newFileName;
 }
 
+// Throws exceptions for:
+// ADD	  - NullTaskString		"No tasks to add!"
+// DELETE - InvalidIntString	"Invalid integer string!"
+// MODIFY - NullModifyString	"No fields to modify!"
+// SEARCH - NullSearchString	"No search phrase!"
+// SAVE	  - NullFilePath		"No file path specified!"
 Command* Parser::parse(std::string userInput) {
 	CommandType cmdType		= Utilities::stringToCmdType(Utilities::getFirstWord(userInput));
 	std::string restOfInput = Utilities::removeFirstWord(userInput);
@@ -39,6 +45,7 @@ Command* Parser::parse(std::string userInput) {
 	ClearAll* clearCmd;
 	DisplayAll* displayCmd;
 	SortAll* sortCmd;
+	Save* saveCmd;
 	Exit* exitCmd;
 
 	switch(cmdType) {
@@ -59,7 +66,7 @@ Command* Parser::parse(std::string userInput) {
 	case DELETE:
 		try {
 			if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
-				throw "Invalid integer string";
+				throw "Invalid integer string!";
 			}
 
 			int deleteID = Utilities::stringToInt(restOfInput);
@@ -67,14 +74,14 @@ Command* Parser::parse(std::string userInput) {
 			return deleteCmd;
 		}
 		catch(std::string InvalidIntString) {
-			std::cerr << InvalidIntString << std::endl;
+			throw InvalidIntString;
 		}
 		break;
 
 	case MODIFY:
 		try {
 			if(restOfInput=="") {
-				throw "No fields to modify";
+				throw "No fields to modify!";
 			}
 			int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
 			std::string tempTaskString = Utilities::removeFirstWord(restOfInput);
@@ -84,21 +91,21 @@ Command* Parser::parse(std::string userInput) {
 			return modifyCmd;
 		}
 		catch(std::string NullModifyString) {
-			std::cerr << NullModifyString << std::endl;
+			throw NullModifyString;
 		}
 		break;
 
 	case SEARCH:
 		try {
 			if(restOfInput=="") {
-				throw "No search phrase";
+				throw "No search phrase!";
 			}
 			std::string searchPhrase = restOfInput;
 			searchCmd = new Search(searchPhrase);
 			return searchCmd;
 		}
 		catch(std::string NullSearchString) {
-			std::cerr << NullSearchString << std::endl;
+			throw NullSearchString;
 		}
 		break;
 
@@ -113,6 +120,18 @@ Command* Parser::parse(std::string userInput) {
 	case SORT_ALL:
 		sortCmd = new SortAll;
 		return sortCmd;
+
+	case SAVE:
+		try {
+			if(restOfInput=="") {
+				throw("No file path specified!");
+			}
+			saveCmd = new Save(userInput);
+			return saveCmd;
+		}
+		catch(std::string NullFilePath) {
+			throw NullFilePath;
+		}
 
 	case EXIT:
 		exitCmd = new Exit;

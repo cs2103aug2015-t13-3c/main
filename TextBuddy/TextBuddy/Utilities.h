@@ -5,16 +5,6 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
-// These are the possible command types
-const std::string COMMAND_ADD = "add";
-const std::string COMMAND_DELETE = "delete";
-const std::string COMMAND_MODIFY = "modify";
-const std::string COMMAND_SEARCH = "search";
-const std::string COMMAND_CLEAR_ALL = "clear";
-const std::string COMMAND_DISPLAY_ALL = "display";
-const std::string COMMAND_SORT_ALL = "sort";
-const std::string COMMAND_EXIT = "exit";
-
 class Utilities {
 private:
 	// This is the return value for invalid numbers

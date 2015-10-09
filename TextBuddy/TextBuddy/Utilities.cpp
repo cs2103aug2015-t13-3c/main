@@ -30,23 +30,24 @@ int Utilities::stringToInt(std::string str) {
 
 CommandType Utilities::stringToCmdType(std::string cmdString) {
 	CommandType cmd;
-	Utilities u;
 
-	if(u.equalsIgnoreCase(cmdString, COMMAND_ADD))	{
+	if(equalsIgnoreCase(cmdString, COMMAND_ADD))	{
 		cmd = ADD;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
+	} else if(equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
 		cmd = DELETE;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_MODIFY)) {
+	} else if(equalsIgnoreCase(cmdString, COMMAND_MODIFY)) {
 		cmd = MODIFY;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
+	} else if(equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
 		cmd = SEARCH;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
+	} else if(equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
 		cmd = CLEAR_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
+	} else if(equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
 		cmd = DISPLAY_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
+	} else if(equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
 		cmd = SORT_ALL;
-	} else if(u.equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
+	} else if(equalsIgnoreCase(cmdString, COMMAND_SAVE)) {
+		cmd = SAVE;
+	} else if(equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
 		cmd = EXIT;
 	} else {
 		cmd = INVALID;
@@ -78,32 +79,30 @@ Day Utilities::stringToDay(std::string dayString) {
 }
 
 Month Utilities::stringToMonth(std::string monthString) {
-	Utilities u;
-
 	Month monthInput = INVALID_MONTH;
-	if(u.containsAny(monthString,"1 jan january")) {
+	if(containsAny(monthString,"1 jan january")) {
 		monthInput = JAN;
-	} else if(u.containsAny(monthString,"2 feb february")) {
+	} else if(containsAny(monthString,"2 feb february")) {
 		monthInput = FEB;
-	} else if(u.containsAny(monthString,"3 mar march")) {
+	} else if(containsAny(monthString,"3 mar march")) {
 		monthInput = MAR;
-	} else if(u.containsAny(monthString,"4 apr april")) {
+	} else if(containsAny(monthString,"4 apr april")) {
 		monthInput = APR;
-	} else if(u.containsAny(monthString,"5 may")) {
+	} else if(containsAny(monthString,"5 may")) {
 		monthInput = MAY;
-	} else if(u.containsAny(monthString,"6 jun june")) {
+	} else if(containsAny(monthString,"6 jun june")) {
 		monthInput = JUN;
-	} else if(u.containsAny(monthString,"7 jul july")) {
+	} else if(containsAny(monthString,"7 jul july")) {
 		monthInput = JUL;
-	} else if(u.containsAny(monthString,"8 aug august")) {
+	} else if(containsAny(monthString,"8 aug august")) {
 		monthInput = AUG;
-	} else if(u.containsAny(monthString,"9 sep sept september")) {
+	} else if(containsAny(monthString,"9 sep sept september")) {
 		monthInput = SEP;
-	} else if(u.containsAny(monthString,"10 oct october")) {
+	} else if(containsAny(monthString,"10 oct october")) {
 		monthInput = OCT;
-	} else if(u.containsAny(monthString,"11 nov november")) {
+	} else if(containsAny(monthString,"11 nov november")) {
 		monthInput = NOV;
-	} else if(u.containsAny(monthString,"12 dec december")) {
+	} else if(containsAny(monthString,"12 dec december")) {
 		monthInput = DEC;
 	}
 	return monthInput;
