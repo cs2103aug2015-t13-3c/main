@@ -36,6 +36,7 @@ namespace UserInterface {
 		TextBuddyUI(void) {
 			InitializeComponent();
 			logic = new Logic();
+			updateDisplay(logic->getCurrentView());
 			floatingTasks = nullptr;
 			floatingTaskIndex = 0;
 			input->Focus();
