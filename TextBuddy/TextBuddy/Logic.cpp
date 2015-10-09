@@ -297,7 +297,9 @@ Feedback Logic::processCommand(std::string userCommand) {
 		feedback.setSearchMessage(searchPhrase->getSearchPhrase(),isFound);
 		feedback.setUpdateView(isFound);
 		break;
-
+	case EXIT:
+		feedback.setExit();
+		break;
 	default:
 		break;
 	}

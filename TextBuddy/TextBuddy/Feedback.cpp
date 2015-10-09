@@ -9,6 +9,7 @@ Feedback::Feedback(std::string feedbackMessage, std::vector<Task> tasksToShow) {
 
 Feedback::Feedback() {
 	warning = false;
+	exit = false;
 }
 
 void Feedback::pushTask(Task newTask) {
@@ -67,4 +68,12 @@ bool Feedback::isSuccess() {
 
 bool Feedback::isWarning() {
 	return warning;
+}
+
+void Feedback::setExit() {
+	exit = true;
+}
+
+bool Feedback::isExit() {
+	return exit;
 }

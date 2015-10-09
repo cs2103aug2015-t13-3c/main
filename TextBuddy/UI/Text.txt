@@ -80,5 +80,21 @@
 			"endDate": 0,
 			"endTime": 0
 		}
+		,
+		{
+			"name": "do assignment",
+			"type": "FLOATING",
+			"uniqueID": 6,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
 	]
 }

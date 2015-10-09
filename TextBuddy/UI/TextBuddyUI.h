@@ -260,6 +260,9 @@ namespace UserInterface {
 		void processAndExecute() {
 			feedback->Clear();
 			Feedback results = logic->processCommand(*userInput);
+			if(results.isExit()) {
+				exit(0);
+			}
 			if(results.needToUpdateDisplay()) {
 				updateDisplay(results.getTaskToShow());
 			}
@@ -380,8 +383,8 @@ private:
 			cursorPosition = input->SelectionStart;
 			if (e->KeyCode == Keys::Return) { //if user presses 'Return' key
 				getInput();
-				input->Clear();
 				processAndExecute();
+				input->Clear();
 			} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right){
 				highlightSyntax();
 				autoComplete();

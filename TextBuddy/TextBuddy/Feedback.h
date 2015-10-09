@@ -18,7 +18,10 @@ public:
 	bool needToUpdateDisplay();
 	bool isSuccess();
 	bool isWarning();
+	void setExit();
+	bool isExit();
 private:
+	bool exit;
 	bool warning;
 	bool updateView;
 	bool operationSucceeded;
