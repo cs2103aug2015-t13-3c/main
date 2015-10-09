@@ -32,6 +32,7 @@ namespace UserInterface {
 	public ref class TextBuddyUI : public System::Windows::Forms::Form {
 
 	public:
+		// INITIALIZATION OF COMPONENTS AND REQUIRED VARIABLES
 		TextBuddyUI(void) {
 			InitializeComponent();
 			logic = new Logic();
@@ -68,6 +69,8 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Label;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  dateAndTime;
 	private: System::Windows::Forms::RichTextBox^  richTextBox1;
+	private: System::ComponentModel::BackgroundWorker^  updateFloating;
+	private: System::ComponentModel::BackgroundWorker^  hotKey;
 	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
@@ -82,6 +85,8 @@ namespace UserInterface {
 			this->input = (gcnew System::Windows::Forms::RichTextBox());
 			this->feedback = (gcnew System::Windows::Forms::TextBox());
 			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
+			this->updateFloating = (gcnew System::ComponentModel::BackgroundWorker());
+			this->hotKey = (gcnew System::ComponentModel::BackgroundWorker());
 			display = (gcnew System::Windows::Forms::DataGridView());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->BeginInit();
 			this->SuspendLayout();
@@ -209,6 +214,7 @@ namespace UserInterface {
 		std::string* userFeedback_cppString;
 		Logic* logic ;
 		int cursorPosition;
+		String^ searchPhrase;
 		List<String^>^ keywords;
 
 	//===================== UI FUNCTIONS=======================================
@@ -222,8 +228,7 @@ namespace UserInterface {
 		=====================================================================*/
 		void getInput() {
 			msclr::interop::marshal_context context;
-			userInput = new std::string(context.marshal_as<std::string>(input->Text));
-			input->Clear();
+			userInput = new std::string(context.marshal_as<std::string>(input->Text));			
 		}
 
 		/*=====================================================================
@@ -282,30 +287,59 @@ namespace UserInterface {
 
 		/*=====================================================================
 			reads the characters as the user types in the richTextBox
-			change colour of words if they match keywords
+			change colour to blue if they match keywords
+			KEYWORDS TO HIGHLIGHT
+			-ADD			-FROM
+			-MODIFY			-BY
+			-SEARCH			-TO
+			-DISPLAY		-ON
+			-DONE
+			-TAG			**MORE TO COME**
+			-STAR
+			-UNSTAR
 		=====================================================================*/
-		void syntaxHighlight() {			
-			int position; 
+		void highlightSyntax() {			
 			for each(String^ keyword in keywords) {
-			position = input->Find(keyword,0,input->Text->Length,RichTextBoxFinds::NoHighlight);
-				if(position >= 0) {
-					input->Select(position,keyword->Length);
-					input->SelectionColor = Color::Blue;
-					input->Select(cursorPosition,0);
-					input->SelectionColor = Color::Black;
+				int position = findKeyword(keyword);
+				if(keywordIsFound(position)) {
+					highlightKeywords(position,keyword);
 				} 
-		/*	position = input->Find(" by ",0,input->Text->Length,RichTextBoxFinds::NoHighlight);
-				if(position >0) {
-					input->Select(position,4);
-					input->SelectionColor = Color::Blue;
-					input->Select(cursorPosition,0);
-					input->SelectionColor = Color::Black;
-				}*/
 			}
 		}
 
-		void autoComplete() {
+		/*====================================================================
+			Finds the keyword in the user Input richTextBox
+			Returns the position of the first occurrence of keyword
+			-1 is returned if keyword is not found
+		=====================================================================*/
+		int findKeyword(String^ keyword) {
+			int position; 
+			position = input->Find(keyword,0,input->Text->Length,
+				RichTextBoxFinds::NoHighlight);
+			return position;
+		}
 
+		bool keywordIsFound(int position) {
+			return position >= 0;
+		}
+
+		/*=====================================================================
+			Performs the change of text in the input richTextBox
+			keywords are changed to BLUE
+		=====================================================================*/
+		void highlightKeywords(int position, String^ keyword) {
+			input->Select(position,keyword->Length);
+			input->SelectionColor = Color::Blue;
+			input->Select(cursorPosition,0);
+			input->SelectionColor = Color::Black;
+		}
+
+		void autoComplete() {
+			int position = findKeyword(SEARCH);
+			if(keywordIsFound(position)) {
+				getInput();
+				processAndExecute();
+			}
 		}
 
 	//********************** EVENT HANDLERS ***********************************
@@ -317,9 +351,10 @@ private:
 			cursorPosition = input->SelectionStart;
 			if (e->KeyCode == Keys::Return) { //if user presses 'Return' key
 				getInput();
+				input->Clear();
 				processAndExecute();
 			} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right){
-				syntaxHighlight();
+				highlightSyntax();
 				autoComplete();
 			 }
 		 }
