@@ -20,14 +20,13 @@ enum Month {
 
 enum FieldType {
 	NAME,
-	START_DAY,
+	LABEL_ADD,
+	LABEL_DELETE,
+	PRIORITY,
 	START_DATE,
 	START_TIME,
-	END_DAY,
 	END_DATE,
 	END_TIME,
-	LABEL,
-	PRIORITY,
 	INVALID_FIELD,
 };
 
@@ -39,13 +38,14 @@ enum TaskType {
 
 // These are the possible field types for tasks
 const std::string FIELD_NAME = "name";
-const std::string FIELD_LABEL = ":";
+const std::string FIELD_LABEL_ADD = ":";
+const std::string FIELD_LABEL_DELETE = "-:";
 const std::string FIELD_PRIORITY = "star";
+const std::string FIELD_DATE_FROM = "from";
+const std::string FIELD_DATE_TO = "to";
 const std::string FIELD_DATE_BY = "by";
 const std::string FIELD_DATE_ON = "on";
 const std::string FIELD_TIME_AT = "at";
-const std::string FIELD_TIME_FROM = "from";
-const std::string FIELD_TIME_TO = "to";
 
 class Task {
 private:
@@ -55,6 +55,7 @@ private:
 	TaskType type;
 	int uniqueID;
 	std::string label;
+	std::vector<std::string> labels;
 
 	bool isDone;
 	bool isPriority;
@@ -79,6 +80,7 @@ public:
 	TaskType getType();
 	int getID();
 	std::string getLabel();
+	std::vector<std::string> getLabels();
 
 	bool getDoneStatus();
 	bool getPriorityStatus();
@@ -94,6 +96,8 @@ public:
 	bool setType(TaskType newType);
 	bool setID(int newID);
 	bool setLabel(std::string newLabel);
+	bool addLabels(std::vector<std::string> newLabel);
+	bool deleteLabels(std::vector<std::string> newLabel);
 
 	bool toggleDone();
 	bool togglePriority();

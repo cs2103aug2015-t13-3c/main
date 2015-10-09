@@ -161,12 +161,13 @@ Task* Parser::parseTask(std::string restOfCommand) {
 
 		while(curr != userInput.end()
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_NAME)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL_ADD)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL_DELETE)
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_ON)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_AT)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_FROM)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_TO)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL)) {
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_FROM)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_TO)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_BY)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
 				inputString.push_back(*curr);
 				curr++;
 		}
@@ -175,16 +176,23 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		case NAME:
 			newTask->setName(Utilities::vecToString(inputString));
 			break;
-		case START_DATE :
-		case START_DAY:
+		case LABEL_ADD:
+			newTask->addLabels(inputString);
+			break;
+		case LABEL_DELETE:
+			newTask->deleteLabels(inputString);
+			break;
+		case PRIORITY:
+			newTask->togglePriority();
+			break;
+		case START_DATE:
 			newTask->setType(EVENT);
 			if(    (newStartDate = parseDate(inputString)) != INVALID_DATE_FORMAT
 				|| (newStartDate = parseDay(inputString)) != INVALID_DATE_FORMAT) {
 					newTask->setStartDate(newStartDate);
 			}
 			break;
-		case END_DATE :
-		case END_DAY :
+		case END_DATE:
 			if(newTask->getType() == FLOATING) {
 				newTask->setType(TODO);
 			}
@@ -192,14 +200,8 @@ Task* Parser::parseTask(std::string restOfCommand) {
 				|| (newEndDate = parseDay(inputString)) != -1) {
 					newTask->setEndDate(newEndDate);
 			}			break;
-		case START_TIME :
-		case END_TIME :
-			break;
-		case PRIORITY:
-			newTask->togglePriority();
-			break;
-		case LABEL:
-			newTask->setLabel(Utilities::vecToString(inputString));
+		case START_TIME:
+		case END_TIME:
 			break;
 		default:
 			break;
@@ -207,19 +209,8 @@ Task* Parser::parseTask(std::string restOfCommand) {
 
 		if(curr == userInput.end()) {
 			break;
-		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_DATE_BY)
-			|| Utilities::equalsIgnoreCase(*curr, FIELD_DATE_ON)) {
-				inputMode = END_DATE;
-		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_TIME_FROM)) {
-			inputMode = START_TIME;
-		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
-			inputMode = END_TIME;
-		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_TIME_TO)) {
-			inputMode = END_TIME;
-		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_PRIORITY)) {
-			inputMode = PRIORITY;
-		} else if(Utilities::equalsIgnoreCase(*curr, FIELD_LABEL)) {
-			inputMode = LABEL;
+		} else {
+			inputMode = Utilities::stringToFieldType(*curr);
 		}
 		curr++;
 	}

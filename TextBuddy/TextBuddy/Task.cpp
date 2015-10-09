@@ -54,12 +54,33 @@ bool Task::setType(TaskType newType) {
 }
 
 bool Task::setID(int newID) {
-uniqueID = newID;
-return true;
+	uniqueID = newID;
+	return true;
 }
 
 bool Task::setLabel(std::string newLabel) {
 	label = newLabel;
+	return true;
+}
+
+bool Task::addLabels(std::vector<std::string> newLabels) {
+	std::vector<std::string>::iterator curr;
+	for(curr=newLabels.begin(); curr!=newLabels.end(); curr++) {
+		labels.push_back(*curr);
+	}
+	return true;
+}
+
+bool Task::deleteLabels(std::vector<std::string> badLabels) {
+	std::vector<std::string>::iterator badCurr;
+	std::vector<std::string>::iterator labelsCurr;
+	for(badCurr=badLabels.begin(); badCurr!=badLabels.end(); badCurr++) {
+		for(labelsCurr=labels.begin();labelsCurr!=badLabels.end(); labelsCurr++) {
+			if(Utilities::equalsIgnoreCase(*badCurr,*labelsCurr)) {
+				labelsCurr = labels.erase(labelsCurr);
+			}
+		}
+	}
 	return true;
 }
 
@@ -105,8 +126,7 @@ bool Task::tasksAreEqual(Task task1, Task task2) {
 		|| (task1.getStartDate() != task2.getStartDate())
 		|| (task1.getStartTime() != task2.getStartTime())
 		|| (task1.getType() != task2.getType())) {
-		return false;
+			return false;
 	}
-
 	return true;
 }

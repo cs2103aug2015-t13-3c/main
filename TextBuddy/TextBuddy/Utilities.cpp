@@ -111,19 +111,21 @@ Month Utilities::stringToMonth(std::string monthString) {
 FieldType Utilities::stringToFieldType(std::string fieldString) {
 	FieldType field;
 
-	if(equalsIgnoreCase(fieldString,FIELD_LABEL)) {
-		field = LABEL;
+	if(equalsIgnoreCase(fieldString,FIELD_LABEL_ADD)) {
+		field = LABEL_ADD;
+	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_DELETE)) {
+		field = LABEL_DELETE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY)) {
 		field = PRIORITY;
-	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_FROM)) {
-		field = START_TIME;
-	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
-		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
 		field = END_DATE;
+	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
+		field = START_DATE;
+	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
+		field = END_DATE;
+	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
+		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
-		field = END_TIME;
-	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_TO)) {
 		field = END_TIME;
 	} else {
 		field = INVALID_FIELD;
@@ -205,15 +207,15 @@ std::string Utilities::taskToString(Task task) {
 
 	sprintf_s(buffer, "%s%s\n%s%d\n",
 		"Name: ",		task.getName().c_str()/*,					// %s%s\n
-		"Type: ",		task.getType(),								// %s%d\n
-		"Label: ",		task.getLabel().c_str(),					// %s%s\n
-		"Done: ",		task.getDoneStatus(),						// %s%d\n
-		"Priority: ",	task.getPriorityStatus(),					// %s%d\n
-		"Start Date: ",	task.getStartDate(),						// %s%d\n
-		"Start Time: ",	task.getStartTime()*/,						// %s%d\n
-		"End Date: ",	task.getEndDate()/*,						// %s%d\n
-		"End Time: ",	task.getEndTime()*/							// %s%d\n
-		);
+											  "Type: ",		task.getType(),								// %s%d\n
+											  "Label: ",		task.getLabel().c_str(),					// %s%s\n
+											  "Done: ",		task.getDoneStatus(),						// %s%d\n
+											  "Priority: ",	task.getPriorityStatus(),					// %s%d\n
+											  "Start Date: ",	task.getStartDate(),						// %s%d\n
+											  "Start Time: ",	task.getStartTime()*/,						// %s%d\n
+											  "End Date: ",	task.getEndDate()/*,						// %s%d\n
+																			 "End Time: ",	task.getEndTime()*/							// %s%d\n
+																			 );
 
 	return buffer;
 }
