@@ -182,12 +182,12 @@ namespace TextBuddyTests
 		TEST_METHOD(Parser_parseDay)
 		{
 			// Change to appropriate date for tomorrow before running this test
-			
+			/*
 			expectedInt = 151009;
 			userInput = "tmr";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDay(inputString));
-			
+			*/
 
 			expectedInt = 151010;
 			userInput = "sat";
@@ -209,7 +209,7 @@ namespace TextBuddyTests
 		{
 			expectedString = "Name: Sing a song\nEnd Date: 151231\n";
 			userInput = "Sing a song by 31 dec";
-			tempTask = p.parseTask(userInput);
+			tempTask = *(p.parseTask(userInput));
 			Assert::AreEqual(expectedString,u.taskToString(tempTask));
 		}
 

@@ -47,8 +47,8 @@ Command* Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw "No task to add";
 			}
-			Task task = parseTask(restOfInput);
-			addCmd = new Add(task,userInput); // userInput included for testing
+			Task* taskPtr = parseTask(restOfInput);
+			addCmd = new Add(*taskPtr,userInput); // userInput included for testing
 			return addCmd;
 		}
 		catch(std::string NullTaskString) {
@@ -79,8 +79,8 @@ Command* Parser::parse(std::string userInput) {
 			int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
 			std::string tempTaskString = Utilities::removeFirstWord(restOfInput);
 			std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
-			Task tempTask = parseTask(tempTaskString);
-			modifyCmd = new Modify(modifyID,fieldsToModify,tempTask);
+			Task* tempTaskPtr = parseTask(tempTaskString);
+			modifyCmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
 			return modifyCmd;
 		}
 		catch(std::string NullModifyString) {
@@ -127,10 +127,10 @@ Command* Parser::parse(std::string userInput) {
 	return cmd;
 }
 
-Task Parser::parseTask(std::string restOfCommand) {
+Task* Parser::parseTask(std::string restOfCommand) {
 	std::vector<std::string> userInput = Utilities::splitParameters(restOfCommand);
 	std::vector<std::string>::iterator curr = userInput.begin();
-	Task newTask;
+	Task* newTask = new Task;
 	FieldType inputMode = NAME;
 	std::vector<std::string> inputString;
 
@@ -154,33 +154,33 @@ Task Parser::parseTask(std::string restOfCommand) {
 
 		switch(inputMode) {
 		case NAME:
-			newTask.setName(Utilities::vecToString(inputString));
+			newTask->setName(Utilities::vecToString(inputString));
 			break;
 		case START_DATE :
 		case START_DAY:
-			newTask.setType(EVENT);
+			newTask->setType(EVENT);
 			if(    (newStartDate = parseDate(inputString)) != INVALID_DATE_FORMAT
 				|| (newStartDate = parseDay(inputString)) != INVALID_DATE_FORMAT) {
-					newTask.setStartDate(newStartDate);
+					newTask->setStartDate(newStartDate);
 			}
 			break;
 		case END_DATE :
 		case END_DAY :
-			if(newTask.getType() == FLOATING) {
-				newTask.setType(TODO);
+			if(newTask->getType() == FLOATING) {
+				newTask->setType(TODO);
 			}
 			if(    (newEndDate = parseDate(inputString)) != -1
 				|| (newEndDate = parseDay(inputString)) != -1) {
-					newTask.setEndDate(newEndDate);
+					newTask->setEndDate(newEndDate);
 			}			break;
 		case START_TIME :
 		case END_TIME :
 			break;
 		case PRIORITY:
-			newTask.togglePriority();
+			newTask->togglePriority();
 			break;
 		case LABEL:
-			newTask.setLabel(Utilities::vecToString(inputString));
+			newTask->setLabel(Utilities::vecToString(inputString));
 			break;
 		default:
 			break;

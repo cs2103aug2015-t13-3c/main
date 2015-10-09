@@ -67,6 +67,8 @@ private:
 
 public:
 	static int getRunningCount();
+	static int setRunningCount(); // For startup
+
 	static bool tasksAreEqual(Task task1, Task task2); // For testing
 
 	Task();

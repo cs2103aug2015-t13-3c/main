@@ -16,8 +16,8 @@ public:
 
 		Task taskOne;
 		taskOne.setName("Sentence one.");
-		Add thisTask;
-		thisTask.setNewTask(taskOne);	//adds taskOne onto taskStore
+		Add thisTask(taskOne);
+		// thisTask.setNewTask(taskOne);	// Adds taskOne into taskStore
 		logic.addInfo(thisTask);
 
 		std::vector<Task> copyTask;

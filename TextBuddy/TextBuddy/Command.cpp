@@ -27,7 +27,7 @@ std::string Command::getUserInput() {
 //                        ADD
 // ==================================================
 
-Add::Add() : Command(ADD) {}
+// Add::Add() : Command(ADD) {}
 
 Add::Add(Task task, std::string userInput) : Command(ADD,userInput) {
 	newTask = task;	
@@ -48,7 +48,7 @@ void Add::setNewTask(Task task) {
 //                       DELETE
 // ==================================================
 
-Delete::Delete() : Command(DELETE) {}
+// Delete::Delete() : Command(DELETE) {}
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
@@ -64,7 +64,7 @@ int Delete::getDeleteID() {
 //                       MODIFY
 // ==================================================
 
-Modify::Modify() : Command(MODIFY) {}
+// Modify::Modify() : Command(MODIFY) {}
 
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
@@ -90,7 +90,7 @@ Task Modify::getTempTask() {
 //                       SEARCH
 // ==================================================
 
-Search::Search() : Command(SEARCH) {}
+// Search::Search() : Command(SEARCH) {}
 
 Search::Search(std::string phraseString) : Command(SEARCH) {
 	searchPhrase = phraseString;
@@ -127,8 +127,13 @@ SortAll::~SortAll() {}
 //                        SAVE
 // ==================================================
 
-Save::Save() : Command(SAVE) {}
+Save::Save(std::string filePath) : Command(SAVE) {
+	newFilePath = filePath;
+}
+
 Save::~Save() {}
+
+std::string Save::getFilePath() {return newFilePath;}
 
 // ==================================================
 //                        EXIT

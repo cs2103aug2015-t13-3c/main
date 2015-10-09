@@ -39,7 +39,7 @@ class Add: public Command {
 private:
 	Task newTask;
 public:
-	Add();
+	// Add();
 	Add(Task task, std::string rawInput="");
 	~Add();
 	Task getNewTask();
@@ -52,7 +52,7 @@ class Delete: public Command {
 private:
 	int deleteID;
 public:
-	Delete();
+	// Delete();
 	Delete(int taskID);
 	~Delete();
 	int getDeleteID();
@@ -64,7 +64,7 @@ private:
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 public:
-	Modify();
+	// Modify();
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	~Modify();
 	int getModifyID();
@@ -76,7 +76,7 @@ class Search: public Command {
 private:
 	std::string searchPhrase;
 public:
-	Search();
+	// Search();
 	Search(std::string phraseString);
 	~Search();
 	std::string getSearchPhrase();
@@ -103,9 +103,13 @@ public:
 };
 
 class Save: public Command {
+private:
+	std::string newFilePath;
 public:
-	Save();
+	Save(std::string filePath);
 	~Save();
+
+	std::string getFilePath();
 };
 
 class Exit: public Command {
