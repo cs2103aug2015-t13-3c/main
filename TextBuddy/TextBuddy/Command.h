@@ -40,7 +40,6 @@ private:
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
 	~Command();
-
 	CommandType getCommand();
 	std::string getUserInput();
 };
@@ -56,9 +55,6 @@ public:
 	Add(Task task, std::string rawInput="");
 	~Add();
 	Task getNewTask();
-
-	// NOTE TO KIAT BOON: Public setter (used in LogicTest.cpp) to be removed (Aaron)
-	void setNewTask(Task task);
 };
 
 class Delete: public Command {
@@ -98,7 +94,6 @@ private:
 public:
 	Markdone(int taskID);
 	~Markdone();
-
 	int getDoneID();
 };
 
@@ -114,7 +109,6 @@ private:
 public:
 	Save(std::string filePath);
 	~Save();
-
 	std::string getFilePath();
 };
 

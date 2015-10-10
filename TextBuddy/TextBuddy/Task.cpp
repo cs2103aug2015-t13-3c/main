@@ -37,6 +37,7 @@ int Task::incrementRunningCount() {
 	return runningCount++;
 }
 
+
 // Getters
 
 std::string Task::getName() {return name;}

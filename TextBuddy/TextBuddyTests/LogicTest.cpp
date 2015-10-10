@@ -13,12 +13,13 @@ public:
 		Logic logic;
 
 		// Add
+		// Note: Add has no more public setter methods (Aaron)
 
 		Task taskOne;
 		taskOne.setName("Sentence one.");
-		Add thisTask(taskOne);
-		// thisTask.setNewTask(taskOne);	// Adds taskOne into taskStore
-		logic.addInfo(thisTask);
+		Add thisTask(taskOne);				// Adds taskOne into taskStore (Step 1/2)
+		// thisTask.setNewTask(taskOne);	// Obsolete function
+		logic.addInfo(thisTask);			// Adds taskOne into taskStore (Step 2/2)
 
 		std::vector<Task> copyTask;
 		copyTask = logic.getTaskStore();
@@ -29,7 +30,8 @@ public:
 
 		Task taskTwo;
 		taskTwo.setName("Sentence two.");
-		thisTask.setNewTask(taskTwo);
+		thisTask = *(new Add(taskTwo));
+		// thisTask.setNewTask(taskTwo);	// Obsolete function
 		logic.addInfo(thisTask);
 
 		copyTask = logic.getTaskStore();
@@ -39,7 +41,8 @@ public:
 
 		Task taskThree;
 		taskThree.setName("Sentence three.");
-		thisTask.setNewTask(taskThree);
+		thisTask = *(new Add(taskThree));
+		// thisTask.setNewTask(taskThree);	// Obsolete function
 		logic.addInfo(thisTask);
 
 		copyTask = logic.getTaskStore();
@@ -49,11 +52,11 @@ public:
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 
 		// Modify
+		// Note: Modify has no more public setter methods (Aaron)
 
 		std::vector<FieldType> testVector;
 		testVector.push_back(NAME);
 
-		// Note: Modify has no public setter methods (Aaron)
 		int modifyID = 2;
 		std::vector<FieldType> fieldsToModify = testVector;
 		taskThree.setName("Changed.");
@@ -68,26 +71,6 @@ public:
 		Assert::AreEqual(std::string("Changed."),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
-	}
-
-	TEST_METHOD(Logic_matchPhrase) {
-		Logic logic;
-		bool isTrue;
-
-		isTrue = logic.matchPhrase("Hi", "high");
-		Assert::AreEqual(true, isTrue);
-
-		isTrue = logic.matchPhrase("hi", "thIgh");
-		Assert::AreEqual(true, isTrue);
-
-		isTrue = logic.matchPhrase("high", "high");
-		Assert::AreEqual(true, isTrue);
-
-		isTrue = logic.matchPhrase("hi", "h1gh");
-		Assert::AreEqual(false, isTrue);
-
-		isTrue = logic.matchPhrase("thigh", "high");
-		Assert::AreEqual(false, isTrue);
 	}
 
 	TEST_METHOD(Logic_processInfo) {

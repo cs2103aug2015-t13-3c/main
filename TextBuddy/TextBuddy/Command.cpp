@@ -35,16 +35,9 @@ Task Add::getNewTask() {
 	return newTask;
 }
 
-// NOTE TO KIAT BOON: Public setter (used in LogicTest.cpp) to be removed (Aaron)
-void Add::setNewTask(Task task) {
-	newTask = task;
-	return;
-}
-
 // ==================================================
-//                      _DELETE
+//                       DELETE
 // ==================================================
-
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
