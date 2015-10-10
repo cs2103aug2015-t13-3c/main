@@ -38,7 +38,6 @@ private:
 	CommandType cmd;
 	std::string userInput;
 public:
-	// Command();
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
 	~Command();
 
@@ -54,7 +53,6 @@ class Add: public Command {
 private:
 	Task newTask;
 public:
-	// Add();
 	Add(Task task, std::string rawInput="");
 	~Add();
 	Task getNewTask();
@@ -67,7 +65,6 @@ class Delete: public Command {
 private:
 	int deleteID;
 public:
-	// Delete();
 	Delete(int taskID);
 	~Delete();
 	int getDeleteID();
@@ -79,7 +76,6 @@ private:
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 public:
-	// Modify();
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	~Modify();
 	int getModifyID();
@@ -91,7 +87,6 @@ class Search: public Command {
 private:
 	std::string searchPhrase;
 public:
-	// Search();
 	Search(std::string phraseString);
 	~Search();
 	std::string getSearchPhrase();
@@ -123,7 +118,7 @@ public:
 	std::string getFilePath();
 };
 
-// Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, SAVE, EXIT
+// Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, EXIT
 
 class ClearAll: public Command {
 public:

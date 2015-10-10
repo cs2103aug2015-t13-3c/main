@@ -7,7 +7,7 @@ int Task::runningCount = 0;
 Task::Task() {
 	name = "";
 	type = FLOATING;
-	uniqueID = ++runningCount;
+	uniqueID = 0;
 	label = "";
 
 	isDone = false;
@@ -23,11 +23,21 @@ Task::Task() {
 Task::~Task() {}
 
 
-// Getters
+// Static
 
 int Task::getRunningCount() {
 	return runningCount;
 }
+
+void Task::setRunningCount(int lastCount) {
+	runningCount = lastCount;
+}
+
+int Task::incrementRunningCount() {
+	return runningCount++;
+}
+
+// Getters
 
 std::string Task::getName() {return name;}
 TaskType Task::getType() {return type;}
@@ -66,16 +76,16 @@ bool Task::setLabel(std::string newLabel) {
 bool Task::addLabels(std::vector<std::string> newLabels) {
 	std::vector<std::string>::iterator curr;
 	for(curr=newLabels.begin(); curr!=newLabels.end(); curr++) {
-		labels.push_back(*curr);
+		labels.insert(*curr);
 	}
 	return true;
 }
 
 bool Task::deleteLabels(std::vector<std::string> badLabels) {
 	std::vector<std::string>::iterator badCurr;
-	std::vector<std::string>::iterator labelsCurr;
+	std::set<std::string>::iterator labelsCurr;
 	for(badCurr=badLabels.begin(); badCurr!=badLabels.end(); badCurr++) {
-		for(labelsCurr=labels.begin();labelsCurr!=badLabels.end(); labelsCurr++) {
+		for(labelsCurr=labels.begin();labelsCurr!=labels.end(); labelsCurr++) {
 			if(Utilities::equalsIgnoreCase(*badCurr,*labelsCurr)) {
 				labelsCurr = labels.erase(labelsCurr);
 			}
@@ -84,14 +94,6 @@ bool Task::deleteLabels(std::vector<std::string> badLabels) {
 	return true;
 }
 
-/*
-// Obsolete function, returns false only
-bool Task::toggleDone() {
-	isDone = !isDone;
-	return true;
-}
-*/
-
 bool Task::markDone() {
 	return isDone != (isDone=true);;
 }
@@ -99,14 +101,6 @@ bool Task::markDone() {
 bool Task::unmarkDone() {
 	return isDone != (isDone=false);;
 }
-
-/*
-// Obsolete function, returns false only
-bool Task::togglePriority() {
-	isPriority = !isPriority;
-	return true;
-}
-*/
 
 bool Task::setPriority() {
 	return isPriority != (isPriority=true);;
@@ -136,7 +130,7 @@ bool Task::setEndTime(int newEndTime) {
 	return true;
 }
 
-std::vector<std::string> Task::getLabels() {
+std::set<std::string> Task::getLabels() {
 	return labels;
 }
 

@@ -1,7 +1,6 @@
 // @@author Aaron Chong Jun Hao
 // Parser converts flexible natural language into commands and parameters for TextBuddy.
 
-#include <ctime>
 #include "stdafx.h"
 #include "Parser.h"
 
@@ -48,7 +47,8 @@ Command* Parser::parse(std::string userInput) {
 				throw "No task to add";
 			}
 			Task* taskPtr = parseTask(restOfInput);
-			cmd = new Add(*taskPtr,userInput); // userInput included for testing
+			taskPtr->setID(Task::incrementRunningCount());
+			cmd = new Add(*taskPtr);
 		}
 		catch(std::string NullTaskString) {
 			std::cerr << NullTaskString << std::endl;

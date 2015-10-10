@@ -338,7 +338,7 @@ std::string Logic::formatTaskDateAndTime_UI(Task task) {
 	std::string start;
 	std::string end;
 	int startDate = task.getStartDate();
-	int startTime = task.getStartTime();
+	int startTime = task.getStartTime()
 		
 	if(task.getType() == TODO) {
 		end = end + toDayFormat(task.getEndDate());

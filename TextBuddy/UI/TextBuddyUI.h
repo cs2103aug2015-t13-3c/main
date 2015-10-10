@@ -301,10 +301,12 @@ namespace UserInterface {
 				Task currentTask = tasks[i];
 				TaskType type = currentTask.getType();
 				String^ name = gcnew String(currentTask.getName().c_str());
-				std::vector<std::string> labels = currentTask.getLabels();
+				std::set<std::string> labels = currentTask.getLabels();
+				std::set<std::string>::iterator labelsCurr = labels.begin();
 				std::string l;
 				for(unsigned int j=0; j< labels.size(); ++j) {
-					l = l + labels[j] + " ";
+					l = l + *labelsCurr + " ";
+					labelsCurr++;
 				}
 				String^ label = gcnew String(l.c_str());
 				String^ dateTime = gcnew String(currentTask.getDateAndTime_UI().c_str());
