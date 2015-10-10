@@ -38,6 +38,7 @@ namespace UserInterface {
 			logic = new Logic();
 			updateDisplay(logic->getCurrentView());
 			floatingTasks = nullptr;
+			updateFloatingTasks();
 			floatingTaskIndex = 0;
 			input->Focus();
 			this->ActiveControl = input;
@@ -245,7 +246,6 @@ namespace UserInterface {
 			reads the characters from textbox
 			converts the entire input from CLI String to std::string
 			stores the input into class variable
-			clears the textbox
 		=====================================================================*/
 		void getInput() {
 			msclr::interop::marshal_context context;
@@ -256,6 +256,7 @@ namespace UserInterface {
 			passes UserInput to Logic
 			prints feedback message if needed
 			updates current display of task if needed
+			updates floating tasks entries
 		=====================================================================*/
 		void processAndExecute() {
 			feedback->Clear();
@@ -323,7 +324,8 @@ namespace UserInterface {
 			-STAR
 			-UNSTAR
 		=====================================================================*/
-		void highlightSyntax() {			
+		void highlightSyntax() {		
+			input->SelectionColor = Color::Black;
 			for each(String^ keyword in keywords) {
 				int position = findKeyword(keyword);
 				if(keywordIsFound(position)) {
@@ -359,14 +361,33 @@ namespace UserInterface {
 			input->SelectionColor = Color::Black;
 		}
 
+		/*=====================================================================
+			When the user types in "search" as the first word in input box,
+			automatically performs search and updates display as user types
+		=====================================================================*/
 		void autoComplete() {
 			int position = findKeyword(SEARCH);
 			if(keywordIsFound(position)) {
 				getInput();
-				processAndExecute();
+				if(input->Text != SEARCH) { 
+					processAndExecute();
+				} 
+			}
+		}
+		/*====================================================================
+								REQUIRES REFINEMENT!!
+		=====================================================================*/
+		void undoSearch() {
+			if(input->Text == SEARCH) {
+				//TODO : logic->undo();
+				*userInput = "display";	//temporary
+				processAndExecute();	//temporary
 			}
 		}
 
+		/*=====================================================================
+			Get the latest list of floating tasks from logic
+		=====================================================================*/
 		void updateFloatingTasks() {
 			 if(floatingTasks != nullptr) {
 				delete floatingTasks;
@@ -374,7 +395,7 @@ namespace UserInterface {
 			 floatingTasks = new std::vector<Task>(logic->getFloatingTasks());
 		}
 
-	//********************** EVENT HANDLERS ***********************************
+//************************** EVENT HANDLERS ***********************************
 
 		//====================== MAIN FUNCTION ================================
 private: 
@@ -388,14 +409,18 @@ private:
 			} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right){
 				highlightSyntax();
 				autoComplete();
-			 } else {
+			} else {
 				 autoComplete();
+			}
+			if(e->KeyCode == Keys::Back) {
+				undoSearch();
 			}
 		 }
 
+		//======= Updates floating Tasks display textbox every 5 seconds ======
 private: 
 	System::Void updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
-		if(floatingTasks != nullptr && !floatingTasks->empty()) {	
+		if(!floatingTasks->empty()) {	
 				floatingTaskIndex = floatingTaskIndex % floatingTasks->size();
 				String^ title = gcnew String(
 					(*floatingTasks)[floatingTaskIndex].getName().c_str());
