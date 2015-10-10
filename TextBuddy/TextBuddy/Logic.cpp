@@ -283,7 +283,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 		feedback.setAddedMessage();
 		break;
 
-	case DELETE:
+	case _DELETE: 
 		// userIndex refers to the nth task of currentView presented to user
 		// eg. delete 1 means deleting the first task
 		taskToDelete = ((Delete*)command);
@@ -335,19 +335,28 @@ std::vector<Task> Logic::getFloatingTasks() {
 }
 
 std::string Logic::formatTaskDateAndTime_UI(Task task) {
-	std::string time_UI;
-	if(task.getEndDate() == 0) {
-			if(task.getStartDate() == 0) {
-				int time = task.getStartTime();
-				time_UI = to12HourFormat(time);
-				if(task.getEndTime() != time) {
-					int endTime = task.getEndTime();
-					time_UI = time_UI + " to " + to12HourFormat(endTime);
-				}
-			}
+	std::string start;
+	std::string end;
+	int startDate = task.getStartDate();
+	int startTime = task.getStartTime();
 
+	// Process date	
+	if(startDate != 0) {
+		start = toDayFormat(startDate);		
 	}
-	return time_UI;
+
+	// Process time
+	if(startTime != 0) {
+		start = start + " " + to12HourFormat(startTime);		
+	}
+
+	if(task.getEndDate() != startDate) {
+			end = " to " + end + toDayFormat(task.getEndDate());
+	}
+	if(task.getEndTime() != startTime) {
+			end = " " + end + to12HourFormat(task.getEndTime());
+	}
+	return start + end ;
 }
 
 std::string Logic::to12HourFormat(int time) {
@@ -366,6 +375,29 @@ std::string Logic::to12HourFormat(int time) {
 		stream << std::fixed << std::setprecision(2) << time2;
 		return stream.str() + " pm";
 	}	
+}
+
+std::string Logic::toDayFormat(int taskDate) {
+	Utilities util;
+	std::string date_UI;
+	SYSTEMTIME lt;
+	GetLocalTime(&lt);
+	int date = taskDate;
+	int day = date % 100;
+	int month = (date % 10000)/100;
+	// TODO : year
+	if(month == lt.wMonth && day >= lt.wDay && (day-lt.wDay) < 14) {
+		int differenceInDays = day - lt.wDay;
+		int dayOfWeek = (lt.wDayOfWeek + differenceInDays);			
+			if(dayOfWeek > 6) {
+				dayOfWeek = dayOfWeek % 7;
+				date_UI = util.dayToString((Day)dayOfWeek);
+				date_UI = "next " + date_UI;
+			} else {
+				date_UI = util.dayToString((Day)dayOfWeek);
+			}
+	}
+	return date_UI;
 }
 
 /* Keep for reference */

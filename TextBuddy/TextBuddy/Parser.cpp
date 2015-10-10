@@ -30,7 +30,7 @@ std::string Parser::parseFileName(char* argv[]) {
 
 // Throws exceptions for:
 // ADD		- NullTaskString	"No tasks to add!"
-// DELETE	- InvalidIntString	"Invalid integer string!"
+// _DELETE	- InvalidIntString	"Invalid integer string!"
 // MODIFY	- NullModifyString	"No fields to modify!"
 // SEARCH	- NullSearchString	"No search phrase!"
 // MARKDONE	- InvalidIntString	"Invalid integer string!"
@@ -55,7 +55,7 @@ Command* Parser::parse(std::string userInput) {
 		}
 		break;
 
-	case DELETE:
+	case _DELETE:
 		try {
 			if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
 				throw "Invalid integer string!";
