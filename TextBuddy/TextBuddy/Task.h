@@ -58,6 +58,7 @@ private:
 	int uniqueID;
 	std::string label;
 	std::vector<std::string> labels;
+	std::string dateAndTime_UI;
 
 	bool isDone;
 	bool isPriority;
@@ -83,6 +84,8 @@ public:
 	int getID();
 	std::string getLabel();
 	std::vector<std::string> getLabels();
+	std::string getDateAndTime_UI();
+	void setDateAndTime_UI(std::string dateAndTime_UI);
 
 	bool getDoneStatus();
 	bool getPriorityStatus();

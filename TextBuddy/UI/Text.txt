@@ -66,9 +66,9 @@
 		}
 		,
 		{
-			"name": "buy vege",
+			"name": "helllooo",
 			"type": "FLOATING",
-			"uniqueID": 8,
+			"uniqueID": 28,
 			"label": "",
 
 			"isDone": false,
@@ -82,8 +82,8 @@
 		}
 		,
 		{
-			"name": "do project",
-			"type": "FLOATING",
+			"name": "debug",
+			"type": "EVENT",
 			"uniqueID": 10,
 			"label": "",
 
@@ -98,7 +98,7 @@
 		}
 		,
 		{
-			"name": "improve cs210 project",
+			"name": "debug UI",
 			"type": "FLOATING",
 			"uniqueID": 7,
 			"label": "",
@@ -107,10 +107,10 @@
 			"isPriority": false,
 
 			"startDate": 0,
-			"startTime": 0,
+			"startTime": 2030,
 
 			"endDate": 0,
-			"endTime": 0
+			"endTime": 2030
 		}
 	]
 }

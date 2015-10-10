@@ -5,6 +5,11 @@
 
 Logic::Logic() {
 	taskStore = loadFile("Text.txt");
+	std::vector<Task>::iterator i;
+	for(i=taskStore.begin() ; i!=taskStore.end(); ++i) {
+		std::string dateAndTime_UI = formatTaskDateAndTime_UI(*i);
+		i->setDateAndTime_UI(dateAndTime_UI);
+	}
 	currentView = taskStore;
 }
 
@@ -93,7 +98,10 @@ int Logic::getIdOfIndex(int userIndex) {
 }
 
 bool Logic::addInfo(Add taskName) {
-	taskStore.push_back(taskName.getNewTask());
+	Task task = taskName.getNewTask();
+	std::string dateAndTime_UI = formatTaskDateAndTime_UI(task);
+	task.setDateAndTime_UI(dateAndTime_UI);
+	taskStore.push_back(task);
 	copyView();
 	return true;
 }
@@ -155,10 +163,17 @@ bool Logic::modifyInfo(Modify toModify) {
 			case END_TIME :
 				taskIter->setEndTime(tempTask.getEndTime());
 				break;
+			case LABEL_ADD:
+				taskIter->setLabel(tempTask.getLabel());
+				break;
+			case LABEL_DELETE:
+				taskIter->setLabel("");
 			default:
 				std::cout << "Error in fetching field name" << std::endl;
 				break;
 			}
+			std::string dateAndTime_UI = formatTaskDateAndTime_UI(*taskIter);
+			taskIter->setDateAndTime_UI(dateAndTime_UI);
 			copyView();
 		}
 		return true;
@@ -317,6 +332,40 @@ std::vector<Task> Logic::getFloatingTasks() {
 		}
 	}
 	return floatingTasks;
+}
+
+std::string Logic::formatTaskDateAndTime_UI(Task task) {
+	std::string time_UI;
+	if(task.getEndDate() == 0) {
+			if(task.getStartDate() == 0) {
+				int time = task.getStartTime();
+				time_UI = to12HourFormat(time);
+				if(task.getEndTime() != time) {
+					int endTime = task.getEndTime();
+					time_UI = time_UI + " to " + to12HourFormat(endTime);
+				}
+			}
+
+	}
+	return time_UI;
+}
+
+std::string Logic::to12HourFormat(int time) {
+	float time2;
+	std::stringstream stream;
+	if(time < 1200) {
+		time2 = time/100.0 ;
+		stream << std::fixed << std::setprecision(2) << time2;
+		return stream.str() + " am";
+	} else {
+		if(time > 1259) {
+			time = time - 1200;
+		}
+		stream.clear();
+		time2 = time/100.0 ;
+		stream << std::fixed << std::setprecision(2) << time2;
+		return stream.str() + " pm";
+	}	
 }
 
 /* Keep for reference */

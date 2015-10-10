@@ -36,6 +36,8 @@ public:
 	bool matchPhrase(std::string phr, std::string str);		
 	Feedback processCommand(std::string userCommand);
 	std::vector<Task> getFloatingTasks();
+	std::string formatTaskDateAndTime_UI(Task task);
+	std::string to12HourFormat(int time);
 };
 
 /* Keep for reference*/

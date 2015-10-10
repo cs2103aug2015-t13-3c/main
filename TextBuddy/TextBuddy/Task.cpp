@@ -136,6 +136,18 @@ bool Task::setEndTime(int newEndTime) {
 	return true;
 }
 
+std::vector<std::string> Task::getLabels() {
+	return labels;
+}
+
+void Task::setDateAndTime_UI(std::string dateAndTime_UI) {
+	this->dateAndTime_UI = dateAndTime_UI;
+}
+
+std::string Task::getDateAndTime_UI() {
+	return dateAndTime_UI;
+}
+
 // For testing
 bool Task::tasksAreEqual(Task task1, Task task2) {
 	if(    (task1.getDoneStatus() != task2.getDoneStatus())

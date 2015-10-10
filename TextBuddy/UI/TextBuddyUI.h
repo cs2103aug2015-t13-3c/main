@@ -17,6 +17,7 @@
 #define BY " by "
 #define TO " to "
 #define ON " on "
+#define AT " at "
 
 namespace UserInterface {
 
@@ -57,6 +58,7 @@ namespace UserInterface {
 			keywords->Add(BY);
 			keywords->Add(TO);
 			keywords->Add(ON);
+			keywords->Add(AT);
 		}
 
 	protected:
@@ -286,9 +288,17 @@ namespace UserInterface {
 			display->Rows->Clear();
 
 			for(unsigned int i=0 ; i<tasks.size() ; ++i) {
-				TaskType type = tasks[i].getType();
-				String^ name = gcnew String(tasks[i].getName().c_str());
-				display->Rows->Add((i+1).ToString(),name);
+				Task currentTask = tasks[i];
+				TaskType type = currentTask.getType();
+				String^ name = gcnew String(currentTask.getName().c_str());
+				std::vector<std::string> labels = currentTask.getLabels();
+				std::string l;
+				for(int j=0; j< labels.size(); ++j) {
+					l = l + labels[j] + " ";
+				}
+				String^ label = gcnew String(l.c_str());
+				String^ dateTime = gcnew String(currentTask.getDateAndTime_UI().c_str());
+				display->Rows->Add((i+1).ToString(),name,label,dateTime);
 			}
 		}
 		/*=====================================================================
