@@ -158,9 +158,3 @@ bool Task::tasksAreEqual(Task task1, Task task2) {
 	}
 	return true;
 }
-
-NewTask::NewTask() : Task() {
-	setID(Task::incrementRunningCount());
-}
-
-NewTask::~NewTask() {}

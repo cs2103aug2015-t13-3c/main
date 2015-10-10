@@ -6,8 +6,6 @@
 //                      COMMAND
 // ==================================================
 
-// Command::Command() {}
-
 Command::Command(CommandType newCmd, std::string rawInput) {
 	cmd = newCmd;
 	userInput = rawInput;
@@ -27,8 +25,6 @@ std::string Command::getUserInput() {
 //                        ADD
 // ==================================================
 
-// Add::Add() : Command(ADD) {}
-
 Add::Add(Task task, std::string userInput) : Command(ADD,userInput) {
 	newTask = task;	
 }
@@ -39,7 +35,7 @@ Task Add::getNewTask() {
 	return newTask;
 }
 
-// Obsolete, should not have public setters
+// NOTE TO KIAT BOON: Public setter (used in LogicTest.cpp) to be removed (Aaron)
 void Add::setNewTask(Task task) {
 	newTask = task;
 	return;
@@ -62,8 +58,6 @@ int Delete::getDeleteID() {
 // ==================================================
 //                       MODIFY
 // ==================================================
-
-// Modify::Modify() : Command(MODIFY) {}
 
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
@@ -88,8 +82,6 @@ Task Modify::getTempTask() {
 // ==================================================
 //                       SEARCH
 // ==================================================
-
-// Search::Search() : Command(SEARCH) {}
 
 Search::Search(std::string phraseString) : Command(SEARCH) {
 	searchPhrase = phraseString;

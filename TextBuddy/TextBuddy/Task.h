@@ -3,6 +3,8 @@
 #ifndef TASK_H_
 #define TASK_H_
 
+#include <set>
+
 enum Day {
 	SUN,
 	MON, TUE, WED,
@@ -117,11 +119,6 @@ public:
 
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
-};
-
-class NewTask : public Task {
-	NewTask();
-	~NewTask();
 };
 
 #endif
