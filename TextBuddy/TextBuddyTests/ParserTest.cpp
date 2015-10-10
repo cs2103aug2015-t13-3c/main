@@ -23,8 +23,8 @@ namespace TextBuddyTests
 		TEST_METHOD(Parser_parse) {
 
 			// Test for ADD
-			expectedString = "Name: A partridge in a pear tree\nEnd Date: 151009\n";
-			userInput = "add A partridge in a pear tree by fri";
+			expectedString = "Name: A partridge in a pear tree\nStart Time: 1900\nEnd Date: 151016\nEnd Time: 2000\n";
+			userInput = "add A partridge in a pear tree by fri from 7 pm to 8 pm";
 
 
 			/*
@@ -137,6 +137,10 @@ namespace TextBuddyTests
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
+			userInput = "7 pm";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseDate(inputString));
+
 			// Valid date formats
 			expectedInt = 151231;
 			userInput = "31 dec";
@@ -151,25 +155,38 @@ namespace TextBuddyTests
 
 		TEST_METHOD(Parser_parseDay)
 		{
-			// Change to appropriate date for tomorrow before running this test
+			// Invalid date formats
+			const int INVALID_DATE_FORMAT = -1;
+			expectedInt = INVALID_DATE_FORMAT;
+
+			userInput = "7 pm";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseDate(inputString));
+
+			// Change to appropriate date for today/tmr before running this test
 			/*
-			expectedInt = 151009;
+			expectedInt = 151010;
+			userInput = "today";
+			inputString = u.splitParameters(userInput);
+			Assert::AreEqual(expectedInt,p.parseDay(inputString));
+
+			expectedInt = 151011;
 			userInput = "tmr";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDay(inputString));
 			*/
 
-			expectedInt = 151010;
-			userInput = "sat";
+			expectedInt = 151012;
+			userInput = "mon";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
-			expectedInt = 151005;
-			userInput = "this mon";
+			expectedInt = 151017;
+			userInput = "this sat";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
-			expectedInt = 151011;
+			expectedInt = 151018;
 			userInput = "next sun";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDay(inputString));
@@ -177,7 +194,7 @@ namespace TextBuddyTests
 
 		TEST_METHOD(Parser_parseTask)
 		{
-			expectedString = "Name: Sing a song\nEnd Date: 151231\n";
+			expectedString = "Name: Sing a song\nStart Time: 0\nEnd Date: 151231\nEnd Time: 0\n";
 			userInput = "Sing a song by 31 dec";
 			tempTask = *(p.parseTask(userInput));
 			Assert::AreEqual(expectedString,u.taskToString(tempTask));

@@ -113,15 +113,15 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	FieldType field;
 
 	if(equalsIgnoreCase(fieldString,FIELD_LABEL_ADD)) {
-		field = LABEL_ADD;
+		field = LABELS_ADD;
 	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_DELETE)) {
-		field = LABEL_DELETE;
+		field = LABELS_DELETE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_SET)) {
 		field = PRIORITY_SET;
 	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
 		field = PRIORITY_UNSET;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
-		field = END_DATE;
+		field = START_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
 		field = START_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
@@ -129,11 +129,10 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
 		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
-		field = END_TIME;
+		field = START_TIME;
 	} else {
 		field = INVALID_FIELD;
 	}
-
 	return field;
 }
 
@@ -208,17 +207,19 @@ std::string Utilities::taskToString(Task task) {
 	const int MAX_BYTES = 2550;
 	char buffer[MAX_BYTES] = "";
 
-	sprintf_s(buffer, "%s%s\n%s%d\n",
-		"Name: ",		task.getName().c_str()/*,					// %s%s\n
-											  "Type: ",		task.getType(),								// %s%d\n
-											  "Label: ",		task.getLabel().c_str(),					// %s%s\n
-											  "Done: ",		task.getDoneStatus(),						// %s%d\n
-											  "Priority: ",	task.getPriorityStatus(),					// %s%d\n
-											  "Start Date: ",	task.getStartDate(),						// %s%d\n
-											  "Start Time: ",	task.getStartTime()*/,						// %s%d\n
-											  "End Date: ",	task.getEndDate()/*,						// %s%d\n
-																			 "End Time: ",	task.getEndTime()*/							// %s%d\n
-																			 );
+	sprintf_s(buffer, "%s%s\n%s%d\n%s%d\n%s%d\n",
+		"Name: ",		task.getName().c_str(),		// %s%s\n
+		/*
+		"Type: ",		task.getType(),				// %s%d\n
+		"Label: ",		task.getLabel().c_str(),	// %s%s\n
+		"Done: ",		task.getDoneStatus(),		// %s%d\n
+		"Priority: ",	task.getPriorityStatus(),	// %s%d\n
+		"Start Date: ",	task.getStartDate(),		// %s%d\n
+		*/
+		"Start Time: ",	task.getStartTime(),		// %s%d\n
+		"End Date: ",	task.getEndDate(),			// %s%d\n
+		"End Time: ",	task.getEndTime()			// %s%d\n
+		);
 
 	return buffer;
 }

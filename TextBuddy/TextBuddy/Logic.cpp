@@ -163,12 +163,12 @@ bool Logic::modifyInfo(Modify toModify) {
 			case END_TIME :
 				taskIter->setEndTime(tempTask.getEndTime());
 				break;
-			case LABEL_ADD:
+			case LABELS_ADD:
 				taskIter->setLabel(tempTask.getLabel());
 				break;
-			case LABEL_DELETE:
+			case LABELS_DELETE:
 				taskIter->setLabel("");
-			default:
+			case INVALID_FIELD:
 				std::cout << "Error in fetching field name" << std::endl;
 				break;
 			}

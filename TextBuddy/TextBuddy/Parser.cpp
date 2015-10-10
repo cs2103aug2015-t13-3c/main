@@ -175,14 +175,26 @@ Task* Parser::parseTask(std::string restOfCommand) {
 				curr++;
 		}
 
+		if(curr != userInput.end()) {
+			if(Utilities::equalsIgnoreCase(*curr,FIELD_TIME_AT)) {
+				newTask->setType(EVENT);
+			}
+		}
+		if (inputMode == START_DATE || inputMode == END_DATE) {
+			if(    (newDate = parseDate(inputString)) == INVALID_DATE_FORMAT
+				&& (newDate = parseDay(inputString)) == INVALID_DATE_FORMAT) {
+					inputMode = START_TIME;
+			}
+		}
+
 		switch(inputMode) {
 		case NAME:
 			newTask->setName(Utilities::vecToString(inputString));
 			break;
-		case LABEL_ADD:
+		case LABELS_ADD:
 			newTask->addLabels(inputString);
 			break;
-		case LABEL_DELETE:
+		case LABELS_DELETE:
 			newTask->deleteLabels(inputString);
 			break;
 		case PRIORITY_SET:
@@ -192,45 +204,40 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->unsetPriority();
 			break;
 		case START_DATE:
-			newTask->setType(EVENT);
-			if(    (newDate = parseDate(inputString)) != INVALID_DATE_FORMAT
-				|| (newDate = parseDay(inputString)) != INVALID_DATE_FORMAT) {
-					newTask->setStartDate(newDate);
-			}
+			newTask->setStartDate(newDate);
 			break;
 		case END_DATE:
 			if(newTask->getType() == FLOATING) {
 				newTask->setType(TODO);
 			}
-			if(    (newDate = parseDate(inputString)) != INVALID_DATE_FORMAT
-				|| (newDate = parseDay(inputString)) != INVALID_DATE_FORMAT) {
-					newTask->setEndDate(newDate);
-			}
+			newTask->setEndDate(newDate);
 			break;
 		case START_TIME:
 		case END_TIME:
-			if(    (newTime = parseTime(inputString)) != INVALID_TIME_FORMAT
-				|| (newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-					switch(newTask->getStartTime()) {
-					case 0: // Temporary initialised value
-					case INVALID_TIME_FORMAT:
-						newTask->setStartTime(newTime);
-					default:
-						newTask->setEndTime(newTime);
-						break;
+			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+				if(newTask->getStartTime() == 0) {
+					if(newTask->getStartDate() == 0 || newTask->getStartDate() == INVALID_DATE_FORMAT) {
+						newTask->setStartDate(parseDay(Utilities::splitParameters("today")));
 					}
+					newTask->setStartTime(newTime);
+				}
+				if(newTask->getEndDate() == 0 || newTask->getEndDate() == INVALID_DATE_FORMAT) {
+					newTask->setEndDate(newTask->getStartDate());
+				}
+				newTask->setEndTime(newTime);
+				break;
 			}
 			break;
-		default:
+		case INVALID_FIELD:
 			break;
 		}
 
-		if(curr == userInput.end()) {
-			break;
-		} else {
+		if(curr != userInput.end()) {
 			inputMode = Utilities::stringToFieldType(*curr);
+			curr++;
+		} else {
+			break;
 		}
-		curr++;
 	}
 
 	return newTask;
@@ -404,7 +411,9 @@ int Parser::parseDay(std::vector<std::string> dayString) {
 	Day day =		  (Day)(now.tm_wday);
 	int date =				now.tm_mday;
 
-	if(*curr == "tmr" || *curr == "tomorrow") {
+	if(*curr == "today") {
+		curr++;
+	} else if(*curr == "tmr" || *curr == "tomorrow") {
 		date++;
 		curr++;
 	} else if(*curr == "this") {
