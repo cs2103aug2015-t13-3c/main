@@ -6,7 +6,10 @@
 
 using namespace rapidjson;
 
-IO::IO() {}
+IO::IO() {
+	filePath = "TEXT.txt";
+}
+
 IO::~IO() {}
 
 // ==================================================
@@ -14,6 +17,19 @@ IO::~IO() {}
 // ==================================================
 
 // TODO: Handle empty file / improper content exceptions
+// TODO: Testing for setFilePath()
+
+std::string IO::getFilePath() {
+	return filePath;
+}
+
+bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector) {
+	if(saveFile(newFilePath,taskVector)) {
+		filePath = newFilePath;
+		return true;
+	}
+	return false;
+}
 
 // Loads file and extracts JSON text into a task vector
 // Throws an assert() if file contents are invalid
@@ -51,7 +67,6 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 
 bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 	remove(fileName.c_str());
-
 	std::ofstream newfile(fileName);
 
 	if(!fileIsOpen(newfile)) {
@@ -71,10 +86,8 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 
 	closeJsonText(newfile);
 	newfile.close();
-
 	return false;
 }
-
 
 // ==================================================
 //                   PRIVATE METHODS
@@ -123,8 +136,7 @@ void IO::writeTaskIntoJsonFormat(std::ofstream &newFile, Task task) {
 	return;
 }
 
-
-//============ Task Attributes Extraction Methods ===========
+//========== Extract Task Attribute Methods ==========
 
 void IO::extractName(Task &newTask, Value &item) {
 	std::string name = item["name"].GetString();
@@ -192,17 +204,7 @@ void IO::extractPriority(Task &newTask, Value &item) {
 	}
 	*/
 }
-/*
-void IO::extractStartDay(Task &newTask, Value &item) {
-	std::string dayString = item["startDay"].GetString();
-	Day day = Utilities::stringToDay(dayString);
-	bool success = newTask.setStartDay(day);
 
-	if(!success) {
-		throw "StartDayNotFound";
-	}
-}
-*/
 void IO::extractStartDate(Task &newTask, Value &item) {
 	int date = item["startDate"].GetInt();
 	bool success = newTask.setStartDate(date);
@@ -220,17 +222,7 @@ void IO::extractStartTime(Task &newTask, Value &item) {
 		throw "StartTimeNotFound";
 	}
 }
-/*
-void IO::extractEndDay(Task &newTask, Value &item) {
-	std::string dayString = item["endDay"].GetString();
-	Day day = Utilities::stringToDay(dayString);
-	bool success = newTask.setEndDay(day);
 
-	if(!success) {
-		throw "EndDayNotFound";
-	}
-}
-*/
 void IO::extractEndDate(Task &newTask, Value &item) {
 	int date = item["endDate"].GetInt();
 	bool success = newTask.setEndDate(date);
@@ -249,8 +241,7 @@ void IO::extractEndTime(Task &newTask, Value &item)  {
 	}
 }
 
-
-//======= Retrieve Task Attributes and Write to File Methods =======
+//========== Write to File Methods ==========
 
 std::string IO::insertOpenParanthese() {
 	return "\t\t{\n";
@@ -313,16 +304,7 @@ std::string IO::writeIsPriorityAttribute(Task task) {
 
 	return isPriorityString;
 }
-/*
-std::string IO::writeStartDayAttribute(Task task) {
-	std::string startDayString;
 
-	startDayString = "\t\t\t\"startDay\": ";
-	startDayString += retrieveStartDay(task);
-
-	return startDayString;
-}
-*/
 std::string IO::writeStartDateAttribute(Task task) {
 	std::string startDateString;
 
@@ -340,16 +322,7 @@ std::string IO::writeStartTimeAttribute(Task task) {
 
 	return startTimeString;
 }
-/*
-std::string IO::writeEndDayAttribute(Task task) {
-	std::string EndDayString;
 
-	EndDayString = "\t\t\t\"endDay\": ";
-	EndDayString += retrieveEndDay(task);
-
-	return EndDayString;
-}
-*/
 std::string IO::writeEndDateAttribute(Task task) {
 	std::string EndDateString;
 
@@ -368,6 +341,7 @@ std::string IO::writeEndTimeAttribute(Task task) {
 	return EndTimeString;
 }
 
+//========== Retrieve Task Attribute Methods ==========
 
 std::string IO::retrieveName(Task task) {
 	std::string string;
@@ -408,14 +382,7 @@ std::string IO::retrieveIsPriority(Task task) {
 	string = Utilities::boolToString(status) + ",\n";
 	return string;
 }
-/*
-std::string IO::retrieveStartDay(Task task) {
-	std::string string;
-	Day day = task.getStartDay();
-	string = "\"" + Utilities::dayToString(day) + "\",\n";
-	return string;
-}
-*/
+
 std::string IO::retrieveStartDate(Task task) {
 	std::string string;
 	int date = task.getStartDate();
@@ -429,14 +396,7 @@ std::string IO::retrieveStartTime(Task task) {
 	string = std::to_string(time) + ",\n";
 	return string;
 }
-/*
-std::string IO::retrieveEndDay(Task task) {
-	std::string string;
-	Day day = task.getEndDay();
-	string = "\"" + Utilities::dayToString(day) + "\",\n";
-	return string;
-}
-*/
+
 std::string IO::retrieveEndDate(Task task) {
 	std::string string;
 	int date = task.getEndDate();
@@ -451,8 +411,8 @@ std::string IO::retrieveEndTime(Task task) {
 	return string;
 }
 
+//========== Overloaded Functions ==========
 
-// Overloaded functions
 bool IO::fileIsOpen(std::ifstream& inputFile) {
 	if(inputFile.is_open())	{
 		return true;
@@ -477,4 +437,25 @@ void IO::initialiseJsonText(std::ofstream& newfile) {
 void IO::closeJsonText(std::ofstream& newfile) {
 	newfile << "\t]\n}";
 	return;
+}
+
+//========== Getter for Testing ==========
+
+std::vector<std::string> IO::getText(std::string fileName) {
+	std::ifstream inputFile(fileName);
+	std::vector<std::string> textVector;
+
+	assert(fileIsOpen(inputFile));
+
+	while(!inputFile.eof()) {
+		std::string line;
+		getline(inputFile,line);
+
+		if(line != "") {
+			textVector.push_back(line);
+		}
+	}
+
+	inputFile.close();
+	return textVector;
 }

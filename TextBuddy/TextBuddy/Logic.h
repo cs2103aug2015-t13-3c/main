@@ -3,8 +3,8 @@
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
-#include "IO.h"
 #include "Parser.h"
+#include "IO.h"
 #include "Feedback.h"
 
 class Logic {
@@ -30,15 +30,21 @@ public:
 	bool deleteInfo(Delete idToDelete);
 	bool modifyInfo(Modify toModify);
 	std::string searchInfo(Search toSearch);
-	//amends currentView to store searched elements
+	// Amends currentView to store searched elements
 	bool amendView(std::string listOfIds);
 
-	bool matchPhrase(std::string phr, std::string str);		
 	Feedback processCommand(std::string userCommand);
 	std::vector<Task> getFloatingTasks();
+
+	// This is actually Utilities::equalsIgnoreCase()
+	// bool matchPhrase(std::string phr, std::string str);
+
+	// Moved to Utilities
+	/*
 	std::string formatTaskDateAndTime_UI(Task task);
 	std::string to12HourFormat(int time);
 	std::string toDayFormat(int taskDate);
+	*/
 };
 
 /* Keep for reference*/

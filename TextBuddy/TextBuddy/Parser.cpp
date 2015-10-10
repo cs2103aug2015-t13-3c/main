@@ -14,7 +14,7 @@ const std::string Parser::FILE_EXTENSION = ".txt";
 //                      METHODS
 // ==================================================
 
-// This is the API
+//========== This is the API ==========
 
 std::string Parser::parseFileName(char* argv[]) {
 	std::string newFileName = argv[1];
@@ -25,6 +25,11 @@ std::string Parser::parseFileName(char* argv[]) {
 		newFileName = argv[1] + FILE_EXTENSION;
 	}
 	return newFileName;
+}
+
+std::string Parser::parseFileName(std::string stringFilePath) {
+	char* charFilePath = &stringFilePath[0u];
+	return parseFileName(&charFilePath);
 }
 
 // Throws exceptions for:
@@ -244,7 +249,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 }
 
 
-// These support user methods
+//========== These support user methods ==========
 
 std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 	std::vector<std::string> vecInput = Utilities::splitParameters(restOfInput);
@@ -323,7 +328,7 @@ int Parser::findYear(std::string yearString) {
 }
 
 
-// These handle task parameters
+//========== These handle task parameters ==========
 
 // Processes dates in these formats:
 // - DDD DDDD

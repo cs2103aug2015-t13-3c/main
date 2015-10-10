@@ -4,6 +4,8 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+#include "stdafx.h"
+
 class Parser {
 private:
 	// This defines the file extension used by TextBuddy
@@ -19,6 +21,7 @@ public:
 
 	// This is the API
 	std::string parseFileName(char* argv[]);
+	std::string parseFileName(std::string stringFilePath);
 	Command* parse(std::string userInput);
 	Task* parseTask(std::string restOfCommand);
 
