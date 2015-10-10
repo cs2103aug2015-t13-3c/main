@@ -283,7 +283,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 		feedback.setAddedMessage();
 		break;
 
-	case _DELETE: 
+	case DELETE: 
 		// userIndex refers to the nth task of currentView presented to user
 		// eg. delete 1 means deleting the first task
 		taskToDelete = ((Delete*)command);
@@ -338,25 +338,28 @@ std::string Logic::formatTaskDateAndTime_UI(Task task) {
 	std::string start;
 	std::string end;
 	int startDate = task.getStartDate();
-	int startTime = task.getStartTime();
-
-	// Process date	
-	if(startDate != 0) {
-		start = toDayFormat(startDate);		
+	int startTime = task.getStartTime()
+		
+	if(task.getType() == TODO) {
+		end = end + toDayFormat(task.getEndDate());
+		return "by " + end ;
+	} else if(task.getType() == EVENT) {
+		if(startDate != 0) {
+			start = toDayFormat(startDate);		
+		}
+		if(startTime != 0) {
+			start = start + " " + to12HourFormat(startTime);		
+		}
+		if(task.getEndDate() != startDate) {
+				end = end + toDayFormat(task.getEndDate());
+		}
+		if(task.getEndTime() != 0 && task.getEndDate() != startDate) {
+				end = end + " " + to12HourFormat(task.getEndTime());
+		}
+		return start + " to " +  end ;
+	} else {
+		return "";
 	}
-
-	// Process time
-	if(startTime != 0) {
-		start = start + " " + to12HourFormat(startTime);		
-	}
-
-	if(task.getEndDate() != startDate) {
-			end = " to " + end + toDayFormat(task.getEndDate());
-	}
-	if(task.getEndTime() != startTime) {
-			end = " " + end + to12HourFormat(task.getEndTime());
-	}
-	return start + end ;
 }
 
 std::string Logic::to12HourFormat(int time) {
@@ -378,17 +381,25 @@ std::string Logic::to12HourFormat(int time) {
 }
 
 std::string Logic::toDayFormat(int taskDate) {
+	time_t t = time(0); // get current time
+	struct tm now;
+	localtime_s(&now,&t);
+
+	int localYear = now.tm_year - 100;
+	int localMonth = now.tm_mon + 1;
+	int localDay = now.tm_mday;
+	int localWDay = (now.tm_wday);
+
 	Utilities util;
 	std::string date_UI;
-	SYSTEMTIME lt;
-	GetLocalTime(&lt);
+	
 	int date = taskDate;
 	int day = date % 100;
 	int month = (date % 10000)/100;
-	// TODO : year
-	if(month == lt.wMonth && day >= lt.wDay && (day-lt.wDay) < 14) {
-		int differenceInDays = day - lt.wDay;
-		int dayOfWeek = (lt.wDayOfWeek + differenceInDays);			
+	int year = date/10000; 
+	int differenceInDays = day - localDay;
+	if(month == localMonth && day >= localDay && differenceInDays < 8) {	
+		int dayOfWeek = (localWDay + differenceInDays);			
 			if(dayOfWeek > 6) {
 				dayOfWeek = dayOfWeek % 7;
 				date_UI = util.dayToString((Day)dayOfWeek);
@@ -396,6 +407,9 @@ std::string Logic::toDayFormat(int taskDate) {
 			} else {
 				date_UI = util.dayToString((Day)dayOfWeek);
 			}
+	} else {
+		date_UI = std::to_string(day) + "/" + std::to_string(month) + "/" +
+			std::to_string(year);
 	}
 	return date_UI;
 }
