@@ -52,12 +52,13 @@ const std::string FIELD_TIME_AT = "at";
 class Task {
 private:
 	static int runningCount;
+	static Task tempTask;
 
 	std::string name;
 	TaskType type;
 	int uniqueID;
-	std::string label;
-	std::vector<std::string> labels;
+	std::string label; // Obsolete, can only store one label
+	std::set<std::string> labels;
 	std::string dateAndTime_UI;
 
 	bool isDone;
@@ -71,7 +72,8 @@ private:
 
 public:
 	static int getRunningCount();
-	static int setRunningCount(); // For startup
+	static int incrementRunningCount();			// For NewTask
+	static void setRunningCount(int lastCount); // For startup
 
 	static bool tasksAreEqual(Task task1, Task task2); // For testing
 
@@ -83,9 +85,8 @@ public:
 	TaskType getType();
 	int getID();
 	std::string getLabel();
-	std::vector<std::string> getLabels();
+	std::set<std::string> getLabels();
 	std::string getDateAndTime_UI();
-	void setDateAndTime_UI(std::string dateAndTime_UI);
 
 	bool getDoneStatus();
 	bool getPriorityStatus();
@@ -103,12 +104,11 @@ public:
 	bool setLabel(std::string newLabel);
 	bool addLabels(std::vector<std::string> newLabel);
 	bool deleteLabels(std::vector<std::string> newLabel);
+	void setDateAndTime_UI(std::string dateAndTime_UI);
 
-	// bool toggleDone();		// Obsolete function: Returns false only
 	bool markDone();		// Returns false if already done
 	bool unmarkDone();		// Returns false if already not done
 
-	// bool togglePriority();	// Obsolete function: Returns false only
 	bool setPriority();		// Returns false if already priority
 	bool unsetPriority();	// Returns false if already not priority
 
@@ -117,6 +117,11 @@ public:
 
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
+};
+
+class NewTask : public Task {
+	NewTask();
+	~NewTask();
 };
 
 #endif

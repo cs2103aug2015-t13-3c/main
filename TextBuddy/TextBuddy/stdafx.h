@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <set>
 
 #include "Task.h"
 #include "Command.h"

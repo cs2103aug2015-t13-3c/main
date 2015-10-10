@@ -39,6 +39,7 @@ Task Add::getNewTask() {
 	return newTask;
 }
 
+// Obsolete, should not have public setters
 void Add::setNewTask(Task task) {
 	newTask = task;
 	return;
@@ -47,8 +48,6 @@ void Add::setNewTask(Task task) {
 // ==================================================
 //                       DELETE
 // ==================================================
-
-// Delete::Delete() : Command(DELETE) {}
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
