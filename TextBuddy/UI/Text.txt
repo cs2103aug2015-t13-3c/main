@@ -82,25 +82,9 @@
 		}
 		,
 		{
-			"name": "world",
-			"type": "EVENT",
-			"uniqueID": 8,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151010,
-			"startTime": 1900,
-
-			"endDate": 151011,
-			"endTime": 1900
-		}
-		,
-		{
-			"name": "report",
+			"name": "homework",
 			"type": "TODO",
-			"uniqueID": 9,
+			"uniqueID": 7,
 			"label": "",
 
 			"isDone": false,
@@ -109,7 +93,23 @@
 			"startDate": 0,
 			"startTime": 0,
 
-			"endDate": 151005,
+			"endDate": 151021,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "bla",
+			"type": "TODO",
+			"uniqueID": 20,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 151018,
 			"endTime": 0
 		}
 	]

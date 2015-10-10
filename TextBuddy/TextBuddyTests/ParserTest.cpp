@@ -28,7 +28,7 @@ namespace TextBuddyTests
 
 
 			/*
-			// Test for _DELETE
+			// Test for DELETE
 			expectedInt = 1;
 			userInput = "delete 1";
 			*/
@@ -64,7 +64,7 @@ namespace TextBuddyTests
 			case ADD:
 				task = ((Add*)cmd)->getNewTask();
 				break;
-			case _DELETE:
+			case DELETE:
 				taskID = ((Delete*)cmd)->getDeleteID();
 				break;
 			case MODIFY:
@@ -76,7 +76,7 @@ namespace TextBuddyTests
 				searchPhrase = ((Search*)cmd)->getSearchPhrase();
 				break;
 			case MARKDONE:		// Mark task as done
-			case UNDO:			// Undo last command if ADD, _DELETE or MODIFY or MARKDONE
+			case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
 			case CLEAR_ALL:		// Clear all tasks
 			case DISPLAY_ALL:	// Display all tasks
 			case SORT_ALL:		// Sort all tasks
@@ -94,7 +94,7 @@ namespace TextBuddyTests
 				// Assert::AreEqual(expectedString,cmd->getUserInput());
 				Assert::AreEqual(expectedString,u.taskToString(task));
 				break;
-			case _DELETE:
+			case DELETE:
 				Assert::AreEqual(expectedInt,taskID);
 				break;
 			case MODIFY:

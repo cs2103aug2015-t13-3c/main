@@ -35,7 +35,7 @@ CommandType Utilities::stringToCmdType(std::string cmdString) {
 	if(equalsIgnoreCase(cmdString, COMMAND_ADD))	{
 		cmd = ADD;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
-		cmd = _DELETE;
+		cmd = DELETE;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_MODIFY)) {
 		cmd = MODIFY;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {

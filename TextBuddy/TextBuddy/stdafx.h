@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <iomanip>
-#include <Windows.h>
 
 #include <cassert>
 #include <algorithm>
