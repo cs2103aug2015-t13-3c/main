@@ -23,10 +23,10 @@ namespace TextBuddyTests
 		TEST_METHOD(Parser_parse) {
 
 			// Test for ADD
-		//	expectedString = "Name: A partridge in a pear tree\nEnd Date: 151009\n";
-		//	userInput = "add A partridge in a pear tree by fri";
-			expectedString = "";
-			userInput = "add ";
+			expectedString = "Name: A partridge in a pear tree\nEnd Date: 151009\n";
+			userInput = "add A partridge in a pear tree by fri";
+
+
 			/*
 			// Test for DELETE
 			expectedInt = 1;
@@ -44,31 +44,6 @@ namespace TextBuddyTests
 			// Test for SEARCH
 			expectedString = "answerToLife";
 			userInput = "search answerToLife";
-			*/
-
-			/*
-			// Test for CLEAR_ALL
-			userInput = "clear";
-			*/
-
-			/*
-			// Test for DISPLAY_ALL
-			userInput = "display";
-			*/
-
-			/*
-			// Test for SORT_ALL
-			userInput = "sort";
-			*/
-
-			/*
-			// Test for EXIT
-			userInput = "exit";
-			*/
-
-			/*
-			// Test for INVALID
-			userInput = "invalid";
 			*/
 
 			// ==================================================
@@ -100,20 +75,14 @@ namespace TextBuddyTests
 			case SEARCH:
 				searchPhrase = ((Search*)cmd)->getSearchPhrase();
 				break;
-			case CLEAR_ALL:
-				// Clear tasks
-				break;
-			case DISPLAY_ALL:
-				// Display tasks
-				break;
-			case SORT_ALL:
-				// Sort tasks
-				break;
-			case EXIT:
-				// Exit program
-				break;
-			case INVALID:
-				// Return error message to UI
+			case MARKDONE:		// Mark task as done
+			case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
+			case CLEAR_ALL:		// Clear all tasks
+			case DISPLAY_ALL:	// Display all tasks
+			case SORT_ALL:		// Sort all tasks
+			case SAVE:			// Save to new file path
+			case EXIT:			// Exit program
+			case INVALID:		// Return error message to UI
 				break;
 			}
 
@@ -136,11 +105,12 @@ namespace TextBuddyTests
 			case SEARCH:
 				Assert::AreEqual(expectedString,searchPhrase);
 				break;
-
-				// Methods with nothing to test
+			case MARKDONE:
+			case UNDO:
 			case CLEAR_ALL:
 			case DISPLAY_ALL:
 			case SORT_ALL:
+			case SAVE:
 			case EXIT:
 			case INVALID:
 				break;
@@ -166,7 +136,7 @@ namespace TextBuddyTests
 			userInput = "1 invalid";
 			inputString = u.splitParameters(userInput);
 			Assert::AreEqual(expectedInt,p.parseDate(inputString));
-			
+
 			// Valid date formats
 			expectedInt = 151231;
 			userInput = "31 dec";

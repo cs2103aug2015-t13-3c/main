@@ -198,10 +198,10 @@ namespace TextBuddyTests
 				"\t\t\t\"label\": \"\",",
 				"\t\t\t\"isDone\": false,",
 				"\t\t\t\"isPriority\": false,",
-				"\t\t\t\"startDay\": \"SUN\",",
+				// "\t\t\t\"startDay\": \"SUN\",",
 				"\t\t\t\"startDate\": 0,",
 				"\t\t\t\"startTime\": 0,",
-				"\t\t\t\"endDay\": \"SUN\",",
+				// "\t\t\t\"endDay\": \"SUN\",",
 				"\t\t\t\"endDate\": 0,",
 				"\t\t\t\"endTime\": 0",
 				"\t\t}",
@@ -210,7 +210,7 @@ namespace TextBuddyTests
 			};
 
 			// TODO: assert areEqual for diff vector sizes
-			Assert::AreEqual((size_t) 19, actualText.size());
+			Assert::AreEqual((size_t) 17, actualText.size());
 
 			for(unsigned int i = 0; i < actualText.size(); i++) {
 				Assert::AreEqual(expectedText[i], actualText[i]);
@@ -241,10 +241,10 @@ namespace TextBuddyTests
 				"\t\t\t\"label\": \"\",",
 				"\t\t\t\"isDone\": false,",
 				"\t\t\t\"isPriority\": false,",
-				"\t\t\t\"startDay\": \"SUN\",",
+				// "\t\t\t\"startDay\": \"SUN\",",
 				"\t\t\t\"startDate\": 0,",
 				"\t\t\t\"startTime\": 0,",
-				"\t\t\t\"endDay\": \"SUN\",",
+				// "\t\t\t\"endDay\": \"SUN\",",
 				"\t\t\t\"endDate\": 0,",
 				"\t\t\t\"endTime\": 0",
 				"\t\t}",
@@ -256,10 +256,10 @@ namespace TextBuddyTests
 				"\t\t\t\"label\": \"\",",
 				"\t\t\t\"isDone\": false,",
 				"\t\t\t\"isPriority\": false,",
-				"\t\t\t\"startDay\": \"SUN\",",
+				// "\t\t\t\"startDay\": \"SUN\",",
 				"\t\t\t\"startDate\": 0,",
 				"\t\t\t\"startTime\": 0,",
-				"\t\t\t\"endDay\": \"SUN\",",
+				//"\t\t\t\"endDay\": \"SUN\",",
 				"\t\t\t\"endDate\": 0,",
 				"\t\t\t\"endTime\": 0",
 				"\t\t}",
@@ -271,10 +271,10 @@ namespace TextBuddyTests
 				"\t\t\t\"label\": \"\",",
 				"\t\t\t\"isDone\": false,",
 				"\t\t\t\"isPriority\": false,",
-				"\t\t\t\"startDay\": \"SUN\",",
+				// "\t\t\t\"startDay\": \"SUN\",",
 				"\t\t\t\"startDate\": 0,",
 				"\t\t\t\"startTime\": 0,",
-				"\t\t\t\"endDay\": \"SUN\",",
+				// "\t\t\t\"endDay\": \"SUN\",",
 				"\t\t\t\"endDate\": 0,",
 				"\t\t\t\"endTime\": 0",
 				"\t\t}",

@@ -1,4 +1,5 @@
 // @@author Aaron Chong Jun Hao
+// Parser converts flexible natural language into commands and parameters for TextBuddy.
 
 #ifndef PARSER_H_
 #define PARSER_H_
