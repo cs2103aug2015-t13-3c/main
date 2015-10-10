@@ -1,4 +1,5 @@
 // @@author Aaron Chong Jun Hao
+// Methods are listed in order of return type, then alphabetical order
 
 #include "stdafx.h"
 
@@ -115,8 +116,10 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 		field = LABEL_ADD;
 	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_DELETE)) {
 		field = LABEL_DELETE;
-	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY)) {
-		field = PRIORITY;
+	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_SET)) {
+		field = PRIORITY_SET;
+	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
+		field = PRIORITY_UNSET;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
 		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {

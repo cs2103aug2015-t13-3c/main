@@ -84,14 +84,36 @@ bool Task::deleteLabels(std::vector<std::string> badLabels) {
 	return true;
 }
 
+/*
+// Obsolete function, returns false only
 bool Task::toggleDone() {
 	isDone = !isDone;
 	return true;
 }
+*/
 
+bool Task::markDone() {
+	return isDone != (isDone=true);;
+}
+
+bool Task::unmarkDone() {
+	return isDone != (isDone=false);;
+}
+
+/*
+// Obsolete function, returns false only
 bool Task::togglePriority() {
 	isPriority = !isPriority;
 	return true;
+}
+*/
+
+bool Task::setPriority() {
+	return isPriority != (isPriority=true);;
+}
+
+bool Task::unsetPriority() {
+	return isPriority != (isPriority=false);;
 }
 
 bool Task::setStartDate(int newStartDate) {

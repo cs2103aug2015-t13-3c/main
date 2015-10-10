@@ -8,6 +8,8 @@ const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
 const std::string COMMAND_MODIFY = "modify";
 const std::string COMMAND_SEARCH = "search";
+const std::string COMMAND_MARKDONE = "done";
+const std::string COMMAND_UNDO = "undo";
 const std::string COMMAND_CLEAR_ALL = "clear";
 const std::string COMMAND_DISPLAY_ALL = "display";
 const std::string COMMAND_SORT_ALL = "sort";
@@ -19,6 +21,8 @@ enum CommandType {
 	DELETE,
 	MODIFY,
 	SEARCH,
+	MARKDONE,
+	UNDO,
 
 	CLEAR_ALL,
 	DISPLAY_ALL,
@@ -91,6 +95,22 @@ public:
 	Search(std::string phraseString);
 	~Search();
 	std::string getSearchPhrase();
+};
+
+class Markdone: public Command {
+private:
+	int doneID;
+public:
+	Markdone(int taskID);
+	~Markdone();
+
+	int getDoneID();
+};
+
+class Undo: public Command {
+public:
+	Undo();
+	~Undo();
 };
 
 class Save: public Command {

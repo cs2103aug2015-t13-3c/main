@@ -167,7 +167,7 @@ void IO::extractDone(Task &newTask, Value &item) {
 	bool isDone = item["isDone"].GetBool();
 	// bool success = false;
 	if(isDone) {
-		newTask.toggleDone();
+		newTask.markDone();
 	}
 
 	// TODO: how to throw exception for GetBool
@@ -182,7 +182,7 @@ void IO::extractPriority(Task &newTask, Value &item) {
 	bool isPriority = item["isPriority"].GetBool();
 	// bool success = false;
 	if(isPriority) {
-		newTask.togglePriority();
+		newTask.setPriority();
 	}
 
 	// TODO: how to throw exception for GetBool

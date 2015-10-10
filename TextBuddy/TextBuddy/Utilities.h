@@ -1,5 +1,4 @@
 // @@author Aaron Chong Jun Hao
-
 // Methods are listed in order of return type, then alphabetical order
 
 #ifndef UTILITIES_H_

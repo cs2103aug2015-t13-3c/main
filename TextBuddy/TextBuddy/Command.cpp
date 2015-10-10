@@ -103,6 +103,28 @@ std::string Search::getSearchPhrase() {
 }
 
 // ==================================================
+//                      MARKDONE
+// ==================================================
+
+Markdone::Markdone(int taskID) : Command(MARKDONE) {
+	doneID = taskID;
+}
+
+Markdone::~Markdone() {}
+
+int Markdone::getDoneID() {
+	return doneID;
+}
+
+// ==================================================
+//                        UNDO
+// ==================================================
+
+Undo::Undo() : Command(UNDO) {}
+
+Undo::~Undo() {}
+
+// ==================================================
 //                     CLEAR_ALL
 // ==================================================
 

@@ -22,7 +22,8 @@ enum FieldType {
 	NAME,
 	LABEL_ADD,
 	LABEL_DELETE,
-	PRIORITY,
+	PRIORITY_SET,
+	PRIORITY_UNSET,
 	START_DATE,
 	START_TIME,
 	END_DATE,
@@ -40,7 +41,8 @@ enum TaskType {
 const std::string FIELD_NAME = "name";
 const std::string FIELD_LABEL_ADD = ":";
 const std::string FIELD_LABEL_DELETE = "-:";
-const std::string FIELD_PRIORITY = "star";
+const std::string FIELD_PRIORITY_SET = "star";
+const std::string FIELD_PRIORITY_UNSET = "unstar";
 const std::string FIELD_DATE_FROM = "from";
 const std::string FIELD_DATE_TO = "to";
 const std::string FIELD_DATE_BY = "by";
@@ -99,8 +101,13 @@ public:
 	bool addLabels(std::vector<std::string> newLabel);
 	bool deleteLabels(std::vector<std::string> newLabel);
 
-	bool toggleDone();
-	bool togglePriority();
+	// bool toggleDone();		// Obsolete function: Returns false only
+	bool markDone();		// Returns false if already done
+	bool unmarkDone();		// Returns false if already not done
+
+	// bool togglePriority();	// Obsolete function: Returns false only
+	bool setPriority();		// Returns false if already priority
+	bool unsetPriority();	// Returns false if already not priority
 
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
