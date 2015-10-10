@@ -18,7 +18,7 @@ const std::string COMMAND_EXIT = "exit";
 
 enum CommandType {
 	ADD,
-	DELETE,
+	_DELETE,
 	MODIFY,
 	SEARCH,
 	MARKDONE,

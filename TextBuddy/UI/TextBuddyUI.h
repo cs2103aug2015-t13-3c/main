@@ -89,6 +89,7 @@ namespace UserInterface {
 		void InitializeComponent(void) {
 			this->components = (gcnew System::ComponentModel::Container());
 			System::Windows::Forms::DataGridView^  display;
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Label = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -109,13 +110,22 @@ namespace UserInterface {
 			display->AllowUserToDeleteRows = false;
 			display->AllowUserToResizeColumns = false;
 			display->AllowUserToResizeRows = false;
+			display->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
 			display->BackgroundColor = System::Drawing::Color::White;
 			display->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			display->CellBorderStyle = System::Windows::Forms::DataGridViewCellBorderStyle::None;
 			display->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(4) {this->id, this->description, 
 				this->Label, this->dateAndTime});
+			dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+			dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
+			dataGridViewCellStyle1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			dataGridViewCellStyle1->ForeColor = System::Drawing::SystemColors::ControlText;
+			dataGridViewCellStyle1->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle1->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			display->DefaultCellStyle = dataGridViewCellStyle1;
 			display->Location = System::Drawing::Point(0, 26);
 			display->Name = L"display";
 			display->ReadOnly = true;
@@ -293,7 +303,7 @@ namespace UserInterface {
 				String^ name = gcnew String(currentTask.getName().c_str());
 				std::vector<std::string> labels = currentTask.getLabels();
 				std::string l;
-				for(int j=0; j< labels.size(); ++j) {
+				for(unsigned int j=0; j< labels.size(); ++j) {
 					l = l + labels[j] + " ";
 				}
 				String^ label = gcnew String(l.c_str());

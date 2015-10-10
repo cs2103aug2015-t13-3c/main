@@ -38,6 +38,7 @@ public:
 	std::vector<Task> getFloatingTasks();
 	std::string formatTaskDateAndTime_UI(Task task);
 	std::string to12HourFormat(int time);
+	std::string toDayFormat(int taskDate);
 };
 
 /* Keep for reference*/

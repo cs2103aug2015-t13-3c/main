@@ -45,12 +45,13 @@ void Add::setNewTask(Task task) {
 }
 
 // ==================================================
-//                       DELETE
+//                       
+
 // ==================================================
 
-// Delete::Delete() : Command(DELETE) {}
+// Delete::Delete() : Command(_DELETE) {}
 
-Delete::Delete(int taskID) : Command(DELETE) {
+Delete::Delete(int taskID) : Command(_DELETE) {
 	deleteID = taskID;
 }
 

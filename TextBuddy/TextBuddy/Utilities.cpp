@@ -35,7 +35,7 @@ CommandType Utilities::stringToCmdType(std::string cmdString) {
 	if(equalsIgnoreCase(cmdString, COMMAND_ADD))	{
 		cmd = ADD;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
-		cmd = DELETE;
+		cmd = _DELETE;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_MODIFY)) {
 		cmd = MODIFY;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
@@ -176,25 +176,25 @@ std::string Utilities::dayToString(Day day) {
 	std::string dayString;
 	switch(day) {
 	case SUN:
-		dayString = "SUN";
+		dayString = "Sunday";
 		break;
 	case MON:
-		dayString = "MON";
+		dayString = "Monday";
 		break;
 	case TUE:
-		dayString = "TUE";
+		dayString = "Tuesday";
 		break;
 	case WED:
-		dayString = "WED";
+		dayString = "Wednesday";
 		break;
 	case THU:
-		dayString = "THU";
+		dayString = "Thursday";
 		break;
 	case FRI:
-		dayString = "FRI";
+		dayString = "Friday";
 		break;
 	case SAT:
-		dayString = "SAT";
+		dayString = "Saturday";
 		break;
 	case INVALID_DAY:
 		dayString = "INVALID_DAY";
