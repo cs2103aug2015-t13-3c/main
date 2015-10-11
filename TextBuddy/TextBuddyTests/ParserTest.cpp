@@ -85,9 +85,9 @@ public:
 			break;
 		case MARKDONE:		// Mark task as done
 		case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
-		case CLEAR_ALL:		// Clear all tasks
+		case VIEW:
 		case DISPLAY_ALL:	// Display all tasks
-		case SORT_ALL:		// Sort all tasks
+		case LOAD:
 		case SAVE:			// Save to new file path
 		case EXIT:			// Exit program
 		case INVALID:		// Return error message to UI
@@ -115,9 +115,9 @@ public:
 			break;
 		case MARKDONE:
 		case UNDO:
-		case CLEAR_ALL:
+		case VIEW:
 		case DISPLAY_ALL:
-		case SORT_ALL:
+		case LOAD:
 		case SAVE:
 		case EXIT:
 		case INVALID:

@@ -19,9 +19,9 @@ const std::string Parser::FILE_EXTENSION = ".txt";
 std::string Parser::parseFileName(char* argv[]) {
 	char* charFilePath = argv[1];
 	// Replace single backslash '\' with double backslash '\\'
-	std::string newFilePath = Utilities::replace(argv[1],"\\","\\\\");
+	std::string newFilePath = Utilities::replace(charFilePath,"\\","\\\\");
 	// Replace forwardslash '/' with double backslash '\\'
-	newFilePath = Utilities::replace(argv[1],"/","\\\\");
+	newFilePath = Utilities::replace(newFilePath,"/","\\\\");
 	// Find where it is supposed to be the file extension ".txt"
 	std::size_t fileExtensionPos = newFilePath.size() - FILE_EXTENSION.size();
 	// Append the file extension ".txt" if neccessary
@@ -46,6 +46,7 @@ std::string Parser::parseFileName(std::string stringFilePath) {
 // MODIFY	- NullModifyString	"No fields to modify!"
 // SEARCH	- NullSearchString	"No search phrase!"
 // MARKDONE	- InvalidIntString	"Invalid integer string!"
+// LOAD		- NullFilePath		"No file path specified!"
 // SAVE		- NullFilePath		"No file path specified!"
 Command* Parser::parse(std::string userInput) {
 	CommandType cmdType		= Utilities::stringToCmdType(Utilities::getFirstWord(userInput));
@@ -62,8 +63,7 @@ Command* Parser::parse(std::string userInput) {
 			Task* taskPtr = parseTask(restOfInput);
 			taskPtr->setID(Task::incrementRunningCount());
 			cmd = new Add(*taskPtr);
-		}
-		catch(std::string NullTaskString) {
+		} catch(std::string NullTaskString) {
 			std::cerr << NullTaskString << std::endl;
 		}
 		break;
@@ -75,8 +75,7 @@ Command* Parser::parse(std::string userInput) {
 			}
 			int deleteID = Utilities::stringToInt(restOfInput);
 			cmd = new Delete(deleteID);
-		}
-		catch(std::string InvalidIntString) {
+		} catch(std::string InvalidIntString) {
 			throw InvalidIntString;
 		}
 		break;
@@ -91,8 +90,7 @@ Command* Parser::parse(std::string userInput) {
 			std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
 			Task* tempTaskPtr = parseTask(tempTaskString);
 			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
-		}
-		catch(std::string NullModifyString) {
+		} catch(std::string NullModifyString) {
 			throw NullModifyString;
 		}
 		break;
@@ -104,8 +102,7 @@ Command* Parser::parse(std::string userInput) {
 			}
 			std::string searchPhrase = restOfInput;
 			cmd = new Search(searchPhrase);
-		}
-		catch(std::string NullSearchString) {
+		} catch(std::string NullSearchString) {
 			throw NullSearchString;
 		}
 		break;
@@ -117,8 +114,7 @@ Command* Parser::parse(std::string userInput) {
 			}
 			int doneID = Utilities::stringToInt(restOfInput);
 			cmd = new Markdone(doneID);
-		}
-		catch(std::string InvalidIntString) {
+		} catch(std::string InvalidIntString) {
 			throw InvalidIntString;
 		}
 		break;
@@ -127,16 +123,23 @@ Command* Parser::parse(std::string userInput) {
 		cmd = new Undo;
 		break;
 
-	case CLEAR_ALL:
-		cmd = new ClearAll;
+	case VIEW:
+		cmd = new View(Utilities::stringToViewType(restOfInput));
 		break;
 
 	case DISPLAY_ALL:
 		cmd = new DisplayAll;
 		break;
 
-	case SORT_ALL:
-		cmd = new SortAll;
+	case LOAD:
+		try {
+			if(restOfInput=="") {
+				throw("No file path specified!");
+			}
+			cmd = new Load(restOfInput);
+		} catch(std::string NullFilePath) {
+			throw NullFilePath;
+		}
 		break;
 
 	case SAVE:
@@ -145,8 +148,7 @@ Command* Parser::parse(std::string userInput) {
 				throw("No file path specified!");
 			}
 			cmd = new Save(restOfInput);
-		}
-		catch(std::string NullFilePath) {
+		} catch(std::string NullFilePath) {
 			throw NullFilePath;
 		}
 		break;
@@ -330,7 +332,7 @@ int Parser::findYear(std::string yearString) {
 				return year+1;
 		}
 	} else {
-		throw("Invalid year string: "+yearString+"\n");
+		throw("Invalid year string: " + yearString + "\n");
 	}
 	return year;
 }

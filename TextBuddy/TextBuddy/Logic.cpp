@@ -296,8 +296,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 		feedback.setUpdateView(isFound);
 		break;
 
-	case EXIT:
-		feedback.setExit();
+	case LOAD:
 		break;
 
 	case SAVE:
@@ -307,10 +306,12 @@ Feedback Logic::processCommand(std::string userCommand) {
 		// TODO: feedback
 		break;
 
+	case EXIT:
+		feedback.setExit();
+		break;
+
 	case MARKDONE:
 	case UNDO:
-	case CLEAR_ALL:	// Do we still want to implement this? (Aaron)
-	case SORT_ALL:	// Do we still want to implement this? (Aaron)
 	case INVALID:
 		break;
 	}

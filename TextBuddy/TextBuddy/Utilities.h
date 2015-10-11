@@ -21,6 +21,7 @@ public:
 	static Month		stringToMonth(std::string monthString);
 	static FieldType	stringToFieldType(std::string fieldString);
 	static TaskType		stringToTaskType(std::string line);
+	static ViewType		stringToViewType(std::string viewString);
 	static std::vector<std::string> splitParameters(std::string commandParametersString);
 	// Type-to-String Converters
 	static std::string	boolToString(bool boolean);
