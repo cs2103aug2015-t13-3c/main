@@ -34,7 +34,7 @@ void Task::setRunningCount(int lastCount) {
 }
 
 int Task::incrementRunningCount() {
-	return runningCount++;
+	return ++runningCount;
 }
 
 

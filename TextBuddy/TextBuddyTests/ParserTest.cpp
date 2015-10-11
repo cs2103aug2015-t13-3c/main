@@ -1,7 +1,6 @@
 // @@author Aaron Chong Jun Hao
 
 #include "stdafx.h"
-#include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

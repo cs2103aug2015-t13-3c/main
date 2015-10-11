@@ -38,6 +38,12 @@ std::vector<Task> Logic::getTaskStore() {
 	return taskStore;
 }
 
+void Logic::clearTaskStore() {
+	taskStore.clear();
+	remove(io.getFilePath().c_str());
+	return;
+}
+
 std::vector<Task> Logic::getCurrentView() {
 	return currentView;
 }
@@ -176,7 +182,7 @@ std::string Logic::searchInfo(Search toSearch) {
 
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		taskName = iter->getName();
-		if (Utilities::isSubString(searchPhrase,taskName)) {
+		if (Utilities::isSubstring(searchPhrase,taskName)) {
 			id = iter->getID();
 			indexString << id << ",";
 		}
@@ -245,7 +251,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 		return feedback;
 	}
 
-	// cmd obtained from command (added by Aaron)
+	// cmd obtained from command (Aaron)
 	CommandType cmd = command->getCommand();
 
 	switch (cmd) {

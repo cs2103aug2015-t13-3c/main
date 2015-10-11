@@ -331,7 +331,7 @@ std::string Utilities::replace(std::string str, std::string from, std::string to
 	return str;
 }
 
-bool Utilities::isSubString(std::string phrase, std::string search) {
+bool Utilities::isSubstring(std::string phrase, std::string search) {
 	bool isFound = false;
 	std::string::iterator pos = std::search(search.begin(), search.end(), 
 		phrase.begin(),phrase.end(),equalsIgnoreCase_char);

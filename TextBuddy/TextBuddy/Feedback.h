@@ -1,5 +1,8 @@
 // @@author Soon Hao Ye
 
+#ifndef FEEDBACK_H_
+#define FEEDBACK_H_
+
 #include "stdafx.h"
 
 class Feedback {
@@ -28,3 +31,5 @@ public:
 	void setExit();
 	bool isExit();
 };
+
+#endif

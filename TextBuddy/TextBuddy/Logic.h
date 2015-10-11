@@ -3,9 +3,9 @@
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
+#include "Feedback.h"
 #include "Parser.h"
 #include "IO.h"
-#include "Feedback.h"
 
 class Logic {
 private:
@@ -25,6 +25,7 @@ public:
 	bool saveFile(std::string fileName);
 	std::vector<Task> loadFile(std::string fileName);
 	std::vector<Task> getTaskStore();
+	void clearTaskStore();
 	std::vector<Task> getCurrentView();
 	bool addInfo(Add taskName);
 	bool deleteInfo(Delete idToDelete);
@@ -35,16 +36,6 @@ public:
 
 	Feedback processCommand(std::string userCommand);
 	std::vector<Task> getFloatingTasks();
-
-	// This is actually Utilities::equalsIgnoreCase()
-	// bool matchPhrase(std::string phr, std::string str);
-
-	// Moved to Utilities
-	/*
-	std::string formatTaskDateAndTime_UI(Task task);
-	std::string to12HourFormat(int time);
-	std::string toDayFormat(int taskDate);
-	*/
 };
 
 /* Keep for reference*/
@@ -108,4 +99,5 @@ std::string freeSlotSearch(int date, int time);
 //std::string returnHelpText(void);
 };
 */
+
 #endif
