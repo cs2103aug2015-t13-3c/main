@@ -341,7 +341,7 @@ namespace UserInterface {
 			-MODIFY			-BY
 			-SEARCH			-TO
 			-DISPLAY		-ON
-			-DONE
+			-DONE			-AT
 			-TAG			**MORE TO COME**
 			-STAR
 			-UNSTAR
@@ -389,7 +389,7 @@ namespace UserInterface {
 		=====================================================================*/
 		void autoComplete() {
 			int position = findKeyword(SEARCH);
-			if(keywordIsFound(position)) {
+			if(keywordIsFound(position) && position == 0) {
 				getInput();
 				if(input->Text != SEARCH) { 
 					processAndExecute();

@@ -2,25 +2,9 @@
 	"TextBuddy Items":
 	[
 		{
-			"name": "budget report",
-			"type": "TODO",
-			"uniqueID": 1,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": 0,
-
-			"endDate": 151011,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "buy milk and cheese",
+			"name": "multiple delete action",
 			"type": "FLOATING",
-			"uniqueID": 3,
+			"uniqueID": 0,
 			"label": "",
 
 			"isDone": false,
@@ -34,7 +18,135 @@
 		}
 		,
 		{
-			"name": "fix project",
+			"name": "time missing when "add<>0oct"",
+			"type": "EVENT",
+			"uniqueID": 2,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "floating returned when "add<>from11amto12pm"",
+			"type": "FLOATING",
+			"uniqueID": 3,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151011,
+			"startTime": 1100,
+
+			"endDate": 151011,
+			"endTime": 1200
+		}
+		,
+		{
+			"name": "improve syntax highlight stability",
+			"type": "FLOATING",
+			"uniqueID": 4,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "control up/down for scrolling display",
+			"type": "FLOATING",
+			"uniqueID": 6,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "more functionality in search and display",
+			"type": "FLOATING",
+			"uniqueID": 7,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "implement tagging",
+			"type": "FLOATING",
+			"uniqueID": 8,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "all keywords are removed in user input",
+			"type": "FLOATING",
+			"uniqueID": 13,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "more feedback messages",
+			"type": "FLOATING",
+			"uniqueID": 14,
+			"label": "",
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "priority",
 			"type": "FLOATING",
 			"uniqueID": 15,
 			"label": "",
@@ -50,41 +162,9 @@
 		}
 		,
 		{
-			"name": "debug all",
-			"type": "EVENT",
-			"uniqueID": 11,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151010,
-			"startTime": 0,
-
-			"endDate": 151014,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "project",
-			"type": "EVENT",
-			"uniqueID": 11,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151014,
-			"startTime": 0,
-
-			"endDate": 151017,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "homework",
-			"type": "TODO",
-			"uniqueID": 7,
+			"name": "throw exceptions when invalid commands",
+			"type": "FLOATING",
+			"uniqueID": 16,
 			"label": "",
 
 			"isDone": false,
@@ -93,14 +173,14 @@
 			"startDate": 0,
 			"startTime": 0,
 
-			"endDate": 151021,
+			"endDate": 0,
 			"endTime": 0
 		}
 		,
 		{
-			"name": "bla",
-			"type": "TODO",
-			"uniqueID": 20,
+			"name": "tagging",
+			"type": "FLOATING",
+			"uniqueID": 17,
 			"label": "",
 
 			"isDone": false,
@@ -109,7 +189,7 @@
 			"startDate": 0,
 			"startTime": 0,
 
-			"endDate": 151018,
+			"endDate": 0,
 			"endTime": 0
 		}
 	]
