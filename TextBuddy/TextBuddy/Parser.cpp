@@ -17,19 +17,27 @@ const std::string Parser::FILE_EXTENSION = ".txt";
 //========== This is the API ==========
 
 std::string Parser::parseFileName(char* argv[]) {
-	std::string newFileName = argv[1];
-	std::size_t fileExtensionPos = newFileName.size() - FILE_EXTENSION.size();
-	if(argv[1] + fileExtensionPos == FILE_EXTENSION) 	{
-		newFileName = argv[1];
+	char* charFilePath = argv[1];
+	// Replace single backslash '\' with double backslash '\\'
+	std::string newFilePath = Utilities::replace(argv[1],"\\","\\\\");
+	// Replace forwardslash '/' with double backslash '\\'
+	newFilePath = Utilities::replace(argv[1],"/","\\\\");
+	// Find where it is supposed to be the file extension ".txt"
+	std::size_t fileExtensionPos = newFilePath.size() - FILE_EXTENSION.size();
+	// Append the file extension ".txt" if neccessary
+	charFilePath = &newFilePath[0u];
+	if(charFilePath + fileExtensionPos == FILE_EXTENSION) 	{
+		newFilePath = charFilePath;
 	} else {
-		newFileName = argv[1] + FILE_EXTENSION;
+		newFilePath = charFilePath + FILE_EXTENSION;
 	}
-	return newFileName;
+	return newFilePath;
 }
 
 std::string Parser::parseFileName(std::string stringFilePath) {
 	char* charFilePath = &stringFilePath[0u];
-	return parseFileName(&charFilePath);
+	char* argv[2]={"",charFilePath};
+	return parseFileName(argv);
 }
 
 // Throws exceptions for:

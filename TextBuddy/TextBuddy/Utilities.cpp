@@ -322,13 +322,13 @@ std::string Utilities::removeSpaces(const std::string& s, const std::string& del
 	}
 }
 
-std::string Utilities::replace(std::string a, std::string b, std::string c) {
+std::string Utilities::replace(std::string str, std::string from, std::string to) {
 	int pos;
 	do {
-		pos = a.find(b);
-		if(pos != -1) a.replace(pos, b.length(), c);
+		pos = str.find(from);
+		if(pos != -1) str.replace(pos, from.length(), to);
 	} while (pos != -1);
-	return a;
+	return str;
 }
 
 bool Utilities::isSubString(std::string phrase, std::string search) {
@@ -342,7 +342,7 @@ bool Utilities::isSubString(std::string phrase, std::string search) {
 }
 
 bool Utilities::equalsIgnoreCase_char (char l, char r) {
-  return (tolower(l) == tolower(r));
+	return (tolower(l) == tolower(r));
 }
 
 // ==================================================

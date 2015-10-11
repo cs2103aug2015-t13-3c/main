@@ -17,14 +17,16 @@ IO::~IO() {}
 // ==================================================
 
 // TODO: Handle empty file / improper content exceptions
-// TODO: Testing for setFilePath()
 
 std::string IO::getFilePath() {
 	return filePath;
 }
 
+// Note: Directory must already exist
+// Returns false if unable to set file path
 bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector) {
 	if(saveFile(newFilePath,taskVector)) {
+		remove(filePath.c_str());
 		filePath = newFilePath;
 		return true;
 	}
@@ -86,7 +88,7 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 
 	closeJsonText(newfile);
 	newfile.close();
-	return false;
+	return true;
 }
 
 // ==================================================

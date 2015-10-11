@@ -9,14 +9,25 @@ namespace TextBuddyTests {
 	TEST_CLASS(ParserTest) {
 public:
 	// Initialise common variables to be used in tests
-	Utilities u;
 	Parser p;
-
 	std::string userInput;
 	std::vector<std::string> inputString;
 	std::string expectedString;
 	int expectedInt;
 	Task tempTask;
+
+	TEST_METHOD(Parser_parseFileName) {
+		userInput = "test.txt";
+		Assert::AreEqual(userInput,p.parseFileName(userInput));
+
+		expectedString = "\\\\test.txt";
+		userInput = "/test.txt";
+		Assert::AreEqual(expectedString,p.parseFileName(userInput));
+
+		expectedString = "test.txt";
+		userInput = "test";
+		Assert::AreEqual(expectedString,p.parseFileName(userInput));
+	}
 
 	TEST_METHOD(Parser_parse) {
 
@@ -90,7 +101,7 @@ public:
 		switch(cmdType) {
 		case ADD:
 			// Assert::AreEqual(expectedString,cmd->getUserInput());
-			Assert::AreEqual(expectedString,u.taskToString(task));
+			Assert::AreEqual(expectedString,Utilities::taskToString(task));
 			break;
 		case DELETE:
 			Assert::AreEqual(expectedInt,taskID);
@@ -98,7 +109,7 @@ public:
 		case MODIFY:
 			Assert::AreEqual(expectedInt,taskID);
 			// Assert::AreEqual(expectedString,fieldVecToString(fieldsToModify);
-			Assert::AreEqual(expectedString,u.taskToString(task));
+			Assert::AreEqual(expectedString,Utilities::taskToString(task));
 			break;
 		case SEARCH:
 			Assert::AreEqual(expectedString,searchPhrase);
@@ -123,29 +134,29 @@ public:
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "invalid";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "1 invalid";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "7 pm";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		// Valid date formats
 		expectedInt = 151231;
 		userInput = "31 dec";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "31 dec 15";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 	}
 
@@ -155,35 +166,35 @@ public:
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "7 pm";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		// Change to appropriate date for today/tmr before running this test
 		/*
 		expectedInt = 151010;
 		userInput = "today";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
 		expectedInt = 151011;
 		userInput = "tmr";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 		*/
 
 		expectedInt = 151012;
 		userInput = "mon";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
 		expectedInt = 151017;
 		userInput = "this sat";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
 		expectedInt = 151018;
 		userInput = "next sun";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 	}
 
@@ -191,7 +202,7 @@ public:
 		expectedString = "Name: Sing a song\nStart Time: 0\nEnd Date: 151231\nEnd Time: 0\n";
 		userInput = "Sing a song by 31 dec";
 		tempTask = *(p.parseTask(userInput));
-		Assert::AreEqual(expectedString,u.taskToString(tempTask));
+		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));
 	}
 
 	TEST_METHOD(Parser_parseTime) {
@@ -199,93 +210,93 @@ public:
 		expectedInt = -1;
 
 		userInput = "invalid";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0.";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = ".0";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0.0";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0.1";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "2400";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "2360";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "24.00";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "23.60";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "23.59 am";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "23.59 pm";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		// Valid time formats
 
 		expectedInt = 100;
 		userInput = "100";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 2359;
 		userInput = "23.59";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 0;
 		userInput = "12 am";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 0;
 		userInput = "12.00 am";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 100;
 		userInput = "1.00 am";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 1159;
 		userInput = "11.59 am";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 1200;
 		userInput = "12 pm";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 1200;
 		userInput = "12.00 pm";
-		inputString = u.splitParameters(userInput);
+		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 	}
 
