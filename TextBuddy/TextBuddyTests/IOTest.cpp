@@ -289,4 +289,20 @@ namespace TextBuddyTests
 		}
 	};
 
+
+	TEST_CLASS(ChangeDirectoryTest)
+	{
+	public:
+		/*
+		TEST_METHOD(IO_changeDirectory_invalidPath)
+		{
+			IO io;
+			// Cannot open file to save
+			std::string pathName = "Desktop";
+			bool success = io.changeSourceFileLocation(pathName);
+
+			Assert::AreEqual(false, success);
+		}
+		*/
+	};
 }

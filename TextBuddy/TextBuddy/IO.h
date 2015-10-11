@@ -64,6 +64,7 @@ public:
 
 	std::vector<Task> loadFile(std::string fileName);
 	bool saveFile(std::string fileName, std::vector<Task> taskVector);
+	bool changeSourceFileLocation (std::string newFileLocation);
 
 	//======== Getter / Setter methods for testing ==========
 	std::vector<std::string> getText(std::string fileName) {

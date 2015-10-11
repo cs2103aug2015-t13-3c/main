@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "IO.h"
 #include "Rapidjson\include\rapidjson\document.h"
+#include "Shlwapi.h"
 
 using namespace rapidjson;
 
@@ -74,7 +75,17 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 
 	return false;
 }
+/*
+bool IO::changeSourceFileLocation (std::string newFileLocation) {
+	std::string systemRoot;
+	systemRoot = getenv ("systemroot");
 
+	std::string newFullPath= systemRoot + "\\" + newFileLocation;
+	const char* newFullPathName = newFullPath.c_str();
+
+	return PathIsDirectory(newFullPathName);
+}
+*/
 
 // ==================================================
 //                   PRIVATE METHODS
