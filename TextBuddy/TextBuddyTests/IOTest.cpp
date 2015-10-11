@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TextBuddyTests
 {
-	//============= LoadFileTest ====================
+	//========== LoadFileTest ==========
 	TEST_CLASS(LoadFileTest)
 	{
 	public:
@@ -138,12 +138,11 @@ namespace TextBuddyTests
 		}
 	};
 
-	//============= SaveFileTest ====================
+	//========== SaveFileTest ==========
 
 	TEST_CLASS(SaveFileTest)
 	{
 	public:
-
 		TEST_METHOD(IO_saveFile_fileDoesntExist)
 		{
 			IO io;
@@ -287,4 +286,24 @@ namespace TextBuddyTests
 		}
 	};
 
+	//========== SetFilePathTest ==========
+
+	TEST_CLASS(SetFilePathTest) {
+public:
+
+	TEST_METHOD(IO_saveFile) {
+		IO io;
+		std::vector<Task> taskVector;
+		Task task;
+		taskVector.push_back(task);
+		Assert::AreEqual(true,io.saveFile("TEXT.txt",taskVector));
+	};
+
+	TEST_METHOD(IO_setFilePath) {
+		IO io;
+		std::vector<Task> taskVector;
+		Assert::AreEqual(true,io.setFilePath("NEW.txt",taskVector));
+	}
+
+	};
 }

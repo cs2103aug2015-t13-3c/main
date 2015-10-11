@@ -19,10 +19,10 @@ namespace TextBuddyTests {
 		bool isTrue;
 
 		isTrue = Utilities::equalsIgnoreCase("Hi", "high");
-		Assert::AreEqual(true, isTrue);
+		Assert::AreEqual(false, isTrue);
 
 		isTrue = Utilities::equalsIgnoreCase("hi", "thIgh");
-		Assert::AreEqual(true, isTrue);
+		Assert::AreEqual(false, isTrue);
 
 		isTrue = Utilities::equalsIgnoreCase("high", "high");
 		Assert::AreEqual(true, isTrue);

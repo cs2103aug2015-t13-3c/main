@@ -103,10 +103,8 @@ Task IO::extractTaskFromJsonObject(Value& item) {
 		extractLabel(newTask, item);
 		extractDone(newTask, item);
 		extractPriority(newTask, item);
-		// extractStartDay(newTask, item);	// Assert fail
 		extractStartDate(newTask, item);
 		extractStartTime(newTask, item);
-		// extractEndDay(newTask, item);	// Assert fail
 		extractEndDate(newTask, item);
 		extractEndTime(newTask, item);
 	} catch (std::string error) {
@@ -125,10 +123,8 @@ void IO::writeTaskIntoJsonFormat(std::ofstream &newFile, Task task) {
 	newFile << writeLabelAttribute(task) << "\n";
 	newFile << writeIsDoneAttribute(task);
 	newFile << writeIsPriorityAttribute(task) << "\n";
-	// newFile << writeStartDayAttribute(task);
 	newFile << writeStartDateAttribute(task);
 	newFile << writeStartTimeAttribute(task) << "\n";
-	// newFile << writeEndDayAttribute(task);
 	newFile << writeEndDateAttribute(task);
 	newFile << writeEndTimeAttribute(task);
 

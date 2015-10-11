@@ -136,7 +136,7 @@ Command* Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw("No file path specified!");
 			}
-			cmd = new Save(userInput);
+			cmd = new Save(restOfInput);
 		}
 		catch(std::string NullFilePath) {
 			throw NullFilePath;
