@@ -176,7 +176,7 @@ std::string Logic::searchInfo(Search toSearch) {
 
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		taskName = iter->getName();
-		if (Utilities::equalsIgnoreCase(searchPhrase,taskName)) {
+		if (Utilities::isSubString(searchPhrase,taskName)) {
 			id = iter->getID();
 			indexString << id << ",";
 		}

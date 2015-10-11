@@ -331,12 +331,27 @@ std::string Utilities::replace(std::string a, std::string b, std::string c) {
 	return a;
 }
 
+bool Utilities::isSubString(std::string phrase, std::string search) {
+	bool isFound = false;
+	std::string::iterator pos = std::search(search.begin(), search.end(), 
+		phrase.begin(),phrase.end(),equalsIgnoreCase_char);
+	if(pos != search.end()) {
+		isFound = true;
+	}
+	return isFound;
+}
+
+bool Utilities::equalsIgnoreCase_char (char l, char r) {
+  return (tolower(l) == tolower(r));
+}
+
 // ==================================================
 //           STRING-FOR-DISPLAY FORMATTERS
 // ==================================================
 // @@author Soon Hao Ye
 
 std::string Utilities::taskDateAndTimeToDisplayString(Task task) {
+	std::string placeHolder;
 	std::string start;
 	std::string end;
 	int startDate = task.getStartDate();
@@ -354,11 +369,13 @@ std::string Utilities::taskDateAndTimeToDisplayString(Task task) {
 		}
 		if(task.getEndDate() != startDate) {
 			end = end + intDateToDayString(task.getEndDate());
+			placeHolder = " to ";
 		}
-		if(task.getEndTime() != 0 && task.getEndDate() != startDate) {
+		if(task.getEndTime() != 0 && task.getStartTime() != task.getEndTime()) {
 			end = end + " " + intTimeTo12HourString(task.getEndTime());
+			placeHolder = " to ";
 		}
-		return start + " to " +  end ;
+		return start + placeHolder +  end ;
 	} else {
 		return "";
 	}

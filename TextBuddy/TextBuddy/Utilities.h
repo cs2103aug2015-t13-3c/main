@@ -32,6 +32,9 @@ public:
 	// Comparisons and Modifiers
 	static bool			containsAny(std::string targetWord, std::string searchWords);
 	static bool			isInt(std::string intString);
+	static bool			isSubString(std::string phrase, std::string search);
+	//Strick weak ordering function for isSubString()
+	static bool			equalsIgnoreCase_char(char l, char r); 
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
 	static bool			equalsIgnoreCase(const std::string& str1, const std::string& str2);
 	static bool			isPositiveNonZeroInt(std::string s);
