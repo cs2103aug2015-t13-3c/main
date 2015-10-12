@@ -79,6 +79,27 @@ int Logic::getIdOfIndex(int userIndex) {
 	return id;
 }
 
+//for swapping of positions of tasks inside TaskStore
+bool Logic::swapTaskPosition(int idA, int idB) {
+	Task tempTask;
+	std::vector<Task>::iterator iterA = taskStore.begin();
+	std::vector<Task>::iterator iterB = taskStore.begin();
+
+	while ((iterA->getID() != idA) && (iterA != taskStore.end())) {
+		++iterA;
+	}
+
+	while ((iterB->getID() != idB) && (iterB != taskStore.end())) {
+		++iterB;
+	}
+
+	tempTask = *iterA;
+	*iterA = *iterB;
+	*iterB = tempTask;
+
+	return true;
+}
+
 bool Logic::markDone(Markdone toMarkDone) {
 	int userIndex;
 	int id;
@@ -110,12 +131,45 @@ bool Logic::markDone(Markdone toMarkDone) {
 	return true;
 }
 
+/*
+bool Logic::markStar(Star toMarkStar){
+	int userIndex;
+	int id;
+	std::vector<Task>::iterator iter;
+
+	userIndex = toMarkDone.getDoneID();
+	
+	try {
+		id = getIdOfIndex(userIndex);
+		if (id == -1) {												//error code
+			throw "User input exceeded bounds.";
+		}
+	} catch (std::string exceedBoundStr) {
+		std::cerr << exceedBoundStr << std::endl;
+		return false;
+	}
+
+	iter = taskStore.begin();
+	while ((iter != taskStore.end()) && (iter->getID() != id)) {
+		++iter;
+	}
+
+	if (iter->getID() == id) {
+		iter->setPriority();
+	}
+
+	copyView();
+
+	return true;
+}
+*/
 
 bool Logic::addInfo(Add taskName) {
 	Task task = taskName.getNewTask();
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(task);
 	task.setDateAndTime_UI(dateAndTime_UI);
 	taskStore.push_back(task);
+	sortDate();
 	copyView();
 	return true;
 }
@@ -147,6 +201,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 		taskStore.erase(iter);
 	}
 
+	sortDate();
 	copyView();
 	return true;
 }
@@ -204,6 +259,8 @@ bool Logic::modifyInfo(Modify toModify) {
 			}
 			std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*taskIter);
 			taskIter->setDateAndTime_UI(dateAndTime_UI);
+
+			sortDate();
 			copyView();
 		}
 		return true;
@@ -384,6 +441,54 @@ std::vector<Task> Logic::getFloatingTasks() {
 	}
 	return floatingTasks;
 }
+
+//sorts in increasing order of dates (except for floating tasks, they are sorted to be at the bottom)
+//should use this to sort according to date before display to UI
+//since tasks with earliest deadlines/event should be seen first
+bool Logic::sortDate() {
+
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	Task tempTask;
+	if (taskStore.size() == 0) {
+		return false;
+	}
+/*	
+	for (i = taskStore.begin(); i != taskStore.end(); ++i) {
+		for (j = taskStore.begin()+1; j != taskStore.end(); ++j) {
+			if (j -> getStartTime() < i.getStartTime) {
+				swapTaskPosition(i->getID(), j->getID());
+			}
+		}
+	}
+*/
+
+	//sorts date after time to ensure date is accurately sorted
+	for (i = taskStore.begin(); i != taskStore.end(); ++i) {
+		for (j = i+1; j != taskStore.end(); ++j) {
+			if (j -> getStartDate() < i -> getStartDate()) {
+				swapTaskPosition(i->getID(), j->getID());
+			}
+		}
+	}
+
+	//sorts floating tasks to be at the bottom
+	for (i = taskStore.begin(); i != taskStore.end(); ++i) {
+		if (i->getType() == FLOATING) {
+			tempTask = *i;
+
+			for (j = i+1; j != taskStore.end(); ++j) {
+				swapTaskPosition(j->getID(), (j-1)->getID());
+			}
+			*(j-1) = tempTask;
+		}
+	}
+	copyView();
+
+	return true;
+}
+
+
 
 /* Keep for reference */
 /*

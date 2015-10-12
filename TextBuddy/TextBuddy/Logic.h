@@ -16,7 +16,9 @@ private:
 
 	bool copyView();
 	int getIdOfIndex(int userIndex);
+	bool swapTaskPosition(int indexA, int indexB);
 	bool markDone(Markdone toMarkDone);
+	//bool markPriority(Star toMarkStar);
 
 public:
 	Logic();
@@ -34,6 +36,8 @@ public:
 	std::string searchInfo(Search toSearch);
 	// Amends currentView to store searched elements
 	bool amendView(std::string listOfIds);
+
+	bool sortDate();
 
 	Feedback processCommand(std::string userCommand);
 	std::vector<Task> getFloatingTasks();

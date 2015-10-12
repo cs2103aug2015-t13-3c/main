@@ -77,19 +77,30 @@ public:
 		logic.clearTaskStore();	// Clear state (Aaron)
 		
 		// Add
-		logic.processCommand(std::string("Add this"));
-		logic.processCommand(std::string("Add that"));
+		logic.processCommand(std::string("Add this from 13 Oct to 15 Oct"));
+		logic.processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic.processCommand(std::string("Add then"));
-		
+		logic.sortDate();
+
 		std::vector<Task> copyTask;
 		copyTask = logic.getTaskStore();
 		std::vector<Task>::iterator iter;
+		
+		copyTask = logic.getTaskStore();
 		iter = copyTask.begin();
-		Assert::AreEqual(std::string("this"), iter->getName());
-		
+		Assert::AreEqual(std::string("this"),iter->getName());
+		Assert::AreEqual(151013,iter->getStartDate());
+		Assert::AreEqual(151015,iter->getEndDate());
+		Assert::AreEqual(0,iter->getStartTime());
+		Assert::AreEqual(0,iter->getEndTime());
+	
+
 		++iter;
-		Assert::AreEqual(std::string("that"),iter->getName());
+		Assert::AreEqual(std::string("that"), iter->getName());
+		Assert::AreEqual(151014,iter->getStartDate());
+		Assert::AreEqual(151016,iter->getEndDate());
 		
+
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
 		
@@ -130,7 +141,8 @@ public:
 		
 		copyTask = logic.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual(1,iter->getIsDone());
+		Assert::AreEqual(true,iter->getDoneStatus());
+
 		
 	}
 
