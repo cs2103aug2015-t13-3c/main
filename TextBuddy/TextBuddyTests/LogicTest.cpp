@@ -7,7 +7,8 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TextBuddyTests {
 	TEST_CLASS(LogicTest) {
 public:
-
+	
+	
 	TEST_METHOD(Logic_addTaskModifyTask) {
 		Logic logic;
 		logic.clearTaskStore();							// Clear state (Aaron)
@@ -70,20 +71,18 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 	}
-
+	
 	TEST_METHOD(Logic_processInfo) {
 		Logic logic;
 		Parser parser;
 		logic.clearTaskStore();	// Clear state (Aaron)
 		
 		// Add
-		logic.processCommand(std::string("Add this from 13 Oct to 15 Oct"));
 		logic.processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic.processCommand(std::string("Add then"));
-		logic.sortDate();
+		logic.processCommand(std::string("Add this from 13 Oct to 15 Oct"));
 
 		std::vector<Task> copyTask;
-		copyTask = logic.getTaskStore();
 		std::vector<Task>::iterator iter;
 		
 		copyTask = logic.getTaskStore();
@@ -93,7 +92,6 @@ public:
 		Assert::AreEqual(151015,iter->getEndDate());
 		Assert::AreEqual(0,iter->getStartTime());
 		Assert::AreEqual(0,iter->getEndTime());
-	
 
 		++iter;
 		Assert::AreEqual(std::string("that"), iter->getName());
@@ -104,6 +102,14 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
 		
+		//view
+		logic.viewTaskType(FLOATING);
+		copyTask = logic.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("then"),iter->getName());
+
+		logic.copyView();
+
 		// Delete
 		logic.processCommand(std::string("Delete 1"));
 		copyTask = logic.getTaskStore();

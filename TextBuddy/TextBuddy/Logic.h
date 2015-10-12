@@ -14,9 +14,7 @@ private:
 	std::vector<Task> taskStore;
 	std::vector<Task> currentView;
 
-	bool copyView();
 	int getIdOfIndex(int userIndex);
-	bool swapTaskPosition(int indexA, int indexB);
 	bool markDone(Markdone toMarkDone);
 	//bool markPriority(Star toMarkStar);
 
@@ -37,7 +35,10 @@ public:
 	// Amends currentView to store searched elements
 	bool amendView(std::string listOfIds);
 
-	bool sortDate();
+	//allows for viewing of a particular task type
+	bool viewTaskType(TaskType type);
+	bool sortDate(std::vector<Task> &taskVector);
+	bool copyView();
 
 	Feedback processCommand(std::string userCommand);
 	std::vector<Task> getFloatingTasks();

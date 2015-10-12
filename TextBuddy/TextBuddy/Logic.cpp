@@ -79,27 +79,6 @@ int Logic::getIdOfIndex(int userIndex) {
 	return id;
 }
 
-//for swapping of positions of tasks inside TaskStore
-bool Logic::swapTaskPosition(int idA, int idB) {
-	Task tempTask;
-	std::vector<Task>::iterator iterA = taskStore.begin();
-	std::vector<Task>::iterator iterB = taskStore.begin();
-
-	while ((iterA->getID() != idA) && (iterA != taskStore.end())) {
-		++iterA;
-	}
-
-	while ((iterB->getID() != idB) && (iterB != taskStore.end())) {
-		++iterB;
-	}
-
-	tempTask = *iterA;
-	*iterA = *iterB;
-	*iterB = tempTask;
-
-	return true;
-}
-
 bool Logic::markDone(Markdone toMarkDone) {
 	int userIndex;
 	int id;
@@ -169,7 +148,8 @@ bool Logic::addInfo(Add taskName) {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(task);
 	task.setDateAndTime_UI(dateAndTime_UI);
 	taskStore.push_back(task);
-	sortDate();
+
+	sortDate(taskStore);
 	copyView();
 	return true;
 }
@@ -201,7 +181,7 @@ bool Logic::deleteInfo(Delete idToDelete) {
 		taskStore.erase(iter);
 	}
 
-	sortDate();
+	sortDate(taskStore);
 	copyView();
 	return true;
 }
@@ -260,7 +240,7 @@ bool Logic::modifyInfo(Modify toModify) {
 			std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*taskIter);
 			taskIter->setDateAndTime_UI(dateAndTime_UI);
 
-			sortDate();
+			sortDate(taskStore);
 			copyView();
 		}
 		return true;
@@ -333,17 +313,19 @@ Feedback Logic::processCommand(std::string userCommand) {
 	bool isFound = true; 
 	//====================================
 
-	Command* command;
-	Add* addTask;
-	Delete* taskToDelete;
-	Modify* taskToModify;
-	Search* searchPhrase;
-	Markdone* taskToMarkDone;
+	Command*	command;
+	Add*		addTask;
+	Delete*		taskToDelete;
+	Modify*		taskToModify;
+	Search*		searchPhrase;
+	View*		tasksToView;
+	Markdone*	taskToMarkDone;
 	std::string newFilePath;
 
 	// For temporary method to return string of names followed by commas	
 	std::ostringstream tempOutput;
 	std::vector<Task>::iterator iter;
+	std::string convertStr;
 	std::string output;
 
 	try {
@@ -402,6 +384,10 @@ Feedback Logic::processCommand(std::string userCommand) {
 		feedback.setUpdateView(isFound);
 		break;
 
+	case VIEW:
+		tasksToView = ((View*)command);
+		break;
+
 	case LOAD:
 		break;
 
@@ -442,20 +428,36 @@ std::vector<Task> Logic::getFloatingTasks() {
 	return floatingTasks;
 }
 
+bool Logic::viewTaskType(TaskType type) {
+	currentView.clear();
+	std::vector<Task>::iterator iter;
+	
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
+		if (iter->getType() == type) {
+			currentView.push_back(*iter);
+		}
+	}
+
+	sortDate(currentView);
+	return true;
+
+}
+
+
 //sorts in increasing order of dates (except for floating tasks, they are sorted to be at the bottom)
 //should use this to sort according to date before display to UI
 //since tasks with earliest deadlines/event should be seen first
-bool Logic::sortDate() {
+bool Logic::sortDate(std::vector<Task> &taskVector) {
 
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
 	Task tempTask;
-	if (taskStore.size() == 0) {
+	if (taskVector.size() == 0) {
 		return false;
 	}
 /*	
-	for (i = taskStore.begin(); i != taskStore.end(); ++i) {
-		for (j = taskStore.begin()+1; j != taskStore.end(); ++j) {
+	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
+		for (j = i+1; j != taskVector.end(); ++j) {
 			if (j -> getStartTime() < i.getStartTime) {
 				swapTaskPosition(i->getID(), j->getID());
 			}
@@ -464,26 +466,25 @@ bool Logic::sortDate() {
 */
 
 	//sorts date after time to ensure date is accurately sorted
-	for (i = taskStore.begin(); i != taskStore.end(); ++i) {
-		for (j = i+1; j != taskStore.end(); ++j) {
+	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
+		for (j = i+1; j != taskVector.end(); ++j) {
 			if (j -> getStartDate() < i -> getStartDate()) {
-				swapTaskPosition(i->getID(), j->getID());
+				std::swap(*i, *j);
 			}
 		}
 	}
 
 	//sorts floating tasks to be at the bottom
-	for (i = taskStore.begin(); i != taskStore.end(); ++i) {
+	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		if (i->getType() == FLOATING) {
 			tempTask = *i;
 
-			for (j = i+1; j != taskStore.end(); ++j) {
-				swapTaskPosition(j->getID(), (j-1)->getID());
+			for (j = i+1; j != taskVector.end(); ++j) {
+				std::swap(*j, *(j-1));
 			}
 			*(j-1) = tempTask;
 		}
 	}
-	copyView();
 
 	return true;
 }
