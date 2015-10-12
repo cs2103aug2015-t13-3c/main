@@ -16,6 +16,7 @@ private:
 
 	bool copyView();
 	int getIdOfIndex(int userIndex);
+	bool markDone(Markdone toMarkDone);
 
 public:
 	Logic();

@@ -57,24 +57,59 @@ bool Logic::copyView() {
 // Returns the uniqueID of the task pointed to by userIndex
 // For deleting taskStore by referring to tasks in currentView
 int Logic::getIdOfIndex(int userIndex) {
-	int id;
+	int id = -1;													//error output is -1
 	std::vector<Task>::iterator iter = currentView.begin();
 
-	for (int i = 1; i < userIndex; i++) {
-		if (iter != currentView.end()) {
-			++iter;
+	try { 
+		if (userIndex > currentView.size()) {
+			throw "User index exceeds number of tasks displayed.";
+		} else if (userIndex < 1) {
+			throw "User index should not go lower than 1.";
 		} else {
-			return false;	// Error since index put in exceeds the currentView capacity
-		}					// Error for exceeding upper bound of acceptable inputs
+			for (int i = 1; i < userIndex; i++) {
+				++iter;
+			}
+	
+			id = iter->getID();
+		}
+	} catch(std::string exceedBoundStr) {
+		std::cerr << exceedBoundStr << std::endl;
 	}
 
-	if (userIndex >= 1) {
-		id = iter->getID();
-	} else {
-		return false;		// Error for index going below the lower bound of acceptable inputs
-	}
 	return id;
 }
+
+bool Logic::markDone(Markdone toMarkDone) {
+	int userIndex;
+	int id;
+	std::vector<Task>::iterator iter;
+
+	userIndex = toMarkDone.getDoneID();
+	
+	try {
+		id = getIdOfIndex(userIndex);
+		if (id == -1) {												//error code
+			throw "User input exceeded bounds.";
+		}
+	} catch (std::string exceedBoundStr) {
+		std::cerr << exceedBoundStr << std::endl;
+		return false;
+	}
+
+	iter = taskStore.begin();
+	while ((iter != taskStore.end()) && (iter->getID() != id)) {
+		++iter;
+	}
+
+	if (iter->getID() == id) {
+		iter->markDone();
+	}
+
+	copyView();
+
+	return true;
+}
+
 
 bool Logic::addInfo(Add taskName) {
 	Task task = taskName.getNewTask();
@@ -92,7 +127,16 @@ bool Logic::deleteInfo(Delete idToDelete) {
 	int id;
 	int index;
 	index = idToDelete.getDeleteID();
-	id = getIdOfIndex(index);
+
+	try {
+		id = getIdOfIndex(index);
+		if (id == -1) {												//error code
+			throw "User input exceeded bounds.";
+		}
+	} catch (std::string exceedBoundStr) {
+		std::cerr << exceedBoundStr << std::endl;
+		return false;
+	}
 
 	iter = taskStore.begin();
 	while ((iter != taskStore.end()) && (iter->getID() != id)) {
@@ -237,6 +281,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 	Delete* taskToDelete;
 	Modify* taskToModify;
 	Search* searchPhrase;
+	Markdone* taskToMarkDone;
 	std::string newFilePath;
 
 	// For temporary method to return string of names followed by commas	
@@ -270,9 +315,13 @@ Feedback Logic::processCommand(std::string userCommand) {
 	case DELETE: 
 		// userIndex refers to the nth task of currentView presented to user
 		// eg. delete 1 means deleting the first task
-		taskToDelete = ((Delete*)command);
-		deleteInfo(*taskToDelete);
-		feedback.setUpdateView(true);
+		try {
+			taskToDelete = ((Delete*)command);
+			deleteInfo(*taskToDelete);
+			feedback.setUpdateView(true);
+		} catch (std::exception e) {
+			return feedback;
+		}
 		break;
 
 	case MODIFY:
@@ -311,6 +360,10 @@ Feedback Logic::processCommand(std::string userCommand) {
 		break;
 
 	case MARKDONE:
+		taskToMarkDone = ((Markdone*)command);
+		markDone(*taskToMarkDone);
+		break;
+
 	case UNDO:
 	case INVALID:
 		break;

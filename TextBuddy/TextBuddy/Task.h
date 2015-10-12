@@ -99,6 +99,8 @@ public:
 	int getEndDate();
 	int getEndTime();
 
+	int getIsDone();
+
 	// Setters, return true if successful
 	bool setName(std::string newName);
 	bool setType(TaskType newType);

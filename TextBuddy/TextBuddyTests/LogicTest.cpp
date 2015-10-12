@@ -124,6 +124,14 @@ public:
 
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
+		
+		//MarkDone
+		logic.processCommand(std::string("Done 1"));
+		
+		copyTask = logic.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(1,iter->getIsDone());
+		
 	}
 
 	/*

@@ -50,6 +50,8 @@ int Task::getStartDate() {return startDate;}
 int Task::getStartTime() {return startTime;}
 int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
+int Task::getIsDone() {return isDone;};
+	
 
 
 // Setters, return true if successful
