@@ -7,7 +7,8 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TextBuddyTests {
 	TEST_CLASS(LogicTest) {
 public:
-
+	
+	
 	TEST_METHOD(Logic_addTaskModifyTask) {
 		Logic logic;
 		logic.clearTaskStore();							// Clear state (Aaron)
@@ -70,29 +71,45 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 	}
-
+	
 	TEST_METHOD(Logic_processInfo) {
 		Logic logic;
 		Parser parser;
 		logic.clearTaskStore();	// Clear state (Aaron)
 		
 		// Add
-		logic.processCommand(std::string("Add this"));
-		logic.processCommand(std::string("Add that"));
+		logic.processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic.processCommand(std::string("Add then"));
-		
+		logic.processCommand(std::string("Add this from 13 Oct to 15 Oct"));
+
 		std::vector<Task> copyTask;
-		copyTask = logic.getTaskStore();
 		std::vector<Task>::iterator iter;
+		
+		copyTask = logic.getTaskStore();
 		iter = copyTask.begin();
-		Assert::AreEqual(std::string("this"), iter->getName());
-		
+		Assert::AreEqual(std::string("this"),iter->getName());
+		Assert::AreEqual(151013,iter->getStartDate());
+		Assert::AreEqual(151015,iter->getEndDate());
+		Assert::AreEqual(0,iter->getStartTime());
+		Assert::AreEqual(0,iter->getEndTime());
+
 		++iter;
-		Assert::AreEqual(std::string("that"),iter->getName());
+		Assert::AreEqual(std::string("that"), iter->getName());
+		Assert::AreEqual(151014,iter->getStartDate());
+		Assert::AreEqual(151016,iter->getEndDate());
 		
+
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
 		
+		//view
+		logic.viewTaskType(FLOATING);
+		copyTask = logic.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("then"),iter->getName());
+
+		logic.copyView();
+
 		// Delete
 		logic.processCommand(std::string("Delete 1"));
 		copyTask = logic.getTaskStore();
@@ -124,6 +141,15 @@ public:
 
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
+		
+		//MarkDone
+		logic.processCommand(std::string("Done 1"));
+		
+		copyTask = logic.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(true,iter->getDoneStatus());
+
+		
 	}
 
 	/*

@@ -13,9 +13,19 @@ private:
 	IO io;
 	std::vector<Task> taskStore;
 	std::vector<Task> currentView;
+	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
 
-	bool copyView();
 	int getIdOfIndex(int userIndex);
+
+	//added by haoye
+	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
+	std::vector<Task>::iterator &taskIter);
+	std::vector<Task>::iterator matchCurrentViewIndex(int index);
+	std::vector<Task>::iterator matchTaskViewIndex(int index);
+	bool isValidIndex(int index);
+
+	void markDone(Markdone toMarkDone);
+	//bool markPriority(Star toMarkStar);
 
 public:
 	Logic();
@@ -28,11 +38,16 @@ public:
 	void clearTaskStore();
 	std::vector<Task> getCurrentView();
 	bool addInfo(Add taskName);
-	bool deleteInfo(Delete idToDelete);
-	bool modifyInfo(Modify toModify);
+	void deleteInfo(Delete idToDelete);
+	void modifyInfo(Modify toModify);
 	std::string searchInfo(Search toSearch);
 	// Amends currentView to store searched elements
 	bool amendView(std::string listOfIds);
+
+	//allows for viewing of a particular task type
+	bool viewTaskType(TaskType type);
+	bool sortDate(std::vector<Task> &taskVector);
+	bool copyView();
 
 	Feedback processCommand(std::string userCommand);
 	std::vector<Task> getFloatingTasks();

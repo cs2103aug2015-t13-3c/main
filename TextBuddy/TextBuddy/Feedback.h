@@ -21,6 +21,7 @@ public:
 	void setTasksToShow(std::vector<Task> tasksToShow);
 	void setAddedMessage();
 	void setSearchMessage(std::string searchPhrase,bool isFound);
+	void setErrorMessage(std::string message);
 	std::string getFeedbackMessage();
 	std::vector<Task> getTaskToShow();
 	std::vector<std::string> getTaskToShow_string();

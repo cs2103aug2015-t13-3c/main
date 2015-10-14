@@ -25,7 +25,7 @@ std::string Command::getUserInput() {
 //                        ADD
 // ==================================================
 
-Add::Add(Task task, std::string userInput) : Command(ADD,userInput) {
+Add::Add(Task task) : Command(ADD) {
 	newTask = task;	
 }
 
@@ -110,11 +110,18 @@ Undo::Undo() : Command(UNDO) {}
 Undo::~Undo() {}
 
 // ==================================================
-//                     CLEAR_ALL
+//                        VIEW
 // ==================================================
 
-ClearAll::ClearAll() : Command(CLEAR_ALL) {}
-ClearAll::~ClearAll() {}
+View::View(ViewType newView) : Command(VIEW) {
+	view = newView;
+}
+
+View::~View() {}
+
+ViewType View::getViewType() {
+	return view;
+}
 
 // ==================================================
 //                    DISPLAY_ALL
@@ -124,23 +131,32 @@ DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {}
 DisplayAll::~DisplayAll() {}
 
 // ==================================================
-//                      SORT_ALL
+//                        LOAD
 // ==================================================
 
-SortAll::SortAll() : Command(SORT_ALL) {}
-SortAll::~SortAll() {}
+Load::Load(std::string newFilePath) : Command(LOAD) {
+	filePath = newFilePath;
+}
+
+Load::~Load() {}
+
+std::string Load::getFilePath() {
+	return filePath;
+}
 
 // ==================================================
 //                        SAVE
 // ==================================================
 
-Save::Save(std::string filePath) : Command(SAVE) {
+Save::Save(std::string newFilePath) : Command(SAVE) {
 	newFilePath = filePath;
 }
 
 Save::~Save() {}
 
-std::string Save::getFilePath() {return newFilePath;}
+std::string Save::getFilePath() {
+	return filePath;
+}
 
 // ==================================================
 //                        EXIT

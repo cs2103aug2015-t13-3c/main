@@ -4,17 +4,26 @@
 #define COMMAND_H_
 
 // These are the possible command types
+// const std::string COMMAND_CLEAR_ALL = "clear";
+// const std::string COMMAND_SORT_ALL = "sort";
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
 const std::string COMMAND_MODIFY = "modify";
 const std::string COMMAND_SEARCH = "search";
 const std::string COMMAND_MARKDONE = "done";
 const std::string COMMAND_UNDO = "undo";
-const std::string COMMAND_CLEAR_ALL = "clear";
+const std::string COMMAND_VIEW = "view";
 const std::string COMMAND_DISPLAY_ALL = "display";
-const std::string COMMAND_SORT_ALL = "sort";
+const std::string COMMAND_LOAD = "load";
 const std::string COMMAND_SAVE = "save";
 const std::string COMMAND_EXIT = "exit";
+
+// These are the possible views
+const std::string VIEW_ALL = "all";
+const std::string VIEW_FLOATING = "floating";
+const std::string VIEW_PAST = "past";
+const std::string VIEW_TODO = "todo";
+const std::string VIEW_WEEK = "week";
 
 enum CommandType {
 	ADD,
@@ -23,14 +32,21 @@ enum CommandType {
 	SEARCH,
 	MARKDONE,
 	UNDO,
-
-	CLEAR_ALL,
+	VIEW,
 	DISPLAY_ALL,
-	SORT_ALL,
-
+	LOAD,
 	SAVE,
 	EXIT,
 	INVALID
+};
+
+enum ViewType {
+	VIEWTYPE_ALL,
+	VIEWTYPE_FLOATING,
+	VIEWTYPE_PAST,
+	VIEWTYPE_TODO,
+	VIEWTYPE_WEEK,
+	VIEWTYPE_INVALID
 };
 
 class Command {
@@ -52,7 +68,7 @@ class Add: public Command {
 private:
 	Task newTask;
 public:
-	Add(Task task, std::string rawInput="");
+	Add(Task task);
 	~Add();
 	Task getNewTask();
 };
@@ -103,21 +119,13 @@ public:
 	~Undo();
 };
 
-class Save: public Command {
+class View: public Command {
 private:
-	std::string newFilePath;
+	ViewType view;
 public:
-	Save(std::string filePath);
-	~Save();
-	std::string getFilePath();
-};
-
-// Classes with no methods for CLEAR_ALL, DISPLAY_ALL, SORT_ALL, EXIT
-
-class ClearAll: public Command {
-public:
-	ClearAll();
-	~ClearAll();
+	View(ViewType newView);
+	~View();
+	ViewType getViewType();
 };
 
 class DisplayAll: public Command {
@@ -126,10 +134,22 @@ public:
 	~DisplayAll();
 };
 
-class SortAll: public Command {
+class Load: public Command {
+private:
+	std::string filePath;
 public:
-	SortAll();
-	~SortAll();
+	Load(std::string Load);
+	~Load();
+	std::string getFilePath();
+};
+
+class Save: public Command {
+private:
+	std::string filePath;
+public:
+	Save(std::string filePath);
+	~Save();
+	std::string getFilePath();
 };
 
 class Exit: public Command {

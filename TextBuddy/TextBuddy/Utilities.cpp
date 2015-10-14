@@ -40,12 +40,16 @@ CommandType Utilities::stringToCmdType(std::string cmdString) {
 		cmd = MODIFY;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
 		cmd = SEARCH;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
-		cmd = CLEAR_ALL;
+	} else if(equalsIgnoreCase(cmdString, COMMAND_MARKDONE)) {
+		cmd = MARKDONE;
+	} else if(equalsIgnoreCase(cmdString, COMMAND_UNDO)) {
+		cmd = UNDO;
+	} else if(equalsIgnoreCase(cmdString, COMMAND_VIEW)) {
+		cmd = VIEW;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
 		cmd = DISPLAY_ALL;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_SORT_ALL)) {
-		cmd = SORT_ALL;
+	} else if(equalsIgnoreCase(cmdString, COMMAND_LOAD)) {
+		cmd = LOAD;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_SAVE)) {
 		cmd = SAVE;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
@@ -53,7 +57,6 @@ CommandType Utilities::stringToCmdType(std::string cmdString) {
 	} else {
 		cmd = INVALID;
 	}
-
 	return cmd;
 }
 
@@ -75,12 +78,12 @@ Day Utilities::stringToDay(std::string dayString) {
 	} else if(containsAny(dayString,"sat saturday")) {
 		day = SAT;
 	}
-
 	return day;
 }
 
 Month Utilities::stringToMonth(std::string monthString) {
 	Month monthInput = INVALID_MONTH;
+
 	if(containsAny(monthString,"1 jan january")) {
 		monthInput = JAN;
 	} else if(containsAny(monthString,"2 feb february")) {
@@ -136,18 +139,34 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	return field;
 }
 
-TaskType Utilities::stringToTaskType(std::string line) {
+TaskType Utilities::stringToTaskType(std::string taskString) {
 	TaskType type = FLOATING;
 
-	if(line == "FLOATING") {
+	if(taskString == "FLOATING") {
 		type = FLOATING;
-	} else if (line == "EVENT") {
+	} else if (taskString == "EVENT") {
 		type = EVENT;
-	} else if (line == "TODO") {
+	} else if (taskString == "TODO") {
 		type = TODO;
 	}
-
 	return type;
+}
+
+ViewType Utilities::stringToViewType(std::string viewString) {
+	ViewType view = VIEWTYPE_INVALID;
+
+	if(equalsIgnoreCase(viewString,VIEW_ALL)) {
+		view = VIEWTYPE_ALL;
+	} else if(equalsIgnoreCase(viewString,FIELD_LABEL_DELETE)) {
+		view = VIEWTYPE_FLOATING;
+	} else if(equalsIgnoreCase(viewString,FIELD_PRIORITY_SET)) {
+		view = VIEWTYPE_PAST;
+	} else if(equalsIgnoreCase(viewString,FIELD_PRIORITY_UNSET)) {
+		view = VIEWTYPE_TODO;
+	} else if(equalsIgnoreCase(viewString,FIELD_DATE_ON)) {
+		view = VIEWTYPE_WEEK;
+	}
+	return view;
 }
 
 // This converts std::string to std::vector<std::string> based on delimiter space
@@ -172,6 +191,7 @@ std::string Utilities::boolToString(bool boolean) {
 
 std::string Utilities::dayToString(Day day) {
 	std::string dayString;
+
 	switch(day) {
 	case SUN:
 		dayString = "Sunday";
@@ -198,7 +218,6 @@ std::string Utilities::dayToString(Day day) {
 		dayString = "INVALID_DAY";
 		break;
 	}
-
 	return dayString;
 }
 
@@ -219,12 +238,12 @@ std::string Utilities::taskToString(Task task) {
 		"End Date: ",	task.getEndDate(),			// %s%d\n
 		"End Time: ",	task.getEndTime()			// %s%d\n
 		);
-
 	return buffer;
 }
 
 std::string Utilities::taskTypeToString(TaskType type) {
 	std::string typeString;
+
 	switch(type) {
 	case FLOATING:
 		typeString = "FLOATING";
@@ -236,7 +255,6 @@ std::string Utilities::taskTypeToString(TaskType type) {
 		typeString = "TODO";
 		break;
 	}
-
 	return typeString;
 }
 
@@ -269,7 +287,6 @@ bool Utilities::containsAny(std::string targetWord, std::string searchWords) {
 			return true;
 		}
 	}
-
 	return false;
 }
 

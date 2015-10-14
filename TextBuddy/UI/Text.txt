@@ -2,12 +2,12 @@
 	"TextBuddy Items":
 	[
 		{
-			"name": "multiple delete action",
+			"name": "foo",
 			"type": "FLOATING",
-			"uniqueID": 0,
+			"uniqueID": 1,
 			"label": "",
 
-			"isDone": false,
+			"isDone": true,
 			"isPriority": false,
 
 			"startDate": 0,
@@ -18,8 +18,24 @@
 		}
 		,
 		{
-			"name": "time missing when "add<>0oct"",
-			"type": "EVENT",
+			"name": "bar",
+			"type": "FLOATING",
+			"uniqueID": 2,
+			"label": "",
+
+			"isDone": true,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": 0,
+
+			"endDate": 0,
+			"endTime": 0
+		}
+		,
+		{
+			"name": "damn",
+			"type": "FLOATING",
 			"uniqueID": 2,
 			"label": "",
 
@@ -34,25 +50,9 @@
 		}
 		,
 		{
-			"name": "floating returned when "add<>from11amto12pm"",
+			"name": "hello",
 			"type": "FLOATING",
-			"uniqueID": 3,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151011,
-			"startTime": 1100,
-
-			"endDate": 151011,
-			"endTime": 1200
-		}
-		,
-		{
-			"name": "improve syntax highlight stability",
-			"type": "FLOATING",
-			"uniqueID": 4,
+			"uniqueID": 1,
 			"label": "",
 
 			"isDone": false,
@@ -66,9 +66,9 @@
 		}
 		,
 		{
-			"name": "control up/down for scrolling display",
+			"name": "foobar",
 			"type": "FLOATING",
-			"uniqueID": 6,
+			"uniqueID": 2,
 			"label": "",
 
 			"isDone": false,
@@ -82,9 +82,9 @@
 		}
 		,
 		{
-			"name": "more functionality in search and display",
+			"name": "dsvdsv",
 			"type": "FLOATING",
-			"uniqueID": 7,
+			"uniqueID": 1,
 			"label": "",
 
 			"isDone": false,
@@ -98,9 +98,9 @@
 		}
 		,
 		{
-			"name": "implement tagging",
+			"name": "helloworld",
 			"type": "FLOATING",
-			"uniqueID": 8,
+			"uniqueID": 1,
 			"label": "",
 
 			"isDone": false,
@@ -114,73 +114,9 @@
 		}
 		,
 		{
-			"name": "all keywords are removed in user input",
+			"name": "cb",
 			"type": "FLOATING",
-			"uniqueID": 13,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": 0,
-
-			"endDate": 0,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "more feedback messages",
-			"type": "FLOATING",
-			"uniqueID": 14,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": 0,
-
-			"endDate": 0,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "priority",
-			"type": "FLOATING",
-			"uniqueID": 15,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": 0,
-
-			"endDate": 0,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "throw exceptions when invalid commands",
-			"type": "FLOATING",
-			"uniqueID": 16,
-			"label": "",
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": 0,
-
-			"endDate": 0,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "tagging",
-			"type": "FLOATING",
-			"uniqueID": 17,
+			"uniqueID": 2,
 			"label": "",
 
 			"isDone": false,
