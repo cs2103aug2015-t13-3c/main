@@ -3,6 +3,9 @@
 #include "stdafx.h"
 #include "Logic.h"
 
+const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
+
+
 Logic::Logic() {
 	taskStore = loadFile(io.getFilePath());
 	std::vector<Task>::iterator i;
@@ -54,60 +57,55 @@ bool Logic::copyView() {
 	return true;
 }
 
-// Returns the uniqueID of the task pointed to by userIndex
-// For deleting taskStore by referring to tasks in currentView
-int Logic::getIdOfIndex(int userIndex) {
-	int id = -1;													//error output is -1
-	std::vector<Task>::iterator iter = currentView.begin();
-
-	try { 
-		if (userIndex > currentView.size()) {
-			throw "User index exceeds number of tasks displayed.";
-		} else if (userIndex < 1) {
-			throw "User index should not go lower than 1.";
-		} else {
-			for (int i = 1; i < userIndex; i++) {
-				++iter;
-			}
-	
-			id = iter->getID();
-		}
-	} catch(std::string exceedBoundStr) {
-		std::cerr << exceedBoundStr << std::endl;
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>added @haoye 14/10/15
+//replaces getIdOfIndex()
+void Logic::matchIndex(int index, std::vector<Task>::iterator &currIter, 
+	std::vector<Task>::iterator &taskIter) {
+	if(isValidIndex(index)) {	
+		currIter = matchCurrentViewIndex(index);
+		index = currIter->getID();
+		taskIter = matchTaskViewIndex(index);
+	} else {
+		throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
 	}
-
-	return id;
 }
 
-bool Logic::markDone(Markdone toMarkDone) {
-	int userIndex;
-	int id;
-	std::vector<Task>::iterator iter;
-
-	userIndex = toMarkDone.getDoneID();
-	
-	try {
-		id = getIdOfIndex(userIndex);
-		if (id == -1) {												//error code
-			throw "User input exceeded bounds.";
-		}
-	} catch (std::string exceedBoundStr) {
-		std::cerr << exceedBoundStr << std::endl;
+bool Logic::isValidIndex(int index) {
+	if(index <1 || index > (int)currentView.size()) {
 		return false;
-	}
+	} 
+	return true;
+} 
 
-	iter = taskStore.begin();
-	while ((iter != taskStore.end()) && (iter->getID() != id)) {
+std::vector<Task>::iterator Logic::matchCurrentViewIndex(int index) {
+	assert(index >0 && index <= (int)currentView.size());
+	std::vector<Task>::iterator iter = currentView.begin();
+	for(int i=1 ; i< index ; ++i) {
 		++iter;
 	}
+	return iter;
+}
 
-	if (iter->getID() == id) {
-		iter->markDone();
+std::vector<Task>::iterator Logic::matchTaskViewIndex(int index) {
+	std::vector<Task>::iterator iter = taskStore.begin();
+	while(iter->getID() != index && iter != taskStore.end()) {
+		++iter;
 	}
+	assert(iter != taskStore.end());
+	return iter;
+}
 
-	copyView();
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-	return true;
+//modified @haoye 14/10/15
+void Logic::markDone(Markdone toMarkDone) {
+	int index = toMarkDone.getDoneID();
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
+
+	matchIndex(index,currIter,taskIter);
+	taskIter->markDone();
+	currentView.erase(currIter);
 }
 
 /*
@@ -148,106 +146,78 @@ bool Logic::addInfo(Add taskName) {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(task);
 	task.setDateAndTime_UI(dateAndTime_UI);
 	taskStore.push_back(task);
+	currentView.push_back(task);
 
-	sortDate(taskStore);
-	copyView();
+//	sortDate(taskStore);
+//	copyView();
 	return true;
 }
 
 // Searches for Task to delete using ID
 // Deleting is done according to the order of elements on currentView
-bool Logic::deleteInfo(Delete idToDelete) {
-	std::vector<Task>::iterator iter;
-	int id;
-	int index;
-	index = idToDelete.getDeleteID();
+//modified @haoye 14/10/15
+void Logic::deleteInfo(Delete idToDelete) {
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
+	int index = idToDelete.getDeleteID();
 
-	try {
-		id = getIdOfIndex(index);
-		if (id == -1) {												//error code
-			throw "User input exceeded bounds.";
-		}
-	} catch (std::string exceedBoundStr) {
-		std::cerr << exceedBoundStr << std::endl;
-		return false;
-	}
-
-	iter = taskStore.begin();
-	while ((iter != taskStore.end()) && (iter->getID() != id)) {
-		++iter;
-	}
-
-	if (iter->getID() == id) {
-		taskStore.erase(iter);
-	}
-
+	matchIndex(index,currIter,taskIter);
+	taskStore.erase(taskIter);
+	currentView.erase(currIter);
 	sortDate(taskStore);
-	copyView();
-	return true;
 }
 
-bool Logic::modifyInfo(Modify toModify) {
+//modified @haoye 14/10/15
+void Logic::modifyInfo(Modify toModify) {
+	std::vector<Task>::iterator currIter;
 	std::vector<Task>::iterator taskIter;
 	Task tempTask = toModify.getTempTask();
 
 	int index = toModify.getModifyID();
-	int id;
-	id = getIdOfIndex(index);
+	matchIndex(index,currIter,taskIter);
 
-	// Matches id obtained from currentView with id in taskstore
-	taskIter = taskStore.begin();
-	while ((taskIter != taskStore.end()) && (taskIter->getID() != id)) {
-		++taskIter;
-	}
+	std::vector<FieldType> tempField = toModify.getFieldsToModify();
+	std::vector<FieldType>::iterator fieldIter;
 
-	if (taskIter->getID() == id) {
-		std::vector<FieldType> tempField = toModify.getFieldsToModify();
-		std::vector<FieldType>::iterator fieldIter;
-
-		for (fieldIter = tempField.begin(); fieldIter != tempField.end(); ++fieldIter) {
-			switch (*fieldIter) {
-			case NAME:
-				taskIter->setName(tempTask.getName());
-				break;
-			case LABELS_ADD:
-				taskIter->setLabel(tempTask.getLabel());
-				break;
-			case LABELS_DELETE:
-				taskIter->setLabel("");
-				break;
-			case PRIORITY_SET:
-				taskIter->setPriority();
-				break;
-			case PRIORITY_UNSET:
-				taskIter->unsetPriority();
-				break;
-			case START_DATE:
-				taskIter->setStartDate(tempTask.getStartDate());
-				break;
-			case START_TIME:
-				taskIter->setStartTime(tempTask.getStartTime());
-				break;
-			case END_DATE:
-				taskIter->setEndDate(tempTask.getEndDate());
-				break;
-			case END_TIME:
-				taskIter->setEndTime(tempTask.getEndTime());
-				break;
-			case INVALID_FIELD:
-				std::cout << "Error in fetching field name" << std::endl;
-				break;
-			}
-			std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*taskIter);
-			taskIter->setDateAndTime_UI(dateAndTime_UI);
-
-			sortDate(taskStore);
-			copyView();
+	for (fieldIter = tempField.begin(); fieldIter != tempField.end(); ++fieldIter) {
+		switch (*fieldIter) {
+		case NAME:
+			taskIter->setName(tempTask.getName());			
+			break;
+		case LABELS_ADD:
+			taskIter->setLabel(tempTask.getLabel());
+			break;
+		case LABELS_DELETE:
+			taskIter->setLabel("");
+			break;
+		case PRIORITY_SET:
+			taskIter->setPriority();
+			break;
+		case PRIORITY_UNSET:
+			taskIter->unsetPriority();
+			break;
+		case START_DATE:
+			taskIter->setStartDate(tempTask.getStartDate());
+			break;
+		case START_TIME:
+			taskIter->setStartTime(tempTask.getStartTime());
+			break;
+		case END_DATE:
+			taskIter->setEndDate(tempTask.getEndDate());
+			break;
+		case END_TIME:
+			taskIter->setEndTime(tempTask.getEndTime());
+			break;
+		case INVALID_FIELD:
+			std::cout << "Error in fetching field name" << std::endl;
+			break;
 		}
-		return true;
-	} else {
-		return false;
-	}
+		*currIter = *taskIter;
+		std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*taskIter);
+		taskIter->setDateAndTime_UI(dateAndTime_UI);
 
+		sortDate(taskStore);
+		}
 }
 
 // Searches name for a phrase match, returns IDs of all matching tasks
@@ -331,8 +301,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 	try {
 		command = parser.parse(userCommand);
 	} catch(std::exception e) {
-		// TODO : set error message
-		return feedback;
+		feedback.setErrorMessage(e.what());
 	}
 
 	// cmd obtained from command (Aaron)
@@ -354,18 +323,22 @@ Feedback Logic::processCommand(std::string userCommand) {
 	case DELETE: 
 		// userIndex refers to the nth task of currentView presented to user
 		// eg. delete 1 means deleting the first task
-		try {
-			taskToDelete = ((Delete*)command);
+		taskToDelete = ((Delete*)command);
+		try {	
 			deleteInfo(*taskToDelete);
 			feedback.setUpdateView(true);
 		} catch (std::exception e) {
-			return feedback;
+			feedback.setErrorMessage(e.what());
 		}
 		break;
 
 	case MODIFY:
 		taskToModify = ((Modify*)command);
-		modifyInfo(*taskToModify);
+		try {
+			modifyInfo(*taskToModify);
+		} catch (std::exception e) {
+			feedback.setErrorMessage(e.what());
+		}
 		feedback.setUpdateView(true);
 		break;
 
@@ -404,11 +377,15 @@ Feedback Logic::processCommand(std::string userCommand) {
 
 	case MARKDONE:
 		taskToMarkDone = ((Markdone*)command);
-		markDone(*taskToMarkDone);
+		try {
+			markDone(*taskToMarkDone);
+			feedback.setUpdateView(true);
+		} catch (std::exception e) {
+			feedback.setErrorMessage(e.what());
+		}	
 		break;
 
 	case UNDO:
-	case INVALID:
 		break;
 	}
 
