@@ -1,4 +1,5 @@
 // @@author Aaron Chong Jun Hao
+// Methods are listed in order of return type, then alphabetical order
 
 #include "stdafx.h"
 
@@ -6,7 +7,7 @@ Utilities::Utilities() {}
 Utilities::~Utilities() {}
 
 // ==================================================
-//  CONVERTERS FOR MULTIPLE ARCHITECTURE COMPONENTS
+//                     CONVERTERS
 // ==================================================
 
 std::string Utilities::stringToLower(std::string str) {
@@ -14,7 +15,7 @@ std::string Utilities::stringToLower(std::string str) {
 	return str;
 }
 
-// String to other types
+//========== String-to-Type Converters ==========
 
 int Utilities::stringToInt(std::string str) {
 	char c;
@@ -112,13 +113,15 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	FieldType field;
 
 	if(equalsIgnoreCase(fieldString,FIELD_LABEL_ADD)) {
-		field = LABEL_ADD;
+		field = LABELS_ADD;
 	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_DELETE)) {
-		field = LABEL_DELETE;
-	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY)) {
-		field = PRIORITY;
+		field = LABELS_DELETE;
+	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_SET)) {
+		field = PRIORITY_SET;
+	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
+		field = PRIORITY_UNSET;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
-		field = END_DATE;
+		field = START_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
 		field = START_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
@@ -126,11 +129,10 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
 		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
-		field = END_TIME;
+		field = START_TIME;
 	} else {
 		field = INVALID_FIELD;
 	}
-
 	return field;
 }
 
@@ -158,8 +160,7 @@ std::vector<std::string> Utilities::splitParameters(std::string commandParameter
 	return tokens;
 }
 
-
-// Other types to string
+//========== Type-to-String Converters ==========
 
 std::string Utilities::boolToString(bool boolean) {
 	if(boolean) {
@@ -173,25 +174,25 @@ std::string Utilities::dayToString(Day day) {
 	std::string dayString;
 	switch(day) {
 	case SUN:
-		dayString = "SUN";
+		dayString = "Sunday";
 		break;
 	case MON:
-		dayString = "MON";
+		dayString = "Monday";
 		break;
 	case TUE:
-		dayString = "TUE";
+		dayString = "Tuesday";
 		break;
 	case WED:
-		dayString = "WED";
+		dayString = "Wednesday";
 		break;
 	case THU:
-		dayString = "THU";
+		dayString = "Thursday";
 		break;
 	case FRI:
-		dayString = "FRI";
+		dayString = "Friday";
 		break;
 	case SAT:
-		dayString = "SAT";
+		dayString = "Saturday";
 		break;
 	case INVALID_DAY:
 		dayString = "INVALID_DAY";
@@ -205,17 +206,19 @@ std::string Utilities::taskToString(Task task) {
 	const int MAX_BYTES = 2550;
 	char buffer[MAX_BYTES] = "";
 
-	sprintf_s(buffer, "%s%s\n%s%d\n",
-		"Name: ",		task.getName().c_str()/*,					// %s%s\n
-											  "Type: ",		task.getType(),								// %s%d\n
-											  "Label: ",		task.getLabel().c_str(),					// %s%s\n
-											  "Done: ",		task.getDoneStatus(),						// %s%d\n
-											  "Priority: ",	task.getPriorityStatus(),					// %s%d\n
-											  "Start Date: ",	task.getStartDate(),						// %s%d\n
-											  "Start Time: ",	task.getStartTime()*/,						// %s%d\n
-											  "End Date: ",	task.getEndDate()/*,						// %s%d\n
-																			 "End Time: ",	task.getEndTime()*/							// %s%d\n
-																			 );
+	sprintf_s(buffer, "%s%s\n%s%d\n%s%d\n%s%d\n",
+		"Name: ",		task.getName().c_str(),		// %s%s\n
+		/*
+		"Type: ",		task.getType(),				// %s%d\n
+		"Label: ",		task.getLabel().c_str(),	// %s%s\n
+		"Done: ",		task.getDoneStatus(),		// %s%d\n
+		"Priority: ",	task.getPriorityStatus(),	// %s%d\n
+		"Start Date: ",	task.getStartDate(),		// %s%d\n
+		*/
+		"Start Time: ",	task.getStartTime(),		// %s%d\n
+		"End Date: ",	task.getEndDate(),			// %s%d\n
+		"End Time: ",	task.getEndTime()			// %s%d\n
+		);
 
 	return buffer;
 }
@@ -238,7 +241,7 @@ std::string Utilities::taskTypeToString(TaskType type) {
 }
 
 // NOTE TO AARON: method doesn't work in IOTest.cpp
-// REPLY: Please see UtilitiesTest.cpp (Aaron)
+// REPLY: Please refer to UtilitiesTest.cpp (Aaron)
 std::string Utilities::vecToString(std::vector<std::string> inputString) {
 	std::string newString;
 	std::vector<std::string>::iterator curr;
@@ -251,9 +254,8 @@ std::string Utilities::vecToString(std::vector<std::string> inputString) {
 	return newString;
 }
 
-
 // ==================================================
-//                   USEFUL METHODS
+//             COMPARISONS AND MODIFIERS
 // ==================================================
 
 bool Utilities::containsAny(std::string targetWord, std::string searchWords) {
@@ -320,11 +322,112 @@ std::string Utilities::removeSpaces(const std::string& s, const std::string& del
 	}
 }
 
-std::string Utilities::replace(std::string a, std::string b, std::string c) {
+std::string Utilities::replace(std::string str, std::string from, std::string to) {
 	int pos;
 	do {
-		pos = a.find(b);
-		if(pos != -1) a.replace(pos, b.length(), c);
+		pos = str.find(from);
+		if(pos != -1) str.replace(pos, from.length(), to);
 	} while (pos != -1);
-	return a;
+	return str;
+}
+
+bool Utilities::isSubstring(std::string phrase, std::string search) {
+	bool isFound = false;
+	std::string::iterator pos = std::search(search.begin(), search.end(), 
+		phrase.begin(),phrase.end(),equalsIgnoreCase_char);
+	if(pos != search.end()) {
+		isFound = true;
+	}
+	return isFound;
+}
+
+bool Utilities::equalsIgnoreCase_char (char l, char r) {
+	return (tolower(l) == tolower(r));
+}
+
+// ==================================================
+//           STRING-FOR-DISPLAY FORMATTERS
+// ==================================================
+// @@author Soon Hao Ye
+
+std::string Utilities::taskDateAndTimeToDisplayString(Task task) {
+	std::string placeHolder;
+	std::string start;
+	std::string end;
+	int startDate = task.getStartDate();
+	int startTime = task.getStartTime();
+
+	if(task.getType() == TODO) {
+		end = end + intDateToDayString(task.getEndDate());
+		return "by " + end ;
+	} else if(task.getType() == EVENT) {
+		if(startDate != 0) {
+			start = intDateToDayString(startDate);		
+		}
+		if(startTime != 0) {
+			start = start + " " + intTimeTo12HourString(startTime);		
+		}
+		if(task.getEndDate() != startDate) {
+			end = end + intDateToDayString(task.getEndDate());
+			placeHolder = " to ";
+		}
+		if(task.getEndTime() != 0 && task.getStartTime() != task.getEndTime()) {
+			end = end + " " + intTimeTo12HourString(task.getEndTime());
+			placeHolder = " to ";
+		}
+		return start + placeHolder +  end ;
+	} else {
+		return "";
+	}
+}
+
+std::string Utilities::intTimeTo12HourString(int time) {
+	double time2;
+	std::stringstream stream;
+	if(time < 1200) {
+		time2 = time/100.0 ;
+		stream << std::fixed << std::setprecision(2) << time2;
+		return stream.str() + " am";
+	} else {
+		if(time > 1259) {
+			time = time - 1200;
+		}
+		stream.clear();
+		time2 = time/100.0 ;
+		stream << std::fixed << std::setprecision(2) << time2;
+		return stream.str() + " pm";
+	}	
+}
+
+std::string Utilities::intDateToDayString(int taskDate) {
+	time_t t = time(0); // get current time
+	struct tm now;
+	localtime_s(&now,&t);
+
+	// int localYear = now.tm_year - 100;
+	int localMonth = now.tm_mon + 1;
+	int localDay = now.tm_mday;
+	int localWDay = (now.tm_wday);
+
+	std::string date_UI;
+
+	int date = taskDate;
+	int day = date % 100;
+	int month = (date % 10000)/100;
+	int year = date/10000; 
+	int differenceInDays = day - localDay;
+	if(month == localMonth && day >= localDay && differenceInDays < 8) {	
+		int dayOfWeek = (localWDay + differenceInDays);			
+		if(dayOfWeek > 6) {
+			dayOfWeek = dayOfWeek % 7;
+			date_UI = dayToString((Day)dayOfWeek);
+			date_UI = "next " + date_UI;
+		} else {
+			date_UI = dayToString((Day)dayOfWeek);
+		}
+	} else {
+		date_UI = std::to_string(day) + "/" + std::to_string(month) + "/" +
+			std::to_string(year);
+	}
+	return date_UI;
 }

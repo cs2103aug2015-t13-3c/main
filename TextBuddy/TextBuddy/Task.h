@@ -3,6 +3,8 @@
 #ifndef TASK_H_
 #define TASK_H_
 
+#include <set>
+
 enum Day {
 	SUN,
 	MON, TUE, WED,
@@ -20,9 +22,10 @@ enum Month {
 
 enum FieldType {
 	NAME,
-	LABEL_ADD,
-	LABEL_DELETE,
-	PRIORITY,
+	LABELS_ADD,
+	LABELS_DELETE,
+	PRIORITY_SET,
+	PRIORITY_UNSET,
 	START_DATE,
 	START_TIME,
 	END_DATE,
@@ -40,7 +43,8 @@ enum TaskType {
 const std::string FIELD_NAME = "name";
 const std::string FIELD_LABEL_ADD = ":";
 const std::string FIELD_LABEL_DELETE = "-:";
-const std::string FIELD_PRIORITY = "star";
+const std::string FIELD_PRIORITY_SET = "star";
+const std::string FIELD_PRIORITY_UNSET = "unstar";
 const std::string FIELD_DATE_FROM = "from";
 const std::string FIELD_DATE_TO = "to";
 const std::string FIELD_DATE_BY = "by";
@@ -50,12 +54,14 @@ const std::string FIELD_TIME_AT = "at";
 class Task {
 private:
 	static int runningCount;
+	static Task tempTask;
 
 	std::string name;
 	TaskType type;
 	int uniqueID;
-	std::string label;
-	std::vector<std::string> labels;
+	std::string label; // Obsolete, can only store one label
+	std::set<std::string> labels;
+	std::string dateAndTime_UI;
 
 	bool isDone;
 	bool isPriority;
@@ -68,7 +74,8 @@ private:
 
 public:
 	static int getRunningCount();
-	static int setRunningCount(); // For startup
+	static int incrementRunningCount();			// For NewTask
+	static void setRunningCount(int lastCount); // For startup
 
 	static bool tasksAreEqual(Task task1, Task task2); // For testing
 
@@ -80,7 +87,8 @@ public:
 	TaskType getType();
 	int getID();
 	std::string getLabel();
-	std::vector<std::string> getLabels();
+	std::set<std::string> getLabels();
+	std::string getDateAndTime_UI();
 
 	bool getDoneStatus();
 	bool getPriorityStatus();
@@ -98,9 +106,13 @@ public:
 	bool setLabel(std::string newLabel);
 	bool addLabels(std::vector<std::string> newLabel);
 	bool deleteLabels(std::vector<std::string> newLabel);
+	void setDateAndTime_UI(std::string dateAndTime_UI);
 
-	bool toggleDone();
-	bool togglePriority();
+	bool markDone();		// Returns false if already done
+	bool unmarkDone();		// Returns false if already not done
+
+	bool setPriority();		// Returns false if already priority
+	bool unsetPriority();	// Returns false if already not priority
 
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);

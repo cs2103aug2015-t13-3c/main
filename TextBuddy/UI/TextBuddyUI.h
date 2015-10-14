@@ -17,6 +17,7 @@
 #define BY " by "
 #define TO " to "
 #define ON " on "
+#define AT " at "
 
 namespace UserInterface {
 
@@ -38,6 +39,7 @@ namespace UserInterface {
 			logic = new Logic();
 			updateDisplay(logic->getCurrentView());
 			floatingTasks = nullptr;
+			updateFloatingTasks();
 			floatingTaskIndex = 0;
 			input->Focus();
 			this->ActiveControl = input;
@@ -56,6 +58,7 @@ namespace UserInterface {
 			keywords->Add(BY);
 			keywords->Add(TO);
 			keywords->Add(ON);
+			keywords->Add(AT);
 		}
 
 	protected:
@@ -86,6 +89,7 @@ namespace UserInterface {
 		void InitializeComponent(void) {
 			this->components = (gcnew System::ComponentModel::Container());
 			System::Windows::Forms::DataGridView^  display;
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Label = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -106,13 +110,22 @@ namespace UserInterface {
 			display->AllowUserToDeleteRows = false;
 			display->AllowUserToResizeColumns = false;
 			display->AllowUserToResizeRows = false;
+			display->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
 			display->BackgroundColor = System::Drawing::Color::White;
 			display->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			display->CellBorderStyle = System::Windows::Forms::DataGridViewCellBorderStyle::None;
 			display->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(4) {this->id, this->description, 
 				this->Label, this->dateAndTime});
+			dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+			dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
+			dataGridViewCellStyle1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			dataGridViewCellStyle1->ForeColor = System::Drawing::SystemColors::ControlText;
+			dataGridViewCellStyle1->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle1->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			display->DefaultCellStyle = dataGridViewCellStyle1;
 			display->Location = System::Drawing::Point(0, 26);
 			display->Name = L"display";
 			display->ReadOnly = true;
@@ -245,7 +258,6 @@ namespace UserInterface {
 			reads the characters from textbox
 			converts the entire input from CLI String to std::string
 			stores the input into class variable
-			clears the textbox
 		=====================================================================*/
 		void getInput() {
 			msclr::interop::marshal_context context;
@@ -256,6 +268,7 @@ namespace UserInterface {
 			passes UserInput to Logic
 			prints feedback message if needed
 			updates current display of task if needed
+			updates floating tasks entries
 		=====================================================================*/
 		void processAndExecute() {
 			feedback->Clear();
@@ -285,9 +298,19 @@ namespace UserInterface {
 			display->Rows->Clear();
 
 			for(unsigned int i=0 ; i<tasks.size() ; ++i) {
-				TaskType type = tasks[i].getType();
-				String^ name = gcnew String(tasks[i].getName().c_str());
-				display->Rows->Add((i+1).ToString(),name);
+				Task currentTask = tasks[i];
+				TaskType type = currentTask.getType();
+				String^ name = gcnew String(currentTask.getName().c_str());
+				std::set<std::string> labels = currentTask.getLabels();
+				std::set<std::string>::iterator labelsCurr = labels.begin();
+				std::string l;
+				for(unsigned int j=0; j< labels.size(); ++j) {
+					l = l + *labelsCurr + " ";
+					labelsCurr++;
+				}
+				String^ label = gcnew String(l.c_str());
+				String^ dateTime = gcnew String(currentTask.getDateAndTime_UI().c_str());
+				display->Rows->Add((i+1).ToString(),name,label,dateTime);
 			}
 		}
 		/*=====================================================================
@@ -318,12 +341,13 @@ namespace UserInterface {
 			-MODIFY			-BY
 			-SEARCH			-TO
 			-DISPLAY		-ON
-			-DONE
+			-DONE			-AT
 			-TAG			**MORE TO COME**
 			-STAR
 			-UNSTAR
 		=====================================================================*/
-		void highlightSyntax() {			
+		void highlightSyntax() {		
+			input->SelectionColor = Color::Black;
 			for each(String^ keyword in keywords) {
 				int position = findKeyword(keyword);
 				if(keywordIsFound(position)) {
@@ -359,14 +383,33 @@ namespace UserInterface {
 			input->SelectionColor = Color::Black;
 		}
 
+		/*=====================================================================
+			When the user types in "search" as the first word in input box,
+			automatically performs search and updates display as user types
+		=====================================================================*/
 		void autoComplete() {
 			int position = findKeyword(SEARCH);
-			if(keywordIsFound(position)) {
+			if(keywordIsFound(position) && position == 0) {
 				getInput();
-				processAndExecute();
+				if(input->Text != SEARCH) { 
+					processAndExecute();
+				} 
+			}
+		}
+		/*====================================================================
+								REQUIRES REFINEMENT!!
+		=====================================================================*/
+		void undoSearch() {
+			if(input->Text == SEARCH) {
+				//TODO : logic->undo();
+				*userInput = "display";	//temporary
+				processAndExecute();	//temporary
 			}
 		}
 
+		/*=====================================================================
+			Get the latest list of floating tasks from logic
+		=====================================================================*/
 		void updateFloatingTasks() {
 			 if(floatingTasks != nullptr) {
 				delete floatingTasks;
@@ -374,7 +417,7 @@ namespace UserInterface {
 			 floatingTasks = new std::vector<Task>(logic->getFloatingTasks());
 		}
 
-	//********************** EVENT HANDLERS ***********************************
+//************************** EVENT HANDLERS ***********************************
 
 		//====================== MAIN FUNCTION ================================
 private: 
@@ -388,14 +431,18 @@ private:
 			} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right){
 				highlightSyntax();
 				autoComplete();
-			 } else {
+			} else {
 				 autoComplete();
+			}
+			if(e->KeyCode == Keys::Back) {
+				undoSearch();
 			}
 		 }
 
+		//======= Updates floating Tasks display textbox every 5 seconds ======
 private: 
 	System::Void updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
-		if(floatingTasks != nullptr && !floatingTasks->empty()) {	
+		if(!floatingTasks->empty()) {	
 				floatingTaskIndex = floatingTaskIndex % floatingTasks->size();
 				String^ title = gcnew String(
 					(*floatingTasks)[floatingTaskIndex].getName().c_str());

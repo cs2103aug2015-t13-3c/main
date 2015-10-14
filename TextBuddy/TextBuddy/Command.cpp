@@ -6,8 +6,6 @@
 //                      COMMAND
 // ==================================================
 
-// Command::Command() {}
-
 Command::Command(CommandType newCmd, std::string rawInput) {
 	cmd = newCmd;
 	userInput = rawInput;
@@ -27,8 +25,6 @@ std::string Command::getUserInput() {
 //                        ADD
 // ==================================================
 
-// Add::Add() : Command(ADD) {}
-
 Add::Add(Task task, std::string userInput) : Command(ADD,userInput) {
 	newTask = task;	
 }
@@ -39,16 +35,9 @@ Task Add::getNewTask() {
 	return newTask;
 }
 
-void Add::setNewTask(Task task) {
-	newTask = task;
-	return;
-}
-
 // ==================================================
 //                       DELETE
 // ==================================================
-
-// Delete::Delete() : Command(DELETE) {}
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
@@ -63,8 +52,6 @@ int Delete::getDeleteID() {
 // ==================================================
 //                       MODIFY
 // ==================================================
-
-// Modify::Modify() : Command(MODIFY) {}
 
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
@@ -90,8 +77,6 @@ Task Modify::getTempTask() {
 //                       SEARCH
 // ==================================================
 
-// Search::Search() : Command(SEARCH) {}
-
 Search::Search(std::string phraseString) : Command(SEARCH) {
 	searchPhrase = phraseString;
 }
@@ -101,6 +86,28 @@ Search::~Search() {}
 std::string Search::getSearchPhrase() {
 	return searchPhrase;
 }
+
+// ==================================================
+//                      MARKDONE
+// ==================================================
+
+Markdone::Markdone(int taskID) : Command(MARKDONE) {
+	doneID = taskID;
+}
+
+Markdone::~Markdone() {}
+
+int Markdone::getDoneID() {
+	return doneID;
+}
+
+// ==================================================
+//                        UNDO
+// ==================================================
+
+Undo::Undo() : Command(UNDO) {}
+
+Undo::~Undo() {}
 
 // ==================================================
 //                     CLEAR_ALL

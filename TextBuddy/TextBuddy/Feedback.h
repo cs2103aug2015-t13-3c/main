@@ -1,9 +1,19 @@
 // @@author Soon Hao Ye
 
+#ifndef FEEDBACK_H_
+#define FEEDBACK_H_
+
 #include "stdafx.h"
-#include "Utilities.h"
 
 class Feedback {
+private:
+	bool exit;
+	bool warning;
+	bool updateView;
+	bool operationSucceeded;
+	std::string feedbackMessage;
+	std::vector<Task> tasksToShow;
+
 public:
 	Feedback();
 	Feedback(std::string feedbackMessage, std::vector<Task> tasksToShow);
@@ -20,11 +30,6 @@ public:
 	bool isWarning();
 	void setExit();
 	bool isExit();
-private:
-	bool exit;
-	bool warning;
-	bool updateView;
-	bool operationSucceeded;
-	std::string feedbackMessage;
-	std::vector<Task> tasksToShow;
 };
+
+#endif

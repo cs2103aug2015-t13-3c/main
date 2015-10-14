@@ -1,4 +1,5 @@
 // @@author Aaron Chong Jun Hao
+// Parser converts flexible natural language into commands and parameters for TextBuddy.
 
 #ifndef PARSER_H_
 #define PARSER_H_
@@ -18,6 +19,7 @@ public:
 
 	// This is the API
 	std::string parseFileName(char* argv[]);
+	std::string parseFileName(std::string stringFilePath);
 	Command* parse(std::string userInput);
 	Task* parseTask(std::string restOfCommand);
 

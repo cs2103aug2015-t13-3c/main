@@ -3,9 +3,9 @@
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
-#include "IO.h"
-#include "Parser.h"
 #include "Feedback.h"
+#include "Parser.h"
+#include "IO.h"
 
 class Logic {
 private:
@@ -25,15 +25,15 @@ public:
 	bool saveFile(std::string fileName);
 	std::vector<Task> loadFile(std::string fileName);
 	std::vector<Task> getTaskStore();
+	void clearTaskStore();
 	std::vector<Task> getCurrentView();
 	bool addInfo(Add taskName);
 	bool deleteInfo(Delete idToDelete);
 	bool modifyInfo(Modify toModify);
 	std::string searchInfo(Search toSearch);
-	//amends currentView to store searched elements
+	// Amends currentView to store searched elements
 	bool amendView(std::string listOfIds);
 
-	bool matchPhrase(std::string phr, std::string str);		
 	Feedback processCommand(std::string userCommand);
 	std::vector<Task> getFloatingTasks();
 };
@@ -99,4 +99,5 @@ std::string freeSlotSearch(int date, int time);
 //std::string returnHelpText(void);
 };
 */
+
 #endif
