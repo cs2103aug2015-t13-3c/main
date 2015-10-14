@@ -2,11 +2,22 @@
 
 #include "stdafx.h"
 #include "Logic.h"
+#include "easylogging++.h"
 
+#define ELPP_STL_LOGGING
+
+INITIALIZE_EASYLOGGINGPP
 const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
 
 
 Logic::Logic() {
+	el::Configurations conf("config_file.conf");
+	el::Loggers::reconfigureLogger("default", conf);
+	el::Loggers::reconfigureAllLoggers(conf);
+	
+	LOG(INFO) << "Logic created";
+
+	LOG(INFO) << "File loaded.";
 	taskStore = loadFile(io.getFilePath());
 	std::vector<Task>::iterator i;
 	for(i=taskStore.begin() ; i!=taskStore.end(); ++i) {
@@ -148,6 +159,7 @@ bool Logic::addInfo(Add taskName) {
 	taskStore.push_back(task);
 	currentView.push_back(task);
 
+	TIMED_SCOPE(logAdd, "added task");
 //	sortDate(taskStore);
 //	copyView();
 	return true;
@@ -165,6 +177,8 @@ void Logic::deleteInfo(Delete idToDelete) {
 	taskStore.erase(taskIter);
 	currentView.erase(currIter);
 	sortDate(taskStore);
+
+	TIMED_SCOPE(logDel, "deleted task");
 }
 
 //modified @haoye 14/10/15
@@ -218,6 +232,8 @@ void Logic::modifyInfo(Modify toModify) {
 
 		sortDate(taskStore);
 		}
+
+	TIMED_SCOPE(logMod, "modified task");
 }
 
 // Searches name for a phrase match, returns IDs of all matching tasks
@@ -243,6 +259,8 @@ std::string Logic::searchInfo(Search toSearch) {
 	if(!returnString.empty()) {
 		returnString.pop_back();
 	}
+
+	TIMED_SCOPE(logSearch, "searched task");
 	return returnString;
 }
 
@@ -278,6 +296,7 @@ bool Logic::amendView(std::string listOfIds) {
 }
 
 Feedback Logic::processCommand(std::string userCommand) {
+	TIMED_FUNC(processCmd);
 	//========== FOR UI PURPOSE ==========
 	Feedback feedback;				
 	bool isFound = true; 
@@ -389,6 +408,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 		break;
 	}
 
+	LOG(INFO) << "Saved file.";
 	saveFile(io.getFilePath());
 	feedback.setTasksToShow(currentView);
 	return feedback;
