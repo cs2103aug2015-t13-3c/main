@@ -63,6 +63,8 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 		}
 	}
 
+	initialiseRunningCount(taskVector);
+
 	inputFile.close();
 
 	return taskVector;
@@ -449,6 +451,15 @@ void IO::closeJsonText(std::ofstream& newfile) {
 	newfile << "\t]\n}";
 	return;
 }
+
+void IO::initialiseRunningCount(std::vector<Task> taskVector) {
+	Task lastTask = taskVector.back();
+	int lastCount = lastTask.getID();
+	lastTask.setRunningCount(lastCount);
+	
+	return;
+}
+
 
 //========== Getter for Testing ==========
 

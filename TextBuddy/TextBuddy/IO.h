@@ -15,6 +15,7 @@ private:
 	bool fileIsOpen(std::ofstream& outputFile);
 	Task extractTaskFromJsonObject(Value& item);
 	void writeTaskIntoJsonFormat(std::ofstream &newFile, Task task);
+	void initialiseRunningCount(std::vector<Task> taskVector);
 
 	void extractName(Task &newTask, Value &item);
 	void extractType(Task &newTask, Value &item);
