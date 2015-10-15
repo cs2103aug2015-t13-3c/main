@@ -165,6 +165,7 @@ void Logic::deleteInfo(Delete idToDelete) {
 	taskStore.erase(taskIter);
 	currentView.erase(currIter);
 	sortDate(taskStore);
+
 }
 
 //modified @haoye 14/10/15
@@ -218,6 +219,7 @@ void Logic::modifyInfo(Modify toModify) {
 
 		sortDate(taskStore);
 		}
+
 }
 
 // Searches name for a phrase match, returns IDs of all matching tasks
@@ -243,6 +245,7 @@ std::string Logic::searchInfo(Search toSearch) {
 	if(!returnString.empty()) {
 		returnString.pop_back();
 	}
+
 	return returnString;
 }
 
