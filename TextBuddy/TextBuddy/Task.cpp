@@ -100,7 +100,7 @@ bool Task::markDone() {
 }
 
 bool Task::unmarkDone() {
-	return isDone != (isDone=false);;
+	return isDone == (isDone=false);;
 }
 
 bool Task::setPriority() {
@@ -108,7 +108,7 @@ bool Task::setPriority() {
 }
 
 bool Task::unsetPriority() {
-	return isPriority != (isPriority=false);;
+	return isPriority == (isPriority=false);;
 }
 
 bool Task::setStartDate(int newStartDate) {

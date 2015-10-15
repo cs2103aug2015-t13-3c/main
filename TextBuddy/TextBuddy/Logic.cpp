@@ -148,8 +148,8 @@ bool Logic::addInfo(Add taskName) {
 	taskStore.push_back(task);
 	currentView.push_back(task);
 
-//	sortDate(taskStore);
-//	copyView();
+	sortDate(taskStore);
+	copyView();
 	return true;
 }
 
@@ -382,6 +382,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 		taskToMarkDone = ((Markdone*)command);
 		try {
 			markDone(*taskToMarkDone);
+			copyView(); //Bugfix (Ren Zhi)
 			feedback.setUpdateView(true);
 		} catch (std::exception e) {
 			feedback.setErrorMessage(e.what());
@@ -431,6 +432,7 @@ bool Logic::sortDate(std::vector<Task> &taskVector) {
 
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
 	Task tempTask;
 	if (taskVector.size() == 0) {
 		return false;
@@ -454,15 +456,21 @@ bool Logic::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
+	//Bugfix: in-place sorting (Ren Zhi)
 	//sorts floating tasks to be at the bottom
-	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
+	i = taskVector.begin(); //points to start of unsorted part
+	k = taskVector.end(); //points to end of unsorted part
+	while(i != k) {
 		if (i->getType() == FLOATING) {
 			tempTask = *i;
 
 			for (j = i+1; j != taskVector.end(); ++j) {
-				std::swap(*j, *(j-1));
+				std::swap(*j, *(j-1)); 
 			}
 			*(j-1) = tempTask;
+			--k;
+		} else {
+			++i;
 		}
 	}
 

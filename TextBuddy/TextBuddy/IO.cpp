@@ -61,9 +61,9 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 			Task newTask = extractTaskFromJsonObject(item[i]);
 			taskVector.push_back(newTask);
 		}
+	initialiseRunningCount(taskVector);
 	}
 
-	initialiseRunningCount(taskVector);
 
 	inputFile.close();
 
