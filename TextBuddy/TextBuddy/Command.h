@@ -4,7 +4,6 @@
 #define COMMAND_H_
 
 // These are the possible command types
-// const std::string COMMAND_CLEAR_ALL = "clear";
 // const std::string COMMAND_SORT_ALL = "sort";
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
@@ -13,6 +12,7 @@ const std::string COMMAND_SEARCH = "search";
 const std::string COMMAND_MARKDONE = "done";
 const std::string COMMAND_UNDO = "undo";
 const std::string COMMAND_VIEW = "view";
+const std::string COMMAND_CLEAR_ALL = "clear";
 const std::string COMMAND_DISPLAY_ALL = "display";
 const std::string COMMAND_LOAD = "load";
 const std::string COMMAND_SAVE = "save";
@@ -33,6 +33,7 @@ enum CommandType {
 	MARKDONE,
 	UNDO,
 	VIEW,
+	CLEAR_ALL,
 	DISPLAY_ALL,
 	LOAD,
 	SAVE,
@@ -46,6 +47,7 @@ enum ViewType {
 	VIEWTYPE_PAST,
 	VIEWTYPE_TODO,
 	VIEWTYPE_WEEK,
+	VIEWTYPE_LABEL,
 	VIEWTYPE_INVALID
 };
 
