@@ -4,6 +4,7 @@
 #define TASK_H_
 
 #include <set>
+#include <vector>
 
 enum Day {
 	SUN,

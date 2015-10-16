@@ -8,7 +8,7 @@ namespace TextBuddyTests {
 	TEST_CLASS(LogicTest) {
 public:
 	
-	
+	/*
 	TEST_METHOD(Logic_addTaskModifyTask) {
 		Logic logic;
 		logic.clearTaskStore();							// Clear state (Aaron)
@@ -135,6 +135,7 @@ public:
 		std::string output = logic.processCommand(std::string("Search th"));	
 		Assert::AreEqual(std::string("that,then"), output);
 		*/
+		/*HERE
 		copyTask = logic.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("that"), iter->getName());

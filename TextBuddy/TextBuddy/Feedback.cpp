@@ -1,5 +1,6 @@
 // @@author Soon Hao Ye
 
+#include "Utilities.h"
 #include "Feedback.h"
 
 Feedback::Feedback(std::string feedbackMessage, std::vector<Task> tasksToShow) {

@@ -1,4 +1,8 @@
 // @@author Aaron Chong Jun Hao
+// Modified to Command pattern (Ren Zhi)
+
+#include "Feedback.h"
+#include <vector>
 
 #ifndef COMMAND_H_
 #define COMMAND_H_
@@ -53,11 +57,26 @@ class Command {
 private:
 	CommandType cmd;
 	std::string userInput;
+
+protected:
+	static std::vector<Task> taskStore;
+	static std::vector<Task> currentView;
+	Feedback feedback;
+
+	bool sortDate(std::vector<Task> &taskVector);
+	bool copyView();
+
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
 	~Command();
+	
 	CommandType getCommand();
 	std::string getUserInput();
+	std::vector<Task> getTaskStore();
+	std::vector<Task> getCurrentView();
+
+	virtual void execute();
+	virtual void undo();
 };
 
 // ==================================================
@@ -67,10 +86,16 @@ public:
 class Add: public Command {
 private:
 	Task newTask;
+
+	bool addInfo();
+
 public:
 	Add(Task task);
 	~Add();
 	Task getNewTask();
+
+	void execute();
+	void undo();
 };
 
 class Delete: public Command {
@@ -80,6 +105,9 @@ public:
 	Delete(int taskID);
 	~Delete();
 	int getDeleteID();
+
+	void execute();
+	void undo();
 };
 
 class Modify: public Command {
@@ -93,6 +121,9 @@ public:
 	int getModifyID();
 	std::vector<FieldType> getFieldsToModify();
 	Task getTempTask();
+
+	void execute();
+	void undo();
 };
 
 class Search: public Command {
@@ -102,6 +133,9 @@ public:
 	Search(std::string phraseString);
 	~Search();
 	std::string getSearchPhrase();
+
+	void execute();
+	void undo();
 };
 
 class Markdone: public Command {
@@ -111,6 +145,9 @@ public:
 	Markdone(int taskID);
 	~Markdone();
 	int getDoneID();
+
+	void execute();
+	void undo();
 };
 
 class Undo: public Command {
@@ -126,12 +163,18 @@ public:
 	View(ViewType newView);
 	~View();
 	ViewType getViewType();
+
+	void execute();
+	void undo();
 };
 
 class DisplayAll: public Command {
 public:
 	DisplayAll();
 	~DisplayAll();
+
+	void execute();
+	void undo();
 };
 
 class Load: public Command {
@@ -141,6 +184,8 @@ public:
 	Load(std::string Load);
 	~Load();
 	std::string getFilePath();
+
+	void execute();
 };
 
 class Save: public Command {
@@ -150,6 +195,9 @@ public:
 	Save(std::string filePath);
 	~Save();
 	std::string getFilePath();
+
+	void execute();
+	// no undo for save
 };
 
 class Exit: public Command {

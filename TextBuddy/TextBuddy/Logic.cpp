@@ -5,7 +5,7 @@
 
 const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
 
-
+/*
 Logic::Logic() {
 	taskStore = loadFile(io.getFilePath());
 	std::vector<Task>::iterator i;
@@ -21,6 +21,14 @@ Logic::~Logic() {}
 // ==================================================
 //                      METHODS
 // ==================================================
+
+//added @RenZhi 16/10/15
+Logic* Logic::getInstance() {
+	if (theOne == NULL) {
+		theOne = new Logic();
+	}
+	return theOne;
+}
 
 int Logic::getSize() {
 	return taskStore.size();
@@ -51,11 +59,7 @@ std::vector<Task> Logic::getCurrentView() {
 	return currentView;
 }
 
-// For now, currentView is set to be the same as taskStore
-bool Logic::copyView() {
-	currentView = taskStore;
-	return true;
-}
+
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>added @haoye 14/10/15
 //replaces getIdOfIndex()
@@ -140,7 +144,8 @@ bool Logic::markStar(Star toMarkStar){
 	return true;
 }
 */
-
+// HERE
+/*
 bool Logic::addInfo(Add taskName) {
 	Task task = taskName.getNewTask();
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(task);
@@ -424,58 +429,6 @@ bool Logic::viewTaskType(TaskType type) {
 
 }
 
-
-//sorts in increasing order of dates (except for floating tasks, they are sorted to be at the bottom)
-//should use this to sort according to date before display to UI
-//since tasks with earliest deadlines/event should be seen first
-bool Logic::sortDate(std::vector<Task> &taskVector) {
-
-	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-	std::vector<Task>::iterator k;
-	Task tempTask;
-	if (taskVector.size() == 0) {
-		return false;
-	}
-/*	
-	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-		for (j = i+1; j != taskVector.end(); ++j) {
-			if (j -> getStartTime() < i.getStartTime) {
-				swapTaskPosition(i->getID(), j->getID());
-			}
-		}
-	}
-*/
-
-	//sorts date after time to ensure date is accurately sorted
-	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-		for (j = i+1; j != taskVector.end(); ++j) {
-			if (j -> getStartDate() < i -> getStartDate()) {
-				std::swap(*i, *j);
-			}
-		}
-	}
-
-	//Bugfix: in-place sorting (Ren Zhi)
-	//sorts floating tasks to be at the bottom
-	i = taskVector.begin(); //points to start of unsorted part
-	k = taskVector.end(); //points to end of unsorted part
-	while(i != k) {
-		if (i->getType() == FLOATING) {
-			tempTask = *i;
-
-			for (j = i+1; j != taskVector.end(); ++j) {
-				std::swap(*j, *(j-1)); 
-			}
-			*(j-1) = tempTask;
-			--k;
-		} else {
-			++i;
-		}
-	}
-
-	return true;
-}
 
 
 

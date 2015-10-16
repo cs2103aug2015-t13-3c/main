@@ -1,0 +1,41 @@
+Common Errors:
+
+**************************************************
+
+Syntax error: missing ';' before '*'
+
+Possible Problem:
+	Included two header files within each other,
+	so they can't initialise one file without initialising the other
+	i.e.
+	In Command.h:
+		#include"Feedback.h"
+	In Feedback.h:
+		#include"stdafx.h"
+	In stdafx.h:
+		#include"Task.h"
+		#include"Command.h"
+
+Solution:
+	Include only what you need
+
+**************************************************
+
+unresolved external symbol "public: virtual void __thiscall Command::execute(void)" (?execute@Command@@UAEXXZ)
+
+Possible Problem:
+	Method declared in header file, but no definition in cpp file
+
+Solution:
+	Create a definition for the method in cpp file
+
+error LNK2001: unresolved external symbol "private: static class History * History::theOne" (?theOne@History@@0PAV1@A)
+
+Possible Problem:
+	Static member declared but not initialised
+
+Solution:
+	Declare static member again in cpp file
+	e.g.
+	In header file: static History *theOne;
+	In cpp file: History * History::theOne;
