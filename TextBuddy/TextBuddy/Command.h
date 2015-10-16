@@ -130,7 +130,7 @@ public:
 
 class Modify: public Command {
 private:
-	int modifyID;
+	int modifyID; // GUI ID, not task ID
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 

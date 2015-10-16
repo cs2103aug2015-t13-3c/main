@@ -252,4 +252,59 @@ namespace TextBuddyTests
 			Assert::AreEqual(std::string("Sentence three."),iter->getName());
 		}
 	};
+
+	TEST_CLASS(Command_Modify)
+	{
+	public:
+
+		TEST_METHOD(Command_Modify_execute)
+		{
+			Task taskOne;
+			taskOne.setID(Task::incrementRunningCount());
+			taskOne.setName("Sentence one.");
+			Add addOne(taskOne);
+			addOne.clearTaskStore();
+			addOne.execute();
+
+			std::vector<Task> copyTask;
+			copyTask = addOne.getTaskStore();
+
+			std::vector<Task>::iterator iter;
+			iter = copyTask.begin();
+			Assert::AreEqual(std::string("Sentence one."), iter->getName());
+
+			Task taskTwo;
+			taskTwo.setName("Sentence two.");
+			Add addTwo(taskTwo);
+			addTwo.execute();
+
+			copyTask = addTwo.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+			Assert::AreEqual(std::string("Sentence two."),iter->getName());
+
+			Task taskThree;
+			taskThree.setName("Sentence three.");
+			Add addThree(taskThree);
+			addThree.execute();
+
+			copyTask = addThree.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+			++iter;
+			Assert::AreEqual(std::string("Sentence three."),iter->getName());
+
+			std::vector<FieldType> fields;
+			fields.push_back(NAME);
+			Task modifiedTaskTwo;
+			modifiedTaskTwo.setName("New Sentence Two");
+			Modify modifyTwo(2, fields, modifiedTaskTwo);
+
+			copyTask = modifyTwo.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+			Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
+		}
+
+	};
 }
