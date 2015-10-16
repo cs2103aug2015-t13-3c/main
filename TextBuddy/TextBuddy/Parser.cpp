@@ -4,8 +4,15 @@
 #include "stdafx.h"
 #include "Parser.h"
 
-Parser::Parser() {}
-Parser::~Parser() {}
+Parser::Parser() {
+	logger = Logger::getInstance();
+	logger->setLogLevel(DEBUG);
+	logger->log(SYS,"Parser instantiated");
+}
+
+Parser::~Parser() {
+	logger->log(SYS,"Parser destroyed");
+}
 
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
@@ -155,6 +162,7 @@ Command* Parser::parse(std::string userInput) {
 
 	case EXIT:
 		cmd = new Exit;
+		logger->close();
 		break;
 
 	case INVALID:
