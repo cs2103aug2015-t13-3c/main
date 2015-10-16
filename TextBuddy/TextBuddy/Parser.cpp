@@ -71,7 +71,7 @@ Command* Parser::parse(std::string userInput) {
 			taskPtr->setID(Task::incrementRunningCount());
 			cmd = new Add(*taskPtr);
 		} catch(std::string NullTaskString) {
-			std::cerr << NullTaskString << std::endl;
+			throw NullTaskString;
 		}
 		break;
 
@@ -94,7 +94,13 @@ Command* Parser::parse(std::string userInput) {
 			}
 			int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
 			std::string tempTaskString = Utilities::removeFirstWord(restOfInput);
+			if(tempTaskString=="") {
+				throw "No fields to modify!";
+			}
 			std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
+			if(Utilities::stringToFieldType(Utilities::getFirstWord(tempTaskString))==INVALID_FIELD) {
+				fieldsToModify.push_back(NAME);
+			}
 			Task* tempTaskPtr = parseTask(tempTaskString);
 			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
 		} catch(std::string NullModifyString) {
@@ -133,7 +139,11 @@ Command* Parser::parse(std::string userInput) {
 	case VIEW:
 		cmd = new View(Utilities::stringToViewType(restOfInput));
 		break;
-
+		
+	case CLEAR_ALL:
+		// cmd = new ClearAll;
+		break;
+		
 	case DISPLAY_ALL:
 		cmd = new DisplayAll;
 		break;
@@ -143,7 +153,8 @@ Command* Parser::parse(std::string userInput) {
 			if(restOfInput=="") {
 				throw("No file path specified!");
 			}
-			cmd = new Load(restOfInput);
+			std::string newFileName = parseFileName(restOfInput);
+			cmd = new Load(newFileName);
 		} catch(std::string NullFilePath) {
 			throw NullFilePath;
 		}
@@ -162,7 +173,7 @@ Command* Parser::parse(std::string userInput) {
 
 	case EXIT:
 		cmd = new Exit;
-		logger->close();
+		logger->close(); // To be transferred to Logic
 		break;
 
 	case INVALID:
