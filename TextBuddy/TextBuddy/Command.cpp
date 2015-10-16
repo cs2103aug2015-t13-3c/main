@@ -2,6 +2,7 @@
 
 #include "Command.h"
 #include "stdafx.h"
+#include "IO.h"
 
 // ==================================================
 //                      COMMAND
@@ -32,6 +33,18 @@ std::vector<Task> Command::getCurrentView() {
 	return currentView;
 }
 
+int Command::getSize() {
+	return taskStore.size();
+}
+
+void Command::clearTaskStore() {
+	IO io;
+	taskStore.clear();
+	currentView.clear();
+	remove(io.getFilePath().c_str());
+	return;
+}
+
 // virtual function does nothing
 void Command::execute() {
 }
@@ -45,6 +58,8 @@ void Command::undo() {
 
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
+
+const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
 
 //sorts in increasing order of dates (except for floating tasks, they are sorted to be at the bottom)
 //should use this to sort according to date before display to UI
@@ -104,6 +119,46 @@ bool Command::copyView() {
 	return true;
 }
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>added @haoye 14/10/15
+//replaces getIdOfIndex()
+void Command::matchIndex(int index, std::vector<Task>::iterator &currIter, 
+	std::vector<Task>::iterator &taskIter) {
+	if(isValidIndex(index)) {	
+		currIter = matchCurrentViewIndex(index);
+		index = currIter->getID();
+		taskIter = matchTaskViewIndex(index);
+	} else {
+		throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
+	}
+}
+
+bool Command::isValidIndex(int index) {
+	if(index <1 || index > (int)currentView.size()) {
+		return false;
+	} 
+	return true;
+} 
+
+std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
+	assert(index >0 && index <= (int)currentView.size());
+	std::vector<Task>::iterator iter = currentView.begin();
+	for(int i=1 ; i< index ; ++i) {
+		++iter;
+	}
+	return iter;
+}
+
+std::vector<Task>::iterator Command::matchTaskViewIndex(int index) {
+	std::vector<Task>::iterator iter = taskStore.begin();
+	while(iter->getID() != index && iter != taskStore.end()) {
+		++iter;
+	}
+	assert(iter != taskStore.end());
+	return iter;
+}
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 // ==================================================
 //                        ADD
 // ==================================================
@@ -111,7 +166,8 @@ bool Command::copyView() {
 
 // ============== ADD : PUBLIC METHODS ===============
 Add::Add(Task task) : Command(ADD) {
-	newTask = task;	
+	newTask = task;
+	currViewID = 0;
 }
 
 Add::~Add() {}
@@ -126,8 +182,10 @@ void Add::execute() {
 		feedback.setAddedMessage();
 }
 
+// Add must have executed before undoing,
+// otherwise currViewID will not be updated
 void Add::undo() {
-	Delete taskToDelete(newTask.getID());
+	Delete taskToDelete(currViewID);
 	taskToDelete.execute();
 }
 
@@ -138,6 +196,7 @@ bool Add::addInfo() {
 	newTask.setDateAndTime_UI(dateAndTime_UI);
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
+	currViewID = currentView.size();
 
 	sortDate(taskStore);
 	copyView();
@@ -148,8 +207,13 @@ bool Add::addInfo() {
 //                       DELETE
 // ==================================================
 
+// ============ DELETE : PUBLIC METHODS =============
+
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
+	currViewIter = matchCurrentViewIndex(deleteID);
+	taskStoreIter = matchTaskViewIndex(currViewIter->getID());
+	taskToBeDeleted = *currViewIter;
 }
 
 Delete::~Delete() {}
@@ -159,15 +223,39 @@ int Delete::getDeleteID() {
 }
 
 void Delete::execute() {
+		// userIndex refers to the nth task of currentView presented to user
+		// eg. delete 1 means deleting the first task
+			deleteInfo();
+			feedback.setUpdateView(true);
 }
 
+// adds the deleted task back to the exact location it was before
 void Delete::undo() {
+	taskStore.insert(taskStoreIter,taskToBeDeleted);
+	currentView.insert(currViewIter,taskToBeDeleted);
+}
+
+// ============= DELETE : PRIVATE METHODS ===========
+
+// Searches for Task to delete using ID
+// Deleting is done according to the order of elements on currentView
+//modified @haoye 14/10/15
+void Delete::deleteInfo() {
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
+
+	matchIndex(deleteID,currIter,taskIter);
+	taskStore.erase(taskIter);
+	currentView.erase(currIter);
+	sortDate(taskStore);
 }
 
 // ==================================================
 //                       MODIFY
 // ==================================================
 
+
+// ================ MODIFY : PUBLIC METHODS =========
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
 	fieldsToModify = fields;
@@ -189,9 +277,65 @@ Task Modify::getTempTask() {
 }
 
 void Modify::execute() {
+		modifyInfo();
+		feedback.setUpdateView(true);
 }
 
 void Modify::undo() {
+}
+
+// ============= MODIFY : PRIVATE METHODS ===========
+
+//modified @haoye 14/10/15
+void Modify::modifyInfo() {
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
+
+	int index = modifyID;
+	matchIndex(index,currIter,taskIter);
+
+	std::vector<FieldType> tempField = fieldsToModify;
+	std::vector<FieldType>::iterator fieldIter;
+
+	for (fieldIter = tempField.begin(); fieldIter != tempField.end(); ++fieldIter) {
+		switch (*fieldIter) {
+		case NAME:
+			taskIter->setName(tempTask.getName());			
+			break;
+		case LABELS_ADD:
+			taskIter->setLabel(tempTask.getLabel());
+			break;
+		case LABELS_DELETE:
+			taskIter->setLabel("");
+			break;
+		case PRIORITY_SET:
+			taskIter->setPriority();
+			break;
+		case PRIORITY_UNSET:
+			taskIter->unsetPriority();
+			break;
+		case START_DATE:
+			taskIter->setStartDate(tempTask.getStartDate());
+			break;
+		case START_TIME:
+			taskIter->setStartTime(tempTask.getStartTime());
+			break;
+		case END_DATE:
+			taskIter->setEndDate(tempTask.getEndDate());
+			break;
+		case END_TIME:
+			taskIter->setEndTime(tempTask.getEndTime());
+			break;
+		case INVALID_FIELD:
+			std::cout << "Error in fetching field name" << std::endl;
+			break;
+		}
+		*currIter = *taskIter;
+		std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*taskIter);
+		taskIter->setDateAndTime_UI(dateAndTime_UI);
+
+		sortDate(taskStore);
+		}
 }
 
 // ==================================================

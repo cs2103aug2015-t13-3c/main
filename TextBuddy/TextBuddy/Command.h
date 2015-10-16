@@ -63,8 +63,17 @@ protected:
 	static std::vector<Task> currentView;
 	Feedback feedback;
 
+	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
+
 	bool sortDate(std::vector<Task> &taskVector);
 	bool copyView();
+
+	//added by haoye
+	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
+	std::vector<Task>::iterator &taskIter);
+	std::vector<Task>::iterator matchCurrentViewIndex(int index);
+	std::vector<Task>::iterator matchTaskViewIndex(int index);
+	bool isValidIndex(int index);
 
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
@@ -74,6 +83,8 @@ public:
 	std::string getUserInput();
 	std::vector<Task> getTaskStore();
 	std::vector<Task> getCurrentView();
+	int getSize();
+	void clearTaskStore();
 
 	virtual void execute();
 	virtual void undo();
@@ -86,6 +97,7 @@ public:
 class Add: public Command {
 private:
 	Task newTask;
+	int currViewID;
 
 	bool addInfo();
 
@@ -100,7 +112,13 @@ public:
 
 class Delete: public Command {
 private:
-	int deleteID;
+	int deleteID; //ID on GUI, not Task ID
+	Task taskToBeDeleted;
+	std::vector<Task>::iterator currViewIter;
+	std::vector<Task>::iterator taskStoreIter;
+
+	void deleteInfo();
+
 public:
 	Delete(int taskID);
 	~Delete();
@@ -115,6 +133,8 @@ private:
 	int modifyID;
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
+
+	void modifyInfo();
 public:
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	~Modify();
