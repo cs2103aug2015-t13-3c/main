@@ -8,16 +8,9 @@
 #include "Command.h"
 #include <string>
 
-<<<<<<< HEAD
-class Utilities {
-private:
-	// This is the return value for invalid numbers
-	static const int INVALID_NUMBER_FORMAT = -1;
-=======
 // This is the return value for invalid numbers
 const int INVALID_NUMBER_FORMAT = -1;
 const int LAST_TASK_INDICATOR = 0;
->>>>>>> c23c736d0f1e2ba1ad314c9912f89ecdc054ebec
 
 class Utilities {
 public:

@@ -100,11 +100,7 @@ bool Task::markDone() {
 }
 
 bool Task::unmarkDone() {
-<<<<<<< HEAD
 	return isDone == (isDone=false);;
-=======
-	return isDone != (isDone=false);
->>>>>>> c23c736d0f1e2ba1ad314c9912f89ecdc054ebec
 }
 
 bool Task::setPriority() {
@@ -112,11 +108,7 @@ bool Task::setPriority() {
 }
 
 bool Task::unsetPriority() {
-<<<<<<< HEAD
 	return isPriority == (isPriority=false);;
-=======
-	return isPriority != (isPriority=false);
->>>>>>> c23c736d0f1e2ba1ad314c9912f89ecdc054ebec
 }
 
 bool Task::setStartDate(int newStartDate) {

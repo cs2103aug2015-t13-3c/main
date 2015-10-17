@@ -1,6 +1,7 @@
 // @@author Aaron Chong Jun Hao
 
 #include "stdafx.h"
+#include <ctime>
 
 namespace TextBuddyTests {
 	TEST_CLASS(LoggerTest) {
