@@ -11,7 +11,7 @@ Parser::Parser() {
 }
 
 Parser::~Parser() {
-	logger->log(SYS,"Parser destroyed");
+	logger->log(SYS,"Parser destructed");
 }
 
 // This defines the file extension used by TextBuddy
@@ -68,7 +68,7 @@ Command* Parser::parse(std::string userInput) {
 	log(INFO,"Parsing \"" + Utilities::getFirstWord(userInput) + "\"");
 
 	switch(cmdType) {
-	case ADD:
+	case ADD: {
 		if(restOfInput=="") {
 			log(WARN,"No task to add: " + restOfInput);
 			throw std::runtime_error("No task to add!");
@@ -76,16 +76,16 @@ Command* Parser::parse(std::string userInput) {
 		Task* taskPtr = parseTask(restOfInput);
 		taskPtr->setID(Task::incrementRunningCount());
 		cmd = new Add(*taskPtr);
-		break;
+		break;}
 
-	case DELETE:
+	case DELETE: {
 		if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
 			log(WARN,"Invalid integer string: " + restOfInput);
 			throw std::runtime_error("Invalid integer string!");
 		}
 		int deleteID = Utilities::stringToInt(restOfInput);
 		cmd = new Delete(deleteID);
-		break;
+		break;}
 
 	case MODIFY: {
 		std::string tempTaskString;
@@ -112,14 +112,14 @@ Command* Parser::parse(std::string userInput) {
 		cmd = new Search(searchPhrase);
 		break;}
 
-	case MARKDONE:
+	case MARKDONE: {
 		if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
 			log(WARN,"Invalid integer string: " + restOfInput);
 			throw std::runtime_error("Invalid integer string!");
 		}
 		int doneID = Utilities::stringToInt(restOfInput);
 		cmd = new Markdone(doneID);
-		break;
+		break;}
 
 	case UNDO:
 		cmd = new Undo;
@@ -186,6 +186,8 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_NAME)
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL_ADD)
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL_DELETE)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_PRIORITY_SET)
+			&& !Utilities::equalsIgnoreCase(*curr, FIELD_PRIORITY_UNSET)
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_ON)
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_FROM)
 			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_TO)

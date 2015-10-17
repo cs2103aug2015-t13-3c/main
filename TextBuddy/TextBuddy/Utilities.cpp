@@ -282,7 +282,6 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 	std::vector<FieldType>::iterator curr = fieldsToModify.begin();
 	std::string newString;
 	while(curr != fieldsToModify.end()) {
-
 		if(*curr == NAME) {
 			newString += FIELD_NAME;
 		} else if(*curr == LABELS_ADD) {
@@ -306,8 +305,12 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 		} else {
 			newString += INVALID_FIELD;
 		}
-		return newString;
+
+		if(++curr != fieldsToModify.end()) {
+			newString += " ";
+		}
 	}
+	return newString;
 }
 
 // NOTE TO AARON: method doesn't work in IOTest.cpp

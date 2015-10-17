@@ -44,9 +44,9 @@ public:
 		
 		// Test for MODIFY
 		expectedInt = 1;
-		userInput = "modify 1 Two turtle doves";
-		expectedString = "name";
-		std::string expectedString2 = "Name: Two turtle doves\n";
+		userInput = "modify 1 Two turtle doves : -: star unstar from to by on at";
+		expectedString = "name : -: star unstar from to by on at";
+		std::string expectedString2 = "Name: Two turtle doves\nStart Time: 0\nEnd Date: 0\nEnd Time: 0\n";
 		
 
 		/*
