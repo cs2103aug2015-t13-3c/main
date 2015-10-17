@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "IO.h"
 #include "Rapidjson\include\rapidjson\document.h"
+//#include "Shlwapi.h"
 
 using namespace rapidjson;
 
@@ -60,7 +61,9 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 			Task newTask = extractTaskFromJsonObject(item[i]);
 			taskVector.push_back(newTask);
 		}
+	initialiseRunningCount(taskVector);
 	}
+
 
 	inputFile.close();
 
@@ -90,6 +93,18 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 	newfile.close();
 	return true;
 }
+/*
+bool IO::changeSourceFileLocation (std::string newFileLocation) {
+	std::string systemRoot;
+	systemRoot = getenv ("systemroot");
+
+	std::string newFullPath= systemRoot + "\\" + newFileLocation;
+	const char* newFullPathName = newFullPath.c_str();
+
+	return PathIsDirectory(newFullPathName);
+}
+*/
+
 
 // ==================================================
 //                   PRIVATE METHODS
@@ -436,6 +451,15 @@ void IO::closeJsonText(std::ofstream& newfile) {
 	newfile << "\t]\n}";
 	return;
 }
+
+void IO::initialiseRunningCount(std::vector<Task> taskVector) {
+	Task lastTask = taskVector.back();
+	int lastCount = lastTask.getID();
+	lastTask.setRunningCount(lastCount);
+	
+	return;
+}
+
 
 //========== Getter for Testing ==========
 

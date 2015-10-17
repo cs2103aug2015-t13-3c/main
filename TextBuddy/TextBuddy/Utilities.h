@@ -4,6 +4,10 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
+#include "Task.h"
+#include "Command.h"
+#include <string>
+
 // This is the return value for invalid numbers
 const int INVALID_NUMBER_FORMAT = -1;
 const int LAST_TASK_INDICATOR = 0;

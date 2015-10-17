@@ -1,9 +1,14 @@
 // @@author Aaron Chong Jun Hao
+// Modified to Command pattern (Ren Zhi)
+
+#include "Feedback.h"
+#include <vector>
 
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
 // These are the possible command types
+// const std::string COMMAND_CLEAR_ALL = "clear";
 // const std::string COMMAND_SORT_ALL = "sort";
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
@@ -55,11 +60,37 @@ class Command {
 private:
 	CommandType cmd;
 	std::string userInput;
+
+protected:
+	static std::vector<Task> taskStore;
+	static std::vector<Task> currentView;
+	Feedback feedback;
+
+	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
+
+	bool sortDate(std::vector<Task> &taskVector);
+	bool copyView();
+
+	//added by haoye
+	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
+	std::vector<Task>::iterator &taskIter);
+	std::vector<Task>::iterator matchCurrentViewIndex(int index);
+	std::vector<Task>::iterator matchTaskViewIndex(int index);
+	bool isValidIndex(int index);
+
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
 	~Command();
+	
 	CommandType getCommand();
 	std::string getUserInput();
+	std::vector<Task> getTaskStore();
+	std::vector<Task> getCurrentView();
+	int getSize();
+	void clearTaskStore();
+
+	virtual void execute();
+	virtual void undo();
 };
 
 // ==================================================
@@ -69,32 +100,53 @@ public:
 class Add: public Command {
 private:
 	Task newTask;
+	int currViewID;
+
+	bool addInfo();
+
 public:
 	Add(Task task);
 	~Add();
 	Task getNewTask();
+
+	void execute();
+	void undo();
 };
 
 class Delete: public Command {
 private:
-	int deleteID;
+	int deleteID; //ID on GUI, not Task ID
+	Task taskToBeDeleted;
+	std::vector<Task>::iterator currViewIter;
+	std::vector<Task>::iterator taskStoreIter;
+
+	void deleteInfo();
+
 public:
 	Delete(int taskID);
 	~Delete();
 	int getDeleteID();
+
+	void execute();
+	void undo();
 };
 
 class Modify: public Command {
 private:
-	int modifyID;
+	int modifyID; // GUI ID, not task ID
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
+
+	void modifyInfo();
 public:
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	~Modify();
 	int getModifyID();
 	std::vector<FieldType> getFieldsToModify();
 	Task getTempTask();
+
+	void execute();
+	void undo();
 };
 
 class Search: public Command {
@@ -104,6 +156,9 @@ public:
 	Search(std::string phraseString);
 	~Search();
 	std::string getSearchPhrase();
+
+	void execute();
+	void undo();
 };
 
 class Markdone: public Command {
@@ -113,6 +168,9 @@ public:
 	Markdone(int taskID);
 	~Markdone();
 	int getDoneID();
+
+	void execute();
+	void undo();
 };
 
 class Undo: public Command {
@@ -128,12 +186,18 @@ public:
 	View(ViewType newView);
 	~View();
 	ViewType getViewType();
+
+	void execute();
+	void undo();
 };
 
 class DisplayAll: public Command {
 public:
 	DisplayAll();
 	~DisplayAll();
+
+	void execute();
+	void undo();
 };
 
 class Load: public Command {
@@ -143,6 +207,8 @@ public:
 	Load(std::string Load);
 	~Load();
 	std::string getFilePath();
+
+	void execute();
 };
 
 class Save: public Command {
@@ -152,6 +218,9 @@ public:
 	Save(std::string filePath);
 	~Save();
 	std::string getFilePath();
+
+	void execute();
+	// no undo for save
 };
 
 class Exit: public Command {

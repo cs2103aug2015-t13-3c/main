@@ -9,11 +9,12 @@
 
 class Logic {
 private:
+	static Logic *theOne; //Singleton
 	Parser parser;
 	IO io;
-	std::vector<Task> taskStore;
-	std::vector<Task> currentView;
+
 	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
+	Logic();
 
 	int getIdOfIndex(int userIndex);
 
@@ -28,7 +29,7 @@ private:
 	//bool markPriority(Star toMarkStar);
 
 public:
-	Logic();
+	static Logic* getInstance();
 	~Logic();
 
 	int getSize();

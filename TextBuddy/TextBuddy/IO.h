@@ -15,6 +15,7 @@ private:
 	bool fileIsOpen(std::ofstream& outputFile);
 	Task extractTaskFromJsonObject(Value& item);
 	void writeTaskIntoJsonFormat(std::ofstream &newFile, Task task);
+	void initialiseRunningCount(std::vector<Task> taskVector);
 
 	void extractName(Task &newTask, Value &item);
 	void extractType(Task &newTask, Value &item);
@@ -61,6 +62,7 @@ public:
 
 	std::vector<Task> loadFile(std::string fileName);
 	bool saveFile(std::string fileName, std::vector<Task> taskVector);
+	//bool changeSourceFileLocation (std::string newFileLocation);
 
 	//========== Getter for Testing ==========
 	std::vector<std::string> getText(std::string fileName);

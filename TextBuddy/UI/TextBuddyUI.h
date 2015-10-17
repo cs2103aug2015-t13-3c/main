@@ -1,5 +1,6 @@
 #pragma once
-#include "Logic.h"
+//#include "Logic.h"
+#include "History.h"
 #include "stdafx.h"
 #include <msclr\marshal_cppstd.h>
 
@@ -36,8 +37,9 @@ namespace UserInterface {
 		// INITIALIZATION OF COMPONENTS AND REQUIRED VARIABLES
 		TextBuddyUI(void) {
 			InitializeComponent();
-			logic = new Logic();
-			updateDisplay(logic->getCurrentView());
+			history = history->getInstance();
+			Command cmd;
+			updateDisplay(cmd.getCurrentView());
 			floatingTasks = nullptr;
 			updateFloatingTasks();
 			floatingTaskIndex = 0;
@@ -65,7 +67,7 @@ namespace UserInterface {
 		~TextBuddyUI() {
 			if (components) {
 				delete components;
-				delete logic;
+				delete history;
 				delete floatingTasks;
 			}
 		}
@@ -244,7 +246,8 @@ namespace UserInterface {
 	private:
 		std::string* userInput;
 		std::string* userFeedback_cppString;
-		Logic* logic ;
+		//Logic* logic ;
+		History* history;
 		std::vector<Task>* floatingTasks;
 		int floatingTaskIndex;
 		int cursorPosition;
@@ -272,16 +275,18 @@ namespace UserInterface {
 		=====================================================================*/
 		void processAndExecute() {
 			feedback->Clear();
+			/*HERE
 			Feedback results = logic->processCommand(*userInput);
 			if(results.isExit()) {
 				exit(0);
 			}
 			if(results.needToUpdateDisplay()) {
 				updateDisplay(results.getTaskToShow());
-			}
+			}			
 			updateFloatingTasks();
 			configureMessageColor(&results);
 			printFeedBackMessage(results.getFeedbackMessage());
+			*/
 			delete userInput;
 		}
 
@@ -414,7 +419,7 @@ namespace UserInterface {
 			 if(floatingTasks != nullptr) {
 				delete floatingTasks;
 			 }
-			 floatingTasks = new std::vector<Task>(logic->getFloatingTasks());
+			 //HERE floatingTasks = new std::vector<Task>(logic->getFloatingTasks());
 		}
 
 //************************** EVENT HANDLERS ***********************************

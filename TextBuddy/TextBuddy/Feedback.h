@@ -3,7 +3,8 @@
 #ifndef FEEDBACK_H_
 #define FEEDBACK_H_
 
-#include "stdafx.h"
+#include "Task.h"
+//#include "stdafx.h"
 
 class Feedback {
 private:

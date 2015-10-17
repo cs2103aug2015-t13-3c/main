@@ -96,19 +96,19 @@ bool Task::deleteLabels(std::vector<std::string> badLabels) {
 }
 
 bool Task::markDone() {
-	return isDone != (isDone=true);;
+	return isDone != (isDone=true);
 }
 
 bool Task::unmarkDone() {
-	return isDone != (isDone=false);;
+	return isDone != (isDone=false);
 }
 
 bool Task::setPriority() {
-	return isPriority != (isPriority=true);;
+	return isPriority != (isPriority=true);
 }
 
 bool Task::unsetPriority() {
-	return isPriority != (isPriority=false);;
+	return isPriority != (isPriority=false);
 }
 
 bool Task::setStartDate(int newStartDate) {
