@@ -6,12 +6,16 @@
 
 class Parser {
 private:
+	Logger* logger;
+
 	// This defines the file extension used by TextBuddy
 	static const std::string FILE_EXTENSION;
 
 	// These are the return values for invalid parameters
 	static const int INVALID_DATE_FORMAT = -1;
 	static const int INVALID_TIME_FORMAT = -1;
+
+	void log(Level level, std::string message);
 
 public:
 	Parser();

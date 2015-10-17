@@ -8,11 +8,18 @@
 #include "Command.h"
 #include <string>
 
+<<<<<<< HEAD
 class Utilities {
 private:
 	// This is the return value for invalid numbers
 	static const int INVALID_NUMBER_FORMAT = -1;
+=======
+// This is the return value for invalid numbers
+const int INVALID_NUMBER_FORMAT = -1;
+const int LAST_TASK_INDICATOR = 0;
+>>>>>>> c23c736d0f1e2ba1ad314c9912f89ecdc054ebec
 
+class Utilities {
 public:
 	Utilities();
 	~Utilities();
@@ -32,6 +39,7 @@ public:
 	static std::string	dayToString(Day day);
 	static std::string	taskToString(Task taskToConvert);
 	static std::string	taskTypeToString(TaskType type);
+	static std::string	fieldVecToString(std::vector<FieldType> fieldsToModify);
 	static std::string	vecToString(std::vector<std::string> inputString);
 
 	// Comparisons and Modifiers

@@ -23,7 +23,7 @@ int Utilities::stringToInt(std::string str) {
 	std::stringstream ss(str);
 	ss >> i;
 	if(ss.fail() || ss.get(c)) {
-		return INVALID_NUMBER_FORMAT;
+		return LAST_TASK_INDICATOR;
 	} else {
 		return i;
 	}
@@ -46,6 +46,8 @@ CommandType Utilities::stringToCmdType(std::string cmdString) {
 		cmd = UNDO;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_VIEW)) {
 		cmd = VIEW;
+	} else if(equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
+		cmd = CLEAR_ALL;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
 		cmd = DISPLAY_ALL;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_LOAD)) {
@@ -115,7 +117,9 @@ Month Utilities::stringToMonth(std::string monthString) {
 FieldType Utilities::stringToFieldType(std::string fieldString) {
 	FieldType field;
 
-	if(equalsIgnoreCase(fieldString,FIELD_LABEL_ADD)) {
+	if(equalsIgnoreCase(fieldString,FIELD_NAME)) {
+		field = NAME;
+	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_ADD)) {
 		field = LABELS_ADD;
 	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_DELETE)) {
 		field = LABELS_DELETE;
@@ -153,20 +157,36 @@ TaskType Utilities::stringToTaskType(std::string taskString) {
 }
 
 ViewType Utilities::stringToViewType(std::string viewString) {
-	ViewType view = VIEWTYPE_INVALID;
+	ViewType view;
 
-	if(equalsIgnoreCase(viewString,VIEW_ALL)) {
+	if(viewString == "") {
+		view = VIEWTYPE_INVALID;
+	} else if(equalsIgnoreCase(viewString,VIEW_ALL)) {
 		view = VIEWTYPE_ALL;
-	} else if(equalsIgnoreCase(viewString,FIELD_LABEL_DELETE)) {
+	} else if(equalsIgnoreCase(viewString,VIEW_FLOATING)) {
 		view = VIEWTYPE_FLOATING;
-	} else if(equalsIgnoreCase(viewString,FIELD_PRIORITY_SET)) {
-		view = VIEWTYPE_PAST;
-	} else if(equalsIgnoreCase(viewString,FIELD_PRIORITY_UNSET)) {
+	} else if(equalsIgnoreCase(viewString,VIEW_TODO)) {
 		view = VIEWTYPE_TODO;
-	} else if(equalsIgnoreCase(viewString,FIELD_DATE_ON)) {
+	} else if(equalsIgnoreCase(viewString,VIEW_PAST)) {
+		view = VIEWTYPE_PAST;
+	} else if(equalsIgnoreCase(viewString,VIEW_WEEK)) {
 		view = VIEWTYPE_WEEK;
+	} else {
+		view = VIEWTYPE_LABEL;
 	}
 	return view;
+
+	// Check that all viewtypes are covered (never run because of return statement above)
+	switch(view) {
+	case VIEWTYPE_INVALID:
+	case VIEWTYPE_ALL:
+	case VIEWTYPE_FLOATING:
+	case VIEWTYPE_TODO:
+	case VIEWTYPE_PAST:
+	case VIEWTYPE_WEEK:
+	case VIEWTYPE_LABEL:
+		break;
+	}
 }
 
 // This converts std::string to std::vector<std::string> based on delimiter space
@@ -256,6 +276,41 @@ std::string Utilities::taskTypeToString(TaskType type) {
 		break;
 	}
 	return typeString;
+}
+
+std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
+	std::vector<FieldType>::iterator curr = fieldsToModify.begin();
+	std::string newString;
+	while(curr != fieldsToModify.end()) {
+		if(*curr == NAME) {
+			newString += FIELD_NAME;
+		} else if(*curr == LABELS_ADD) {
+			newString += FIELD_LABEL_ADD;
+		} else if(*curr == LABELS_DELETE) {
+			newString += FIELD_LABEL_DELETE;
+		} else if(*curr == PRIORITY_SET) {
+			newString += FIELD_PRIORITY_SET;
+		} else if(*curr == PRIORITY_UNSET) {
+			newString += FIELD_PRIORITY_UNSET;
+		} else if(*curr == START_DATE) {
+			newString += FIELD_PRIORITY_UNSET;
+		} else if(*curr == START_DATE) {
+			newString += FIELD_DATE_FROM;
+		} else if(*curr == END_DATE) {
+			newString += FIELD_DATE_TO;
+		} else if(*curr == END_DATE) {
+			newString += FIELD_DATE_BY;
+		} else if(*curr == START_TIME) {
+			newString += FIELD_TIME_AT;
+		} else {
+			newString += INVALID_FIELD;
+		}
+
+		if(++curr != fieldsToModify.end()) {
+			newString += " ";
+		}
+	}
+	return newString;
 }
 
 // NOTE TO AARON: method doesn't work in IOTest.cpp

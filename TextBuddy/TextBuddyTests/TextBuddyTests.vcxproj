@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClCompile Include="CommandTest.cpp" />
     <ClCompile Include="IOTest.cpp" />
+    <ClCompile Include="LoggerTest.cpp" />
     <ClCompile Include="LogicTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
     <ClCompile Include="stdafx.cpp">

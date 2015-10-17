@@ -29,11 +29,11 @@ public:
 	}
 
 	TEST_METHOD(Parser_parse) {
-
+		/*
 		// Test for ADD
 		expectedString = "Name: A partridge in a pear tree\nStart Time: 1900\nEnd Date: 151016\nEnd Time: 2000\n";
 		userInput = "add A partridge in a pear tree by fri from 7 pm to 8 pm";
-
+		*/
 
 		/*
 		// Test for DELETE
@@ -41,12 +41,13 @@ public:
 		userInput = "delete 1";
 		*/
 
-		/*
+		
 		// Test for MODIFY
 		expectedInt = 1;
-		userInput = "modify 1 name Two turtle doves";
-		expectedString = "Name: Two turtle doves\n";
-		*/
+		userInput = "modify 1 Two turtle doves : -: star unstar from to by on at";
+		expectedString = "name : -: star unstar from to by on at";
+		std::string expectedString2 = "Name: Two turtle doves\nStart Time: 0\nEnd Date: 0\nEnd Time: 0\n";
+		
 
 		/*
 		// Test for SEARCH
@@ -107,8 +108,8 @@ public:
 			break;
 		case MODIFY:
 			Assert::AreEqual(expectedInt,taskID);
-			// Assert::AreEqual(expectedString,fieldVecToString(fieldsToModify);
-			Assert::AreEqual(expectedString,Utilities::taskToString(task));
+			Assert::AreEqual(expectedString,Utilities::fieldVecToString(fieldsToModify));
+			Assert::AreEqual(expectedString2,Utilities::taskToString(task));
 			break;
 		case SEARCH:
 			Assert::AreEqual(expectedString,searchPhrase);
