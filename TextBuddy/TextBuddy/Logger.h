@@ -12,8 +12,14 @@
 // Include in cpp file in destructor, change ### to class name:
 //		logger->log(SYS,"### destructed");
 //
+// Add in cpp file as private method, change ### to class name:
+//		void ###::log(Level level, std::string message) {
+//		logger->log(level,message);
+//		return;
+//		}
+//
 // Use in cpp file in methods, refer to enum for Level options:
-//		logger->log(Level,std::string);
+//		log(Level,std::string);
 //
 //========== Note for Logic ==========
 // Include the following upon exit command:

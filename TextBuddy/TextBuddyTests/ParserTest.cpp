@@ -45,7 +45,8 @@ public:
 		// Test for MODIFY
 		expectedInt = 1;
 		userInput = "modify 1 Two turtle doves";
-		expectedString = "Name: Two turtle doves\n";
+		expectedString = "name";
+		std::string expectedString2 = "Name: Two turtle doves\n";
 		
 
 		/*
@@ -108,7 +109,7 @@ public:
 		case MODIFY:
 			Assert::AreEqual(expectedInt,taskID);
 			Assert::AreEqual(expectedString,Utilities::fieldVecToString(fieldsToModify));
-			Assert::AreEqual(expectedString,Utilities::taskToString(task));
+			Assert::AreEqual(expectedString2,Utilities::taskToString(task));
 			break;
 		case SEARCH:
 			Assert::AreEqual(expectedString,searchPhrase);

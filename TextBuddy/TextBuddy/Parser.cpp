@@ -17,6 +17,11 @@ Parser::~Parser() {
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
 
+void Parser::log(Level level, std::string message) {
+	logger->log(level,message);
+	return;
+}
+
 // ==================================================
 //                      METHODS
 // ==================================================
@@ -60,76 +65,60 @@ Command* Parser::parse(std::string userInput) {
 	std::string restOfInput = Utilities::removeFirstWord(userInput);
 
 	Command* cmd = new Command(INVALID,userInput);
+	log(INFO,"Parsing \"" + Utilities::getFirstWord(userInput) + "\"");
 
 	switch(cmdType) {
 	case ADD:
-		try {
-			if(restOfInput=="") {
-				throw "No task to add";
-			}
-			Task* taskPtr = parseTask(restOfInput);
-			taskPtr->setID(Task::incrementRunningCount());
-			cmd = new Add(*taskPtr);
-		} catch(std::string NullTaskString) {
-			throw NullTaskString;
+		if(restOfInput=="") {
+			log(WARN,"No task to add: " + restOfInput);
+			throw std::runtime_error("No task to add!");
 		}
+		Task* taskPtr = parseTask(restOfInput);
+		taskPtr->setID(Task::incrementRunningCount());
+		cmd = new Add(*taskPtr);
 		break;
 
 	case DELETE:
-		try {
-			if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
-				throw "Invalid integer string!";
-			}
-			int deleteID = Utilities::stringToInt(restOfInput);
-			cmd = new Delete(deleteID);
-		} catch(std::string InvalidIntString) {
-			throw InvalidIntString;
+		if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
+			log(WARN,"Invalid integer string: " + restOfInput);
+			throw std::runtime_error("Invalid integer string!");
 		}
+		int deleteID = Utilities::stringToInt(restOfInput);
+		cmd = new Delete(deleteID);
 		break;
 
-	case MODIFY:
-		try {
-			if(restOfInput=="") {
-				throw "No fields to modify!";
-			}
-			int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-			std::string tempTaskString = Utilities::removeFirstWord(restOfInput);
-			if(tempTaskString=="") {
-				throw "No fields to modify!";
-			}
-			std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
-			if(Utilities::stringToFieldType(Utilities::getFirstWord(tempTaskString))==INVALID_FIELD) {
-				fieldsToModify.push_back(NAME);
-			}
-			Task* tempTaskPtr = parseTask(tempTaskString);
-			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
-		} catch(std::string NullModifyString) {
-			throw NullModifyString;
+	case MODIFY: {
+		std::string tempTaskString;
+		if(restOfInput == "" ||
+			(tempTaskString = Utilities::removeFirstWord(restOfInput)) == "") {
+				log(WARN,"No fields to modify: " + restOfInput);
+				throw std::runtime_error("No fields to modify!");
 		}
-		break;
+		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+		std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
+		if(Utilities::stringToFieldType(Utilities::getFirstWord(tempTaskString))==INVALID_FIELD) {
+			fieldsToModify.push_back(NAME);
+		}
+		Task* tempTaskPtr = parseTask(tempTaskString);
+		cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
+		break;}
 
-	case SEARCH:
-		try {
-			if(restOfInput=="") {
-				throw "No search phrase!";
-			}
-			std::string searchPhrase = restOfInput;
-			cmd = new Search(searchPhrase);
-		} catch(std::string NullSearchString) {
-			throw NullSearchString;
+	case SEARCH: {
+		if(restOfInput=="") {
+			log(WARN,"No search phrase: " + restOfInput);
+			throw std::runtime_error("No search phrase!");
 		}
-		break;
+		std::string searchPhrase = restOfInput;
+		cmd = new Search(searchPhrase);
+		break;}
 
 	case MARKDONE:
-		try {
-			if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
-				throw "Invalid integer string!";
-			}
-			int doneID = Utilities::stringToInt(restOfInput);
-			cmd = new Markdone(doneID);
-		} catch(std::string InvalidIntString) {
-			throw InvalidIntString;
+		if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
+			log(WARN,"Invalid integer string: " + restOfInput);
+			throw std::runtime_error("Invalid integer string!");
 		}
+		int doneID = Utilities::stringToInt(restOfInput);
+		cmd = new Markdone(doneID);
 		break;
 
 	case UNDO:
@@ -139,36 +128,30 @@ Command* Parser::parse(std::string userInput) {
 	case VIEW:
 		cmd = new View(Utilities::stringToViewType(restOfInput));
 		break;
-		
+
 	case CLEAR_ALL:
 		// cmd = new ClearAll;
 		break;
-		
+
 	case DISPLAY_ALL:
 		cmd = new DisplayAll;
 		break;
 
-	case LOAD:
-		try {
-			if(restOfInput=="") {
-				throw("No file path specified!");
-			}
-			std::string newFileName = parseFileName(restOfInput);
-			cmd = new Load(newFileName);
-		} catch(std::string NullFilePath) {
-			throw NullFilePath;
+	case LOAD: {
+		if(restOfInput=="") {
+			log(WARN,"No file path specified: " + restOfInput);
+			throw std::runtime_error("No file path specified!");
 		}
-		break;
+		std::string newFileName = parseFileName(restOfInput);
+		cmd = new Load(parseFileName(newFileName));
+		break;}
 
 	case SAVE:
-		try {
-			if(restOfInput=="") {
-				throw("No file path specified!");
-			}
-			cmd = new Save(restOfInput);
-		} catch(std::string NullFilePath) {
-			throw NullFilePath;
+		if(restOfInput=="") {
+			log(WARN,"No file path specified: " + restOfInput);
+			throw std::runtime_error("No file path specified!");
 		}
+		cmd = new Save(parseFileName(restOfInput));
 		break;
 
 	case EXIT:
@@ -177,6 +160,7 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case INVALID:
+		log(WARN,"Invalid command: " + restOfInput);
 		break;
 	}
 
@@ -184,12 +168,14 @@ Command* Parser::parse(std::string userInput) {
 }
 
 Task* Parser::parseTask(std::string restOfCommand) {
+	log(INFO,"Parsing task");
 	std::vector<std::string> userInput = Utilities::splitParameters(restOfCommand);
 	std::vector<std::string>::iterator curr = userInput.begin();
 	Task* newTask = new Task;
 	FieldType inputMode = NAME;
-	std::vector<std::string> inputString;
+	log(DEBUG,"Parsing field: name");
 
+	std::vector<std::string> inputString;
 	int newDate = INVALID_DATE_FORMAT;
 	int newTime = INVALID_TIME_FORMAT;
 
@@ -209,16 +195,13 @@ Task* Parser::parseTask(std::string restOfCommand) {
 				curr++;
 		}
 
-		if(curr != userInput.end()) {
-			if(Utilities::equalsIgnoreCase(*curr,FIELD_TIME_AT)) {
-				newTask->setType(EVENT);
-			}
-		}
-		if (inputMode == START_DATE || inputMode == END_DATE) {
-			if(    (newDate = parseDate(inputString)) == INVALID_DATE_FORMAT
-				&& (newDate = parseDay(inputString)) == INVALID_DATE_FORMAT) {
-					inputMode = START_TIME;
-			}
+		if( (inputMode == START_DATE || inputMode == END_DATE)
+			&& (newDate = parseDate(inputString)) == INVALID_DATE_FORMAT
+			&& (newDate = parseDay(inputString)) == INVALID_DATE_FORMAT) {
+				log(DEBUG,"Invalid date format: " + Utilities::vecToString(inputString));
+				inputMode = START_TIME;
+		} else {
+			log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
 		}
 
 		switch(inputMode) {
@@ -238,6 +221,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->unsetPriority();
 			break;
 		case START_DATE:
+			newTask->setType(EVENT);
 			newTask->setStartDate(newDate);
 			break;
 		case END_DATE:
@@ -247,8 +231,10 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->setEndDate(newDate);
 			break;
 		case START_TIME:
+			newTask->setType(EVENT);
 		case END_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+				// Valid time format
 				if(newTask->getStartTime() == 0) {
 					if(newTask->getStartDate() == 0 || newTask->getStartDate() == INVALID_DATE_FORMAT) {
 						newTask->setStartDate(parseDay(Utilities::splitParameters("today")));
@@ -267,9 +253,11 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		}
 
 		if(curr != userInput.end()) {
+			log(DEBUG,"Parsing field: " + *curr);
 			inputMode = Utilities::stringToFieldType(*curr);
 			curr++;
 		} else {
+			log(INFO,"Parsed task");
 			break;
 		}
 	}
@@ -351,7 +339,7 @@ int Parser::findYear(std::string yearString) {
 				return year+1;
 		}
 	} else {
-		throw("Invalid year string: " + yearString + "\n");
+		throw std::runtime_error("Invalid year string: " + yearString + "\n");
 	}
 	return year;
 }

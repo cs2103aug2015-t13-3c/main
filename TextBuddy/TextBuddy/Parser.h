@@ -15,6 +15,8 @@ private:
 	static const int INVALID_DATE_FORMAT = -1;
 	static const int INVALID_TIME_FORMAT = -1;
 
+	void log(Level level, std::string message);
+
 public:
 	Parser();
 	~Parser();
