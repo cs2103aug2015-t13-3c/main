@@ -190,6 +190,11 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 }
 
 // This converts std::string to std::vector<std::string> based on delimiter space
+std::vector<std::string> Utilities::stringToVec(std::string commandParametersString) {
+	return splitParameters(commandParametersString);
+}
+
+// To be removed
 std::vector<std::string> Utilities::splitParameters(std::string commandParametersString) {
 	std::vector<std::string> tokens;
 	std::istringstream iss(commandParametersString);
@@ -293,28 +298,24 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 		} else if(*curr == PRIORITY_UNSET) {
 			newString += FIELD_PRIORITY_UNSET;
 		} else if(*curr == START_DATE) {
-			newString += FIELD_PRIORITY_UNSET;
-		} else if(*curr == START_DATE) {
 			newString += FIELD_DATE_FROM;
 		} else if(*curr == END_DATE) {
 			newString += FIELD_DATE_TO;
-		} else if(*curr == END_DATE) {
-			newString += FIELD_DATE_BY;
 		} else if(*curr == START_TIME) {
 			newString += FIELD_TIME_AT;
 		} else {
 			newString += INVALID_FIELD;
 		}
 
-		if(++curr != fieldsToModify.end()) {
+		TbLogger::getInstance()->log(DEBUG,"Current field string: " + newString);
+		curr++;
+		if(curr != fieldsToModify.end()) {
 			newString += " ";
 		}
 	}
 	return newString;
 }
 
-// NOTE TO AARON: method doesn't work in IOTest.cpp
-// REPLY: Please refer to UtilitiesTest.cpp (Aaron)
 std::string Utilities::vecToString(std::vector<std::string> inputString) {
 	std::string newString;
 	std::vector<std::string>::iterator curr;

@@ -13,10 +13,12 @@ const int INVALID_NUMBER_FORMAT = -1;
 const int LAST_TASK_INDICATOR = 0;
 
 class Utilities {
-public:
+private:
+	// No public constructors and destructors, since Utilities is not an object
 	Utilities();
 	~Utilities();
 
+public:
 	// String-to-Type Converters
 	static std::string	stringToLower(std::string str);
 	static CommandType	stringToCmdType(std::string str);
@@ -26,7 +28,8 @@ public:
 	static FieldType	stringToFieldType(std::string fieldString);
 	static TaskType		stringToTaskType(std::string line);
 	static ViewType		stringToViewType(std::string viewString);
-	static std::vector<std::string> splitParameters(std::string commandParametersString);
+	static std::vector<std::string> stringToVec(std::string commandParametersString);
+	static std::vector<std::string> splitParameters(std::string commandParametersString); // To be removed
 	// Type-to-String Converters
 	static std::string	boolToString(bool boolean);
 	static std::string	dayToString(Day day);

@@ -7,6 +7,15 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TextBuddyTests {
 	TEST_CLASS(UtilitiesTest) {
 public:
+
+	TEST_METHOD(Utilities_fieldVecToString) {
+		TbLogger::getInstance()->clear();
+		Parser p;
+		std::string expectedString = "from from to"; // Expected behaviour
+		std::vector<FieldType> fields = p.extractFields("from on by");
+		Assert::AreEqual(expectedString,Utilities::fieldVecToString(fields));
+	}
+
 	TEST_METHOD(Utilities_vecToString) {
 		std::string expectedString = "little brown fox";
 		std::string userInput = "little brown fox";

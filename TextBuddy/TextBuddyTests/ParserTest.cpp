@@ -29,6 +29,9 @@ public:
 	}
 
 	TEST_METHOD(Parser_parse) {
+		// Clear before start
+		TbLogger::getInstance()->clear();
+
 		/*
 		// Test for ADD
 		expectedString = "Name: A partridge in a pear tree\nStart Time: 1900\nEnd Date: 151016\nEnd Time: 2000\n";
@@ -44,9 +47,9 @@ public:
 		
 		// Test for MODIFY
 		expectedInt = 1;
-		userInput = "modify 1 Two turtle doves : -: star unstar from to by on at";
-		expectedString = "name : -: star unstar from to by on at";
-		std::string expectedString2 = "Name: Two turtle doves\nStart Time: 0\nEnd Date: 0\nEnd Time: 0\n";
+		userInput = "modify 1 Two turtle doves : label1 -: unlabel1 star dummy unstar dummy from today to tmr on fri by sat at 8 am";
+		expectedString = "name : -: star unstar from to from to at"; // Expected behaviour
+		std::string expectedString2 = "Name: Two turtle doves\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
 		
 
 		/*
@@ -117,6 +120,7 @@ public:
 		case MARKDONE:
 		case UNDO:
 		case VIEW:
+		case CLEAR_ALL:
 		case DISPLAY_ALL:
 		case LOAD:
 		case SAVE:
@@ -124,6 +128,9 @@ public:
 		case INVALID:
 			break;
 		}
+
+		// Clear if successful
+		TbLogger::getInstance()->clear();
 	}
 
 	// Note: As parseDate() takes in regex like "this Monday",
@@ -171,28 +178,28 @@ public:
 
 		// Change to appropriate date for today/tmr before running this test
 		/*
-		expectedInt = 151010;
+		expectedInt = 151018;
 		userInput = "today";
 		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
-		expectedInt = 151011;
+		expectedInt = 151019;
 		userInput = "tmr";
 		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 		*/
 
-		expectedInt = 151012;
+		expectedInt = 151019;
 		userInput = "mon";
 		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
-		expectedInt = 151017;
+		expectedInt = 151024;
 		userInput = "this sat";
 		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
-		expectedInt = 151018;
+		expectedInt = 151025;
 		userInput = "next sun";
 		inputString = Utilities::splitParameters(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
