@@ -1,3 +1,5 @@
+// @@author Soon Hao Ye
+
 #include "TextBuddyUI.h"
 
 using namespace System;
@@ -13,5 +15,3 @@ int main() {
 	Application::Run(%mainWindow);
 	return 0;
 }
-
-

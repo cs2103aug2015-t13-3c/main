@@ -12,7 +12,7 @@ Parser::Parser() {
 
 Parser::~Parser() {
 	logger->log(SYS,"Parser destructed");
-	logger->close(); // To be transferred to Logic
+	logger->close(); // To be transferred to UI
 }
 
 // This defines the file extension used by TextBuddy

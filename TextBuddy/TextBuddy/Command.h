@@ -84,13 +84,13 @@ public:
 	
 	CommandType getCommand();
 	std::string getUserInput();
-	std::vector<Task> getTaskStore();
-	std::vector<Task> getCurrentView();
-	int getSize();
-	void clearTaskStore();
+	static std::vector<Task> getTaskStore();
+	static std::vector<Task> getCurrentView();
+	static int getSize();
+	static void clearTaskStore();
 
-	virtual void execute();
-	virtual void undo();
+	/*virtual*/ void execute();
+	/*virtual*/ void undo();
 };
 
 // ==================================================

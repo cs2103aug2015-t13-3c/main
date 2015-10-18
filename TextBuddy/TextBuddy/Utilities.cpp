@@ -148,9 +148,9 @@ TaskType Utilities::stringToTaskType(std::string taskString) {
 
 	if(taskString == "FLOATING") {
 		type = FLOATING;
-	} else if (taskString == "EVENT") {
+	} else if(taskString == "EVENT") {
 		type = EVENT;
-	} else if (taskString == "TODO") {
+	} else if(taskString == "TODO") {
 		type = TODO;
 	}
 	return type;
