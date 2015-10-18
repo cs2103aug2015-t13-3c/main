@@ -438,6 +438,8 @@ bool Search::amendView(std::string listOfIds) {
 //                      MARKDONE
 // ==================================================
 
+// ============= MARKDONE : PUBLIC METHODS ===========
+
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
 	doneID = taskID;
 }
@@ -449,9 +451,75 @@ int Markdone::getDoneID() {
 }
 
 void Markdone::execute() {
+	try {
+		markDone();
+		feedback.setUpdateView(true);
+	} catch (std::exception e) {
+		feedback.setErrorMessage(e.what());
+	}	
 }
 
 void Markdone::undo() {
+	if(successMarkDone) {
+		taskIter->unmarkDone();
+		currentView.insert(currIter,*taskIter);
+	}
+}
+
+// ============= MARKDONE : PRIVATE METHODS ===========
+
+//modified @haoye 14/10/15
+void Markdone::markDone() {
+	matchIndex(doneID,currIter,taskIter);
+	successMarkDone = taskIter->markDone();
+	if(successMarkDone) {
+		currentView.erase(currIter);
+	} // Remove from current view only if mark done successful (Ren Zhi)
+}
+
+// >>>>>>> UnmarkDone class added by Ren Zhi @19/10/15 >>>>>>>>>>>>
+
+// ==================================================
+//                      UNMARKDONE
+// ==================================================
+
+// =========== UNMARKDONE : PUBLIC METHODS ==========
+
+UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
+	undoneID = taskID;
+}
+
+UnmarkDone::~UnmarkDone() {}
+
+int UnmarkDone::getUndoneID() {
+	return undoneID;
+}
+
+void UnmarkDone::execute() {
+	try {
+		unmarkDone();
+		feedback.setUpdateView(true);
+	} catch (std::exception e) {
+		feedback.setErrorMessage(e.what());
+	}
+}
+
+void UnmarkDone::undo() {
+	if(successUnmarkDone) {
+		taskIter->markDone();
+		currentView.insert(currIter,*taskIter);
+	}
+}
+
+// =========== UNMARKDONE : PRIVATE METHODS ==========
+
+void UnmarkDone::unmarkDone() {
+	matchIndex(undoneID,currIter,taskIter);
+	successUnmarkDone = taskIter->unmarkDone();
+
+	if(successUnmarkDone) {
+		currentView.erase(currIter);
+	} // Remove from current view only if unmark done successful (Ren Zhi)
 }
 
 // ==================================================

@@ -176,11 +176,37 @@ public:
 
 class Markdone: public Command {
 private:
+	// == EXECUTE ==
 	int doneID;
+	// ==== UNDO ===
+	bool successMarkDone;
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
+
+	void markDone();
 public:
 	Markdone(int taskID);
 	~Markdone();
 	int getDoneID();
+
+	void execute();
+	void undo();
+};
+
+class UnmarkDone: public Command {
+private:
+	// == EXECUTE ==
+	int undoneID;
+	// ==== UNDO ===
+	bool successUnmarkDone;
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
+
+	void unmarkDone();
+public:
+	UnmarkDone(int taskID);
+	~UnmarkDone();
+	int getUndoneID();
 
 	void execute();
 	void undo();

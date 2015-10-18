@@ -459,6 +459,186 @@ namespace TextBuddyTests
 				
 	};
 	
+	TEST_CLASS(Command_MarkDone)
+	{
+	public:
+
+		TEST_METHOD(Command_MarkDone_execute)
+		{
+			//Add tasks
+			Task task;
+			Add addOne(task);
+			addOne.clearTaskStore();
+			addOne.execute();
+
+			task.setID(task.incrementRunningCount());
+			task.markDone();
+			Add addTwo(task);
+			addTwo.execute();
+
+			//Start markDone
+			Markdone markdoneOne(1);
+			markdoneOne.execute();
+
+			std::vector<Task> copyTask;
+			copyTask = addTwo.getCurrentView();
+			std::vector<Task>::iterator iter;
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			copyTask = addTwo.getTaskStore();
+			iter = copyTask.begin();
+			Assert::AreEqual(true,iter->getDoneStatus());
+
+			Markdone markdoneTwo(1);
+			markdoneTwo.execute();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			Assert::AreEqual(true,iter->getDoneStatus());
+		}
+
+		TEST_METHOD(Command_MarkDone_undo)
+		{
+			//Add tasks
+			Task task;
+			Add addOne(task);
+			addOne.clearTaskStore();
+			addOne.execute();
+
+			task.setID(task.incrementRunningCount());
+			task.markDone();
+			Add addTwo(task);
+			addTwo.execute();
+
+			//Start markDone
+			Markdone markdoneOne(1);
+			markdoneOne.execute();
+
+			std::vector<Task> copyTask;
+			copyTask = addTwo.getCurrentView();
+			std::vector<Task>::iterator iter;
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			copyTask = addTwo.getTaskStore();
+			iter = copyTask.begin();
+			Assert::AreEqual(true,iter->getDoneStatus());
+
+			Markdone markdoneTwo(1);
+			markdoneTwo.execute();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			Assert::AreEqual(true,iter->getDoneStatus());
+
+			markdoneTwo.undo();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			Assert::AreEqual(true,iter->getDoneStatus());
+
+			markdoneOne.undo();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			Assert::AreEqual(false,iter->getDoneStatus());
+
+		}
+						
+	};
+
+	TEST_CLASS(Command_UnmarkDone)
+	{
+	public:
+
+		TEST_METHOD(Command_UnmarkDone_execute)
+		{
+			//Add tasks
+			Task task;
+			Add addOne(task);
+			addOne.clearTaskStore();
+			addOne.execute();
+
+			task.setID(task.incrementRunningCount());
+			task.markDone();
+			Add addTwo(task);
+			addTwo.execute();
+
+			//Start unmarkDone
+			UnmarkDone unmarkdoneOne(1);
+			unmarkdoneOne.execute();
+
+			std::vector<Task> copyTask;
+			copyTask = addTwo.getCurrentView();
+			std::vector<Task>::iterator iter;
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			
+			UnmarkDone unmarkdoneTwo(2);
+			unmarkdoneTwo.execute();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			copyTask = addTwo.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+			Assert::AreEqual(false,iter->getDoneStatus());
+		}
+
+		TEST_METHOD(Command_UnmarkDone_undo)
+		{
+			//Add tasks
+			Task task;
+			Add addOne(task);
+			addOne.clearTaskStore();
+			addOne.execute();
+
+			task.setID(task.incrementRunningCount());
+			task.markDone();
+			Add addTwo(task);
+			addTwo.execute();
+
+			//Start unmarkDone
+			UnmarkDone unmarkdoneOne(1);
+			unmarkdoneOne.execute();
+
+			std::vector<Task> copyTask;
+			copyTask = addTwo.getCurrentView();
+			std::vector<Task>::iterator iter;
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			
+			UnmarkDone unmarkdoneTwo(2);
+			unmarkdoneTwo.execute();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			copyTask = addTwo.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+			Assert::AreEqual(false,iter->getDoneStatus());
+
+			unmarkdoneTwo.undo();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			++iter;
+			Assert::AreEqual(true,iter->getDoneStatus());
+
+			unmarkdoneOne.undo();
+
+			copyTask = addTwo.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+		}
+						
+	};
 }
 
 void addThreeSentences(std::vector<Task> copyTask) {

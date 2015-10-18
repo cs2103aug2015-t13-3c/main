@@ -50,7 +50,7 @@ int Task::getStartDate() {return startDate;}
 int Task::getStartTime() {return startTime;}
 int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
-	
+
 
 // Setters, return true if successful
 
@@ -96,11 +96,15 @@ bool Task::deleteLabels(std::vector<std::string> badLabels) {
 }
 
 bool Task::markDone() {
-	return isDone != (isDone=true);
+	bool currDone = !isDone;
+	isDone = true;
+	return currDone;
 }
 
 bool Task::unmarkDone() {
-	return isDone == (isDone=false);;
+	bool currDone = isDone;
+	isDone = false;
+	return currDone;
 }
 
 bool Task::setPriority() {
