@@ -233,6 +233,7 @@ void Delete::execute() {
 void Delete::undo() {
 	taskStore.insert(taskStoreIter,taskToBeDeleted);
 	currentView.insert(currViewIter,taskToBeDeleted);
+	feedback.setUpdateView(true);
 }
 
 // ============= DELETE : PRIVATE METHODS ===========
@@ -283,6 +284,8 @@ void Modify::execute() {
 }
 
 void Modify::undo() {
+	Modify *undoModify = new Modify(modifyID, fieldsToModify, originalTask);
+	undoModify->execute();
 }
 
 // ============= MODIFY : PRIVATE METHODS ===========
@@ -294,6 +297,7 @@ void Modify::modifyInfo() {
 
 	int index = modifyID;
 	matchIndex(index,currIter,taskIter);
+	originalTask = *currIter;
 
 	std::vector<FieldType>::iterator fieldIter;
 

@@ -99,7 +99,9 @@ public:
 
 class Add: public Command {
 private:
+	// == EXECUTE ==
 	Task newTask;
+	// ==== UNDO ===
 	int currViewID;
 
 	bool addInfo();
@@ -115,7 +117,9 @@ public:
 
 class Delete: public Command {
 private:
+	// == EXECUTE ==
 	int deleteID; //ID on GUI, not Task ID
+	// ==== UNDO ===
 	Task taskToBeDeleted;
 	std::vector<Task>::iterator currViewIter;
 	std::vector<Task>::iterator taskStoreIter;
@@ -133,9 +137,12 @@ public:
 
 class Modify: public Command {
 private:
+	// == EXECUTE ==
 	int modifyID; // GUI ID, not task ID
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
+	// ==== UNDO ===
+	Task originalTask;
 
 	void modifyInfo();
 public:
