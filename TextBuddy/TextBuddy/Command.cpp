@@ -73,15 +73,15 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 	if(taskVector.size() == 0) {
 		return false;
 	}
-/*	
+	/*	
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-		for (j = i+1; j != taskVector.end(); ++j) {
-			if(j -> getStartTime() < i.getStartTime) {
-				swapTaskPosition(i->getID(), j->getID());
-			}
-		}
+	for (j = i+1; j != taskVector.end(); ++j) {
+	if(j -> getStartTime() < i.getStartTime) {
+	swapTaskPosition(i->getID(), j->getID());
 	}
-*/
+	}
+	}
+	*/
 
 	//sorts date after time to ensure date is accurately sorted
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
@@ -122,14 +122,14 @@ bool Command::copyView() {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>added @haoye 14/10/15
 //replaces getIdOfIndex()
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter, 
-	std::vector<Task>::iterator &taskIter) {
-	if(isValidIndex(index)) {	
-		currIter = matchCurrentViewIndex(index);
-		index = currIter->getID();
-		taskIter = matchTaskViewIndex(index);
-	} else {
-		throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
-	}
+						 std::vector<Task>::iterator &taskIter) {
+							 if(isValidIndex(index)) {	
+								 currIter = matchCurrentViewIndex(index);
+								 index = currIter->getID();
+								 taskIter = matchTaskViewIndex(index);
+							 } else {
+								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
+							 }
 }
 
 bool Command::isValidIndex(int index) {
@@ -177,9 +177,9 @@ Task Add::getNewTask() {
 }
 
 void Add::execute() {
-		addInfo();
-		feedback.pushTask(newTask);
-		feedback.setAddedMessage();
+	addInfo();
+	feedback.pushTask(newTask);
+	feedback.setAddedMessage();
 }
 
 // Add must have executed before undoing,
@@ -223,10 +223,10 @@ int Delete::getDeleteID() {
 }
 
 void Delete::execute() {
-		// userIndex refers to the nth task of currentView presented to user
-		// eg. delete 1 means deleting the first task
-			deleteInfo();
-			feedback.setUpdateView(true);
+	// userIndex refers to the nth task of currentView presented to user
+	// eg. delete 1 means deleting the first task
+	deleteInfo();
+	feedback.setUpdateView(true);
 }
 
 // adds the deleted task back to the exact location it was before
@@ -279,8 +279,8 @@ Task Modify::getTempTask() {
 }
 
 void Modify::execute() {
-		modifyInfo();
-		feedback.setUpdateView(true);
+	modifyInfo();
+	feedback.setUpdateView(true);
 }
 
 void Modify::undo() {
@@ -339,15 +339,18 @@ void Modify::modifyInfo() {
 		taskIter->setDateAndTime_UI(dateAndTime_UI);
 
 		sortDate(taskStore);
-		}
+	}
 }
 
 // ==================================================
 //                       SEARCH
 // ==================================================
 
+// ============== SEARCH : PUBLIC METHODS ===========
+
 Search::Search(std::string phraseString) : Command(SEARCH) {
 	searchPhrase = phraseString;
+	currentViewBeforeSearch = currentView;
 }
 
 Search::~Search() {}
@@ -357,10 +360,79 @@ std::string Search::getSearchPhrase() {
 }
 
 void Search::execute() {
+	// Currently search returns string of names
+	// currentView is also amended, can refer to items from currentView after every processInfo cmd
+	// eg. add/delete will display new list under UI
+	// If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
+	std::string output = searchInfo();
+	amendView(output);
+	bool isFound = !output.empty();
+	feedback.setSearchMessage(searchPhrase,isFound);
+	feedback.setUpdateView(isFound);
 }
 
 void Search::undo() {
+	currentView = currentViewBeforeSearch;
 }
+
+// ================ SEARCH : PRIVATE METHODS =================
+
+// Searches name for a phrase match, returns IDs of all matching tasks
+std::string Search::searchInfo() {
+	std::ostringstream indexString;
+	std::string taskName;
+	std::string returnString;
+	int id;
+
+	std::vector<Task>::iterator iter;
+
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
+		taskName = iter->getName();
+		if(Utilities::isSubstring(searchPhrase,taskName)) {
+			id = iter->getID();
+			indexString << id << ",";
+		}
+	}
+	returnString = indexString.str();
+
+	if(!returnString.empty()) {
+		returnString.pop_back();
+	}
+
+	return returnString;
+}
+
+// The list is separated by commas
+bool Search::amendView(std::string listOfIds) {
+	std::string idToken;
+	int id;
+	int index;
+	std::vector<Task>::iterator iter;
+
+	currentView.clear();
+
+	while (listOfIds != "") {
+		index = listOfIds.find(",");
+
+		if(index == -1) {
+			idToken = listOfIds;
+			listOfIds = "";
+		} else {
+			idToken = listOfIds.substr(0, index);
+			listOfIds = listOfIds.substr(index+1);
+		}
+
+		id = stoi(idToken);
+		iter = taskStore.begin();
+		for (iter = taskStore.begin() ; iter != taskStore.end(); ++iter) {
+			if(id == iter->getID()) {
+				currentView.push_back(*iter);
+			}
+		}
+	}
+	return true;
+}
+
 
 // ==================================================
 //                      MARKDONE

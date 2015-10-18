@@ -158,7 +158,13 @@ public:
 
 class Search: public Command {
 private:
+	// == EXECUTE ==
 	std::string searchPhrase;
+	// ==== UNDO ===
+	std::vector<Task> currentViewBeforeSearch;
+
+	std::string searchInfo();
+	bool amendView(std::string listOfIds);
 public:
 	Search(std::string phraseString);
 	~Search();

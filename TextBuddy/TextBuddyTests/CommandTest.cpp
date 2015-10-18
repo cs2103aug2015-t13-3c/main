@@ -282,6 +282,183 @@ namespace TextBuddyTests
 			Assert::AreEqual(0,iter->getStartDate());
 		}
 	};
+
+	TEST_CLASS(Command_Search)
+	{
+	public:
+
+		TEST_METHOD(Command_Search_execute)
+		{
+			//Add tasks
+			Task task;
+			task.setID(Task::incrementRunningCount());
+			task.setName("one two three");
+			Add addOne(task);
+			addOne.clearTaskStore();
+			addOne.execute();
+
+			task.setID(Task::incrementRunningCount());
+			task.setName("one three five");
+			Add addTwo(task);
+			addTwo.execute();
+
+			task.setID(Task::incrementRunningCount());
+			task.setName("one five seven");
+			Add addThree(task);
+			addThree.execute();
+
+			std::vector<Task> copyTask;
+			copyTask = addThree.getTaskStore();
+
+			//Start searching
+			Search searchOne("one");
+			searchOne.execute();
+
+			copyTask = addThree.getCurrentView();
+			std::vector<Task>::iterator iter;
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)3,copyTask.size());
+			Assert::AreEqual(std::string("one two three"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+
+			Search searchThree("three");
+			searchThree.execute();
+
+			copyTask = searchThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			Assert::AreEqual(std::string("one two three"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+
+			Search searchFive("fiVe");
+			searchFive.execute();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+
+			Search searchSeven("sEveN");
+			searchSeven.execute();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+
+			Search searchGibberish("51267");
+			searchGibberish.execute();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)0,copyTask.size());
+		}
+		
+		TEST_METHOD(Command_Search_undo)
+		{
+			//Add tasks
+			Task task;
+			task.setID(Task::incrementRunningCount());
+			task.setName("one two three");
+			Add addOne(task);
+			addOne.clearTaskStore();
+			addOne.execute();
+
+			task.setID(Task::incrementRunningCount());
+			task.setName("one three five");
+			Add addTwo(task);
+			addTwo.execute();
+
+			task.setID(Task::incrementRunningCount());
+			task.setName("one five seven");
+			Add addThree(task);
+			addThree.execute();
+
+			std::vector<Task> copyTask;
+			copyTask = addThree.getTaskStore();
+
+			//Start Searching
+			Search searchOne("one");
+			searchOne.execute();
+
+			copyTask = addThree.getCurrentView();
+			std::vector<Task>::iterator iter;
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)3,copyTask.size());
+			Assert::AreEqual(std::string("one two three"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+
+			Search searchThree("three");
+			searchThree.execute();
+
+			copyTask = searchThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			Assert::AreEqual(std::string("one two three"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+
+			searchThree.undo();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)3,copyTask.size());
+			Assert::AreEqual(std::string("one two three"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+			
+			Search searchFive("fiVe");
+			searchFive.execute();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+
+			Search searchSeven("sEveN");
+			searchSeven.execute();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)1,copyTask.size());
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+
+			searchSeven.undo();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)2,copyTask.size());
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+
+			searchFive.undo();
+
+			copyTask = addThree.getCurrentView();
+			iter = copyTask.begin();
+			Assert::AreEqual((size_t)3,copyTask.size());
+			Assert::AreEqual(std::string("one two three"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one three five"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("one five seven"),iter->getName());
+		}
+				
+	};
+	
 }
 
 void addThreeSentences(std::vector<Task> copyTask) {
