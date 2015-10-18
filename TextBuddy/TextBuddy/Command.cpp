@@ -255,7 +255,8 @@ void Delete::deleteInfo() {
 // ==================================================
 
 
-// ================ MODIFY : PUBLIC METHODS =========
+// ============= MODIFY : PUBLIC METHODS ============
+
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
 	fieldsToModify = fields;
@@ -294,10 +295,9 @@ void Modify::modifyInfo() {
 	int index = modifyID;
 	matchIndex(index,currIter,taskIter);
 
-	std::vector<FieldType> tempField = fieldsToModify;
 	std::vector<FieldType>::iterator fieldIter;
 
-	for (fieldIter = tempField.begin(); fieldIter != tempField.end(); ++fieldIter) {
+	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
 		case NAME:
 			taskIter->setName(tempTask.getName());			

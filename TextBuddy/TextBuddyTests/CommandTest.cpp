@@ -296,14 +296,33 @@ namespace TextBuddyTests
 
 			std::vector<FieldType> fields;
 			fields.push_back(NAME);
-			Task modifiedTaskTwo;
-			modifiedTaskTwo.setName("New Sentence Two");
-			Modify modifyTwo(2, fields, modifiedTaskTwo);
+			Task modifiedTask;
+			modifiedTask.setName("New Sentence Two");
+			Modify modifyTwo(2, fields, modifiedTask);
+
+			modifyTwo.execute();
 
 			copyTask = modifyTwo.getTaskStore();
 			iter = copyTask.begin();
+			Assert::AreEqual(std::string("Sentence one."),iter->getName());
 			++iter;
 			Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
+			++iter;
+			Assert::AreEqual(std::string("Sentence three."),iter->getName());
+
+			fields.push_back(START_DATE);
+			modifiedTask.setName("New Sentence Three");
+			modifiedTask.setStartDate(150101);
+			Modify modifyThree(3, fields, modifiedTask);
+
+			modifyThree.execute();
+
+			copyTask = modifyThree.getTaskStore();
+			iter = copyTask.begin();
+			++iter;
+			++iter;
+			Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
+			Assert::AreEqual(150101,iter->getStartDate());
 		}
 
 	};
