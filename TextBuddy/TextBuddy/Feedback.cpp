@@ -55,9 +55,8 @@ std::string Feedback::getFeedbackMessage() {
 std::vector<std::string> Feedback::getTaskToShow_string() {
 	int size = tasksToShow.size();
 	std::vector<std::string> tasksAsStrings;
-	Utilities utility;
 	for(int i=0 ; i< size ; ++i) {
-		tasksAsStrings[i] = utility.taskToString(tasksToShow[i]);
+		tasksAsStrings[i] = Utilities::taskToString(tasksToShow[i]);
 	}
 	return tasksAsStrings;
 }

@@ -3,10 +3,12 @@
 #include "stdafx.h"
 #include <ctime>
 
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
 namespace TextBuddyTests {
-	TEST_CLASS(LoggerTest) {
+	TEST_CLASS(TbLoggerTest) {
 public:
-	TEST_METHOD(Logger_getLocalTime) {
+	TEST_METHOD(TbLogger_getLocalTime) {
 		time_t rawtime;
 		time(&rawtime);
 
@@ -17,9 +19,9 @@ public:
 		asctime_s(buffer,26,timeinfo);
 		buffer[strlen(buffer)-1]=0;
 
-		Logger* logger = Logger::getInstance();
+		TbLogger* logger = TbLogger::getInstance();
 		// Note: Visual check is consistent even though test fails
-		// Microsoft::VisualStudio::CppUnitTestFramework::Assert::AreEqual(buffer,logger->getLocalTime());
+		// Assert::AreEqual(buffer,logger->getLocalTime());
 	}
 
 	};

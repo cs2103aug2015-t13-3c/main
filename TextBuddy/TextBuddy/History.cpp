@@ -1,3 +1,5 @@
+// @@author Ng Ren Zhi
+
 #include "History.h"
 #include "stdafx.h"
 

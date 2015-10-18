@@ -2,19 +2,19 @@
 
 #include "stdafx.h"
 
-const std::string Logger::logFileName = ".tblog";
-Logger* Logger::logger = new Logger;
+const std::string TbLogger::logFileName = ".tblog";
+TbLogger* TbLogger::logger = new TbLogger;
 
-Logger::Logger() {
+TbLogger::TbLogger() {
 	logLevel = INFO;
 	log(SYS,"Logger initialised");
 }
 
-Logger::~Logger() {
+TbLogger::~TbLogger() {
 	log(SYS,"Logger closed");
 }
 
-char* Logger::getLocalTime() {
+char* TbLogger::getLocalTime() {
 	time_t rawtime;
 	time(&rawtime);
 
@@ -27,15 +27,15 @@ char* Logger::getLocalTime() {
 	return buffer;
 }
 
-Logger* Logger::getInstance() {
+TbLogger* TbLogger::getInstance() {
 	return logger;
 }
 
-void Logger::setLogLevel(Level level) {
+void TbLogger::setLogLevel(Level level) {
 	logLevel = level;
 }
 
-void Logger::log(Level level, std::string message) {
+void TbLogger::log(Level level, std::string message) {
 	if(level >= logLevel) {
 		std::ofstream logfile;
 		logfile.open(logFileName, std::ofstream::out | std::ofstream::app);
@@ -44,24 +44,29 @@ void Logger::log(Level level, std::string message) {
 	}
 }
 
-void Logger::close() {
+void TbLogger::clear() {
+	remove(logFileName.c_str());
+	return;
+}
+
+void TbLogger::close() {
 	delete logger;
 	return;
 }
 
 // Currently disabled
 /*
-bool Logger::setLogFileName(std::string fileName) {
+bool TbLogger::setLogFileName(std::string fileName) {
 	std::ofstream newLogFile;
 	newLogFile.open(fileName, std::ofstream::out | std::ofstream::app);
 
 	if(newLogFile.is_open()) {
 		newLogFile.close();
 
-		log(FATAL,"Logger closed");
+		log(FATAL,"TbLogger closed");
 
 		logFileName = fileName;
-		log(FATAL,"Logger initiated");
+		log(FATAL,"TbLogger initiated");
 		return true;
 	}
 	return false;
