@@ -6,7 +6,7 @@
 
 class Parser {
 private:
-	Logger* logger;
+	TbLogger* logger;
 
 	// This defines the file extension used by TextBuddy
 	static const std::string FILE_EXTENSION;

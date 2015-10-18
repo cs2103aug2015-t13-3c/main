@@ -1,10 +1,11 @@
 #pragma once
+
 //#include "Logic.h"
 #include "History.h"
 #include "stdafx.h"
 #include <msclr\marshal_cppstd.h>
 
-//DEFINES STRINGS
+// DEFINE KEYWORD STRINGS
 #define ADD "add "
 #define DEL "delete "
 #define MODIFY "modify "
@@ -65,7 +66,7 @@ namespace UserInterface {
 
 	protected:
 		~TextBuddyUI() {
-			if (components) {
+			if(components) {
 				delete components;
 				delete history;
 				delete floatingTasks;
@@ -236,10 +237,11 @@ namespace UserInterface {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
-
 		}
+
 #pragma endregion
 
+// @@author Soon Hao Ye
 //*********************** AUTHOR : Soon Hao Ye ********************************
 
 	//================== PRIVATE VARIABLES=====================================
@@ -318,6 +320,7 @@ namespace UserInterface {
 				display->Rows->Add((i+1).ToString(),name,label,dateTime);
 			}
 		}
+
 		/*=====================================================================
 			change feedback message text colour 
 				- green  : ok
@@ -401,6 +404,7 @@ namespace UserInterface {
 				} 
 			}
 		}
+
 		/*====================================================================
 								REQUIRES REFINEMENT!!
 		=====================================================================*/
@@ -413,13 +417,14 @@ namespace UserInterface {
 		}
 
 		/*=====================================================================
-			Get the latest list of floating tasks from logic
+			Get the latest list of floating tasks from Logic
 		=====================================================================*/
 		void updateFloatingTasks() {
 			 if(floatingTasks != nullptr) {
 				delete floatingTasks;
 			 }
-			 //HERE floatingTasks = new std::vector<Task>(logic->getFloatingTasks());
+			 // Fixed to get list from Command (Aaron)
+			 floatingTasks = new std::vector<Task>(Command::getTaskStore());
 		}
 
 //************************** EVENT HANDLERS ***********************************
@@ -429,7 +434,7 @@ private:
 	System::Void input_KeyUp_1(System::Object^  sender,
 		System::Windows::Forms::KeyEventArgs^  e) {
 			cursorPosition = input->SelectionStart;
-			if (e->KeyCode == Keys::Return) { //if user presses 'Return' key
+			if(e->KeyCode == Keys::Return) { //if user presses 'Return' key
 				getInput();
 				processAndExecute();
 				input->Clear();

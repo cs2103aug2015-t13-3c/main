@@ -17,7 +17,7 @@
 #include <vector>
 #include <set>
 
-#include "Logger.h"
+#include "TbLogger.h"
 #include "Task.h"
 #include "Command.h"
 #include "Utilities.h"

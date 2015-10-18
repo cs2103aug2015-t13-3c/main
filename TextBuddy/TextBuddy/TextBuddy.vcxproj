@@ -66,7 +66,7 @@
     <ClInclude Include="Feedback.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="IO.h" />
-    <ClInclude Include="Logger.h" />
+    <ClInclude Include="TbLogger.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="stdafx.h" />
@@ -78,7 +78,7 @@
     <ClCompile Include="Feedback.cpp" />
     <ClCompile Include="History.cpp" />
     <ClCompile Include="IO.cpp" />
-    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="TbLogger.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="stdafx.cpp" />

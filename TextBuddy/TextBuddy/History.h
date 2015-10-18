@@ -5,19 +5,17 @@
 #ifndef HISTORY_H_
 #define HISTORY_H_
 
-
 // Holds a stack of executed commands
-class History
-{
+class History {
 private:
 	std::vector<Command> commandHistory;
 	
-	static History *theOne; //Singleton
-	History(void); 
+	static History *theOne; // Singleton
+	History(); 
 
 public:
 	static History* getInstance();
-	~History(void);
+	~History();
 
 	void add(Command cmd);
 	void undo();

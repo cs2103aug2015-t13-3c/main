@@ -5,13 +5,14 @@
 #include "Parser.h"
 
 Parser::Parser() {
-	logger = Logger::getInstance();
+	logger = TbLogger::getInstance();
 	logger->setLogLevel(DEBUG);
 	logger->log(SYS,"Parser instantiated");
 }
 
 Parser::~Parser() {
 	logger->log(SYS,"Parser destructed");
+	logger->close(); // To be transferred to UI
 }
 
 // This defines the file extension used by TextBuddy
@@ -95,10 +96,7 @@ Command* Parser::parse(std::string userInput) {
 				throw std::runtime_error("No fields to modify!");
 		}
 		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-		std::vector<FieldType> fieldsToModify = extractFields(tempTaskString);
-		if(Utilities::stringToFieldType(Utilities::getFirstWord(tempTaskString))==INVALID_FIELD) {
-			fieldsToModify.push_back(NAME);
-		}
+		std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
 		Task* tempTaskPtr = parseTask(tempTaskString);
 		cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
 		break;}
@@ -156,7 +154,6 @@ Command* Parser::parse(std::string userInput) {
 
 	case EXIT:
 		cmd = new Exit;
-		logger->close(); // To be transferred to Logic
 		break;
 
 	case INVALID:
@@ -196,14 +193,13 @@ Task* Parser::parseTask(std::string restOfCommand) {
 				inputString.push_back(*curr);
 				curr++;
 		}
+		log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
 
 		if( (inputMode == START_DATE || inputMode == END_DATE)
 			&& (newDate = parseDate(inputString)) == INVALID_DATE_FORMAT
 			&& (newDate = parseDay(inputString)) == INVALID_DATE_FORMAT) {
 				log(DEBUG,"Invalid date format: " + Utilities::vecToString(inputString));
 				inputMode = START_TIME;
-		} else {
-			log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
 		}
 
 		switch(inputMode) {
@@ -259,11 +255,11 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			inputMode = Utilities::stringToFieldType(*curr);
 			curr++;
 		} else {
-			log(INFO,"Parsed task");
 			break;
 		}
 	}
 
+	log(INFO,"Parsed task");
 	return newTask;
 }
 
@@ -271,16 +267,22 @@ Task* Parser::parseTask(std::string restOfCommand) {
 //========== These support user methods ==========
 
 std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
+	assert(restOfInput != "");
 	std::vector<std::string> vecInput = Utilities::splitParameters(restOfInput);
 	std::vector<std::string>::iterator curr = vecInput.begin();
 	std::vector<FieldType> fields;
 
-	if(Utilities::stringToFieldType(restOfInput) == INVALID_FIELD) {
+	if(Utilities::isInt(*curr)){
+		curr++;
+	}
+
+	if(Utilities::stringToFieldType(*curr) == INVALID_FIELD) {
 		fields.push_back(NAME);
 	}
 
+	FieldType newField;
 	while(curr != vecInput.end()) {
-		FieldType newField = Utilities::stringToFieldType(*curr);
+		newField = Utilities::stringToFieldType(*curr);
 		if(newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}

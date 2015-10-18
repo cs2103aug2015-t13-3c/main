@@ -24,7 +24,7 @@ Logic::~Logic() {}
 
 //added @RenZhi 16/10/15
 Logic* Logic::getInstance() {
-	if (theOne == NULL) {
+	if(theOne == NULL) {
 		theOne = new Logic();
 	}
 	return theOne;
@@ -122,7 +122,7 @@ bool Logic::markStar(Star toMarkStar){
 	
 	try {
 		id = getIdOfIndex(userIndex);
-		if (id == -1) {												//error code
+		if(id == -1) {												//error code
 			throw "User input exceeded bounds.";
 		}
 	} catch (std::string exceedBoundStr) {
@@ -135,7 +135,7 @@ bool Logic::markStar(Star toMarkStar){
 		++iter;
 	}
 
-	if (iter->getID() == id) {
+	if(iter->getID() == id) {
 		iter->setPriority();
 	}
 
@@ -240,7 +240,7 @@ std::string Logic::searchInfo(Search toSearch) {
 
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		taskName = iter->getName();
-		if (Utilities::isSubstring(searchPhrase,taskName)) {
+		if(Utilities::isSubstring(searchPhrase,taskName)) {
 			id = iter->getID();
 			indexString << id << ",";
 		}
@@ -266,7 +266,7 @@ bool Logic::amendView(std::string listOfIds) {
 	while (listOfIds != "") {
 		index = listOfIds.find(",");
 
-		if (index == -1) {
+		if(index == -1) {
 			idToken = listOfIds;
 			listOfIds = "";
 		} else {
@@ -277,7 +277,7 @@ bool Logic::amendView(std::string listOfIds) {
 		id = stoi(idToken);
 		iter = taskStore.begin();
 		for (iter = taskStore.begin() ; iter != taskStore.end(); ++iter) {
-			if (id == iter->getID()) {
+			if(id == iter->getID()) {
 				currentView.push_back(*iter);
 			}
 		}
@@ -419,7 +419,7 @@ bool Logic::viewTaskType(TaskType type) {
 	std::vector<Task>::iterator iter;
 	
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
-		if (iter->getType() == type) {
+		if(iter->getType() == type) {
 			currentView.push_back(*iter);
 		}
 	}
@@ -469,7 +469,7 @@ return;
 //assume addValue is lesser than 60
 //**problem for case of 2359, change later (need to add day parameter)
 int Logic::addTime(int time, int addValue) {
-if (addValue < 60) {
+if(addValue < 60) {
 int newTime;
 int minutes;
 int hours;
@@ -479,7 +479,7 @@ hours = time / 100;
 
 minutes = minutes + addValue;
 
-if (minutes >= 60) {
+if(minutes >= 60) {
 minutes = minutes - 60;
 hours = hours + 1;
 newTime = hours * 100 + minutes;
@@ -509,7 +509,7 @@ infoArray[i].endTime = stringArray[i].endTime;
 void Logic::addInfo(std::string textInput, int startDateInput, int startTimeInput, 
 int endDateInput, int endTimeInput) {
 
-if (sizeOfArray < SIZE) {
+if(sizeOfArray < SIZE) {
 infoArray[sizeOfArray].text = textInput;
 infoArray[sizeOfArray].startDate = startDateInput;
 infoArray[sizeOfArray].startTime = startTimeInput;
@@ -523,7 +523,7 @@ return;
 
 void Logic::deleteInfo(int index) {
 
-if (index < sizeOfArray) {	
+if(index < sizeOfArray) {	
 for (int i = index; i < sizeOfArray - 1; i++) {
 infoArray[i].text = infoArray[i+1].text;
 infoArray[i].startDate = infoArray[i+1].startDate;
@@ -541,7 +541,7 @@ return;
 //information passed in order of text, startDate, startTime, endDate, endTime separated by "|" as of now
 std::string Logic::returnInfo(int index) {
 
-if (index < sizeOfArray){
+if(index < sizeOfArray){
 std::ostringstream infoContainer;
 
 infoContainer << infoArray[index].text << "|";
@@ -559,10 +559,10 @@ return "Nothing to return.";
 //sorts date and time in increasing order of startDate and startTime
 //eg: 0th element will contain the earliest due date/time
 void Logic::sortDateAndTime() {
-if (sizeOfArray != 0) {
+if(sizeOfArray != 0) {
 for (int i = 0; i < sizeOfArray; i++) {
 for (int j = i+1; j < sizeOfArray; j++) {
-if (infoArray[j].startTime < infoArray[i].startTime) {
+if(infoArray[j].startTime < infoArray[i].startTime) {
 swapElement(infoArray[i], infoArray[j]);
 }
 }
@@ -571,7 +571,7 @@ swapElement(infoArray[i], infoArray[j]);
 //sorts date after time
 for (int i = 0; i < sizeOfArray; i++) {
 for (int j = i+1; j < sizeOfArray; j++) {
-if (infoArray[j].startDate < infoArray[i].startDate) {
+if(infoArray[j].startDate < infoArray[i].startDate) {
 swapElement(infoArray[i], infoArray[j]);
 }
 }
@@ -584,23 +584,23 @@ void Logic::changeInfo(std::string textInput, int startDateInput, int startTimeI
 int endDateInput, int endTimeInput, int index) {
 
 //if text is not meant to be changed, textInput will be "*"
-if (textInput != "*") {
+if(textInput != "*") {
 infoArray[index].text = textInput;	
 }
 
-if (startDateInput != 999999) {
+if(startDateInput != 999999) {
 infoArray[index].startDate = startDateInput;
 }
 
-if (startTimeInput != 9999) {
+if(startTimeInput != 9999) {
 infoArray[index].startTime = startTimeInput;
 }
 
-if (endDateInput != 999999) {
+if(endDateInput != 999999) {
 infoArray[index].endDate = endDateInput;
 }
 
-if (endTimeInput != 9999) {
+if(endTimeInput != 9999) {
 infoArray[index].endTime = endTimeInput;
 }
 
@@ -612,7 +612,7 @@ return;
 std::string Logic::freeSlotSearch(int date, int time) {
 std::ostringstream freeSlot;
 
-if (sizeOfArray == 0) {
+if(sizeOfArray == 0) {
 freeSlot << date << "|" << time;
 return freeSlot.str();					
 } else {
@@ -627,13 +627,13 @@ sortDateAndTime();
 for (int i = 0; i < sizeOfArray; i++) {
 
 //below condition checks if date and time is in between the duration of ith array element
-if ((infoArray[i].startDate < freeDate) || 
+if((infoArray[i].startDate < freeDate) || 
 ((infoArray[i].startDate == freeDate) && (infoArray[i].startTime <= freeTime))) {
-if ((infoArray[i].endDate > freeDate) ||
+if((infoArray[i].endDate > freeDate) ||
 ((infoArray[i].endDate == freeDate) && (infoArray[i].endTime >= freeTime))) {
 
 //condition to prevent freeDate/freeTime from going back to the past
-if ((freeDate < infoArray[i].endDate) ||
+if((freeDate < infoArray[i].endDate) ||
 ((freeDate == infoArray[i].endDate) && (freeTime < infoArray[i].endTime))) {
 freeDate = infoArray[i].endDate;
 freeTime = addTime(infoArray[i].endTime, 1);

@@ -70,13 +70,13 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator j;
 	std::vector<Task>::iterator k;
 	Task tempTask;
-	if (taskVector.size() == 0) {
+	if(taskVector.size() == 0) {
 		return false;
 	}
 /*	
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		for (j = i+1; j != taskVector.end(); ++j) {
-			if (j -> getStartTime() < i.getStartTime) {
+			if(j -> getStartTime() < i.getStartTime) {
 				swapTaskPosition(i->getID(), j->getID());
 			}
 		}
@@ -86,7 +86,7 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 	//sorts date after time to ensure date is accurately sorted
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		for (j = i+1; j != taskVector.end(); ++j) {
-			if (j -> getStartDate() < i -> getStartDate()) {
+			if(j -> getStartDate() < i -> getStartDate()) {
 				std::swap(*i, *j);
 			}
 		}
@@ -97,7 +97,7 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 	i = taskVector.begin(); //points to start of unsorted part
 	k = taskVector.end(); //points to end of unsorted part
 	while(i != k) {
-		if (i->getType() == FLOATING) {
+		if(i->getType() == FLOATING) {
 			tempTask = *i;
 
 			for (j = i+1; j != taskVector.end(); ++j) {
@@ -441,7 +441,7 @@ void Load::execute() {
 // ==================================================
 
 Save::Save(std::string newFilePath) : Command(SAVE) {
-	newFilePath = filePath;
+	filePath = newFilePath;
 }
 
 Save::~Save() {}
