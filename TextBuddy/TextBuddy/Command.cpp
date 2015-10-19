@@ -3,6 +3,7 @@
 #include "Command.h"
 #include "stdafx.h"
 #include "IO.h"
+#include "Parser.h"
 
 // ==================================================
 //                      COMMAND
@@ -554,13 +555,20 @@ void View::undo() {
 //                    DISPLAY_ALL
 // ==================================================
 
-DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {}
+DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {
+	previousView = currentView;
+}
+
 DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
+	copyView();
+	feedback.setUpdateView(true);
 }
 
 void DisplayAll::undo() {
+	currentView = previousView;
+	//TODO: feedback
 }
 
 // ==================================================
@@ -577,7 +585,14 @@ std::string Load::getFilePath() {
 	return filePath;
 }
 
+// TODO: Clear history after load, to avoid seg fault
 void Load::execute() {
+	Parser parser;
+	IO io;
+	std::string newFilePath = parser.parseFileName(filePath);
+	taskStore = io.loadFile(newFilePath);
+	copyView();
+	//TODO: update feedback
 }
 
 // ==================================================
@@ -595,6 +610,12 @@ std::string Save::getFilePath() {
 }
 
 void Save::execute() {
+	Parser parser;
+	IO io;
+	// setFilePath returns false if unable to change file path
+	std::string newFilePath = parser.parseFileName(filePath);
+	io.setFilePath(newFilePath,taskStore);
+	// TODO: feedback
 }
 
 // ==================================================
@@ -604,3 +625,6 @@ void Save::execute() {
 Exit::Exit() : Command(EXIT) {}
 Exit::~Exit() {}
 
+void Exit::execute() {
+	feedback.setExit();
+}

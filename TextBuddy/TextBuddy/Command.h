@@ -231,6 +231,9 @@ public:
 };
 
 class DisplayAll: public Command {
+private:
+	// ==== UNDO ===
+	std::vector<Task> previousView;
 public:
 	DisplayAll();
 	~DisplayAll();
@@ -266,6 +269,8 @@ class Exit: public Command {
 public:
 	Exit();
 	~Exit();
+
+	void execute();
 };
 
 #endif
