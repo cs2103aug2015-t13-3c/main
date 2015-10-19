@@ -10,6 +10,10 @@ using namespace rapidjson;
 class IO {
 private:
 	std::string filePath;
+	
+	const static std::string lastSavedLocation;
+
+	void setLastSavedLocation(std::string fileName);
 
 	bool fileIsOpen(std::ifstream& inputFile);
 	bool fileIsOpen(std::ofstream& outputFile);

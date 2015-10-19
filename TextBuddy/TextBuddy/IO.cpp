@@ -5,10 +5,15 @@
 #include "Rapidjson\include\rapidjson\document.h"
 //#include "Shlwapi.h"
 
+//TODO: Refactor IO.cpp - remove repeated file names
+
 using namespace rapidjson;
 
+const std::string IO::lastSavedLocation = "lastSave.tbconfig";
+
 IO::IO() {
-	filePath = "TEXT.txt";
+	std::ifstream lastSave(lastSavedLocation);
+	lastSave >> filePath;
 }
 
 IO::~IO() {}
@@ -90,9 +95,13 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 	}
 
 	closeJsonText(newfile);
+	setLastSavedLocation(fileName);
+
 	newfile.close();
 	return true;
 }
+
+
 /*
 bool IO::changeSourceFileLocation (std::string newFileLocation) {
 	std::string systemRoot;
@@ -109,6 +118,15 @@ bool IO::changeSourceFileLocation (std::string newFileLocation) {
 // ==================================================
 //                   PRIVATE METHODS
 // ==================================================
+
+// Records down last saved location as .tbconfig file
+// for IO to find where to load when it launches
+void IO::setLastSavedLocation(std::string fileName) {
+	remove(lastSavedLocation.c_str());
+	std::ofstream lastSaved(lastSavedLocation);
+	lastSaved << fileName;
+	lastSaved.close();
+}
 
 Task IO::extractTaskFromJsonObject(Value& item) {
 	Task newTask;

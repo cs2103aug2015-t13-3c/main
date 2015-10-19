@@ -9,16 +9,18 @@
 class History {
 private:
 	std::vector<Command> commandHistory;
-	
+	std::vector<Command> redoHistory;
+
 	static History *theOne; // Singleton
 	History(); 
 
 public:
-	static History* getInstance();
+	static History *getInstance();
 	~History();
 
 	void add(Command cmd);
 	void undo();
+	void redo();
 };
 
 #endif

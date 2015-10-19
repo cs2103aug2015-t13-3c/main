@@ -2,6 +2,7 @@
 // Modified to Command pattern (Ren Zhi)
 
 #include "Feedback.h"
+#include "IO.h"
 #include <vector>
 
 #ifndef COMMAND_H_
@@ -37,6 +38,7 @@ enum CommandType {
 	SEARCH,
 	MARKDONE,
 	UNDO,
+	REDO,
 	VIEW,
 	CLEAR_ALL,
 	DISPLAY_ALL,
@@ -255,9 +257,12 @@ public:
 
 class Save: public Command {
 private:
+	//TODO: make IO singleton
+	IO io;
 	std::string filePath;
 public:
-	Save(std::string filePath);
+	Save();
+	Save(std::string filePath);	
 	~Save();
 	std::string getFilePath();
 

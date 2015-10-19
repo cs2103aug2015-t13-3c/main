@@ -6,10 +6,12 @@
 #include "Feedback.h"
 #include "Parser.h"
 #include "IO.h"
+#include "History.h"
 
 class Logic {
 private:
 	static Logic *theOne; //Singleton
+	History* history;
 	Parser parser;
 	IO io;
 

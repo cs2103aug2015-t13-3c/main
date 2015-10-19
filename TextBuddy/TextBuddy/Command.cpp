@@ -599,6 +599,11 @@ void Load::execute() {
 //                        SAVE
 // ==================================================
 
+// Save to current file path
+Save::Save() : Command(SAVE) {
+	filePath = io.getFilePath();
+}
+// Save to new file path
 Save::Save(std::string newFilePath) : Command(SAVE) {
 	filePath = newFilePath;
 }
@@ -611,7 +616,6 @@ std::string Save::getFilePath() {
 
 void Save::execute() {
 	Parser parser;
-	IO io;
 	// setFilePath returns false if unable to change file path
 	std::string newFilePath = parser.parseFileName(filePath);
 	io.setFilePath(newFilePath,taskStore);
