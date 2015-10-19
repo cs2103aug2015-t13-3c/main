@@ -1,4 +1,6 @@
 // @@author Aaron Chong Jun Hao
+// Modified to Command Pattern (Ren Zhi)
+// Private methods originally by Kiat Boon
 
 #include "Command.h"
 #include "stdafx.h"

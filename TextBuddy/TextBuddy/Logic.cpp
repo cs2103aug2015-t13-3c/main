@@ -73,12 +73,18 @@ Feedback Logic::processCommand(std::string userCommand) {
 	Feedback feedback;
 
 	Command* command;
-	
-	// For temporary method to return string of names followed by commas	
-	std::ostringstream tempOutput;
-	std::vector<Task>::iterator iter;
-	std::string convertStr;
-	std::string output;
+	Add* add;
+	Delete* delet;
+	Modify* modify;
+	Search* search;
+	Markdone* markdone;
+	UnmarkDone* unmarkdone;
+	View* view;
+	//Clearall* clearAll; //ClearAll subclass not created yet
+	DisplayAll* displayAll;
+	Load* load;
+	Save* save;
+	Exit* exit;
 
 	try {
 		command = parser.parse(userCommand);
@@ -87,7 +93,6 @@ Feedback Logic::processCommand(std::string userCommand) {
 	}
 
 	CommandType cmd = command->getCommand();
-
 	switch (cmd) {
 	case UNDO:
 		history->undo();
@@ -111,6 +116,62 @@ Feedback Logic::processCommand(std::string userCommand) {
 	feedback.setTasksToShow(command->getCurrentView());
 	return feedback;
 }
+
+/*
+Add* add;
+Delete* delet;
+Modify* modify;
+Search* search;
+Markdone* markdone;
+UnmarkDone* unmarkdone;
+View* view;
+//Clearall* clearAll; //ClearAll subclass not created yet
+DisplayAll* displayAll;
+Load* load;
+Save* save;
+Exit* exit;
+
+try {
+command = parser.parse(userCommand);
+} catch(std::exception e) {
+feedback.setErrorMessage(e.what());
+}
+
+CommandType cmd = command->getCommand();
+switch (cmd) {
+case ADD:
+add = (Add*)command;
+add->execute();
+history->add(*command);
+break;
+case DELETE:
+case MODIFY:
+case SEARCH:
+case MARKDONE:
+case UNMARKDONE:
+case UNDO:
+history->undo();
+break;
+case REDO:
+history->redo();
+break;
+case VIEW:
+case CLEAR_ALL:
+case DISPLAY_ALL:
+case LOAD:
+case SAVE:
+case EXIT:
+case INVALID:
+throw "INVALID COMMAND ENTERED";
+break;
+
+default:
+command->execute();
+history->add(*command);
+}
+
+*/
+
 
 // CURRENTLY NOT USED
 /*

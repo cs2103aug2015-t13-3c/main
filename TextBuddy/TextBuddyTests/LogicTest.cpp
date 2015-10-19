@@ -85,23 +85,24 @@ public:
 		Parser parser;
 		Command cmd;
 		cmd.clearTaskStore();	// Clear state
-		/*
+		
 		// Add
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add then"));
 		logic->processCommand(std::string("Add this from 13 Oct to 15 Oct"));
-
-		std::vector<Task> copyTask;
+		
+		std::vector<Task> copyTask;	
 		std::vector<Task>::iterator iter;
 
 		copyTask = cmd.getTaskStore();
+		Assert::AreEqual((size_t)3,copyTask.size());
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("this"),iter->getName());
 		Assert::AreEqual(151013,iter->getStartDate());
 		Assert::AreEqual(151015,iter->getEndDate());
 		Assert::AreEqual(0,iter->getStartTime());
 		Assert::AreEqual(0,iter->getEndTime());
-
+		
 		++iter;
 		Assert::AreEqual(std::string("that"), iter->getName());
 		Assert::AreEqual(151014,iter->getStartDate());
@@ -128,7 +129,7 @@ public:
 
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
-		*/
+		
 		/*
 		// Modify
 		logic->processCommand(std::string("Modify 1 changed."));
@@ -142,7 +143,7 @@ public:
 		logic->processCommand(std::string("Modify 1 that"));
 		*/
 
-		/*
+		
 		// Search
 		
 		logic->processCommand(std::string("Search he"));	
@@ -160,7 +161,7 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
-		*/
+		
 	}
 	
 	/*

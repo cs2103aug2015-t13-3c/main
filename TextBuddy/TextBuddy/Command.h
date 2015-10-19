@@ -92,8 +92,8 @@ public:
 	static int getSize();
 	static void clearTaskStore();
 
-	/*virtual*/ void execute();
-	/*virtual*/ void undo();
+	virtual void execute();
+	virtual void undo();
 };
 
 // ==================================================
