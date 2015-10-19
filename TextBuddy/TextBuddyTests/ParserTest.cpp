@@ -26,6 +26,11 @@ public:
 		expectedString = "test.txt";
 		userInput = "test";
 		Assert::AreEqual(expectedString,p.parseFileName(userInput));
+
+		//added by @Ren Zhi 19/10/15
+		expectedString = "C:\\\\Users\\\\Public\\\\test.txt";
+		userInput = "C:\\\Users\\Public\\test.txt";
+		Assert::AreEqual(expectedString,p.parseFileName(userInput));
 	}
 
 	TEST_METHOD(Parser_parse) {

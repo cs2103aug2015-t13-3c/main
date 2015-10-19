@@ -599,6 +599,9 @@ void DisplayAll::undo() {
 //                        LOAD
 // ==================================================
 
+Load::Load() : Command(LOAD) {
+	filePath = io.getFilePath();
+}
 Load::Load(std::string newFilePath) : Command(LOAD) {
 	filePath = newFilePath;
 }
@@ -612,9 +615,9 @@ std::string Load::getFilePath() {
 // TODO: Clear history after load, to avoid seg fault
 void Load::execute() {
 	Parser parser;
-	IO io;
-	std::string newFilePath = parser.parseFileName(filePath);
-	taskStore = io.loadFile(newFilePath);
+	
+	//std::string newFilePath = parser.parseFileName(filePath);
+	taskStore = io.loadFile(filePath);
 	copyView();
 	//TODO: update feedback
 }

@@ -252,7 +252,9 @@ public:
 class Load: public Command {
 private:
 	std::string filePath;
+	IO io;
 public:
+	Load();
 	Load(std::string Load);
 	~Load();
 	std::string getFilePath();

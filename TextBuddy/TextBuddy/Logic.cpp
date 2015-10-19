@@ -29,9 +29,6 @@ Logic::~Logic() {}
 
 //added @RenZhi 16/10/15
 Logic* Logic::getInstance() {
-	if(theOne == NULL) {
-		theOne = new Logic();
-	}
 	return theOne;
 }
 
