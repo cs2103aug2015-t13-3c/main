@@ -1,4 +1,4 @@
-// @@author Aaron Chong Jun Hao
+// @@author A0110376N (Aaron Chong Jun Hao)
 // Methods are listed in order of return type, then alphabetical order
 
 #include "stdafx.h"
@@ -254,7 +254,7 @@ std::string Utilities::taskToString(Task task) {
 		"Name: ",		task.getName().c_str(),		// %s%s\n
 		/*
 		"Type: ",		task.getType(),				// %s%d\n
-		"Label: ",		task.getLabel().c_str(),	// %s%s\n
+		"Labels: ",		task.getLabels().c_str(),	// %s%s\n
 		"Done: ",		task.getDoneStatus(),		// %s%d\n
 		"Priority: ",	task.getPriorityStatus(),	// %s%d\n
 		"Start Date: ",	task.getStartDate(),		// %s%d\n
@@ -332,14 +332,14 @@ std::string Utilities::vecToString(std::vector<std::string> inputString) {
 //             COMPARISONS AND MODIFIERS
 // ==================================================
 
-bool Utilities::containsAny(std::string targetWord, std::string searchWords) {
-	targetWord = stringToLower(targetWord);
-	searchWords = stringToLower(searchWords);
-	std::vector<std::string> vecSearchWords = splitParameters(searchWords);
+bool Utilities::containsAny(std::string searchWord, std::string words) {
+	searchWord = stringToLower(searchWord);
+	words = stringToLower(words);
+	std::vector<std::string> vecWords = splitParameters(words);
 	std::vector<std::string>::iterator curr;
 
-	for(curr=vecSearchWords.begin(); curr!=vecSearchWords.end(); curr++) {
-		if(targetWord == *curr) {
+	for(curr=vecWords.begin(); curr!=vecWords.end(); curr++) {
+		if(searchWord == *curr) {
 			return true;
 		}
 	}
@@ -350,7 +350,23 @@ bool Utilities::isInt(std::string intString) {
 	return !(intString.empty()) && intString.find_first_not_of("0123456789")==std::string::npos;
 }
 
+bool Utilities::isKeyword(std::string str) {
+	// TODO (Aaron)
+	return false;
+}
+
+std::vector<std::string> Utilities::removeSlashKeywords(std::vector<std::string> inputString) {
+	std::vector<std::string>::iterator curr;
+	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
+		if( ((*curr)[0] == '/' || (*curr)[0] == '\\') && isKeyword(*curr) ) {
+			*curr = curr[1];
+		}
+	}
+	return inputString;
+}
+
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
+// @@author A0110376N-reused
 
 bool Utilities::isPositiveNonZeroInt(std::string s) {
 	int i = stringToInt(s);
@@ -404,11 +420,11 @@ std::string Utilities::replace(std::string str, std::string from, std::string to
 	return str;
 }
 
-bool Utilities::isSubstring(std::string phrase, std::string search) {
+bool Utilities::isSubstring(std::string subString, std::string wordString) {
 	bool isFound = false;
-	std::string::iterator pos = std::search(search.begin(), search.end(), 
-		phrase.begin(),phrase.end(),equalsIgnoreCase_char);
-	if(pos != search.end()) {
+	std::string::iterator pos = std::search(wordString.begin(), wordString.end(), 
+		subString.begin(),subString.end(),equalsIgnoreCase_char);
+	if(pos != wordString.end()) {
 		isFound = true;
 	}
 	return isFound;
@@ -421,7 +437,7 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 // ==================================================
 //           STRING-FOR-DISPLAY FORMATTERS
 // ==================================================
-// @@author Soon Hao Ye
+// @@author A0126677U (Soon Hao Ye)
 
 std::string Utilities::taskDateAndTimeToDisplayString(Task task) {
 	std::string placeHolder;
