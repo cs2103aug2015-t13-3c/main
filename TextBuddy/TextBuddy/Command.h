@@ -222,7 +222,12 @@ public:
 
 class View: public Command {
 private:
+	// == EXECUTE ==
 	ViewType view;
+	// ==== UNDO ===
+	std::vector<Task> previousView;
+	
+	bool viewTaskType(TaskType type);
 public:
 	View(ViewType newView);
 	~View();

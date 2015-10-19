@@ -1,0 +1,49 @@
+Mon Oct 19 17:02:50 2015 Logger initialised
+Mon Oct 19 17:02:50 2015 Parser instantiated
+Mon Oct 19 17:02:50 2015 Parser instantiated
+Mon Oct 19 17:02:50 2015 Parser destructed
+Mon Oct 19 17:02:50 2015 Logger closed
+Mon Oct 19 17:03:03 2015 Parsing "add"
+Mon Oct 19 17:03:03 2015 Parsing task
+Mon Oct 19 17:03:03 2015 Parsing field: name
+Mon Oct 19 17:03:03 2015 Parsing string: eat macs
+Mon Oct 19 17:03:03 2015 Parsed task
+Mon Oct 19 17:03:03 2015 Parser instantiated
+Mon Oct 19 17:03:03 2015 Parser destructed
+Mon Oct 19 17:03:03 2015 Logger closed
+Mon Oct 19 17:03:49 2015 Logger initialised
+Mon Oct 19 17:03:49 2015 Parser instantiated
+Mon Oct 19 17:03:49 2015 Parser instantiated
+Mon Oct 19 17:03:49 2015 Parser destructed
+Mon Oct 19 17:03:49 2015 Logger closed
+Mon Oct 19 17:03:53 2015 Parser instantiated
+Mon Oct 19 17:03:53 2015 Parser destructed
+Mon Oct 19 17:03:53 2015 Logger closed
+Mon Oct 19 17:37:07 2015 Logger initialised
+Mon Oct 19 17:37:07 2015 Parser instantiated
+Mon Oct 19 17:37:07 2015 Parser instantiated
+Mon Oct 19 17:37:07 2015 Parser destructed
+Mon Oct 19 17:37:13 2015 Parsing "add"
+Mon Oct 19 17:37:13 2015 Parsing task
+Mon Oct 19 17:37:13 2015 Parsing field: name
+Mon Oct 19 17:37:13 2015 Parsing string: hello
+Mon Oct 19 17:37:13 2015 Parsed task
+Mon Oct 19 17:37:13 2015 Parser instantiated
+Mon Oct 19 17:37:13 2015 Parser destructed
+Mon Oct 19 17:37:21 2015 Parsing "view"
+Mon Oct 19 17:37:21 2015 Parser instantiated
+Mon Oct 19 17:37:21 2015 Parser destructed
+Mon Oct 19 17:44:42 2015 Parsing "add"
+Mon Oct 19 17:44:42 2015 Parsing task
+Mon Oct 19 17:44:42 2015 Parsing field: name
+Mon Oct 19 17:44:42 2015 Parsing string: abcdefg
+Mon Oct 19 17:44:42 2015 Parsed task
+Mon Oct 19 17:44:42 2015 Parser instantiated
+Mon Oct 19 17:44:42 2015 Parser destructed
+Mon Oct 19 17:45:37 2015 Parsing "exit"
+Mon Oct 19 17:45:37 2015 Parser instantiated
+Mon Oct 19 17:45:37 2015 Parser destructed
+Mon Oct 19 17:45:40 2015 Parsing "exit"
+Mon Oct 19 17:45:40 2015 Parser instantiated
+Mon Oct 19 17:45:40 2015 Parser destructed
+Mon Oct 19 17:45:43 2015 Parser destructed
