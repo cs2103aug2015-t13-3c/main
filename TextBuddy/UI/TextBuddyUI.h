@@ -1,7 +1,6 @@
 #pragma once
 
-//#include "Logic.h"
-#include "History.h"
+#include "Logic.h"
 #include "stdafx.h"
 #include <msclr\marshal_cppstd.h>
 
@@ -38,7 +37,7 @@ namespace UserInterface {
 		// INITIALIZATION OF COMPONENTS AND REQUIRED VARIABLES
 		TextBuddyUI(void) {
 			InitializeComponent();
-			history = history->getInstance();
+			logic = logic->getInstance();
 			Command cmd;
 			updateDisplay(cmd.getCurrentView());
 			floatingTasks = nullptr;
@@ -68,7 +67,7 @@ namespace UserInterface {
 		~TextBuddyUI() {
 			if(components) {
 				delete components;
-				delete history;
+				delete logic;
 				delete floatingTasks;
 			}
 		}
@@ -248,8 +247,7 @@ namespace UserInterface {
 	private:
 		std::string* userInput;
 		std::string* userFeedback_cppString;
-		//Logic* logic ;
-		History* history;
+		Logic *logic;
 		std::vector<Task>* floatingTasks;
 		int floatingTaskIndex;
 		int cursorPosition;
@@ -277,7 +275,7 @@ namespace UserInterface {
 		=====================================================================*/
 		void processAndExecute() {
 			feedback->Clear();
-			/*HERE
+			
 			Feedback results = logic->processCommand(*userInput);
 			if(results.isExit()) {
 				exit(0);
@@ -288,7 +286,7 @@ namespace UserInterface {
 			updateFloatingTasks();
 			configureMessageColor(&results);
 			printFeedBackMessage(results.getFeedbackMessage());
-			*/
+			
 			delete userInput;
 		}
 

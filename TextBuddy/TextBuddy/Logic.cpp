@@ -6,6 +6,7 @@
 
 const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
 
+Logic* Logic::theOne = new Logic();
 
 Logic::Logic() {
 	history = History::getInstance();

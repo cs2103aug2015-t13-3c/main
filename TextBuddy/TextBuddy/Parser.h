@@ -4,6 +4,8 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+#include "stdafx.h"
+
 class Parser {
 private:
 	TbLogger* logger;
