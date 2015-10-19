@@ -119,8 +119,21 @@ Command* Parser::parse(std::string userInput) {
 		cmd = new Markdone(doneID);
 		break;}
 
+	case UNMARKDONE: {
+		if(!Utilities::isPositiveNonZeroInt(restOfInput)) {
+			log(WARN,"Invalid integer string: " + restOfInput);
+			throw std::runtime_error("Invalid integer string!");
+		}
+		int notdoneID = Utilities::stringToInt(restOfInput);
+		cmd = new UnmarkDone(notdoneID);
+		break;}
+
 	case UNDO:
 		cmd = new Undo;
+		break;
+
+	case REDO:
+		// cmd = new Redo;
 		break;
 
 	case VIEW:
