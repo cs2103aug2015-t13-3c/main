@@ -7,6 +7,7 @@
 #include "Parser.h"
 #include "IO.h"
 #include "History.h"
+#include "Observer.h"
 
 class Logic {
 private:
@@ -15,44 +16,18 @@ private:
 	Parser parser;
 	IO io;
 
-	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
+	const static std::string Logic::ERROR_INVALID_COMMAND;
 	Logic();
-
-	int getIdOfIndex(int userIndex);
-
-	//added by haoye
-	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
-	std::vector<Task>::iterator &taskIter);
-	std::vector<Task>::iterator matchCurrentViewIndex(int index);
-	std::vector<Task>::iterator matchTaskViewIndex(int index);
-	bool isValidIndex(int index);
 
 	void markDone(Markdone toMarkDone);
 	//bool markPriority(Star toMarkStar);
 
 public:
+	Feedback processCommand(std::string userCommand);
 	static Logic* getInstance();
 	~Logic();
 
-	int getSize();
-	bool saveFile(std::string fileName);
-	std::vector<Task> loadFile(std::string fileName);
-	std::vector<Task> getTaskStore();
-	void clearTaskStore();
-	std::vector<Task> getCurrentView();
-	bool addInfo(Add taskName);
-	void deleteInfo(Delete idToDelete);
-	void modifyInfo(Modify toModify);
-	std::string searchInfo(Search toSearch);
-	// Amends currentView to store searched elements
-	bool amendView(std::string listOfIds);
-
-	//allows for viewing of a particular task type
-	bool viewTaskType(TaskType type);
-	bool sortDate(std::vector<Task> &taskVector);
-	bool copyView();
-
-	Feedback processCommand(std::string userCommand);
+	void subscribe(Observer* ui);
 	std::vector<Task> getFloatingTasks();
 };
 
