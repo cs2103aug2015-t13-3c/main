@@ -9,7 +9,9 @@ Logic* Logic::theOne = new Logic();
 
 Logic::Logic() {
 	history = History::getInstance();
-	Load initialLoad(io.getFilePath());
+	// parser = Parser::getInstance();
+	io = IO::getInstance();
+	Load initialLoad(io->getFilePath());
 	initialLoad.execute();
 	Command temp;
 	currentView = temp.getCurrentView();
@@ -67,15 +69,15 @@ std::string Logic::processCommand(std::string userCommand) {
 }
 
 void Logic::subscribe(std::vector<std::string>* labels,
-				std::vector<std::string>* description,
-				std::vector<std::string>* dateAndTime,
-				std::vector<std::string>* floatingTasks,
-				std::vector<bool>* priotiryTasks) {
+					  std::vector<std::string>* description,
+					  std::vector<std::string>* dateAndTime,
+					  std::vector<std::string>* floatingTasks,
+					  std::vector<bool>* priorityTasks) {
 
-	assert(updater == nullptr);
-	updater = new Update(labels, description, dateAndTime, floatingTasks,
-						 priotiryTasks,currentView);
-	updater->update();
+						  assert(updater == nullptr);
+						  updater = new Update(labels, description, dateAndTime, floatingTasks,
+							  priorityTasks,currentView);
+						  updater->update();
 }
 
 /*

@@ -16,7 +16,7 @@ private:
 	std::vector<Task>* currentView; 
 	History* history;
 	Parser parser;
-	IO io;
+	IO* io;
 	Update* updater;
 
 	const static std::string ERROR_INVALID_COMMAND;
@@ -67,7 +67,7 @@ public:
 class Logic{
 private:
 bool isActive;
-IO io;
+IO* io;
 
 //start and end dates to allow for "blocking" of slots for now
 //if it is a normal "duedate", no endDate and endTime will be given

@@ -16,7 +16,7 @@ History* History::getInstance() {
 
 // Add new command into History stack
 void History::add(Command cmd) {
-	cmd.execute();
+	// cmd.execute();
 	commandHistory.push_back(cmd);
 	redoHistory.clear();
 }

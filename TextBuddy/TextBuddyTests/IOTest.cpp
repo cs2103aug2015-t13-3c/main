@@ -8,6 +8,7 @@ namespace TextBuddyTests {
 	//========== LoadFileTest ==========
 	TEST_CLASS(LoadFileTest) {
 public:
+	IO* io;
 	// Use only if incorrect input
 	/*
 	TEST_METHOD(IO_loadFile_correctStringReadIn)
@@ -25,41 +26,44 @@ public:
 
 	TEST_METHOD(IO_loadFile_emptyFile) {
 		// Empty file should load empty vector
-		IO io;
-
+		io = IO::getInstance();
+		
 		std::vector<Task> emptyVector;
-		io.saveFile("TEXT.txt", emptyVector);
-		std::vector<Task> actualVector = io.loadFile("TEXT.txt");
+		io->saveFile("TEXT.txt", emptyVector);
+		std::vector<Task> actualVector = io->loadFile("TEXT.txt");
 
 		Assert::AreEqual(emptyVector.size(), actualVector.size());
 	}
 
 	TEST_METHOD(IO_loadFile_fileDoesntExist) {
-		IO io;
+		io = IO::getInstance();
+		
 		// Empty file should load empty vector
-		std::vector<Task> actualVector = io.loadFile("");
+		std::vector<Task> actualVector = io->loadFile("");
 		std::vector<Task> emptyVector;
 
 		Assert::AreEqual(emptyVector.size(), actualVector.size());
 	}
 
 	TEST_METHOD(IO_loadFile_loadGibberish) {
-		IO io;
+		io = IO::getInstance();
+		
 		// Empty file should load empty vector
-		std::vector<Task> actualVector = io.loadFile("");
+		std::vector<Task> actualVector = io->loadFile("");
 		std::vector<Task> emptyVector;
 
 		Assert::AreEqual(emptyVector.size(), actualVector.size());
 	}
 
 	TEST_METHOD(IO_loadFile_oneTask) {
-		IO io;
+		io = IO::getInstance();
+		
 		std::vector<Task> textVector;
 		Task newTask;
 		textVector.push_back(newTask);
-		io.saveFile("TEXT.txt", textVector);
+		io->saveFile("TEXT.txt", textVector);
 
-		std::vector<Task> actualVector = io.loadFile("TEXT.txt");
+		std::vector<Task> actualVector = io->loadFile("TEXT.txt");
 		Assert::AreEqual(textVector.size(), actualVector.size());
 
 		for(unsigned int i = 0; i < actualVector.size(); i++) {
@@ -87,15 +91,16 @@ public:
 	}
 
 	TEST_METHOD(IO_loadFile_threeTasks) {
-		IO io;
+		io = IO::getInstance();
+		
 		std::vector<Task> textVector;
 		Task newTask;
 		textVector.push_back(newTask);
 		textVector.push_back(newTask);
 		textVector.push_back(newTask);
-		io.saveFile("TEXT.txt", textVector);
+		io->saveFile("TEXT.txt", textVector);
 
-		std::vector<Task> actualVector = io.loadFile("TEXT.txt");
+		std::vector<Task> actualVector = io->loadFile("TEXT.txt");
 
 		Assert::AreEqual(textVector.size(), actualVector.size());
 
@@ -128,28 +133,29 @@ public:
 	//========== SaveFileTest ==========
 	TEST_CLASS(SaveFileTest) {
 public:
+	IO* io;
 	TEST_METHOD(IO_saveFile_fileDoesntExist) {
-		IO io;
+		io = IO::getInstance();
 		// Cannot open file to save
 		std::vector<Task> emptyVector;
-		bool success = io.saveFile("", emptyVector);
+		bool success = io->saveFile("", emptyVector);
 
 		Assert::AreEqual(false, success);
 	}
 
 	TEST_METHOD(IO_saveFile_noText) {
-		IO io;
+		io = IO::getInstance();
 		std::vector<Task> emptyVector;
 		std::string expectedText[] = {"{","\t\"TextBuddy Items\":", "\t[","\t]","}"};
 
-		bool success = io.saveFile("TEXT.txt", emptyVector);
+		bool success = io->saveFile("TEXT.txt", emptyVector);
 
-		std::vector<std::string> actualText = io.getText("TEXT.txt");
+		std::vector<std::string> actualText = io->getText("TEXT.txt");
 
 		// NOTE: vecToString method doesnt work
 		// REPLY: Please refer to UtilitiesTest.cpp (Aaron)
 
-		// std::vector<std::string> actualTextVector = io.getText("TEXT.txt");
+		// std::vector<std::string> actualTextVector = io->getText("TEXT.txt");
 		// std::string actualText = Utilities::vecToString(actualTextVector);
 
 		for(unsigned int i = 0; i < actualText.size(); i++) {
@@ -158,13 +164,13 @@ public:
 	}
 
 	TEST_METHOD(IO_saveFile_oneLine) {
-		IO io;
+		io = IO::getInstance();
 		std::vector<Task> textVector;
 		Task newTask;
 		textVector.push_back(newTask);
 
-		bool success = io.saveFile("TEXT.txt", textVector);
-		std::vector<std::string> actualText = io.getText("TEXT.txt");
+		bool success = io->saveFile("TEXT.txt", textVector);
+		std::vector<std::string> actualText = io->getText("TEXT.txt");
 
 		std::string expectedText[] = {
 			"{",
@@ -198,7 +204,7 @@ public:
 	}
 
 	TEST_METHOD(IO_saveFile_threeLines) {
-		IO io;
+		io = IO::getInstance();
 		std::vector<Task> textVector;
 		Task newTask;
 		newTask.setID(Task::incrementRunningCount()); // Added to fix uniqueID (Aaron)
@@ -206,8 +212,8 @@ public:
 		textVector.push_back(newTask);
 		textVector.push_back(newTask);
 
-		bool success = io.saveFile("TEXT.txt", textVector);
-		std::vector<std::string> actualText = io.getText("TEXT.txt");
+		bool success = io->saveFile("TEXT.txt", textVector);
+		std::vector<std::string> actualText = io->getText("TEXT.txt");
 
 		std::string expectedText[] = {
 			"{",
@@ -269,7 +275,6 @@ public:
 
 	};
 
-
 	/*
 	TEST_CLASS(ChangeDirectoryTest)
 	{
@@ -277,39 +282,42 @@ public:
 
 	TEST_METHOD(IO_changeDirectory_invalidPath)
 	{
-	IO io;
+	io = IO::getInstance();
 	// Cannot open file to save
 	std::string pathName = "Desktop";
-	bool success = io.changeSourceFileLocation(pathName);
+	bool success = io->changeSourceFileLocation(pathName);
 
 	Assert::AreEqual(false, success);
 	}
 	*/
 
-
 	//========== SetFilePathTest ==========
 	TEST_CLASS(SetFilePathTest) {
 public:
-	Parser parser;
-	IO io;
+	Parser* parser;
+	IO* io;
 
 	TEST_METHOD(IO_setFilePath_parentDirectory) {
+		parser = Parser::getInstance();
+		io = IO::getInstance();
 		std::vector<Task> taskVector;
-		Task task = *parser.parseTask("dummy");
+		Task task = *parser->parseTask("dummy");
 		std::string userInput = "../test";
-		std::string newFilePath = parser.parseFileName(userInput);
-		Assert::AreEqual(true,io.setFilePath(newFilePath,taskVector));
+		std::string newFilePath = parser->parseFileName(userInput);
+		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 
 		// Remove file created
 		remove(newFilePath.c_str());
 	}
 
 	TEST_METHOD(IO_setFilePath_parentOfParentDirectory) {
+		parser = Parser::getInstance();
+		io = IO::getInstance();
 		std::vector<Task> taskVector;
-		Task task = *parser.parseTask("dummy");
+		Task task = *parser->parseTask("dummy");
 		std::string userInput = "../../test";
-		std::string newFilePath = parser.parseFileName(userInput);
-		Assert::AreEqual(true,io.setFilePath(newFilePath,taskVector));
+		std::string newFilePath = parser->parseFileName(userInput);
+		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 
 		// Remove file created
 		remove(newFilePath.c_str());
@@ -317,16 +325,17 @@ public:
 
 	// Note: Replace yourusername with the appropriate string first
 	TEST_METHOD(IO_setFilePath_userDirectory) {
+		parser = Parser::getInstance();
+		io = IO::getInstance();
 		std::vector<Task> taskVector;
-		Task task = *parser.parseTask("dummy");
+		Task task = *parser->parseTask("dummy");
 		std::string userInput = "C:/Users/Public/test";
-		std::string newFilePath = parser.parseFileName(userInput);
-		Assert::AreEqual(true,io.setFilePath(newFilePath,taskVector));
+		std::string newFilePath = parser->parseFileName(userInput);
+		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 
 		// Remove file created
 		remove(newFilePath.c_str());
 	}
-
 
 	};
 }

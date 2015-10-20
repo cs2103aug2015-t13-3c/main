@@ -171,10 +171,10 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 		view = VIEWTYPE_PAST;
 	} else if(equalsIgnoreCase(viewString,VIEW_WEEK)) {
 		view = VIEWTYPE_WEEK;
-	} else if(equalsIgnoreCase(viewString,VIEW_UNDONE)) {
-		view = VIEWTYPE_UNDONE;
+	} else if(equalsIgnoreCase(viewString,VIEW_NOTDONE)) {
+		view = VIEWTYPE_NOTDONE;
 	} else {
-		view = VIEWTYPE_LABEL;
+		view = VIEWTYPE_LABELS;
 	}
 	return view;
 
@@ -184,9 +184,10 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 	case VIEWTYPE_ALL:
 	case VIEWTYPE_FLOATING:
 	case VIEWTYPE_TODO:
+	case VIEWTYPE_NOTDONE:
 	case VIEWTYPE_PAST:
 	case VIEWTYPE_WEEK:
-	case VIEWTYPE_LABEL:
+	case VIEWTYPE_LABELS:
 		break;
 	}
 }
@@ -348,15 +349,15 @@ bool Utilities::isInt(std::string intString) {
 }
 
 bool Utilities::isKeyword(std::string str) {
-	// TODO (Aaron)
-	return false;
+	return stringToFieldType(str)!=INVALID_FIELD;
 }
 
 std::vector<std::string> Utilities::removeSlashKeywords(std::vector<std::string> inputString) {
 	std::vector<std::string>::iterator curr;
+	std::string subString;
 	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
-		if( ((*curr)[0] == '/' || (*curr)[0] == '\\') && isKeyword(*curr) ) {
-			*curr = curr[1];
+		if( ((*curr)[0] == '/' || (*curr)[0] == '\\') && isKeyword(subString = (*curr).substr(1)) ) {
+			*curr = subString;
 		}
 	}
 	return inputString;

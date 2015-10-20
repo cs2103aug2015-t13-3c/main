@@ -1,7 +1,7 @@
 // @@author A0096720A (Chin Kiat Boon)
 
-#include "Logic.h"
 #include "stdafx.h"
+#include "Logic.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -9,7 +9,7 @@ namespace TextBuddyTests {
 	TEST_CLASS(LogicTest) {
 public:
 
-	TEST_METHOD(initiate_history) {
+	TEST_METHOD(Logic_intitiateHistory) {
 		History *history = history->getInstance();
 	}
 
@@ -82,7 +82,7 @@ public:
 	// Modified by @Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processInfo) {
 		Logic* logic = Logic::getInstance();
-		Parser parser;
+		// Parser* parser = Parser::getInstance();
 		Command cmd;
 		cmd.clearTaskStore();	// Clear state
 		
@@ -112,13 +112,13 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
 		
-		//view
+		// View
 		logic->processCommand(std::string("View floating"));
-		copyTask = cmd.getCurrentView();
+		copyTask = *cmd.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("then"),iter->getName());
 
-		//display all
+		// Display all
 		logic->processCommand(std::string("display all"));
 
 		// Delete
@@ -145,17 +145,15 @@ public:
 
 		
 		// Search
-		
 		logic->processCommand(std::string("Search he"));	
-		copyTask = cmd.getCurrentView();
+		copyTask = *cmd.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(std::string("then"), iter->getName());
 		
-		//MarkDone
+		// MarkDone
 		logic->processCommand(std::string("Done 1"));
-
-		copyTask = cmd.getCurrentView();
+		copyTask = *cmd.getCurrentView();
 		Assert::AreEqual((size_t)0,copyTask.size());
 		copyTask = cmd.getTaskStore();
 		iter = copyTask.begin();

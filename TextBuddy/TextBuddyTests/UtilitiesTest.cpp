@@ -10,9 +10,9 @@ public:
 
 	TEST_METHOD(Utilities_fieldVecToString) {
 		TbLogger::getInstance()->clear();
-		Parser p;
+		Parser* parser = Parser::getInstance();
 		std::string expectedString = "from from to"; // Expected behaviour
-		std::vector<FieldType> fields = p.extractFields("from on by");
+		std::vector<FieldType> fields = parser->extractFields("from on by");
 		Assert::AreEqual(expectedString,Utilities::fieldVecToString(fields));
 	}
 
@@ -21,6 +21,23 @@ public:
 		std::string userInput = "little brown fox";
 		std::vector<std::string> inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedString,Utilities::vecToString(inputString));
+	}
+
+	TEST_METHOD(Utilities_isKeyword) {
+		Assert::AreEqual(false,Utilities::isKeyword("add"));
+		Assert::AreEqual(true,Utilities::isKeyword("at"));
+	}
+
+	TEST_METHOD(Utilities_removeSlashKeywords) {
+		std::string expectedString = "/add";
+		std::string userInput = "/add";
+		std::vector<std::string> inputString = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedString,Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
+
+		expectedString = "take money from drawer";
+		userInput = "take money /from drawer";
+		inputString = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedString,Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
 	}
 
 	TEST_METHOD(Utilities_equalsIgnoreCase) {
@@ -61,6 +78,6 @@ public:
 		c = "\\\\";
 		Assert::AreEqual(expectedString,Utilities::replace(a,b,c));
 	}
-	
+
 	};
 }

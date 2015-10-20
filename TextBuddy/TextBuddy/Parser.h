@@ -8,6 +8,7 @@
 
 class Parser {
 private:
+	static Parser* theOne;
 	TbLogger* logger;
 
 	// This defines the file extension used by TextBuddy
@@ -24,6 +25,7 @@ public:
 	~Parser();
 
 	// This is the API
+	static Parser* getInstance();
 	std::string parseFileName(char* argv[]);
 	std::string parseFileName(std::string stringFilePath);
 	Command* parse(std::string userInput);
