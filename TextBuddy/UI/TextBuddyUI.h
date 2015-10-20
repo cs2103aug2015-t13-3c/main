@@ -41,9 +41,9 @@ namespace UserInterface {
 			taskDescription = new std::vector<std::string>;
 			dateTime = new std::vector<std::string>;
 			floatingTasks = new std::vector<std::string>;
-			priotiryTasks = new std::vector<bool>;
+			priorityTasks = new std::vector<bool>;
 			logic = logic->getInstance();
-			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priotiryTasks);
+			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 			floatingTaskIndex = 0;
 			originalRowPosition = 0;
 			input->Focus();
@@ -75,7 +75,7 @@ namespace UserInterface {
 				delete labels;
 				delete taskDescription;
 				delete dateTime;
-				delete priotiryTasks;
+				delete priorityTasks;
 			}
 		}
 
@@ -267,7 +267,7 @@ namespace UserInterface {
 		std::vector<std::string>* taskDescription;
 		std::vector<std::string>* dateTime;
 		std::vector<std::string>* floatingTasks;
-		std::vector<bool>* priotiryTasks;
+		std::vector<bool>* priorityTasks;
 
 	//===================== UI FUNCTIONS=======================================
 	private:	
@@ -321,7 +321,7 @@ namespace UserInterface {
 				String^ title = gcnew String((*taskDescription)[i].c_str());
 				String^ dt = gcnew String((*dateTime)[i].c_str());
 				display->Rows->Add(index,label,title,dt);
-				if((*priotiryTasks)[i]) {
+				if((*priorityTasks)[i]) {
 					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;				
 				} else {
 					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;

@@ -3,7 +3,7 @@
 // Private methods originally by @@author A0096720A (Chin Kiat Boon)
 
 #include "stdafx.h"
-#include "Parser.h"
+//#include "Parser.h"
 #include "IO.h"
 
 // ==================================================
@@ -44,10 +44,10 @@ int Command::getSize() {
 }
 
 void Command::clearTaskStore() {
-	IO io;
+	IO* io = IO::getInstance();
 	taskStore.clear();
 	currentView.clear();
-	remove(io.getFilePath().c_str());
+	remove(io->getFilePath().c_str());
 	return;
 }
 
@@ -142,13 +142,13 @@ bool Command::copyView() {
 // Replaces getIdOfIndex()
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
-	if(isValidIndex(index)) {	
-		currIter = matchCurrentViewIndex(index);
-		index = currIter->getID();
-		taskIter = matchTaskStoreIndex(index);
-	} else {
-		throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
-	}
+							 if(isValidIndex(index)) {	
+								 currIter = matchCurrentViewIndex(index);
+								 index = currIter->getID();
+								 taskIter = matchTaskStoreIndex(index);
+							 } else {
+								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
+							 }
 }
 
 bool Command::isValidIndex(int index) {
@@ -540,17 +540,18 @@ const std::string VIEW_LABEL = "label";
 // These are the View enums
 // Count: 6 + VIEWTYPE_INVALID
 enum ViewType {
-	VIEWTYPE_ALL,
-	VIEWTYPE_FLOATING,
-	VIEWTYPE_PAST,
-	VIEWTYPE_TODO,
-	VIEWTYPE_WEEK,
-	VIEWTYPE_LABEL,
-	VIEWTYPE_INVALID
+VIEWTYPE_ALL,
+VIEWTYPE_FLOATING,
+VIEWTYPE_PAST,
+VIEWTYPE_TODO,
+VIEWTYPE_WEEK,
+VIEWTYPE_LABELS,
+VIEWTYPE_INVALID
 };
 */
-View::View(ViewType newView) : Command(VIEW) {
+View::View(ViewType newView, std::string restOfInput) : Command(VIEW) {
 	view = newView;
+	viewLabels = Utilities::stringToVec(restOfInput);
 	previousView = currentView;
 }
 
@@ -581,12 +582,12 @@ void View::execute() {
 	case VIEWTYPE_WEEK:
 		//pwrSearch.setTasksWithinPeriod(currentTime, currentTime + 7);
 		break;
-	
-	//case VIEWTYPE_LABEL:
-	//	viewLabel(label);
 
-	case VIEWTYPE_UNDONE:
-		viewUndone();
+		//case VIEWTYPE_LABELS:
+		//	viewLabel(label);
+
+	case VIEWTYPE_NOTDONE:
+		viewNotdone();
 		break;
 	}
 }
@@ -630,7 +631,7 @@ bool View::viewDone() {
 	return true;
 }
 
-bool View::viewUndone() {
+bool View::viewNotdone() {
 	std::vector<Task>::iterator iter;
 
 	currentView.clear();
@@ -667,6 +668,25 @@ bool View::viewLabel(std::string label) {
 }
 
 // ==================================================
+//                    CLEAR_ALL
+// ==================================================
+// Added by Aaron 20/10/15
+ClearAll::ClearAll() : Command(CLEAR_ALL) {
+	currentView = *(new std::vector<Task>);
+}
+
+ClearAll::~ClearAll() {}
+
+void ClearAll::execute() {
+	currentView = *(new std::vector<Task>);
+}
+
+void ClearAll::undo() {
+	currentView = previousView;
+	// TODO: feedback
+}
+
+// ==================================================
 //                    DISPLAY_ALL
 // ==================================================
 
@@ -682,7 +702,7 @@ void DisplayAll::execute() {
 
 void DisplayAll::undo() {
 	currentView = previousView;
-	//TODO: feedback
+	// TODO: feedback
 }
 
 // ==================================================
@@ -691,11 +711,13 @@ void DisplayAll::undo() {
 
 // Load most recent file path (or default)
 Load::Load() : Command(LOAD) {
-	filePath = io.getFilePath();
+	IO* io = IO::getInstance();
+	filePath = io->getFilePath();
 }
 
 // Load new file path
 Load::Load(std::string newFilePath) : Command(LOAD) {
+	IO* io = IO::getInstance();
 	filePath = newFilePath;
 }
 
@@ -707,12 +729,13 @@ std::string Load::getFilePath() {
 
 // TODO: Clear history after load, to avoid seg fault
 void Load::execute() {
-	Parser parser;
+	// Note: filePath should already have been parsed (Aaron)
+	// Parser* parser = Parser::getInstance();
+	// std::string newFilePath = parser->parseFileName(filePath);
 
-	//std::string newFilePath = parser.parseFileName(filePath);
-	taskStore = io.loadFile(filePath);
+	taskStore = io->loadFile(filePath);
 	copyView();
-	//TODO: update feedback
+	// TODO: update feedback
 }
 
 // ==================================================
@@ -721,7 +744,7 @@ void Load::execute() {
 
 // Save to current file path (or default)
 Save::Save() : Command(SAVE) {
-	filePath = io.getFilePath();
+	filePath = io->getFilePath();
 }
 
 // Save to new file path
@@ -736,10 +759,12 @@ std::string Save::getFilePath() {
 }
 
 void Save::execute() {
-	Parser parser;
+	// Note: filePath should already have been parsed (Aaron)
+	// Parser* parser = Parser::getInstance();
+	// std::string newFilePath = parser->parseFileName(filePath);
+
 	// setFilePath returns false if unable to change file path
-	std::string newFilePath = parser.parseFileName(filePath);
-	io.setFilePath(newFilePath,taskStore);
+	io->setFilePath(filePath,taskStore);
 	// TODO: feedback
 }
 

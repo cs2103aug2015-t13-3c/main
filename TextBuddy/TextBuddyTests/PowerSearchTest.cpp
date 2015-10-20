@@ -9,7 +9,7 @@ namespace TextBuddyTests {
 	TEST_CLASS(PowerSearchTest) {
 	public:
 		
-		TEST_METHOD(setTasksWithinPeriodTest) {
+		TEST_METHOD(PowerSearch_setTasksWithinPeriod) {
 			PowerSearch testPwrSearch;
 			std::vector<Task>::iterator iter;
 

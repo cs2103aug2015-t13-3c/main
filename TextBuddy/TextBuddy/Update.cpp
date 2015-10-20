@@ -1,3 +1,5 @@
+// @@author (Soon Hao Ye)
+
 #include "Update.h"
 
 Update::Update(std::vector<std::string>* labels,

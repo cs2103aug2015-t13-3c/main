@@ -5,11 +5,13 @@
 #include "Rapidjson\include\rapidjson\document.h"
 //#include "Shlwapi.h"
 
-//TODO: Refactor IO.cpp - remove repeated file names
+// TODO: Refactor IO.cpp - remove repeated file names
 
 using namespace rapidjson;
 
 const std::string IO::lastSavedLocation = "lastSave.tbconfig";
+
+IO* IO::theOne = new IO();
 
 IO::IO() {
 	std::ifstream lastSave(lastSavedLocation);
@@ -23,6 +25,10 @@ IO::~IO() {}
 // ==================================================
 
 // TODO: Handle empty file / improper content exceptions
+
+IO* IO::getInstance() {
+	return theOne;
+}
 
 std::string IO::getFilePath() {
 	return filePath;

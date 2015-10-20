@@ -54,7 +54,7 @@ const std::string VIEW_PAST = "past";
 const std::string VIEW_TODO = "todo";
 const std::string VIEW_WEEK = "week";
 const std::string VIEW_LABEL = "label";
-const std::string VIEW_UNDONE = "undone";
+const std::string VIEW_NOTDONE = "notdone";
 
 // These are the View enums
 // Count: 6 + VIEWTYPE_INVALID
@@ -64,8 +64,8 @@ enum ViewType {
 	VIEWTYPE_PAST,
 	VIEWTYPE_TODO,
 	VIEWTYPE_WEEK,
-	VIEWTYPE_LABEL,
-	VIEWTYPE_UNDONE,
+	VIEWTYPE_LABELS,
+	VIEWTYPE_NOTDONE,
 	VIEWTYPE_INVALID
 };
 
@@ -233,6 +233,7 @@ class View: public Command {
 private:
 	// == EXECUTE ==
 	ViewType view;
+	std::vector<std::string> viewLabels;
 	PowerSearch pwrSearch;
 	// ==== UNDO ===
 	std::vector<Task> previousView;
@@ -240,13 +241,25 @@ private:
 	bool viewAll();
 	bool viewTaskType(TaskType type);
 	bool viewDone();
-	bool viewUndone();
+	bool viewNotdone();
 	bool viewLabel(std::string label);
 
 public:
-	View(ViewType newView);
+	View(ViewType newView,std::string labels);
 	~View();
 	ViewType getViewType();
+
+	void execute();
+	void undo();
+};
+
+class ClearAll: public Command {
+private:
+	// ==== UNDO ===
+	std::vector<Task> previousView;
+public:
+	ClearAll();
+	~ClearAll();
 
 	void execute();
 	void undo();
@@ -266,8 +279,8 @@ public:
 
 class Load: public Command {
 private:
+	IO* io;
 	std::string filePath;
-	IO io;
 public:
 	Load();
 	Load(std::string Load);
@@ -279,8 +292,7 @@ public:
 
 class Save: public Command {
 private:
-	// TODO: make IO singleton
-	IO io;
+	IO* io;
 	std::string filePath;
 public:
 	Save();

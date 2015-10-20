@@ -10,6 +10,8 @@ using namespace rapidjson;
 
 class IO {
 private:
+	static IO* theOne;
+	IO();
 	std::string filePath;
 	static const std::string lastSavedLocation;
 	void setLastSavedLocation(std::string fileName);
@@ -58,8 +60,8 @@ private:
 	std::string retrieveEndTime(Task task);
 
 public:
-	IO();
 	~IO();
+	static IO* getInstance();
 	std::string getFilePath();
 	bool setFilePath(std::string newFilePath, std::vector<Task> taskVector);
 

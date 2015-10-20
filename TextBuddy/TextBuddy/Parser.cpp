@@ -1,8 +1,9 @@
 // @@author A0110376N (Aaron Chong Jun Hao)
 // Parser converts flexible natural language into commands and parameters for TextBuddy.
 
-#include "stdafx.h"
 #include "Parser.h"
+
+Parser* Parser::theOne;
 
 Parser::Parser() {
 	logger = TbLogger::getInstance();
@@ -19,7 +20,7 @@ Parser::~Parser() {
 const std::string Parser::FILE_EXTENSION = ".txt";
 
 void Parser::log(Level level, std::string message) {
-	logger->log(level,message);
+	//logger->log(level,message);
 	return;
 }
 
@@ -28,6 +29,10 @@ void Parser::log(Level level, std::string message) {
 // ==================================================
 
 //========== This is the API ==========
+
+Parser* Parser::getInstance() {
+	return theOne;
+}
 
 std::string Parser::parseFileName(char* argv[]) {
 	char* charFilePath = argv[1];
@@ -136,12 +141,13 @@ Command* Parser::parse(std::string userInput) {
 		// cmd = new Redo;
 		break;
 
-	case VIEW:
-		cmd = new View(Utilities::stringToViewType(restOfInput));
-		break;
+	case VIEW: {
+		ViewType newView = Utilities::stringToViewType(restOfInput);
+		cmd = new View(newView,restOfInput);
+		break;}
 
 	case CLEAR_ALL:
-		// cmd = new ClearAll;
+		cmd = new ClearAll;
 		break;
 
 	case DISPLAY_ALL:
@@ -217,13 +223,13 @@ Task* Parser::parseTask(std::string restOfCommand) {
 
 		switch(inputMode) {
 		case NAME:
-			newTask->setName(Utilities::vecToString(inputString));
+			newTask->setName(Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
 			break;
 		case LABELS_ADD:
-			newTask->addLabels(inputString);
+			newTask->addLabels(Utilities::removeSlashKeywords(inputString));
 			break;
 		case LABELS_DELETE:
-			newTask->deleteLabels(inputString);
+			newTask->deleteLabels(Utilities::removeSlashKeywords(inputString));
 			break;
 		case PRIORITY_SET:
 			newTask->setPriority();
@@ -242,7 +248,6 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->setEndDate(newDate);
 			break;
 		case START_TIME:
-			newTask->setType(EVENT);
 		case END_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
 				// Valid time format
@@ -257,6 +262,9 @@ Task* Parser::parseTask(std::string restOfCommand) {
 				}
 				newTask->setEndTime(newTime);
 				break;
+			}
+			if(newTask->getStartTime() != newTask->getEndTime()) {
+				newTask->setType(EVENT);
 			}
 			break;
 		case INVALID_FIELD:
