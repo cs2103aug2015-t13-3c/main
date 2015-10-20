@@ -47,8 +47,6 @@ void PowerSearch::addFreeDate(int startDate, int startTime, int endDate, int end
 	freeDates.push_back(freeDateTask);
 }
 
-//========== Public Methods ==========
-// Kiat Boon: will complete all 3 (and add more if possible) by Tues morning
 
 // Searches for a phrase within a particular time period, stores the output in currentView
 void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime) {

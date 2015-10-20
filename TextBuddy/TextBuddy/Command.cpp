@@ -110,6 +110,21 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
+	//sorts priority tasks to be at the top
+	i = taskVector.begin(); //points to start of unsorted part
+	while (i != taskVector.end()) {
+		for (j = i; j != taskVector.end(); ++j) {
+			if (j->getPriorityStatus() == true) {
+				tempTask = *j;
+				for (k = j; k != i; --k) {
+					std::swap(*k, *(k-1)); 
+				}
+				*i = tempTask;
+				break;
+			}
+		}
+		++i;
+	}
 	return true;
 }
 

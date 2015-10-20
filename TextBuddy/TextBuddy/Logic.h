@@ -5,7 +5,7 @@
 
 #include "Feedback.h"
 #include "History.h"
-#include "Observer.h"
+//#include "Observer.h"
 #include "Parser.h"
 #include "IO.h"
 
@@ -34,7 +34,7 @@ public:
 	~Logic();
 	
 	Feedback processCommand(std::string userCommand);
-	void subscribe(Observer* ui);
+//	void subscribe(Observer* ui);
 	std::vector<Task> getFloatingTasks();
 	/*
 	int getSize();
