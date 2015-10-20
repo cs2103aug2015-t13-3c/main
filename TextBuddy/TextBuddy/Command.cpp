@@ -589,7 +589,7 @@ void View::execute() {
 		break;
 
 	case VIEWTYPE_PAST:
-		//pwrSearch.setTasksWithinPeriod()
+		viewDone();
 		break;
 
 	case VIEWTYPE_WEEK:
@@ -599,8 +599,8 @@ void View::execute() {
 	//case VIEWTYPE_LABEL:
 	//	viewLabel(label);
 
-	case VIEWTYPE_DONE:
-		viewDone();
+	case VIEWTYPE_UNDONE:
+		viewUndone();
 		break;
 	}
 }
@@ -644,6 +644,18 @@ bool View::viewDone() {
 	return true;
 }
 
+bool View::viewUndone() {
+	std::vector<Task>::iterator iter;
+
+	currentView.clear();
+
+	for (iter == taskStore.begin(); iter != taskStore.end(); ++iter) {
+		if (iter->getDoneStatus() == false) {
+			currentView.push_back(*iter);
+		}
+	}
+	return true;
+}
 //delete viewLabel if we use search to search for label
 //if view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::string label) {

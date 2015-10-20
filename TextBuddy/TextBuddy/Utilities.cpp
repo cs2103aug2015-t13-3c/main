@@ -171,8 +171,8 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 		view = VIEWTYPE_PAST;
 	} else if(equalsIgnoreCase(viewString,VIEW_WEEK)) {
 		view = VIEWTYPE_WEEK;
-	} else if(equalsIgnoreCase(viewString,VIEW_DONE)) {
-		view = VIEWTYPE_DONE;
+	} else if(equalsIgnoreCase(viewString,VIEW_UNDONE)) {
+		view = VIEWTYPE_UNDONE;
 	} else {
 		view = VIEWTYPE_LABEL;
 	}

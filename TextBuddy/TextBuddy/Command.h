@@ -54,7 +54,7 @@ const std::string VIEW_PAST = "past";
 const std::string VIEW_TODO = "todo";
 const std::string VIEW_WEEK = "week";
 const std::string VIEW_LABEL = "label";
-const std::string VIEW_DONE = "done";
+const std::string VIEW_UNDONE = "undone";
 
 // These are the View enums
 // Count: 6 + VIEWTYPE_INVALID
@@ -65,7 +65,7 @@ enum ViewType {
 	VIEWTYPE_TODO,
 	VIEWTYPE_WEEK,
 	VIEWTYPE_LABEL,
-	VIEWTYPE_DONE,
+	VIEWTYPE_UNDONE,
 	VIEWTYPE_INVALID
 };
 
@@ -239,6 +239,7 @@ private:
 	bool viewAll();
 	bool viewTaskType(TaskType type);
 	bool viewDone();
+	bool viewUndone();
 	bool viewLabel(std::string label);
 
 public:
