@@ -121,15 +121,16 @@ bool Command::copyView() {
 
 // Added by Hao Ye 14/10/15
 // Replaces getIdOfIndex()
-void Command::matchIndex(int index, std::vector<Task>::iterator &currIter, 
+void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
 	if(isValidIndex(index)) {	
 		currIter = matchCurrentViewIndex(index);
 		index = currIter->getID();
-		taskIter = matchTaskViewIndex(index);
-		} else {
-			throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
-		}
+		taskIter = matchTaskStoreIndex(index);
+	} else {
+		throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
+	}
+}
 
 bool Command::isValidIndex(int index) {
 	if(index <1 || index > (int)currentView.size()) {
