@@ -248,7 +248,7 @@ namespace UserInterface {
 
 #pragma endregion
 
-// @@author Soon Hao Ye
+// @@author A0126677U (Soon Hao Ye)
 //*********************** AUTHOR : Soon Hao Ye ********************************
 
 	//================== PRIVATE VARIABLES=====================================

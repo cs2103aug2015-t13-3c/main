@@ -6,7 +6,6 @@
 
 #include "Task.h"
 #include "Command.h"
-#include <string>
 
 // This is the return value for invalid numbers
 const int INVALID_NUMBER_FORMAT = -1;
@@ -29,7 +28,6 @@ public:
 	static TaskType		stringToTaskType(std::string line);
 	static ViewType		stringToViewType(std::string viewString);
 	static std::vector<std::string> stringToVec(std::string commandParametersString);
-	static std::vector<std::string> splitParameters(std::string commandParametersString); // To be removed
 	//========== Type-to-String Converters ==========
 	static std::string	boolToString(bool boolean);
 	static std::string	dayToString(Day day);

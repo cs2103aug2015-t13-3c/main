@@ -1,4 +1,4 @@
-// @@author Aaron Chong Jun Hao
+// @@author A0110376N (Aaron Chong Jun Hao)
 // Parser converts flexible natural language into commands and parameters for TextBuddy.
 
 #include "stdafx.h"
@@ -179,7 +179,7 @@ Command* Parser::parse(std::string userInput) {
 
 Task* Parser::parseTask(std::string restOfCommand) {
 	log(INFO,"Parsing task");
-	std::vector<std::string> userInput = Utilities::splitParameters(restOfCommand);
+	std::vector<std::string> userInput = Utilities::stringToVec(restOfCommand);
 	std::vector<std::string>::iterator curr = userInput.begin();
 	Task* newTask = new Task;
 	FieldType inputMode = NAME;
@@ -248,7 +248,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 				// Valid time format
 				if(newTask->getStartTime() == 0) {
 					if(newTask->getStartDate() == 0 || newTask->getStartDate() == INVALID_DATE_FORMAT) {
-						newTask->setStartDate(parseDay(Utilities::splitParameters("today")));
+						newTask->setStartDate(parseDay(Utilities::stringToVec("today")));
 					}
 					newTask->setStartTime(newTime);
 				}
@@ -281,7 +281,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 
 std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 	assert(restOfInput != "");
-	std::vector<std::string> vecInput = Utilities::splitParameters(restOfInput);
+	std::vector<std::string> vecInput = Utilities::stringToVec(restOfInput);
 	std::vector<std::string>::iterator curr = vecInput.begin();
 	std::vector<FieldType> fields;
 

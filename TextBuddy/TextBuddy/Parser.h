@@ -1,4 +1,4 @@
-// @@author Aaron Chong Jun Hao
+// @@author A0110376N (Aaron Chong Jun Hao)
 // Parser converts flexible natural language into commands and parameters for TextBuddy.
 
 #ifndef PARSER_H_

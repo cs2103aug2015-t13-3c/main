@@ -1,13 +1,13 @@
-// @@author Ng Ren Zhi
+// @@author A0130463R (Ng Ren Zhi)
 
+//#include "stdafx.h"
 #include "History.h"
-#include "stdafx.h"
-
-History::History(void) {}
-
-History::~History(void) {}
 
 History* History::theOne = new History();
+
+History::History() {}
+
+History::~History() {}
 
 //========== PUBLIC METHODS ==========
 History* History::getInstance() {
@@ -24,12 +24,12 @@ void History::add(Command cmd) {
 // Undo most recent command in History stack
 void History::undo() {
 	if(commandHistory.size() == 0) {
-		throw "Nothing to undo";
+		throw std::runtime_error("Nothing to undo");
 	} else {
-	Command cmdToUndo = commandHistory.back();
-	cmdToUndo.undo();
-	redoHistory.push_back(cmdToUndo);
-	commandHistory.pop_back();
+		Command cmdToUndo = commandHistory.back();
+		cmdToUndo.undo();
+		redoHistory.push_back(cmdToUndo);
+		commandHistory.pop_back();
 	}
 	return;
 }
@@ -37,12 +37,12 @@ void History::undo() {
 // Redo most recent undone action in redo stack
 void History::redo() {
 	if(redoHistory.size() == 0) {
-		throw "Nothing to redo";
+		throw std::runtime_error("Nothing to redo");
 	} else {
 		Command cmdToRedo = redoHistory.back();
-	cmdToRedo.execute();
-	commandHistory.push_back(cmdToRedo);
-	redoHistory.pop_back();
+		cmdToRedo.execute();
+		commandHistory.push_back(cmdToRedo);
+		redoHistory.pop_back();
 	}
 	return;
 }

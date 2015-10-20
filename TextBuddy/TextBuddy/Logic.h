@@ -1,62 +1,55 @@
-// @@author Chin Kiat Boon
+// @@author A0096720A (Chin Kiat Boon)
 
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
 #include "Feedback.h"
+#include "History.h"
 #include "Parser.h"
 #include "IO.h"
-#include "History.h"
 
 class Logic {
 private:
-	static Logic *theOne; //Singleton
+	Logic();
+	static Logic *theOne; // Singleton
 	History* history;
 	Parser parser;
 	IO io;
-
+	/*
 	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
-	Logic();
-
 	int getIdOfIndex(int userIndex);
-
-	//added by haoye
+	bool isValidIndex(int index);
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
 	std::vector<Task>::iterator &taskIter);
 	std::vector<Task>::iterator matchCurrentViewIndex(int index);
 	std::vector<Task>::iterator matchTaskViewIndex(int index);
-	bool isValidIndex(int index);
-
 	void markDone(Markdone toMarkDone);
-	//bool markPriority(Star toMarkStar);
-
+	// bool markPriority(Star toMarkStar);
+	*/
 public:
 	static Logic* getInstance();
 	~Logic();
-
+	Feedback processCommand(std::string userCommand);
+	/*
 	int getSize();
-	bool saveFile(std::string fileName);
 	std::vector<Task> loadFile(std::string fileName);
-	std::vector<Task> getTaskStore();
-	void clearTaskStore();
 	std::vector<Task> getCurrentView();
-	bool addInfo(Add taskName);
+	std::vector<Task> getTaskStore();
+	std::vector<Task> getFloatingTasks();
+	void amendView(std::string listOfIds); // Amends currentView to store searched elements
+	void clearTaskStore();
+	void copyView();
+	void sortDate(std::vector<Task> &taskVector);
+	void viewTaskType(TaskType type); // Allows for viewing of a particular task type
+	void addInfo(Add taskName);
 	void deleteInfo(Delete idToDelete);
 	void modifyInfo(Modify toModify);
+	void saveFile(std::string fileName);
 	std::string searchInfo(Search toSearch);
-	// Amends currentView to store searched elements
-	bool amendView(std::string listOfIds);
-
-	//allows for viewing of a particular task type
-	bool viewTaskType(TaskType type);
-	bool sortDate(std::vector<Task> &taskVector);
-	bool copyView();
-
-	Feedback processCommand(std::string userCommand);
-	std::vector<Task> getFloatingTasks();
+	*/
 };
 
-/* Keep for reference*/
+/* Keep for reference */
 /*
 //assume max storage of 1000 tasks for now
 #define SIZE 1000

@@ -1,4 +1,4 @@
-// @@author Aaron Chong Jun Hao
+// @@author A0110376N (Aaron Chong Jun Hao)
 
 #include "stdafx.h"
 
@@ -172,29 +172,29 @@ public:
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "invalid";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "1 invalid";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "7 pm";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		// Valid date formats
 		expectedInt = 151231;
 		userInput = "31 dec";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		userInput = "31 dec 15";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 	}
 
@@ -204,35 +204,35 @@ public:
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "7 pm";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDate(inputString));
 
 		// Change to appropriate date for today/tmr before running this test
 		/*
 		expectedInt = 151018;
 		userInput = "today";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
 		expectedInt = 151019;
 		userInput = "tmr";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 		*/
 
 		expectedInt = 151019;
 		userInput = "mon";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
 		expectedInt = 151024;
 		userInput = "this sat";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 
 		expectedInt = 151025;
 		userInput = "next sun";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseDay(inputString));
 	}
 
@@ -248,93 +248,93 @@ public:
 		expectedInt = -1;
 
 		userInput = "invalid";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0.";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = ".0";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0.0";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "0.1";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "2400";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "2360";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "24.00";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "23.60";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "23.59 am";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		userInput = "23.59 pm";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		// Valid time formats
 
 		expectedInt = 100;
 		userInput = "100";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 2359;
 		userInput = "23.59";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 0;
 		userInput = "12 am";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 0;
 		userInput = "12.00 am";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 100;
 		userInput = "1.00 am";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 1159;
 		userInput = "11.59 am";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 1200;
 		userInput = "12 pm";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 
 		expectedInt = 1200;
 		userInput = "12.00 pm";
-		inputString = Utilities::splitParameters(userInput);
+		inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p.parseTime(inputString));
 	}
 

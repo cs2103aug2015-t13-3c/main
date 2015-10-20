@@ -1,4 +1,4 @@
-// @@author Soon Hao Ye
+// @@author A0126677U (Soon Hao Ye)
 
 #ifndef FEEDBACK_H_
 #define FEEDBACK_H_
@@ -9,9 +9,9 @@
 class Feedback {
 private:
 	bool exit;
-	bool warning;
-	bool updateView;
 	bool operationSucceeded;
+	bool updateView;
+	bool warning;
 	std::string feedbackMessage;
 	std::vector<Task> tasksToShow;
 
@@ -19,19 +19,19 @@ public:
 	Feedback();
 	Feedback(std::string feedbackMessage, std::vector<Task> tasksToShow);
 	void pushTask(Task newTask);
-	void setTasksToShow(std::vector<Task> tasksToShow);
 	void setAddedMessage();
-	void setSearchMessage(std::string searchPhrase,bool isFound);
 	void setErrorMessage(std::string message);
+	void setExit();
+	void setSearchMessage(std::string searchPhrase,bool isFound);
+	void setTasksToShow(std::vector<Task> tasksToShow);
+	void setUpdateView(bool truthValue);
+	bool isExit();
+	bool isSuccess();
+	bool isWarning();
+	bool needToUpdateDisplay();
 	std::string getFeedbackMessage();
 	std::vector<Task> getTaskToShow();
 	std::vector<std::string> getTaskToShow_string();
-	void setUpdateView(bool);
-	bool needToUpdateDisplay();
-	bool isSuccess();
-	bool isWarning();
-	void setExit();
-	bool isExit();
 };
 
 #endif

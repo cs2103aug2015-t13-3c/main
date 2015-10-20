@@ -1,10 +1,9 @@
-// @@author Chin Kiat Boon
+// @@author A0096720A (Chin Kiat Boon)
 
 #include "stdafx.h"
 #include "Logic.h"
-#include "History.h"
 
-const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
+// const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
 
 Logic* Logic::theOne = new Logic();
 
@@ -27,52 +26,17 @@ Logic::~Logic() {}
 //                      METHODS
 // ==================================================
 
-//added @RenZhi 16/10/15
+// Added by Ren Zhi 16/10/15
 Logic* Logic::getInstance() {
 	return theOne;
 }
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-//modified @haoye 14/10/15
-/*
-bool Logic::markStar(Star toMarkStar){
-int userIndex;
-int id;
-std::vector<Task>::iterator iter;
-
-userIndex = toMarkDone.getDoneID();
-
-try {
-id = getIdOfIndex(userIndex);
-if(id == -1) {												//error code
-throw "User input exceeded bounds.";
-}
-} catch (std::string exceedBoundStr) {
-std::cerr << exceedBoundStr << std::endl;
-return false;
-}
-
-iter = taskStore.begin();
-while ((iter != taskStore.end()) && (iter->getID() != id)) {
-++iter;
-}
-
-if(iter->getID() == id) {
-iter->setPriority();
-}
-
-copyView();
-
-return true;
-}
-*/
-
-//modified @RenZhi 19/10/15
+// Modified by RenZhi 19/10/15: Implement command pattern
+// Modified by Aaron  20/10/15: Move execute into 'try' block
 Feedback Logic::processCommand(std::string userCommand) {
 	Feedback feedback;
-
 	Command* command;
+	/*
 	Add* add;
 	Delete* delet;
 	Modify* modify;
@@ -80,35 +44,31 @@ Feedback Logic::processCommand(std::string userCommand) {
 	Markdone* markdone;
 	UnmarkDone* unmarkdone;
 	View* view;
-	//Clearall* clearAll; //ClearAll subclass not created yet
+	// ClearAll* clearAll; // ClearAll subclass not created yet
 	DisplayAll* displayAll;
 	Load* load;
 	Save* save;
 	Exit* exit;
-
+	*/
 	try {
 		command = parser.parse(userCommand);
+		CommandType cmd = command->getCommand();
+		switch (cmd) {
+		case UNDO:
+			history->undo();
+			break;
+		case REDO:
+			history->redo();
+			break;
+		case INVALID:
+			throw std::runtime_error("INVALID COMMAND ENTERED");
+			break;
+		default:
+			command->execute();
+			history->add(*command);
+		}
 	} catch(std::exception e) {
 		feedback.setErrorMessage(e.what());
-	}
-
-	CommandType cmd = command->getCommand();
-	switch (cmd) {
-	case UNDO:
-		history->undo();
-		break;
-
-	case REDO:
-		history->redo();
-		break;
-
-	case INVALID:
-		throw "INVALID COMMAND ENTERED";
-		break;
-
-	default:
-		command->execute();
-		history->add(*command);
 	}
 
 	Save saveFile;
@@ -116,7 +76,6 @@ Feedback Logic::processCommand(std::string userCommand) {
 	feedback.setTasksToShow(command->getCurrentView());
 	return feedback;
 }
-
 /*
 Add* add;
 Delete* delet;
@@ -172,6 +131,39 @@ history->add(*command);
 
 */
 
+// Modified by Hao Ye 14/10/15
+/*
+bool Logic::markStar(Star toMarkStar){
+int userIndex;
+int id;
+std::vector<Task>::iterator iter;
+
+userIndex = toMarkDone.getDoneID();
+
+try {
+id = getIdOfIndex(userIndex);
+if(id == -1) {												//error code
+throw "User input exceeded bounds.";
+}
+} catch (std::string exceedBoundStr) {
+std::cerr << exceedBoundStr << std::endl;
+return false;
+}
+
+iter = taskStore.begin();
+while ((iter != taskStore.end()) && (iter->getID() != id)) {
+++iter;
+}
+
+if(iter->getID() == id) {
+iter->setPriority();
+}
+
+copyView();
+
+return true;
+}
+*/
 
 // CURRENTLY NOT USED
 /*
@@ -201,9 +193,6 @@ return true;
 
 }
 */
-
-
-
 
 /* Keep for reference */
 /*

@@ -1,35 +1,21 @@
-// @@author Soon Hao Ye
+// @@author A0126677U (Soon Hao Ye)
 
+#include <string>
 #include "Utilities.h"
 #include "Feedback.h"
-
-Feedback::Feedback(std::string feedbackMessage, std::vector<Task> tasksToShow) {
-	this->feedbackMessage = feedbackMessage;
-	this->tasksToShow = tasksToShow;
-}
 
 Feedback::Feedback() {
 	warning = false;
 	exit = false;
 }
 
+Feedback::Feedback(std::string feedbackMessage, std::vector<Task> tasksToShow) {
+	this->feedbackMessage = feedbackMessage;
+	this->tasksToShow = tasksToShow;
+}
+
 void Feedback::pushTask(Task newTask) {
 	tasksToShow.push_back(newTask);
-}
-
-void Feedback::setTasksToShow(std::vector<Task> tasksToShow) {
-	this->tasksToShow = tasksToShow;
-	this->updateView = true;
-}
-
-void Feedback::setSearchMessage(std::string searchPhrase, bool isFound) {
-	if(isFound) {
-		operationSucceeded = true;
-		feedbackMessage = "results for \"" + searchPhrase + "\"";
-	} else {
-		operationSucceeded = false;
-		feedbackMessage = "no results found for \"" + searchPhrase + "\"";
-	}
 }
 
 void Feedback::setAddedMessage() {
@@ -44,12 +30,35 @@ void Feedback::setErrorMessage(std::string message) {
 	this->updateView = false;
 }
 
-void Feedback::setUpdateView(bool trueOrFalse) {
-	this->updateView = trueOrFalse;
+void Feedback::setExit() {
+	exit = true;
+}
+
+void Feedback::setSearchMessage(std::string searchPhrase, bool isFound) {
+	if(isFound) {
+		operationSucceeded = true;
+		feedbackMessage = "results for \"" + searchPhrase + "\"";
+	} else {
+		operationSucceeded = false;
+		feedbackMessage = "no results found for \"" + searchPhrase + "\"";
+	}
+}
+
+void Feedback::setTasksToShow(std::vector<Task> tasksToShow) {
+	this->tasksToShow = tasksToShow;
+	this->updateView = true;
+}
+
+void Feedback::setUpdateView(bool truthValue) {
+	this->updateView = truthValue;
 }
 
 std::string Feedback::getFeedbackMessage() {
 	return feedbackMessage;
+}
+
+std::vector<Task> Feedback::getTaskToShow() {
+	return tasksToShow;
 }
 
 std::vector<std::string> Feedback::getTaskToShow_string() {
@@ -61,12 +70,12 @@ std::vector<std::string> Feedback::getTaskToShow_string() {
 	return tasksAsStrings;
 }
 
-std::vector<Task> Feedback::getTaskToShow() {
-	return tasksToShow;
-}
-
 bool Feedback::needToUpdateDisplay() {
 	return updateView;
+}
+
+bool Feedback::isExit() {
+	return exit;
 }
 
 bool Feedback::isSuccess() {
@@ -75,12 +84,4 @@ bool Feedback::isSuccess() {
 
 bool Feedback::isWarning() {
 	return warning;
-}
-
-void Feedback::setExit() {
-	exit = true;
-}
-
-bool Feedback::isExit() {
-	return exit;
 }

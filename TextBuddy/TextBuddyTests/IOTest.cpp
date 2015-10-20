@@ -1,4 +1,4 @@
-// @@author Ng Ren Zhi
+// @@author A0130463R (Ng Ren Zhi)
 
 #include "stdafx.h"
 

@@ -1,4 +1,4 @@
-// @@author Ng Ren Zhi
+// @@author A0130463R (Ng Ren Zhi)
 
 #include "stdafx.h"
 #include "IO.h"
@@ -48,10 +48,10 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 	if(!fileIsOpen(inputFile)) {
 		return taskVector;
 	}
-	
+
 	std::string inputFileString((std::istreambuf_iterator<char>(inputFile)),
 		std::istreambuf_iterator<char>());
-		
+
 	const char* inputFileText = inputFileString.c_str();
 
 	Document document;
@@ -67,7 +67,7 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 			Task newTask = extractTaskFromJsonObject(item[i]);
 			taskVector.push_back(newTask);
 		}
-	initialiseRunningCount(taskVector);
+		initialiseRunningCount(taskVector);
 	}
 
 
@@ -102,19 +102,17 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 	return true;
 }
 
-
 /*
 bool IO::changeSourceFileLocation (std::string newFileLocation) {
-	std::string systemRoot;
-	systemRoot = getenv ("systemroot");
+std::string systemRoot;
+systemRoot = getenv ("systemroot");
 
-	std::string newFullPath= systemRoot + "\\" + newFileLocation;
-	const char* newFullPathName = newFullPath.c_str();
+std::string newFullPath= systemRoot + "\\" + newFileLocation;
+const char* newFullPathName = newFullPath.c_str();
 
-	return PathIsDirectory(newFullPathName);
+return PathIsDirectory(newFullPathName);
 }
 */
-
 
 // ==================================================
 //                   PRIVATE METHODS
@@ -175,7 +173,7 @@ void IO::extractName(Task &newTask, Value &item) {
 	bool success = newTask.setName(name);
 
 	if(!success) {
-		throw "NameNotFound";
+		throw std::runtime_error("NameNotFound");
 	}
 }
 
@@ -185,7 +183,7 @@ void IO::extractType(Task &newTask, Value &item) {
 	bool success = newTask.setType(type);
 
 	if(!success) {
-		throw "TypeNotFound";
+		throw std::runtime_error("TypeNotFound");
 	}
 }
 
@@ -194,7 +192,7 @@ void IO::extractID(Task &newTask, Value &item) {
 	bool success = newTask.setID(ID);
 
 	if(!success) {
-		throw "IDNotFound";
+		throw std::runtime_error("IDNotFound");
 	}
 }
 
@@ -203,7 +201,7 @@ void IO::extractLabel(Task &newTask, Value &item) {
 	bool success = newTask.setLabel(label);
 
 	if(!success) {
-		throw "LabelNotFound";
+		throw std::runtime_error("LabelNotFound");
 	}
 }
 
@@ -242,7 +240,7 @@ void IO::extractStartDate(Task &newTask, Value &item) {
 	bool success = newTask.setStartDate(date);
 
 	if(!success) {
-		throw "StartDateNotFound";
+		throw std::runtime_error("StartDateNotFound");
 	}
 }
 
@@ -251,7 +249,7 @@ void IO::extractStartTime(Task &newTask, Value &item) {
 	bool success = newTask.setStartTime(time);
 
 	if(!success) {
-		throw "StartTimeNotFound";
+		throw std::runtime_error("StartTimeNotFound");
 	}
 }
 
@@ -260,7 +258,7 @@ void IO::extractEndDate(Task &newTask, Value &item) {
 	bool success = newTask.setEndDate(date);
 
 	if(!success) {
-		throw "EndDateNotFound";
+		throw ("EndDateNotFound");
 	}
 }
 
@@ -269,7 +267,7 @@ void IO::extractEndTime(Task &newTask, Value &item)  {
 	bool success = newTask.setEndTime(time);
 
 	if(!success) {
-		throw "EndTimeNotFound";
+		throw std::runtime_error("EndTimeNotFound");
 	}
 }
 
@@ -475,10 +473,9 @@ void IO::initialiseRunningCount(std::vector<Task> taskVector) {
 	Task lastTask = taskVector.back();
 	int lastCount = lastTask.getID();
 	lastTask.setRunningCount(lastCount);
-	
+
 	return;
 }
-
 
 //========== Getter for Testing ==========
 

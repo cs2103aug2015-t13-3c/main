@@ -1,4 +1,4 @@
-// @@author Ng Ren Zhi
+// @@author A0130463R (Ng Ren Zhi)
 
 #ifndef IO_H_
 #define IO_H_
@@ -10,9 +10,7 @@ using namespace rapidjson;
 class IO {
 private:
 	std::string filePath;
-	
-	const static std::string lastSavedLocation;
-
+	static const std::string lastSavedLocation;
 	void setLastSavedLocation(std::string fileName);
 
 	bool fileIsOpen(std::ifstream& inputFile);
@@ -66,7 +64,7 @@ public:
 
 	std::vector<Task> loadFile(std::string fileName);
 	bool saveFile(std::string fileName, std::vector<Task> taskVector);
-	//bool changeSourceFileLocation (std::string newFileLocation);
+	// bool changeSourceFileLocation (std::string newFileLocation);
 
 	//========== Getter for Testing ==========
 	std::vector<std::string> getText(std::string fileName);

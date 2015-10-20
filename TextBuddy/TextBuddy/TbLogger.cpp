@@ -1,8 +1,9 @@
-﻿// @@author Aaron Chong Jun Hao
+﻿// @@author A0110376N (Aaron Chong Jun Hao)
 
 #include "stdafx.h"
 
 const std::string TbLogger::logFileName = ".tblog";
+
 TbLogger* TbLogger::logger = new TbLogger;
 
 TbLogger::TbLogger() {

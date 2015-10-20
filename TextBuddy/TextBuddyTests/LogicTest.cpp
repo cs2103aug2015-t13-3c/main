@@ -1,4 +1,4 @@
-// @@author Chin Kiat Boon
+// @@author A0096720A (Chin Kiat Boon)
 
 #include "Logic.h"
 #include "stdafx.h"

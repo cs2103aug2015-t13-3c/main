@@ -1,11 +1,10 @@
-// @@author Aaron Chong Jun Hao
-// Modified to Command Pattern (Ren Zhi)
-// Private methods originally by Kiat Boon
+// @@author A0110376N (Aaron Chong Jun Hao)
+// Modified to Command Pattern by Ng Ren Zhi
+// Private methods originally by @@author A0096720A (Chin Kiat Boon)
 
-#include "Command.h"
 #include "stdafx.h"
-#include "IO.h"
 #include "Parser.h"
+#include "IO.h"
 
 // ==================================================
 //                      COMMAND
@@ -48,11 +47,11 @@ void Command::clearTaskStore() {
 	return;
 }
 
-// virtual function does nothing
+// Virtual function does nothing
 void Command::execute() {
 }
 
-//virtual function does nothing
+// Virtual function does nothing
 void Command::undo() {
 	throw ("Action cannot be undone");
 }
@@ -61,12 +60,10 @@ void Command::undo() {
 
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
+const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 
-const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
-
-//sorts in increasing order of dates (except for floating tasks, they are sorted to be at the bottom)
-//should use this to sort according to date before display to UI
-//since tasks with earliest deadlines/event should be seen first
+// Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
+// Use this before returning to UI for display
 bool Command::sortDate(std::vector<Task> &taskVector) {
 
 	std::vector<Task>::iterator i;
@@ -122,14 +119,14 @@ bool Command::copyView() {
 	return true;
 }
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>added @haoye 14/10/15
-//replaces getIdOfIndex()
+// Added by Hao Ye 14/10/15
+// Replaces getIdOfIndex()
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter, 
 						 std::vector<Task>::iterator &taskIter) {
 							 if(isValidIndex(index)) {	
 								 currIter = matchCurrentViewIndex(index);
 								 index = currIter->getID();
-								 taskIter = matchTaskViewIndex(index);
+								 taskIter = matchTaskStoreIndex(index);
 							 } else {
 								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
 							 }
@@ -151,7 +148,7 @@ std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
 	return iter;
 }
 
-std::vector<Task>::iterator Command::matchTaskViewIndex(int index) {
+std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 	std::vector<Task>::iterator iter = taskStore.begin();
 	while(iter->getID() != index && iter != taskStore.end()) {
 		++iter;
@@ -160,12 +157,9 @@ std::vector<Task>::iterator Command::matchTaskViewIndex(int index) {
 	return iter;
 }
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 // ==================================================
 //                        ADD
 // ==================================================
-
 
 // ============== ADD : PUBLIC METHODS ===============
 Add::Add(Task task) : Command(ADD) {
@@ -215,7 +209,7 @@ bool Add::addInfo() {
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
 	currViewIter = matchCurrentViewIndex(deleteID);
-	taskStoreIter = matchTaskViewIndex(currViewIter->getID());
+	taskStoreIter = matchTaskStoreIndex(currViewIter->getID());
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -232,7 +226,7 @@ void Delete::execute() {
 	feedback.setUpdateView(true);
 }
 
-// adds the deleted task back to the exact location it was before
+// Adds the deleted task back to the exact location it was before
 void Delete::undo() {
 	taskStore.insert(taskStoreIter,taskToBeDeleted);
 	currentView.insert(currViewIter,taskToBeDeleted);
@@ -243,7 +237,7 @@ void Delete::undo() {
 
 // Searches for Task to delete using ID
 // Deleting is done according to the order of elements on currentView
-//modified @haoye 14/10/15
+// Modified by Hao Ye 14/10/15
 void Delete::deleteInfo() {
 	std::vector<Task>::iterator currIter;
 	std::vector<Task>::iterator taskIter;
@@ -257,7 +251,6 @@ void Delete::deleteInfo() {
 // ==================================================
 //                       MODIFY
 // ==================================================
-
 
 // ============= MODIFY : PUBLIC METHODS ============
 
@@ -293,7 +286,7 @@ void Modify::undo() {
 
 // ============= MODIFY : PRIVATE METHODS ===========
 
-//modified @haoye 14/10/15
+// Modified by Hao Ye 14/10/15
 void Modify::modifyInfo() {
 	std::vector<Task>::iterator currIter;
 	std::vector<Task>::iterator taskIter;
@@ -436,7 +429,6 @@ bool Search::amendView(std::string listOfIds) {
 	return true;
 }
 
-
 // ==================================================
 //                      MARKDONE
 // ==================================================
@@ -471,7 +463,7 @@ void Markdone::undo() {
 
 // ============= MARKDONE : PRIVATE METHODS ===========
 
-//modified @haoye 14/10/15
+// Modified by Hao Ye 14/10/15
 void Markdone::markDone() {
 	matchIndex(doneID,currIter,taskIter);
 	successMarkDone = taskIter->markDone();
@@ -480,12 +472,10 @@ void Markdone::markDone() {
 	} // Remove from current view only if mark done successful (Ren Zhi)
 }
 
-// >>>>>>> UnmarkDone class added by Ren Zhi @19/10/15 >>>>>>>>>>>>
-
 // ==================================================
 //                      UNMARKDONE
 // ==================================================
-
+// Added by Ren Zhi 19/10/15
 // =========== UNMARKDONE : PUBLIC METHODS ==========
 
 UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
@@ -601,9 +591,12 @@ void DisplayAll::undo() {
 //                        LOAD
 // ==================================================
 
+// Load most recent file path (or default)
 Load::Load() : Command(LOAD) {
 	filePath = io.getFilePath();
 }
+
+// Load new file path
 Load::Load(std::string newFilePath) : Command(LOAD) {
 	filePath = newFilePath;
 }
@@ -617,7 +610,7 @@ std::string Load::getFilePath() {
 // TODO: Clear history after load, to avoid seg fault
 void Load::execute() {
 	Parser parser;
-	
+
 	//std::string newFilePath = parser.parseFileName(filePath);
 	taskStore = io.loadFile(filePath);
 	copyView();
@@ -628,10 +621,11 @@ void Load::execute() {
 //                        SAVE
 // ==================================================
 
-// Save to current file path
+// Save to current file path (or default)
 Save::Save() : Command(SAVE) {
 	filePath = io.getFilePath();
 }
+
 // Save to new file path
 Save::Save(std::string newFilePath) : Command(SAVE) {
 	filePath = newFilePath;
@@ -656,6 +650,7 @@ void Save::execute() {
 // ==================================================
 
 Exit::Exit() : Command(EXIT) {}
+
 Exit::~Exit() {}
 
 void Exit::execute() {

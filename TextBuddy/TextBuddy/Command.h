@@ -1,15 +1,15 @@
-// @@author Aaron Chong Jun Hao
-// Modified to Command pattern (Ren Zhi)
-
-#include "Feedback.h"
-#include "IO.h"
-#include <vector>
+// @@author A0110376N (Aaron Chong Jun Hao)
+// Modified to Command Pattern by Ng Ren Zhi
 
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-// These are the possible command types
-// const std::string COMMAND_SORT_ALL = "sort";
+#include <vector>
+#include "Feedback.h"
+#include "IO.h"
+
+// These are the valid Command keywords
+// Count: 14
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
 const std::string COMMAND_MODIFY = "modify";
@@ -17,6 +17,7 @@ const std::string COMMAND_SEARCH = "search";
 const std::string COMMAND_MARKDONE = "done";
 const std::string COMMAND_UNMARKDONE = "notdone";
 const std::string COMMAND_UNDO = "undo";
+const std::string COMMAND_REDO = "redo";
 const std::string COMMAND_VIEW = "view";
 const std::string COMMAND_CLEAR_ALL = "clear";
 const std::string COMMAND_DISPLAY_ALL = "display";
@@ -24,13 +25,8 @@ const std::string COMMAND_LOAD = "load";
 const std::string COMMAND_SAVE = "save";
 const std::string COMMAND_EXIT = "exit";
 
-// These are the possible views
-const std::string VIEW_ALL = "all";
-const std::string VIEW_FLOATING = "floating";
-const std::string VIEW_PAST = "past";
-const std::string VIEW_TODO = "todo";
-const std::string VIEW_WEEK = "week";
-
+// These are the Command enums
+// Count: 14 + INVALID
 enum CommandType {
 	ADD,
 	DELETE,
@@ -49,6 +45,17 @@ enum CommandType {
 	INVALID
 };
 
+// These are the valid View keywords
+// Count: 6
+const std::string VIEW_ALL = "all";
+const std::string VIEW_FLOATING = "floating";
+const std::string VIEW_PAST = "past";
+const std::string VIEW_TODO = "todo";
+const std::string VIEW_WEEK = "week";
+const std::string VIEW_LABEL = "label";
+
+// These are the View enums
+// Count: 6 + VIEWTYPE_INVALID
 enum ViewType {
 	VIEWTYPE_ALL,
 	VIEWTYPE_FLOATING,
@@ -65,33 +72,32 @@ private:
 	std::string userInput;
 
 protected:
-	static std::vector<Task> taskStore;
 	static std::vector<Task> currentView;
+	static std::vector<Task> taskStore;
 	Feedback feedback;
 
-	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
+	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 
-	bool sortDate(std::vector<Task> &taskVector);
 	bool copyView();
+	bool sortDate(std::vector<Task> &taskVector);
 
-	//added by haoye
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
-	std::vector<Task>::iterator &taskIter);
-	std::vector<Task>::iterator matchCurrentViewIndex(int index);
-	std::vector<Task>::iterator matchTaskViewIndex(int index);
+		std::vector<Task>::iterator &taskIter);
 	bool isValidIndex(int index);
+	std::vector<Task>::iterator matchCurrentViewIndex(int index);
+	std::vector<Task>::iterator matchTaskStoreIndex(int index);
 
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
-	~Command();
-	
 	CommandType getCommand();
 	std::string getUserInput();
-	static std::vector<Task> getTaskStore();
+
 	static std::vector<Task> getCurrentView();
+	static std::vector<Task> getTaskStore();
 	static int getSize();
 	static void clearTaskStore();
 
+	virtual ~Command();
 	virtual void execute();
 	virtual void undo();
 };
@@ -108,7 +114,6 @@ private:
 	int currViewID;
 
 	bool addInfo();
-
 public:
 	Add(Task task);
 	~Add();
@@ -121,14 +126,13 @@ public:
 class Delete: public Command {
 private:
 	// == EXECUTE ==
-	int deleteID; //ID on GUI, not Task ID
+	int deleteID; // ID on GUI, not taskID
 	// ==== UNDO ===
 	Task taskToBeDeleted;
 	std::vector<Task>::iterator currViewIter;
 	std::vector<Task>::iterator taskStoreIter;
 
 	void deleteInfo();
-
 public:
 	Delete(int taskID);
 	~Delete();
@@ -141,7 +145,7 @@ public:
 class Modify: public Command {
 private:
 	// == EXECUTE ==
-	int modifyID; // GUI ID, not task ID
+	int modifyID; // ID on GUI, not taskID
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 	// ==== UNDO ===
@@ -227,7 +231,7 @@ private:
 	ViewType view;
 	// ==== UNDO ===
 	std::vector<Task> previousView;
-	
+
 	bool viewTaskType(TaskType type);
 public:
 	View(ViewType newView);
@@ -265,7 +269,7 @@ public:
 
 class Save: public Command {
 private:
-	//TODO: make IO singleton
+	// TODO: make IO singleton
 	IO io;
 	std::string filePath;
 public:
@@ -275,7 +279,7 @@ public:
 	std::string getFilePath();
 
 	void execute();
-	// no undo for save
+	// No undo() for Save
 };
 
 class Exit: public Command {

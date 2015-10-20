@@ -1,4 +1,4 @@
-// @@author Aaron Chong Jun Hao
+// @@author A0110376N (Aaron Chong Jun Hao)
 
 #include "stdafx.h"
 
@@ -19,7 +19,7 @@ public:
 	TEST_METHOD(Utilities_vecToString) {
 		std::string expectedString = "little brown fox";
 		std::string userInput = "little brown fox";
-		std::vector<std::string> inputString = Utilities::splitParameters(userInput);
+		std::vector<std::string> inputString = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedString,Utilities::vecToString(inputString));
 	}
 

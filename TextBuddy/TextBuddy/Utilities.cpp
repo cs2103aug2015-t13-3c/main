@@ -191,11 +191,6 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 
 // This converts std::string to std::vector<std::string> based on delimiter space
 std::vector<std::string> Utilities::stringToVec(std::string commandParametersString) {
-	return splitParameters(commandParametersString);
-}
-
-// To be removed
-std::vector<std::string> Utilities::splitParameters(std::string commandParametersString) {
 	std::vector<std::string> tokens;
 	std::istringstream iss(commandParametersString);
 	std::copy(std::istream_iterator<std::string>(iss),
@@ -335,7 +330,7 @@ std::string Utilities::vecToString(std::vector<std::string> inputString) {
 bool Utilities::containsAny(std::string searchWord, std::string words) {
 	searchWord = stringToLower(searchWord);
 	words = stringToLower(words);
-	std::vector<std::string> vecWords = splitParameters(words);
+	std::vector<std::string> vecWords = stringToVec(words);
 	std::vector<std::string>::iterator curr;
 
 	for(curr=vecWords.begin(); curr!=vecWords.end(); curr++) {
@@ -392,7 +387,7 @@ bool Utilities::equalsIgnoreCase(const std::string& str1, const std::string& str
 }
 
 std::string Utilities::getFirstWord(std::string userCommand) {
-	return splitParameters(userCommand)[0];
+	return stringToVec(userCommand)[0];
 }
 
 std::string Utilities::removeFirstWord(std::string userCommand) {

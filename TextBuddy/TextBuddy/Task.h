@@ -1,4 +1,4 @@
-// @@author Aaron Chong Jun Hao
+// @@author A0110376N (Aaron Chong Jun Hao)
 
 #ifndef TASK_H_
 #define TASK_H_
@@ -40,7 +40,8 @@ enum TaskType {
 	TODO
 };
 
-// These are the possible field types for tasks
+// These are the valid Field keywords
+// Count: 10
 const std::string FIELD_NAME = "name";
 const std::string FIELD_LABEL_ADD = ":";
 const std::string FIELD_LABEL_DELETE = "-:";
@@ -75,9 +76,8 @@ private:
 
 public:
 	static int getRunningCount();
-	static int incrementRunningCount();			// For NewTask
+	static int incrementRunningCount();			// For new tasks
 	static void setRunningCount(int lastCount); // For startup
-
 	static bool tasksAreEqual(Task task1, Task task2); // For testing
 
 	Task();

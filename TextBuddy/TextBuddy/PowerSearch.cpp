@@ -1,15 +1,16 @@
-// @@author Chin Kiat Boon
-#include "PowerSearch.h"
+// @@author A0096720A (Chin Kiat Boon)
 
+#include <string>
+#include "Utilities.h"
+#include "PowerSearch.h"
 
 PowerSearch::PowerSearch(void) {
 }
 
-
 PowerSearch::~PowerSearch(void) {
 }
 
-//private methods
+//========== Private Methods ==========
 void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task>::iterator iter = taskStore.begin();
 	
@@ -46,11 +47,10 @@ void PowerSearch::addFreeDate(int startDate, int startTime, int endDate, int end
 	freeDates.push_back(freeDateTask);
 }
 
+//========== Public Methods ==========
+// Kiat Boon: will complete all 3 (and add more if possible) by Tues morning
 
-//public methods
-//KB: will complete all 3 (and add more if possible) by tues morning
-
-//searches for a phrase within a particular time period, stores the output in currentView
+// Searches for a phrase within a particular time period, stores the output in currentView
 void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task>::iterator iter;
 	std::string taskName;
@@ -103,4 +103,3 @@ void PowerSearch::searchLabel(std::string label) {
 		}
 	}
 }
-

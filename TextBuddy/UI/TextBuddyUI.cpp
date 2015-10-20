@@ -1,4 +1,4 @@
-// @@author Soon Hao Ye
+// @@author A0126677U (Soon Hao Ye)
 
 #include "TextBuddyUI.h"
 

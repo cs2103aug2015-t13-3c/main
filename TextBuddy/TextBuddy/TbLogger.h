@@ -1,4 +1,4 @@
-﻿// @@author Aaron Chong Jun Hao
+﻿// @@author A0110376N (Aaron Chong Jun Hao)
 //
 //========== Setup for your Component Class ==========
 // Declare in header file as private member of the component class:

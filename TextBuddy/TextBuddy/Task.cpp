@@ -1,4 +1,4 @@
-// @@author Aaron Chong Jun Hao
+// @@author A0110376N (Aaron Chong Jun Hao)
 
 #include "stdafx.h"
 
@@ -23,7 +23,7 @@ Task::Task() {
 Task::~Task() {}
 
 
-// Static
+//========== Static ==========
 
 int Task::getRunningCount() {
 	return runningCount;
@@ -38,7 +38,7 @@ int Task::incrementRunningCount() {
 }
 
 
-// Getters
+//========== Getters ==========
 
 std::string Task::getName() {return name;}
 TaskType Task::getType() {return type;}
@@ -52,7 +52,8 @@ int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
 
 
-// Setters, return true if successful
+//========== Setters ==========
+// Return true if successful
 
 bool Task::setName(std::string newName) {
 	name = newName;
