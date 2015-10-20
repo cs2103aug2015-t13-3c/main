@@ -110,6 +110,21 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
+	//sorts priority tasks to be at the top
+	i = taskVector.begin(); //points to start of unsorted part
+	while (i != taskVector.end()) {
+		for (j = i; j != taskVector.end(); ++j) {
+			if (j->getPriorityStatus() == true) {
+				tempTask = *j;
+				for (k = j; k != i; --k) {
+					std::swap(*k, *(k-1)); 
+				}
+				*i = tempTask;
+				break;
+			}
+		}
+		++i;
+	}
 	return true;
 }
 
@@ -512,7 +527,28 @@ Undo::~Undo() {}
 // ==================================================
 //                        VIEW
 // ==================================================
+/* For reference
+// These are the valid View keywords
+// Count: 6
+const std::string VIEW_ALL = "all";
+const std::string VIEW_FLOATING = "floating";
+const std::string VIEW_PAST = "past";
+const std::string VIEW_TODO = "todo";
+const std::string VIEW_WEEK = "week";
+const std::string VIEW_LABEL = "label";
 
+// These are the View enums
+// Count: 6 + VIEWTYPE_INVALID
+enum ViewType {
+	VIEWTYPE_ALL,
+	VIEWTYPE_FLOATING,
+	VIEWTYPE_PAST,
+	VIEWTYPE_TODO,
+	VIEWTYPE_WEEK,
+	VIEWTYPE_LABEL,
+	VIEWTYPE_INVALID
+};
+*/
 View::View(ViewType newView) : Command(VIEW) {
 	view = newView;
 	previousView = currentView;
@@ -526,8 +562,31 @@ ViewType View::getViewType() {
 
 void View::execute() {
 	switch (view) {
+	case VIEWTYPE_ALL:
+		viewAll();
+		break;
+
 	case VIEWTYPE_FLOATING:
 		viewTaskType(FLOATING);
+		break;
+
+	case VIEWTYPE_TODO:
+		viewTaskType(TODO);
+		break;
+
+	case VIEWTYPE_PAST:
+		viewDone();
+		break;
+
+	case VIEWTYPE_WEEK:
+		//pwrSearch.setTasksWithinPeriod(currentTime, currentTime + 7);
+		break;
+	
+	//case VIEWTYPE_LABEL:
+	//	viewLabel(label);
+
+	case VIEWTYPE_UNDONE:
+		viewUndone();
 		break;
 	}
 }
@@ -537,6 +596,12 @@ void View::undo() {
 }
 
 // ============== VIEW : PRIVATE METHODS ============
+//added by Kiat Boon 20/10/15
+
+bool View::viewAll() {
+	currentView = taskStore;
+	return true;
+}
 
 bool View::viewTaskType(TaskType type) {
 	currentView.clear();
@@ -550,7 +615,55 @@ bool View::viewTaskType(TaskType type) {
 
 	sortDate(currentView);
 	return true;
+}
 
+bool View::viewDone() {
+	std::vector<Task>::iterator iter;
+
+	currentView.clear();
+
+	for (iter == taskStore.begin(); iter != taskStore.end(); ++iter) {
+		if (iter->getDoneStatus() == true) {
+			currentView.push_back(*iter);
+		}
+	}
+	return true;
+}
+
+bool View::viewUndone() {
+	std::vector<Task>::iterator iter;
+
+	currentView.clear();
+
+	for (iter == taskStore.begin(); iter != taskStore.end(); ++iter) {
+		if (iter->getDoneStatus() == false) {
+			currentView.push_back(*iter);
+		}
+	}
+	return true;
+}
+//delete viewLabel if we use search to search for label
+//if view is used to view labels, need to add string object for this method
+bool View::viewLabel(std::string label) {
+	std::set<std::string> searchSet;
+
+	std::vector<Task>::iterator taskIter;
+	std::set<std::string>::iterator setIter;
+
+	currentView.clear();
+
+	for (taskIter == taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
+		searchSet = taskIter->getLabels();
+
+		for (setIter == searchSet.begin(); setIter != searchSet.end(); ++setIter) {
+			if (*setIter == label) {
+				currentView.push_back(*taskIter);
+				break;
+			}
+		}
+	}
+
+	return true;
 }
 
 // ==================================================

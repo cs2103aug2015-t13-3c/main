@@ -13,8 +13,7 @@ namespace TextBuddyTests
 	public:
 
 		//originally written by Kiat Boon
-		TEST_METHOD(Command_Add_execute)
-		{
+		TEST_METHOD(Command_Add_execute) {
 			Task taskOne;
 			taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 			taskOne.setName("Sentence one.");
@@ -111,6 +110,51 @@ namespace TextBuddyTests
 			Assert::AreEqual(1,addOne.getSize());
 			Assert::AreEqual(std::string("Sentence three."),iter->getName());
 
+		}
+
+		//Added by Kiat Boon 20/10/15
+		TEST_METHOD(Command_Add_Sort) {
+			Task taskOne;
+			taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+			taskOne.setName("Sentence one.");
+			taskOne.setStartDate(150910);
+			taskOne.setPriority();							//prioritised task
+			Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
+			addOne.clearTaskStore();
+			addOne.execute();						// Adds taskOne into taskStore (Step 2/2)
+
+			std::vector<Task> copyTask;
+			std::vector<Task>::iterator iter;
+			
+			Task taskTwo;
+			taskTwo.setName("Sentence two.");
+			taskTwo.setStartDate(151010);
+			taskTwo.setPriority();							//prioritised task
+			Add addTwo(taskTwo);
+			addTwo.execute();
+
+			Task taskThree;
+			taskThree.setName("Sentence three.");
+			taskThree.setStartDate(150809);
+			Add addThree(taskThree);
+			addThree.execute();
+
+			Task taskFour;
+			taskFour.setName("Sentence four.");
+			taskFour.setStartDate(150910);
+			Add addFour(taskFour);
+			addFour.execute();
+
+			copyTask = addFour.getTaskStore();
+			iter = copyTask.begin();
+			Assert::AreEqual(150910,iter->getStartDate());
+			++iter;
+			Assert::AreEqual(151010, iter->getStartDate());
+			++iter;
+			Assert::AreEqual(150809, iter->getStartDate());
+			++iter;
+			Assert::AreEqual(150910, iter->getStartDate());
+			
 		}
 	};
 
@@ -652,6 +696,7 @@ namespace TextBuddyTests
 			load.execute();
 		}
 	};
+
 }
 
 void addThreeSentences(std::vector<Task> copyTask) {

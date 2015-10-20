@@ -33,13 +33,14 @@ private:
 public:
 	static Logic* getInstance();
 	~Logic();
-	
+
 	std::string processCommand(std::string userCommand);
 	void subscribe(std::vector<std::string>* labels,
 				std::vector<std::string>* description,
 				std::vector<std::string>* dateAndTime,
 				std::vector<std::string>* floatingTasks,
 				std::vector<bool>* priotiryTasks);
+
 	/*
 	int getSize();
 	std::vector<Task> loadFile(std::string fileName);

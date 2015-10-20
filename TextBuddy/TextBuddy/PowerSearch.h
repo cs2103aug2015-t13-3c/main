@@ -16,6 +16,7 @@ public:
 	std::vector<Task> freeDates;			// each task element stores the start and end of the free period
 
 	PowerSearch(void);
+	PowerSearch(std::vector<Task> cmdTaskStore, std::vector<Task> cmdCurrentView);
 	~PowerSearch(void);
 
 	// To be private
