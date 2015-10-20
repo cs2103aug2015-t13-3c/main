@@ -88,7 +88,7 @@ public:
 	TaskType getType();
 	int getID();
 	std::string getLabel();
-	std::set<std::string> getLabels();
+	std::vector<std::string> getLabels();
 	std::string getDateAndTime_UI();
 
 	bool getDoneStatus();
@@ -104,7 +104,7 @@ public:
 	bool setName(std::string newName);
 	bool setType(TaskType newType);
 	bool setID(int newID);
-	bool setLabel(std::string newLabel);
+	//bool setLabel(std::string newLabel);
 	bool addLabels(std::vector<std::string> newLabel);
 	bool deleteLabels(std::vector<std::string> newLabel);
 

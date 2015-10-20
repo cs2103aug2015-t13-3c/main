@@ -49,7 +49,8 @@ public:
 
 	TEST_METHOD(Command_Add_undo) {
 		Task taskOne;
-		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+		int firstID = Task::incrementRunningCount();
+		taskOne.setID(firstID);	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
 		Add addOne(taskOne);
 		addOne.clearTaskStore();
@@ -93,8 +94,8 @@ public:
 		copyTask = addTwo.getTaskStore();
 		iter = copyTask.begin();
 		Assert::AreEqual(2,addTwo.getSize());
-		Assert::AreEqual(3,taskTwoID);
-		Assert::AreEqual(4,taskThreeID);
+		Assert::AreEqual(firstID+1,taskTwoID);
+		Assert::AreEqual(firstID+2,taskThreeID);
 		Assert::AreEqual(std::string("Sentence one."),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());

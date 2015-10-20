@@ -19,5 +19,4 @@
 
 #include "TbLogger.h"
 #include "Task.h"
-#include "Command.h"
 #include "Utilities.h"

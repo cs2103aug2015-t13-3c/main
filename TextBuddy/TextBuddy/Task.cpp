@@ -68,12 +68,12 @@ bool Task::setID(int newID) {
 	uniqueID = newID;
 	return true;
 }
-
+/*
 bool Task::setLabel(std::string newLabel) {
 	labels.insert(newLabel);
 	return true;
 }
-
+*/
 bool Task::addLabels(std::vector<std::string> newLabels) {
 	std::vector<std::string>::iterator curr;
 	for(curr=newLabels.begin(); curr!=newLabels.end(); curr++) {
@@ -135,8 +135,14 @@ bool Task::setEndTime(int newEndTime) {
 	return true;
 }
 
-std::set<std::string> Task::getLabels() {
-	return labels;
+std::vector<std::string> Task::getLabels() {
+	std::vector<std::string> labelVector;
+	std::set<std::string>::iterator i = labels.begin();
+	while(i != labels.end()) {
+		labelVector.push_back(*i);
+		++i;
+	}
+	return labelVector;
 }
 
 std::string Task::getLabel() {

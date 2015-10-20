@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include "IO.h"
-#include "Rapidjson\include\rapidjson\document.h"
 //#include "Shlwapi.h"
 
 // TODO: Refactor IO.cpp - remove repeated file names
@@ -15,6 +14,7 @@ IO* IO::theOne = new IO();
 
 IO::IO() {
 	std::ifstream lastSave(lastSavedLocation);
+	//std::getline(lastSave,filePath);
 	lastSave >> filePath;
 }
 
@@ -203,8 +203,13 @@ void IO::extractID(Task &newTask, Value &item) {
 }
 
 void IO::extractLabel(Task &newTask, Value &item) {
-	std::string label = item["label"].GetString();
-	bool success = newTask.setLabel(label);
+	int arraySize = item["label"].Size();
+	std::vector<std::string> labels;
+
+	for(int i = 0; i < arraySize; i++) {
+		labels.push_back(item["label"][i].GetString());
+	}
+	bool success = newTask.addLabels(labels);
 
 	if(!success) {
 		throw std::runtime_error("LabelNotFound");
@@ -401,7 +406,17 @@ std::string IO::retrieveID(Task task) {
 
 std::string IO::retrieveLabel(Task task) {
 	std::string string;
-	string = "\"" + task.getLabel() + "\",\n";
+	std::vector<std::string> labelVector = task.getLabels();
+	string = "[";
+
+	for(int i = 0; i < labelVector.size(); i++) {
+		string += "\"" + labelVector[i] + "\"";
+		if (i+1 < labelVector.size()) {
+			string += ",\n\t\t\t\t";
+		}
+	}
+	string += "],\n";
+
 	return string;
 }
 

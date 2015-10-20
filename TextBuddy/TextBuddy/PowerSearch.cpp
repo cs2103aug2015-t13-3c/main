@@ -86,17 +86,17 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 }
 
 void PowerSearch::searchLabel(std::string label) {
-	std::set<std::string> searchSet;
+	std::vector<std::string> searchVector;
 
 	std::vector<Task>::iterator taskIter;
-	std::set<std::string>::iterator setIter;
+	std::vector<std::string>::iterator setIter;
 
 	currentView.clear();
 
 	for (taskIter == taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
-		searchSet = taskIter->getLabels();
+		searchVector = taskIter->getLabels();
 
-		for (setIter == searchSet.begin(); setIter != searchSet.end(); ++setIter) {
+		for (setIter == searchVector.begin(); setIter != searchVector.end(); ++setIter) {
 			if (*setIter == label) {
 				currentView.push_back(*taskIter);
 				break;

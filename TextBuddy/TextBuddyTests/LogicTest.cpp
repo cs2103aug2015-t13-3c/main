@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Logic.h"
+#include"IO.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -78,19 +79,35 @@ public:
 	}
 	*/
 
-	
+
 	// Modified by @Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processInfo) {
 		Logic* logic = Logic::getInstance();
 		// Parser* parser = Parser::getInstance();
 		Command cmd;
 		cmd.clearTaskStore();	// Clear state
-		
+
+		IO* io = IO::getInstance();
+		//Assert::AreEqual(std::string("123"),io->getFilePath());
+
+		//to be subscribed
+		std::vector<std::string>* labels;
+		std::vector<std::string>* taskDescription;
+		std::vector<std::string>* dateTime;
+		std::vector<std::string>* floatingTasks;
+		std::vector<bool>* priorityTasks;
+		labels = new std::vector<std::string>;
+		taskDescription = new std::vector<std::string>;
+		dateTime = new std::vector<std::string>;
+		floatingTasks = new std::vector<std::string>;
+		priorityTasks = new std::vector<bool>;
+		logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
+
 		// Add
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add then"));
 		logic->processCommand(std::string("Add this from 13 Oct to 15 Oct"));
-		
+
 		std::vector<Task> copyTask;	
 		std::vector<Task>::iterator iter;
 
@@ -102,7 +119,7 @@ public:
 		Assert::AreEqual(151015,iter->getEndDate());
 		Assert::AreEqual(0,iter->getStartTime());
 		Assert::AreEqual(0,iter->getEndTime());
-		
+
 		++iter;
 		Assert::AreEqual(std::string("that"), iter->getName());
 		Assert::AreEqual(151014,iter->getStartDate());
@@ -111,7 +128,7 @@ public:
 
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
-		
+
 		// View
 		logic->processCommand(std::string("View floating"));
 		copyTask = cmd.getCurrentView();
@@ -129,7 +146,7 @@ public:
 
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
-		
+
 		/*
 		// Modify
 		logic->processCommand(std::string("Modify 1 changed."));
@@ -143,14 +160,14 @@ public:
 		logic->processCommand(std::string("Modify 1 that"));
 		*/
 
-		
+
 		// Search
 		logic->processCommand(std::string("Search he"));	
 		copyTask = cmd.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(std::string("then"), iter->getName());
-		
+
 		// MarkDone
 		logic->processCommand(std::string("Done 1"));
 		copyTask = cmd.getCurrentView();
@@ -159,9 +176,9 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
-		
+
 	}
-	
+
 	/*
 	TEST_METHOD(Logic_AddAndReturnInfoTest) {
 	Logic testLogic;
@@ -244,6 +261,6 @@ public:
 	Assert::AreEqual(std::string("Bye World!|151126|1300|151126|1500"), testLogic.returnInfo(3));
 	}
 	*/
-	
+
 	};
 }

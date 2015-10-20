@@ -3,8 +3,7 @@
 // Private methods originally by @@author A0096720A (Chin Kiat Boon)
 
 #include "stdafx.h"
-//#include "Parser.h"
-#include "IO.h"
+#include "Command.h"
 
 // ==================================================
 //                      COMMAND
@@ -304,6 +303,7 @@ void Modify::undo() {
 // ============= MODIFY : PRIVATE METHODS ===========
 
 // Modified by Hao Ye 14/10/15
+// Modified by Ren Zhi 20/10/15 updated add/deleteLabels
 void Modify::modifyInfo() {
 	std::vector<Task>::iterator currIter;
 	std::vector<Task>::iterator taskIter;
@@ -320,10 +320,10 @@ void Modify::modifyInfo() {
 			taskIter->setName(tempTask.getName());			
 			break;
 		case LABELS_ADD:
-			taskIter->setLabel(tempTask.getLabel());
+			taskIter->addLabels(tempTask.getLabels());
 			break;
 		case LABELS_DELETE:
-			taskIter->setLabel("");
+			taskIter->deleteLabels(taskIter->getLabels());
 			break;
 		case PRIORITY_SET:
 			taskIter->setPriority();
@@ -646,10 +646,10 @@ bool View::viewNotdone() {
 //delete viewLabel if we use search to search for label
 //if view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::string label) {
-	std::set<std::string> searchSet;
+	std::vector<std::string> searchSet;
 
 	std::vector<Task>::iterator taskIter;
-	std::set<std::string>::iterator setIter;
+	std::vector<std::string>::iterator setIter;
 
 	currentView.clear();
 
@@ -744,11 +744,13 @@ void Load::execute() {
 
 // Save to current file path (or default)
 Save::Save() : Command(SAVE) {
+	io = IO::getInstance();
 	filePath = io->getFilePath();
 }
 
 // Save to new file path
 Save::Save(std::string newFilePath) : Command(SAVE) {
+	io = IO::getInstance();
 	filePath = newFilePath;
 }
 
