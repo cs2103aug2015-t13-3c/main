@@ -427,7 +427,7 @@ namespace UserInterface {
 		=====================================================================*/
 		void undoSearch() {
 			if(input->Text == SEARCH) {
-				*userInput = "undo";	
+				*userInput = "display";	
 				processAndExecute();	
 			}
 		}

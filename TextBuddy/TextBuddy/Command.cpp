@@ -31,7 +31,11 @@ std::vector<Task> Command::getTaskStore() {
 	return taskStore;
 }
 
-std::vector<Task>* Command::getCurrentView() {
+std::vector<Task> Command::getCurrentView() {
+	return currentView;
+}
+
+std::vector<Task>* Command::getCurrentViewPtr() {
 	return &currentView;
 }
 
@@ -344,8 +348,6 @@ void Modify::modifyInfo() {
 			break;
 		}
 		*currIter = *taskIter;
-		std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*taskIter);
-
 		sortDate(taskStore);
 	}
 }

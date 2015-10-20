@@ -43,15 +43,6 @@ int Task::incrementRunningCount() {
 std::string Task::getName() {return name;}
 TaskType Task::getType() {return type;}
 int Task::getID() {return uniqueID;}
-std::string Task::getLabel() {
-	std::string label;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		label = *i + " " ;
-		++i;
-	}
-	return label;
-}
 bool Task::getDoneStatus() {return isDone;}
 bool Task::getPriorityStatus() {return isPriority;}
 int Task::getStartDate() {return startDate;}
@@ -79,7 +70,7 @@ bool Task::setID(int newID) {
 }
 
 bool Task::setLabel(std::string newLabel) {
-	label = newLabel;
+	labels.insert(newLabel);
 	return true;
 }
 
@@ -146,6 +137,16 @@ bool Task::setEndTime(int newEndTime) {
 
 std::set<std::string> Task::getLabels() {
 	return labels;
+}
+
+std::string Task::getLabel() {
+	std::string label;
+	std::set<std::string>::iterator i = labels.begin();
+	while(i != labels.end()) {
+		label = label + *i + " " ;
+		++i;
+	}
+	return label;
 }
 
 std::string Task::getDateAndTime_UI() {

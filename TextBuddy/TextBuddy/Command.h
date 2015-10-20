@@ -94,7 +94,8 @@ public:
 	CommandType getCommand();
 	std::string getUserInput();
 
-	static std::vector<Task>* getCurrentView();
+	static std::vector<Task> getCurrentView();
+	static std::vector<Task>* getCurrentViewPtr();
 	static std::vector<Task> getTaskStore();
 	static int getSize();
 	static void clearTaskStore();

@@ -12,7 +12,7 @@ Logic::Logic() {
 	Load initialLoad(io.getFilePath());
 	initialLoad.execute();
 	Command temp;
-	currentView = temp.getCurrentView();
+	currentView = temp.getCurrentViewPtr();
 	updater = nullptr;
 	/*
 	std::vector<Task>::iterator i;
