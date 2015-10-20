@@ -342,7 +342,7 @@ public:
 		Search searchOne("one");
 		searchOne.execute();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)3,copyTask.size());
@@ -355,7 +355,7 @@ public:
 		Search searchThree("three");
 		searchThree.execute();
 
-		copyTask = *searchThree.getCurrentView();
+		copyTask = searchThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		Assert::AreEqual(std::string("one two three"),iter->getName());
@@ -365,7 +365,7 @@ public:
 		Search searchFive("fiVe");
 		searchFive.execute();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		Assert::AreEqual(std::string("one three five"),iter->getName());
@@ -375,7 +375,7 @@ public:
 		Search searchSeven("sEveN");
 		searchSeven.execute();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(std::string("one five seven"),iter->getName());
@@ -383,7 +383,7 @@ public:
 		Search searchGibberish("51267");
 		searchGibberish.execute();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)0,copyTask.size());
 	}
@@ -414,7 +414,7 @@ public:
 		Search searchOne("one");
 		searchOne.execute();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)3,copyTask.size());
@@ -427,7 +427,7 @@ public:
 		Search searchThree("three");
 		searchThree.execute();
 
-		copyTask = *searchThree.getCurrentView();
+		copyTask = searchThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		Assert::AreEqual(std::string("one two three"),iter->getName());
@@ -436,7 +436,7 @@ public:
 
 		searchThree.undo();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)3,copyTask.size());
 		Assert::AreEqual(std::string("one two three"),iter->getName());
@@ -448,7 +448,7 @@ public:
 		Search searchFive("fiVe");
 		searchFive.execute();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		Assert::AreEqual(std::string("one three five"),iter->getName());
@@ -458,14 +458,14 @@ public:
 		Search searchSeven("sEveN");
 		searchSeven.execute();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(std::string("one five seven"),iter->getName());
 
 		searchSeven.undo();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		Assert::AreEqual(std::string("one three five"),iter->getName());
@@ -474,7 +474,7 @@ public:
 
 		searchFive.undo();
 
-		copyTask = *addThree.getCurrentView();
+		copyTask = addThree.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)3,copyTask.size());
 		Assert::AreEqual(std::string("one two three"),iter->getName());
@@ -504,7 +504,7 @@ public:
 		markdoneOne.execute();
 
 		std::vector<Task> copyTask;
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
@@ -515,7 +515,7 @@ public:
 		Markdone markdoneTwo(1);
 		markdoneTwo.execute();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(true,iter->getDoneStatus());
@@ -538,7 +538,7 @@ public:
 		markdoneOne.execute();
 
 		std::vector<Task> copyTask;
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
@@ -549,21 +549,21 @@ public:
 		Markdone markdoneTwo(1);
 		markdoneTwo.execute();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(true,iter->getDoneStatus());
 
 		markdoneTwo.undo();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(true,iter->getDoneStatus());
 
 		markdoneOne.undo();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		Assert::AreEqual(false,iter->getDoneStatus());
@@ -589,7 +589,7 @@ public:
 		unmarkdoneOne.execute();
 
 		std::vector<Task> copyTask;
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
@@ -597,7 +597,7 @@ public:
 		UnmarkDone unmarkdoneTwo(2);
 		unmarkdoneTwo.execute();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		copyTask = addTwo.getTaskStore();
@@ -623,7 +623,7 @@ public:
 		unmarkdoneOne.execute();
 
 		std::vector<Task> copyTask;
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
@@ -631,7 +631,7 @@ public:
 		UnmarkDone unmarkdoneTwo(2);
 		unmarkdoneTwo.execute();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		copyTask = addTwo.getTaskStore();
@@ -641,7 +641,7 @@ public:
 
 		unmarkdoneTwo.undo();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		++iter;
@@ -649,7 +649,7 @@ public:
 
 		unmarkdoneOne.undo();
 
-		copyTask = *addTwo.getCurrentView();
+		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 	}

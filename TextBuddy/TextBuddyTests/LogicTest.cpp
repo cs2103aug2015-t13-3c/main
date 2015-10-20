@@ -114,7 +114,7 @@ public:
 		
 		// View
 		logic->processCommand(std::string("View floating"));
-		copyTask = *cmd.getCurrentView();
+		copyTask = cmd.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("then"),iter->getName());
 
@@ -146,14 +146,14 @@ public:
 		
 		// Search
 		logic->processCommand(std::string("Search he"));	
-		copyTask = *cmd.getCurrentView();
+		copyTask = cmd.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(std::string("then"), iter->getName());
 		
 		// MarkDone
 		logic->processCommand(std::string("Done 1"));
-		copyTask = *cmd.getCurrentView();
+		copyTask = cmd.getCurrentView();
 		Assert::AreEqual((size_t)0,copyTask.size());
 		copyTask = cmd.getTaskStore();
 		iter = copyTask.begin();
