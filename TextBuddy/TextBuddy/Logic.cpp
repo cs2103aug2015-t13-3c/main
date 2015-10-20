@@ -4,6 +4,7 @@
 #include "Logic.h"
 
 // const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
+const std::string Logic::ERROR_INVALID_COMMAND = "Invalid Command Entered";
 
 Logic* Logic::theOne = new Logic();
 
@@ -61,7 +62,7 @@ Feedback Logic::processCommand(std::string userCommand) {
 			history->redo();
 			break;
 		case INVALID:
-			throw std::runtime_error("INVALID COMMAND ENTERED");
+			throw std::runtime_error(ERROR_INVALID_COMMAND);
 			break;
 		default:
 			command->execute();

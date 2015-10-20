@@ -5,6 +5,7 @@
 
 #include "Feedback.h"
 #include "History.h"
+#include "Observer.h"
 #include "Parser.h"
 #include "IO.h"
 
@@ -15,6 +16,7 @@ private:
 	History* history;
 	Parser parser;
 	IO io;
+	const static std::string ERROR_INVALID_COMMAND;
 	/*
 	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
 	int getIdOfIndex(int userIndex);
@@ -29,7 +31,10 @@ private:
 public:
 	static Logic* getInstance();
 	~Logic();
+	
 	Feedback processCommand(std::string userCommand);
+	void subscribe(Observer* ui);
+	std::vector<Task> getFloatingTasks();
 	/*
 	int getSize();
 	std::vector<Task> loadFile(std::string fileName);
