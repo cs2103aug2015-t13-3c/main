@@ -6,9 +6,9 @@
 Utilities::Utilities() {}
 Utilities::~Utilities() {}
 
-// ==================================================
+//==================================================
 //                     CONVERTERS
-// ==================================================
+//==================================================
 
 std::string Utilities::stringToLower(std::string str) {
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
@@ -326,9 +326,9 @@ std::string Utilities::vecToString(std::vector<std::string> inputString) {
 	return newString;
 }
 
-// ==================================================
+//==================================================
 //             COMPARISONS AND MODIFIERS
-// ==================================================
+//==================================================
 
 bool Utilities::containsAny(std::string searchWord, std::string words) {
 	searchWord = stringToLower(searchWord);
@@ -417,7 +417,7 @@ std::string Utilities::replace(std::string str, std::string from, std::string to
 		pos = str.find(from);
 		if(pos != -1) {
 			newString += str.substr(0,pos) + to;
-			str = str.substr(pos+fromLength); //bugfix: infinite loop if str not updated (Ren Zhi)
+			str = str.substr(pos+fromLength); // Bugfix: infinite loop if str not updated (Ren Zhi)
 		}
 	} while (pos != -1);
 	newString += str;
@@ -438,9 +438,9 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 	return (tolower(l) == tolower(r));
 }
 
-// ==================================================
+//==================================================
 //           STRING-FOR-DISPLAY FORMATTERS
-// ==================================================
+//==================================================
 // @@author A0126677U (Soon Hao Ye)
 
 std::string Utilities::taskDateAndTimeToDisplayString(Task task) {

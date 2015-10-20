@@ -24,7 +24,7 @@ void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate
 			tasksWithinPeriod.push_back(*iter);
 		}
 
-		//if date is the same, further filter using time in the date
+		// If date is the same, further filter using time in the date
 		if (iter->getStartDate() == startDate) {
 			if (iter->getStartTime() >= startTime) {
 				tasksWithinPeriod.push_back(*iter);

@@ -27,27 +27,27 @@ public:
 		userInput = "test";
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 
-		//added by @Ren Zhi 19/10/15
+		// Added by Ren Zhi 19/10/15
 		expectedString = "C:\\\\Users\\\\Public\\\\test.txt";
 		userInput = "C:\\Users\\Public\\test.txt";
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 	}
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	//Added by Ren Zhi 19/10/15
+	// Added by Ren Zhi 19/10/15
 	TEST_METHOD(Parser_parse_Add) {
 		Add *add;
 		Command *cmd;
 		cmd = p->parse("Add that from 14 Oct to 16 Oct");
 		add = (Add*)cmd;
 
-		//Assert::AreEqual(ADD,cmd->getCommand());
+		// Assert::AreEqual(ADD,cmd->getCommand());
 		
 		Task task = add->getNewTask();
-		//task.setStartDate(141015);
-		//task.setEndDate(161015);
-		//task.setName("that");
-		//task.setID(task.getRunningCount());
+		// task.setStartDate(141015);
+		// task.setEndDate(161015);
+		// task.setName("that");
+		// task.setID(task.getRunningCount());
 		Assert::AreEqual(151014, task.getStartDate());
 		Assert::AreEqual(151016, task.getEndDate());
 		Assert::AreEqual(std::string("that"),task.getName());
@@ -62,12 +62,12 @@ public:
 	TEST_METHOD(Parser_parse) {
 		// Clear before start
 		TbLogger::getInstance()->clear();
-
-		/*
+		std::string expectedString2;
+		
 		// Test for ADD
-		expectedString = "Name: A partridge in a pear tree\nType: 0\nStart Time: 1900\nEnd Date: 151016\nEnd Time: 2000\n";
-		userInput = "add A partridge in a pear tree by fri from 7 pm to 8 pm";
-		*/
+		expectedString = "Name: A partridge in a pear tree\nType: 2\nStart Time: 0\nEnd Date: 151021\nEnd Time: 2000\n";
+		userInput = "add A partridge in a pear tree by 8 pm";
+		
 
 		/*
 		// Test for DELETE
@@ -75,13 +75,13 @@ public:
 		userInput = "delete 1";
 		*/
 
-		
+		/*
 		// Test for MODIFY
 		expectedInt = 1;
 		userInput = "modify 1 Two turtle doves : label1 -: unlabel1 star dummy unstar dummy from today to tmr on fri by sat at 8 am";
 		expectedString = "name : -: star unstar from to from to at"; // Expected behaviour
-		std::string expectedString2 = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
-		
+		expectedString2 = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
+		*/
 
 		/*
 		// Test for SEARCH
@@ -89,9 +89,9 @@ public:
 		userInput = "search answerToLife";
 		*/
 
-		// ==================================================
+		//==================================================
 		//         IMPLEMENTING PARSE() TO BE TESTED
-		// ==================================================
+		//==================================================
 		Command* cmd = p->parse(userInput);
 
 		// For switch()
@@ -129,9 +129,9 @@ public:
 			break;
 		}
 
-		// ==================================================
+		//==================================================
 		//          TEST-ASSERTING OUTPUT OF PARSE()
-		// ==================================================
+		//==================================================
 		switch(cmdType) {
 		case ADD:
 			// Assert::AreEqual(expectedString,cmd->getUserInput());

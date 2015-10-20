@@ -7,7 +7,6 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TextBuddyTests {
 	TEST_CLASS(UtilitiesTest) {
 public:
-
 	TEST_METHOD(Utilities_fieldVecToString) {
 		TbLogger::getInstance()->clear();
 		Parser* parser = Parser::getInstance();
@@ -78,6 +77,5 @@ public:
 		c = "\\\\";
 		Assert::AreEqual(expectedString,Utilities::replace(a,b,c));
 	}
-
 	};
 }

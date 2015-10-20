@@ -16,7 +16,7 @@ public:
 		taskOne.setName("Sentence one.");
 		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
 		addOne.clearTaskStore();
-		addOne.execute();						// Adds taskOne into taskStore (Step 2/2)
+		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
 
 		std::vector<Task> copyTask;
 		copyTask = addOne.getTaskStore();
@@ -114,10 +114,10 @@ public:
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
 		taskOne.setStartDate(150910);
-		taskOne.setPriority();							//prioritised task
+		taskOne.setPriority();							// Prioritised task
 		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
 		addOne.clearTaskStore();
-		addOne.execute();						// Adds taskOne into taskStore (Step 2/2)
+		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
 
 		std::vector<Task> copyTask;
 		std::vector<Task>::iterator iter;
@@ -125,7 +125,7 @@ public:
 		Task taskTwo;
 		taskTwo.setName("Sentence two.");
 		taskTwo.setStartDate(151010);
-		taskTwo.setPriority();							//prioritised task
+		taskTwo.setPriority();							// Prioritised task
 		Add addTwo(taskTwo);
 		addTwo.execute();
 
@@ -318,7 +318,7 @@ public:
 	TEST_CLASS(Command_Search) {
 public:
 	TEST_METHOD(Command_Search_execute) {
-		//Add tasks
+		// Add tasks
 		Task task;
 		task.setID(Task::incrementRunningCount());
 		task.setName("one two three");
@@ -339,7 +339,7 @@ public:
 		std::vector<Task> copyTask;
 		copyTask = addThree.getTaskStore();
 
-		//Start searching
+		// Start searching
 		Search searchOne("one");
 		searchOne.execute();
 
@@ -390,7 +390,7 @@ public:
 	}
 
 	TEST_METHOD(Command_Search_undo) {
-		//Add tasks
+		// Add tasks
 		Task task;
 		task.setID(Task::incrementRunningCount());
 		task.setName("one two three");
@@ -411,7 +411,7 @@ public:
 		std::vector<Task> copyTask;
 		copyTask = addThree.getTaskStore();
 
-		//Start Searching
+		// Start searching
 		Search searchOne("one");
 		searchOne.execute();
 
@@ -489,7 +489,7 @@ public:
 	TEST_CLASS(Command_MarkDone) {
 public:
 	TEST_METHOD(Command_MarkDone_execute) {
-		//Add tasks
+		// Add tasks
 		Task task;
 		Add addOne(task);
 		addOne.clearTaskStore();
@@ -500,7 +500,7 @@ public:
 		Add addTwo(task);
 		addTwo.execute();
 
-		//Start markDone
+		// Start markDone
 		Markdone markdoneOne(1);
 		markdoneOne.execute();
 
@@ -523,7 +523,7 @@ public:
 	}
 
 	TEST_METHOD(Command_MarkDone_undo) {
-		//Add tasks
+		// Add tasks
 		Task task;
 		Add addOne(task);
 		addOne.clearTaskStore();
@@ -534,7 +534,7 @@ public:
 		Add addTwo(task);
 		addTwo.execute();
 
-		//Start markDone
+		// Start markDone
 		Markdone markdoneOne(1);
 		markdoneOne.execute();
 
@@ -574,7 +574,7 @@ public:
 	TEST_CLASS(Command_UnmarkDone) {
 public:
 	TEST_METHOD(Command_UnmarkDone_execute) {
-		//Add tasks
+		// Add tasks
 		Task task;
 		Add addOne(task);
 		addOne.clearTaskStore();
@@ -585,7 +585,7 @@ public:
 		Add addTwo(task);
 		addTwo.execute();
 
-		//Start unmarkDone
+		// Start unmarkDone
 		UnmarkDone unmarkdoneOne(1);
 		unmarkdoneOne.execute();
 
@@ -608,7 +608,7 @@ public:
 	}
 
 	TEST_METHOD(Command_UnmarkDone_undo) {
-		//Add tasks
+		// Add tasks
 		Task task;
 		Add addOne(task);
 		addOne.clearTaskStore();
@@ -619,7 +619,7 @@ public:
 		Add addTwo(task);
 		addTwo.execute();
 
-		//Start unmarkDone
+		// Start unmarkDone
 		UnmarkDone unmarkdoneOne(1);
 		unmarkdoneOne.execute();
 

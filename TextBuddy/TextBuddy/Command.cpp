@@ -5,11 +5,11 @@
 #include "stdafx.h"
 #include "Command.h"
 
-// ==================================================
+//==================================================
 //                      COMMAND
-// ==================================================
+//==================================================
 
-// ========== COMMAND : PUBLIC METHODS ==============
+//========== COMMAND : PUBLIC METHODS ==============
 
 Command::Command(CommandType newCmd, std::string rawInput) {
 	cmd = newCmd;
@@ -59,7 +59,7 @@ void Command::undo() {
 	throw ("Action cannot be undone");
 }
 
-// ================ COMMAND : PROTECTED METHODS ==================
+//================ COMMAND : PROTECTED METHODS ==================
 
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
@@ -86,7 +86,7 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 	}
 	*/
 
-	//sorts date after time to ensure date is accurately sorted
+	// Sorts date after time to ensure date is accurately sorted
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		for (j = i+1; j != taskVector.end(); ++j) {
 			if(j -> getStartDate() < i -> getStartDate()) {
@@ -95,10 +95,10 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
-	//Bugfix: in-place sorting (Ren Zhi)
-	//sorts floating tasks to be at the bottom
-	i = taskVector.begin(); //points to start of unsorted part
-	k = taskVector.end(); //points to end of unsorted part
+	// Bugfix: in-place sorting (Ren Zhi)
+	// Sorts floating tasks to be at the bottom
+	i = taskVector.begin();	// Points to start of unsorted part
+	k = taskVector.end();	// Points to end of unsorted part
 	while(i != k) {
 		if(i->getType() == FLOATING) {
 			tempTask = *i;
@@ -113,8 +113,8 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
-	//sorts priority tasks to be at the top
-	i = taskVector.begin(); //points to start of unsorted part
+	// Sorts priority tasks to be at the top
+	i = taskVector.begin(); // Points to start of unsorted part
 	while (i != taskVector.end()) {
 		for (j = i; j != taskVector.end(); ++j) {
 			if (j->getPriorityStatus() == true) {
@@ -179,11 +179,11 @@ std::string Command::getMessage() {
 	return "foobar";
 }
 
-// ==================================================
+//==================================================
 //                        ADD
-// ==================================================
+//==================================================
 
-// ============== ADD : PUBLIC METHODS ===============
+//============== ADD : PUBLIC METHODS ===============
 Add::Add(Task task) : Command(ADD) {
 	newTask = task;
 	currViewID = 0;
@@ -206,7 +206,7 @@ void Add::undo() {
 	taskToDelete.execute();
 }
 
-// ============== ADD : PRIVATE METHODS ===============
+//============== ADD : PRIVATE METHODS ===============
 
 bool Add::addInfo() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
@@ -219,11 +219,11 @@ bool Add::addInfo() {
 	return true;
 }
 
-// ==================================================
+//==================================================
 //                       DELETE
-// ==================================================
+//==================================================
 
-// ============ DELETE : PUBLIC METHODS =============
+//============ DELETE : PUBLIC METHODS =============
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
@@ -250,7 +250,7 @@ void Delete::undo() {
 	currentView.insert(currViewIter,taskToBeDeleted);
 }
 
-// ============= DELETE : PRIVATE METHODS ===========
+//============= DELETE : PRIVATE METHODS ===========
 
 // Searches for Task to delete using ID
 // Deleting is done according to the order of elements on currentView
@@ -265,11 +265,11 @@ void Delete::deleteInfo() {
 	sortDate(taskStore);
 }
 
-// ==================================================
+//==================================================
 //                       MODIFY
-// ==================================================
+//==================================================
 
-// ============= MODIFY : PUBLIC METHODS ============
+//============= MODIFY : PUBLIC METHODS ============
 
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
@@ -300,7 +300,7 @@ void Modify::undo() {
 	undoModify->execute();
 }
 
-// ============= MODIFY : PRIVATE METHODS ===========
+//============= MODIFY : PRIVATE METHODS ===========
 
 // Modified by Hao Ye 14/10/15
 // Modified by Ren Zhi 20/10/15 updated add/deleteLabels
@@ -352,11 +352,11 @@ void Modify::modifyInfo() {
 	}
 }
 
-// ==================================================
+//==================================================
 //                       SEARCH
-// ==================================================
+//==================================================
 
-// ============== SEARCH : PUBLIC METHODS ===========
+//============== SEARCH : PUBLIC METHODS ===========
 
 Search::Search(std::string phraseString) : Command(SEARCH) {
 	searchPhrase = phraseString;
@@ -382,7 +382,7 @@ void Search::undo() {
 	currentView = currentViewBeforeSearch;
 }
 
-// ================ SEARCH : PRIVATE METHODS =================
+//================ SEARCH : PRIVATE METHODS =================
 
 // Searches name for a phrase match, returns IDs of all matching tasks
 std::string Search::searchInfo() {
@@ -440,11 +440,11 @@ bool Search::amendView(std::string listOfIds) {
 	return true;
 }
 
-// ==================================================
+//==================================================
 //                      MARKDONE
-// ==================================================
+//==================================================
 
-// ============= MARKDONE : PUBLIC METHODS ===========
+//============= MARKDONE : PUBLIC METHODS ===========
 
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
 	doneID = taskID;
@@ -467,7 +467,7 @@ void Markdone::undo() {
 	}
 }
 
-// ============= MARKDONE : PRIVATE METHODS ===========
+//============= MARKDONE : PRIVATE METHODS ===========
 
 // Modified by Hao Ye 14/10/15
 void Markdone::markDone() {
@@ -478,11 +478,11 @@ void Markdone::markDone() {
 	} // Remove from current view only if mark done successful (Ren Zhi)
 }
 
-// ==================================================
+//==================================================
 //                      UNMARKDONE
-// ==================================================
+//==================================================
 // Added by Ren Zhi 19/10/15
-// =========== UNMARKDONE : PUBLIC METHODS ==========
+//=========== UNMARKDONE : PUBLIC METHODS ==========
 
 UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
 	undoneID = taskID;
@@ -505,7 +505,7 @@ void UnmarkDone::undo() {
 	}
 }
 
-// =========== UNMARKDONE : PRIVATE METHODS ==========
+//=========== UNMARKDONE : PRIVATE METHODS ==========
 
 void UnmarkDone::unmarkDone() {
 	matchIndex(undoneID,currIter,taskIter);
@@ -516,17 +516,17 @@ void UnmarkDone::unmarkDone() {
 	} // Remove from current view only if unmark done successful (Ren Zhi)
 }
 
-// ==================================================
+//==================================================
 //                        UNDO
-// ==================================================
+//==================================================
 
 Undo::Undo() : Command(UNDO) {}
 
 Undo::~Undo() {}
 
-// ==================================================
+//==================================================
 //                        VIEW
-// ==================================================
+//==================================================
 /* For reference
 // These are the valid View keywords
 // Count: 6
@@ -580,10 +580,10 @@ void View::execute() {
 		break;
 
 	case VIEWTYPE_WEEK:
-		//pwrSearch.setTasksWithinPeriod(currentTime, currentTime + 7);
+		// pwrSearch.setTasksWithinPeriod(currentTime, currentTime + 7);
 		break;
 
-		//case VIEWTYPE_LABELS:
+		// case VIEWTYPE_LABELS:
 		//	viewLabel(label);
 
 	case VIEWTYPE_NOTDONE:
@@ -596,8 +596,8 @@ void View::undo() {
 	currentView = previousView;
 }
 
-// ============== VIEW : PRIVATE METHODS ============
-//added by Kiat Boon 20/10/15
+//============== VIEW : PRIVATE METHODS ============
+// Added by Kiat Boon 20/10/15
 
 bool View::viewAll() {
 	currentView = taskStore;
@@ -643,8 +643,8 @@ bool View::viewNotdone() {
 	}
 	return true;
 }
-//delete viewLabel if we use search to search for label
-//if view is used to view labels, need to add string object for this method
+// Delete viewLabel if we use search to search for label
+// If view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::string label) {
 	std::vector<std::string> searchSet;
 
@@ -667,9 +667,9 @@ bool View::viewLabel(std::string label) {
 	return true;
 }
 
-// ==================================================
+//==================================================
 //                    CLEAR_ALL
-// ==================================================
+//==================================================
 // Added by Aaron 20/10/15
 ClearAll::ClearAll() : Command(CLEAR_ALL) {
 	currentView = *(new std::vector<Task>);
@@ -686,9 +686,9 @@ void ClearAll::undo() {
 	// TODO: feedback
 }
 
-// ==================================================
+//==================================================
 //                    DISPLAY_ALL
-// ==================================================
+//==================================================
 
 DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {
 	previousView = currentView;
@@ -705,9 +705,9 @@ void DisplayAll::undo() {
 	// TODO: feedback
 }
 
-// ==================================================
+//==================================================
 //                        LOAD
-// ==================================================
+//==================================================
 
 // Load most recent file path (or default)
 Load::Load() : Command(LOAD) {
@@ -738,9 +738,9 @@ void Load::execute() {
 	// TODO: update feedback
 }
 
-// ==================================================
+//==================================================
 //                        SAVE
-// ==================================================
+//==================================================
 
 // Save to current file path (or default)
 Save::Save() : Command(SAVE) {
@@ -770,9 +770,9 @@ void Save::execute() {
 	// TODO: feedback
 }
 
-// ==================================================
+//==================================================
 //                        EXIT
-// ==================================================
+//==================================================
 
 Exit::Exit() : Command(EXIT) {}
 

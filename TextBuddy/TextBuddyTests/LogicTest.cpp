@@ -9,7 +9,6 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TextBuddyTests {
 	TEST_CLASS(LogicTest) {
 public:
-
 	TEST_METHOD(Logic_intitiateHistory) {
 		History *history = history->getInstance();
 	}
@@ -80,7 +79,7 @@ public:
 	*/
 
 
-	// Modified by @Ren Zhi 19/10/15
+	// Modified by Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processInfo) {
 		Logic* logic = Logic::getInstance();
 		// Parser* parser = Parser::getInstance();
@@ -125,7 +124,6 @@ public:
 		Assert::AreEqual(151014,iter->getStartDate());
 		Assert::AreEqual(151016,iter->getEndDate());
 
-
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
 
@@ -160,7 +158,6 @@ public:
 		logic->processCommand(std::string("Modify 1 that"));
 		*/
 
-
 		// Search
 		logic->processCommand(std::string("Search he"));	
 		copyTask = cmd.getCurrentView();
@@ -176,7 +173,6 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
-
 	}
 
 	/*
@@ -201,7 +197,6 @@ public:
 
 	testLogic.deleteInfo(1);
 	Assert::AreEqual(std::string("Hello World!|150918|1357|151018|1457"), testLogic.returnInfo(1));
-
 	}
 
 	TEST_METHOD(Logic_SortTest) {
