@@ -63,7 +63,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
-    <ClInclude Include="Feedback.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="PowerSearch.h" />
@@ -72,11 +71,11 @@
     <ClInclude Include="Parser.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Task.h" />
+    <ClInclude Include="Update.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
-    <ClCompile Include="Feedback.cpp" />
     <ClCompile Include="History.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="PowerSearch.cpp" />
@@ -85,6 +84,7 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Task.cpp" />
+    <ClCompile Include="Update.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

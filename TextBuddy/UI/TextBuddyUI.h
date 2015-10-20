@@ -39,9 +39,7 @@ namespace UserInterface {
 			InitializeComponent();
 			logic = logic->getInstance();
 			Command cmd;
-			updateDisplay(cmd.getCurrentView());
-			floatingTasks = nullptr;
-			updateFloatingTasks();
+			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priotiryTasks);
 			floatingTaskIndex = 0;
 			originalRowPosition = 0;
 			input->Focus();
@@ -75,13 +73,7 @@ namespace UserInterface {
 
 	private: System::Windows::Forms::RichTextBox^  input;
 	private: System::Windows::Forms::TextBox^  feedback;
-
-
-
-
 	private: System::Windows::Forms::RichTextBox^  floatingTaskDisplay;
-
-
 	private: System::ComponentModel::BackgroundWorker^  hotKey;
 	private: System::Windows::Forms::Timer^  updateFloatingTimer;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  id;
@@ -256,12 +248,18 @@ namespace UserInterface {
 		std::string* userInput;
 		std::string* userFeedback_cppString;
 		Logic *logic;
-		std::vector<Task>* floatingTasks;
 		int floatingTaskIndex;
 		int cursorPosition;
 		int originalRowPosition;
 		String^ searchPhrase;
 		List<String^>^ keywords;
+
+		//to be subscribed
+		std::vector<std::string>* labels;
+		std::vector<std::string>* taskDescription;
+		std::vector<std::string>* dateTime;
+		std::vector<std::string>* floatingTasks;
+		std::vector<bool>* priotiryTasks;
 
 	//===================== UI FUNCTIONS=======================================
 	private:	
@@ -284,32 +282,46 @@ namespace UserInterface {
 		=====================================================================*/
 		void processAndExecute() {
 			feedback->Clear();
-			
-			Feedback results = logic->processCommand(*userInput);
-			if(results.isExit()) {
-				exit(0);
+			std::string message;
+			try {
+				feedback->ForeColor = Color::Green;
+				message = logic->processCommand(*userInput);
+				updateDisplay();			
+				printFeedBackMessage(message);
+				delete userInput;
+			} catch(std::exception e) {
+				feedback->ForeColor = Color::Red;
+				//suggestHelpPage()
 			}
-			if(results.needToUpdateDisplay()) {
-				updateDisplay(results.getTaskToShow());
-			}			
-			updateFloatingTasks();
-			configureMessageColor(&results);
-			printFeedBackMessage(results.getFeedbackMessage());
-			
-			delete userInput;
 		}
 
 		/*=====================================================================
-			loops through the vector returned by logic
+			loops through the subscribed fields
 			writes data to the cells :
 				-ID
 				-Description
 				-Label
 				-Date/Time
 		=====================================================================*/
-		void updateDisplay(std::vector<Task> tasks) {
+		void updateDisplay() {
 			DataGridView^ display = description->DataGridView ;
 			display->Rows->Clear();
+			unsigned int size = taskDescription->size();
+			for(unsigned int i=0 ; i< size ; ++i) {
+				String^ index = gcnew String(i.ToString());
+				String^ label = gcnew String((*labels)[i].c_str());
+				String^ title = gcnew String((*taskDescription)[i].c_str());
+				String^ dt = gcnew String((*dateTime)[i].c_str());
+				if((*priotiryTasks)[i]) {
+					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;				
+				} else {
+					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;
+				}
+				display->Rows->Add(index,label,title,dt);
+				display->FirstDisplayedScrollingRowIndex = originalRowPosition;
+			}
+
+/*
 			for(unsigned int i=0 ; i<tasks.size() ; ++i) {
 				Task currentTask = tasks[i];
 				bool isUrgent = currentTask.getPriorityStatus();
@@ -331,23 +343,7 @@ namespace UserInterface {
 				} else {
 					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;
 				}
-			}
-		}
-
-		/*=====================================================================
-			change feedback message text colour 
-				- green  : ok
-				- red	 : error
-				- yellow : warning
-		=====================================================================*/
-		void configureMessageColor(Feedback* results) {
-			if(results->isWarning()) {
-				feedback->ForeColor = Color::Yellow;
-			} else if(results->isSuccess()) {
-				feedback->ForeColor = Color::Green;
-			} else {
-				feedback->ForeColor = Color::Red;
-			}
+			}*/
 		}
 
 		void printFeedBackMessage(std::string message) {
@@ -423,21 +419,9 @@ namespace UserInterface {
 		=====================================================================*/
 		void undoSearch() {
 			if(input->Text == SEARCH) {
-				//TODO : logic->undo();
-				*userInput = "display";	//temporary
-				processAndExecute();	//temporary
+				*userInput = "undo";	
+				processAndExecute();	
 			}
-		}
-
-		/*=====================================================================
-			Get the latest list of floating tasks from Logic
-		=====================================================================*/
-		void updateFloatingTasks() {
-			 if(floatingTasks != nullptr) {
-				delete floatingTasks;
-			 }
-			 // Fixed to get list from Command (Aaron)
-			 floatingTasks = new std::vector<Task>(Command::getTaskStore());
 		}
 
 		void scrollDown() {
@@ -490,7 +474,7 @@ private:
 		if(!floatingTasks->empty()) {	
 				floatingTaskIndex = floatingTaskIndex % floatingTasks->size();
 				String^ title = gcnew String(
-					(*floatingTasks)[floatingTaskIndex].getName().c_str());
+					(*floatingTasks)[floatingTaskIndex].c_str());
 				floatingTaskDisplay->Text = title;
 				++floatingTaskIndex;
 		}

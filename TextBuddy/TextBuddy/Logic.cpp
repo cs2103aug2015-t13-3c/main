@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "Logic.h"
 
-// const std::string Logic::ERROR_INDEX_OUT_OF_BOUNDS = "invalid index";
 const std::string Logic::ERROR_INVALID_COMMAND = "Invalid Command Entered";
 
 Logic* Logic::theOne = new Logic();
@@ -12,6 +11,9 @@ Logic::Logic() {
 	history = History::getInstance();
 	Load initialLoad(io.getFilePath());
 	initialLoad.execute();
+	Command temp;
+	currentView = temp.getCurrentView();
+	updater = nullptr;
 	/*
 	std::vector<Task>::iterator i;
 	for(i=taskStore.begin() ; i!=taskStore.end(); ++i) {
@@ -21,7 +23,9 @@ Logic::Logic() {
 	*/
 }
 
-Logic::~Logic() {}
+Logic::~Logic() {
+	delete updater;
+}
 
 // ==================================================
 //                      METHODS
@@ -34,49 +38,46 @@ Logic* Logic::getInstance() {
 
 // Modified by RenZhi 19/10/15: Implement command pattern
 // Modified by Aaron  20/10/15: Move execute into 'try' block
-Feedback Logic::processCommand(std::string userCommand) {
-	Feedback feedback;
+std::string Logic::processCommand(std::string userCommand) {
+	std::string message;
 	Command* command;
-	/*
-	Add* add;
-	Delete* delet;
-	Modify* modify;
-	Search* search;
-	Markdone* markdone;
-	UnmarkDone* unmarkdone;
-	View* view;
-	// ClearAll* clearAll; // ClearAll subclass not created yet
-	DisplayAll* displayAll;
-	Load* load;
-	Save* save;
-	Exit* exit;
-	*/
-	try {
-		command = parser.parse(userCommand);
-		CommandType cmd = command->getCommand();
-		switch (cmd) {
-		case UNDO:
-			history->undo();
-			break;
-		case REDO:
-			history->redo();
-			break;
-		case INVALID:
-			throw std::runtime_error(ERROR_INVALID_COMMAND);
-			break;
-		default:
-			command->execute();
-			history->add(*command);
-		}
-	} catch(std::exception e) {
-		feedback.setErrorMessage(e.what());
+	command = parser.parse(userCommand);
+	CommandType cmd = command->getCommand();
+	switch (cmd) {
+	case UNDO:
+		history->undo();
+		break;
+	case REDO:
+		history->redo();
+		break;
+	case INVALID:
+		throw std::runtime_error(ERROR_INVALID_COMMAND);
+		break;
+	default:
+		command->execute();
+		message = command->getMessage();
+		history->add(*command);
 	}
 
+	assert(updater != nullptr);
+	updater->update();
 	Save saveFile;
 	saveFile.execute();
-	feedback.setTasksToShow(command->getCurrentView());
-	return feedback;
+	return message;
 }
+
+void Logic::subscribe(std::vector<std::string>* labels,
+				std::vector<std::string>* description,
+				std::vector<std::string>* dateAndTime,
+				std::vector<std::string>* floatingTasks,
+				std::vector<bool>* priotiryTasks) {
+
+	assert(updater == nullptr);
+	updater = new Update(labels, description, dateAndTime, floatingTasks,
+						 priotiryTasks,currentView);
+	updater->update();
+}
+
 /*
 Add* add;
 Delete* delet;

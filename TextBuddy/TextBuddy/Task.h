@@ -61,7 +61,7 @@ private:
 	std::string name;
 	TaskType type;
 	int uniqueID;
-	std::string label; // Obsolete, can only store one label
+	std::string label; 
 	std::set<std::string> labels;
 	std::string dateAndTime_UI;
 

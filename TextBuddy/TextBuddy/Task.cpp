@@ -43,7 +43,15 @@ int Task::incrementRunningCount() {
 std::string Task::getName() {return name;}
 TaskType Task::getType() {return type;}
 int Task::getID() {return uniqueID;}
-std::string Task::getLabel() {return label;}
+std::string Task::getLabel() {
+	std::string label;
+	std::set<std::string>::iterator i = labels.begin();
+	while(i != labels.end()) {
+		label = *i + " " ;
+		++i;
+	}
+	return label;
+}
 bool Task::getDoneStatus() {return isDone;}
 bool Task::getPriorityStatus() {return isPriority;}
 int Task::getStartDate() {return startDate;}

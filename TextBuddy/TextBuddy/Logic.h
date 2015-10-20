@@ -3,9 +3,9 @@
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
-#include "Feedback.h"
+#include <assert.h>
+#include "Update.h"
 #include "History.h"
-#include "Observer.h"
 #include "Parser.h"
 #include "IO.h"
 
@@ -13,13 +13,14 @@ class Logic {
 private:
 	Logic();
 	static Logic *theOne; // Singleton
+	std::vector<Task>* currentView; 
 	History* history;
 	Parser parser;
 	IO io;
+	Update* updater;
 
 	const static std::string ERROR_INVALID_COMMAND;
 	/*
-	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
 	int getIdOfIndex(int userIndex);
 	bool isValidIndex(int index);
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
@@ -33,9 +34,12 @@ public:
 	static Logic* getInstance();
 	~Logic();
 	
-	Feedback processCommand(std::string userCommand);
-	void subscribe(Observer* ui);
-	std::vector<Task> getFloatingTasks();
+	std::string processCommand(std::string userCommand);
+	void subscribe(std::vector<std::string>* labels,
+				std::vector<std::string>* description,
+				std::vector<std::string>* dateAndTime,
+				std::vector<std::string>* floatingTasks,
+				std::vector<bool>* priotiryTasks);
 	/*
 	int getSize();
 	std::vector<Task> loadFile(std::string fileName);

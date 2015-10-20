@@ -31,8 +31,8 @@ std::vector<Task> Command::getTaskStore() {
 	return taskStore;
 }
 
-std::vector<Task> Command::getCurrentView() {
-	return currentView;
+std::vector<Task>* Command::getCurrentView() {
+	return &currentView;
 }
 
 int Command::getSize() {
@@ -157,6 +157,10 @@ std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 	return iter;
 }
 
+std::string Command::getMessage() {
+	return "foobar";
+}
+
 // ==================================================
 //                        ADD
 // ==================================================
@@ -175,8 +179,6 @@ Task Add::getNewTask() {
 
 void Add::execute() {
 	addInfo();
-	feedback.pushTask(newTask);
-	feedback.setAddedMessage();
 }
 
 // Add must have executed before undoing,
@@ -223,14 +225,12 @@ void Delete::execute() {
 	// userIndex refers to the nth task of currentView presented to user
 	// eg. delete 1 means deleting the first task
 	deleteInfo();
-	feedback.setUpdateView(true);
 }
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
 	taskStore.insert(taskStoreIter,taskToBeDeleted);
 	currentView.insert(currViewIter,taskToBeDeleted);
-	feedback.setUpdateView(true);
 }
 
 // ============= DELETE : PRIVATE METHODS ===========
@@ -276,7 +276,6 @@ Task Modify::getTempTask() {
 
 void Modify::execute() {
 	modifyInfo();
-	feedback.setUpdateView(true);
 }
 
 void Modify::undo() {
@@ -362,9 +361,6 @@ void Search::execute() {
 	// If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 	std::string output = searchInfo();
 	amendView(output);
-	bool isFound = !output.empty();
-	feedback.setSearchMessage(searchPhrase,isFound);
-	feedback.setUpdateView(isFound);
 }
 
 void Search::undo() {
@@ -446,12 +442,7 @@ int Markdone::getDoneID() {
 }
 
 void Markdone::execute() {
-	try {
-		markDone();
-		feedback.setUpdateView(true);
-	} catch (std::exception e) {
-		feedback.setErrorMessage(e.what());
-	}	
+	markDone();
 }
 
 void Markdone::undo() {
@@ -489,12 +480,7 @@ int UnmarkDone::getUndoneID() {
 }
 
 void UnmarkDone::execute() {
-	try {
-		unmarkDone();
-		feedback.setUpdateView(true);
-	} catch (std::exception e) {
-		feedback.setErrorMessage(e.what());
-	}
+	unmarkDone();
 }
 
 void UnmarkDone::undo() {
@@ -579,7 +565,6 @@ DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
 	copyView();
-	feedback.setUpdateView(true);
 }
 
 void DisplayAll::undo() {
@@ -654,5 +639,5 @@ Exit::Exit() : Command(EXIT) {}
 Exit::~Exit() {}
 
 void Exit::execute() {
-	feedback.setExit();
+	exit(0);
 }

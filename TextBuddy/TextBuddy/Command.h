@@ -5,8 +5,8 @@
 #define COMMAND_H_
 
 #include <vector>
-#include "Feedback.h"
 #include "IO.h"
+#include "Task.h"
 
 // These are the valid Command keywords
 // Count: 14
@@ -74,7 +74,6 @@ private:
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
-	Feedback feedback;
 
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 
@@ -92,13 +91,14 @@ public:
 	CommandType getCommand();
 	std::string getUserInput();
 
-	static std::vector<Task> getCurrentView();
+	static std::vector<Task>* getCurrentView();
 	static std::vector<Task> getTaskStore();
 	static int getSize();
 	static void clearTaskStore();
 
 	virtual ~Command();
 	virtual void execute();
+	virtual std::string getMessage();
 	virtual void undo();
 };
 

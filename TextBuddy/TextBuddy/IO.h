@@ -4,6 +4,7 @@
 #define IO_H_
 
 #include "Rapidjson\include\rapidjson\document.h"
+#include "Task.h"
 
 using namespace rapidjson;
 
