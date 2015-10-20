@@ -7,6 +7,7 @@
 #include <vector>
 #include "Feedback.h"
 #include "IO.h"
+#include "PowerSearch.h"
 
 // These are the valid Command keywords
 // Count: 14
@@ -46,13 +47,14 @@ enum CommandType {
 };
 
 // These are the valid View keywords
-// Count: 6
+// Count: 7
 const std::string VIEW_ALL = "all";
 const std::string VIEW_FLOATING = "floating";
 const std::string VIEW_PAST = "past";
 const std::string VIEW_TODO = "todo";
 const std::string VIEW_WEEK = "week";
 const std::string VIEW_LABEL = "label";
+const std::string VIEW_DONE = "done";
 
 // These are the View enums
 // Count: 6 + VIEWTYPE_INVALID
@@ -63,6 +65,7 @@ enum ViewType {
 	VIEWTYPE_TODO,
 	VIEWTYPE_WEEK,
 	VIEWTYPE_LABEL,
+	VIEWTYPE_DONE,
 	VIEWTYPE_INVALID
 };
 
@@ -229,10 +232,15 @@ class View: public Command {
 private:
 	// == EXECUTE ==
 	ViewType view;
+	PowerSearch pwrSearch;
 	// ==== UNDO ===
 	std::vector<Task> previousView;
 
+	bool viewAll();
 	bool viewTaskType(TaskType type);
+	bool viewDone();
+	bool viewLabel(std::string label);
+
 public:
 	View(ViewType newView);
 	~View();

@@ -4,11 +4,14 @@
 #include "Utilities.h"
 #include "PowerSearch.h"
 
-PowerSearch::PowerSearch(void) {
+PowerSearch::PowerSearch(void) {}
+
+PowerSearch::PowerSearch(std::vector<Task> cmdTaskStore, std::vector<Task> cmdCurrentView) {
+	taskStore = cmdTaskStore;
+	currentView = cmdCurrentView;
 }
 
-PowerSearch::~PowerSearch(void) {
-}
+PowerSearch::~PowerSearch(void) {}
 
 //========== Private Methods ==========
 void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {
