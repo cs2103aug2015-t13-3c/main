@@ -207,7 +207,6 @@ void Add::undo() {
 
 bool Add::addInfo() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
-	newTask.setDateAndTime_UI(dateAndTime_UI);
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
 	currViewID = currentView.size();
@@ -346,7 +345,6 @@ void Modify::modifyInfo() {
 		}
 		*currIter = *taskIter;
 		std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*taskIter);
-		taskIter->setDateAndTime_UI(dateAndTime_UI);
 
 		sortDate(taskStore);
 	}

@@ -148,12 +148,8 @@ std::set<std::string> Task::getLabels() {
 	return labels;
 }
 
-void Task::setDateAndTime_UI(std::string dateAndTime_UI) {
-	this->dateAndTime_UI = dateAndTime_UI;
-}
-
 std::string Task::getDateAndTime_UI() {
-	return dateAndTime_UI;
+	return Utilities::taskDateAndTimeToDisplayString(*this);
 }
 
 // For testing

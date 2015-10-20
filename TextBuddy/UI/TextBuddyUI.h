@@ -37,9 +37,13 @@ namespace UserInterface {
 		// INITIALIZATION OF COMPONENTS AND REQUIRED VARIABLES
 		TextBuddyUI(void) {
 			InitializeComponent();
+			labels = new std::vector<std::string>;
+			taskDescription = new std::vector<std::string>;
+			dateTime = new std::vector<std::string>;
+			floatingTasks = new std::vector<std::string>;
+			priorityTasks = new std::vector<bool>;
 			logic = logic->getInstance();
-			Command cmd;
-			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priotiryTasks);
+			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 			floatingTaskIndex = 0;
 			originalRowPosition = 0;
 			input->Focus();
@@ -68,6 +72,10 @@ namespace UserInterface {
 				delete components;
 				delete logic;
 				delete floatingTasks;
+				delete labels;
+				delete taskDescription;
+				delete dateTime;
+				delete priorityTasks;
 			}
 		}
 
@@ -259,7 +267,7 @@ namespace UserInterface {
 		std::vector<std::string>* taskDescription;
 		std::vector<std::string>* dateTime;
 		std::vector<std::string>* floatingTasks;
-		std::vector<bool>* priotiryTasks;
+		std::vector<bool>* priorityTasks;
 
 	//===================== UI FUNCTIONS=======================================
 	private:	
@@ -308,16 +316,16 @@ namespace UserInterface {
 			display->Rows->Clear();
 			unsigned int size = taskDescription->size();
 			for(unsigned int i=0 ; i< size ; ++i) {
-				String^ index = gcnew String(i.ToString());
+				String^ index = gcnew String((i+1).ToString());
 				String^ label = gcnew String((*labels)[i].c_str());
 				String^ title = gcnew String((*taskDescription)[i].c_str());
 				String^ dt = gcnew String((*dateTime)[i].c_str());
-				if((*priotiryTasks)[i]) {
+				display->Rows->Add(index,label,title,dt);
+				if((*priorityTasks)[i]) {
 					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;				
 				} else {
 					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;
 				}
-				display->Rows->Add(index,label,title,dt);
 				display->FirstDisplayedScrollingRowIndex = originalRowPosition;
 			}
 
@@ -471,7 +479,7 @@ private:
 		//======= Updates floating Tasks display textbox every 5 seconds ======
 private: 
 	System::Void updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
-		if(!floatingTasks->empty()) {	
+		if(floatingTasks != nullptr && !floatingTasks->empty()) {	
 				floatingTaskIndex = floatingTaskIndex % floatingTasks->size();
 				String^ title = gcnew String(
 					(*floatingTasks)[floatingTaskIndex].c_str());
