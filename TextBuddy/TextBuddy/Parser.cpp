@@ -20,13 +20,13 @@ Parser::~Parser() {
 const std::string Parser::FILE_EXTENSION = ".txt";
 
 void Parser::log(Level level, std::string message) {
-	//logger->log(level,message);
+	// logger->log(level,message);
 	return;
 }
 
-// ==================================================
+//==================================================
 //                      METHODS
-// ==================================================
+//==================================================
 
 //========== This is the API ==========
 
@@ -218,7 +218,11 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			&& (newDate = parseDate(inputString)) == INVALID_DATE_FORMAT
 			&& (newDate = parseDay(inputString)) == INVALID_DATE_FORMAT) {
 				log(DEBUG,"Invalid date format: " + Utilities::vecToString(inputString));
-				inputMode = START_TIME;
+				if(inputMode == START_DATE) {
+					inputMode = START_TIME;
+				} else if(inputMode == END_DATE) {
+					inputMode = END_TIME;
+				}
 		}
 
 		switch(inputMode) {
@@ -248,23 +252,27 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->setEndDate(newDate);
 			break;
 		case START_TIME:
+			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+				if(newTask->getStartTime() == 0) {
+					newTask->setStartTime(newTime);
+				}
+			} else {
+				break;
+			}
 		case END_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-				// Valid time format
-				if(newTask->getStartTime() == 0) {
-					if(newTask->getStartDate() == 0 || newTask->getStartDate() == INVALID_DATE_FORMAT) {
-						newTask->setStartDate(parseDay(Utilities::stringToVec("today")));
-					}
-					newTask->setStartTime(newTime);
+				if(newTask->getStartDate() == 0 || newTask->getStartDate() == INVALID_DATE_FORMAT) {
+					newTask->setStartDate(parseDay(Utilities::stringToVec("today")));
 				}
 				if(newTask->getEndDate() == 0 || newTask->getEndDate() == INVALID_DATE_FORMAT) {
 					newTask->setEndDate(newTask->getStartDate());
 				}
 				newTask->setEndTime(newTime);
-				break;
-			}
-			if(newTask->getStartTime() != newTask->getEndTime()) {
-				newTask->setType(EVENT);
+				if(newTask->getStartTime()!=0 && newTask->getStartTime()!=newTask->getEndTime()) {
+					newTask->setType(EVENT);
+				} else {
+					newTask->setType(TODO);
+				}
 			}
 			break;
 		case INVALID_FIELD:

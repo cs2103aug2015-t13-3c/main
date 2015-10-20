@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "IO.h"
 #include "Rapidjson\include\rapidjson\document.h"
-//#include "Shlwapi.h"
+// #include "Shlwapi.h"
 
 // TODO: Refactor IO.cpp - remove repeated file names
 
@@ -20,9 +20,9 @@ IO::IO() {
 
 IO::~IO() {}
 
-// ==================================================
+//==================================================
 //                   PUBLIC METHODS
-// ==================================================
+//==================================================
 
 // TODO: Handle empty file / improper content exceptions
 
@@ -120,9 +120,9 @@ return PathIsDirectory(newFullPathName);
 }
 */
 
-// ==================================================
+//==================================================
 //                   PRIVATE METHODS
-// ==================================================
+//==================================================
 
 // Records down last saved location as .tbconfig file
 // for IO to find where to load when it launches

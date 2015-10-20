@@ -262,7 +262,7 @@ namespace UserInterface {
 		String^ searchPhrase;
 		List<String^>^ keywords;
 
-		//to be subscribed
+		// To be subscribed
 		std::vector<std::string>* labels;
 		std::vector<std::string>* taskDescription;
 		std::vector<std::string>* dateTime;
@@ -299,7 +299,7 @@ namespace UserInterface {
 				delete userInput;
 			} catch(std::exception e) {
 				feedback->ForeColor = Color::Red;
-				//suggestHelpPage()
+				// suggestHelpPage()
 			}
 		}
 
@@ -455,7 +455,7 @@ private:
 	System::Void input_KeyUp_1(System::Object^  sender,
 		System::Windows::Forms::KeyEventArgs^  e) {
 			cursorPosition = input->SelectionStart;
-			if(e->KeyCode == Keys::Return) { //if user presses 'Return' key
+			if(e->KeyCode == Keys::Return) { // If user presses 'Return' key
 				getInput();
 				processAndExecute();
 				input->Clear();

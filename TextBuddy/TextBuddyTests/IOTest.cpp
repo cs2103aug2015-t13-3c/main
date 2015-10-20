@@ -13,7 +13,7 @@ public:
 	/*
 	TEST_METHOD(IO_loadFile_correctStringReadIn)
 	{
-	//Test if what is read to rapidJSON is the correct file contents
+	// Test if what is read to rapidJSON is the correct file contents
 	std::ifstream inputFile("JSONTEXT.txt");
 	std::string hardstring = "\"TextBuddy Items\":\n[\n]";
 

@@ -106,15 +106,15 @@ public:
 	virtual void undo();
 };
 
-// ==================================================
+//==================================================
 //                  DERIVED COMMANDS
-// ==================================================
+//==================================================
 
 class Add: public Command {
 private:
-	// == EXECUTE ==
+	//== EXECUTE ==
 	Task newTask;
-	// ==== UNDO ===
+	//==== UNDO ===
 	int currViewID;
 
 	bool addInfo();
@@ -129,9 +129,9 @@ public:
 
 class Delete: public Command {
 private:
-	// == EXECUTE ==
+	//== EXECUTE ==
 	int deleteID; // ID on GUI, not taskID
-	// ==== UNDO ===
+	//==== UNDO ===
 	Task taskToBeDeleted;
 	std::vector<Task>::iterator currViewIter;
 	std::vector<Task>::iterator taskStoreIter;
@@ -148,11 +148,11 @@ public:
 
 class Modify: public Command {
 private:
-	// == EXECUTE ==
+	//== EXECUTE ==
 	int modifyID; // ID on GUI, not taskID
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
-	// ==== UNDO ===
+	//==== UNDO ===
 	Task originalTask;
 
 	void modifyInfo();
@@ -169,9 +169,9 @@ public:
 
 class Search: public Command {
 private:
-	// == EXECUTE ==
+	//== EXECUTE ==
 	std::string searchPhrase;
-	// ==== UNDO ===
+	//==== UNDO ===
 	std::vector<Task> currentViewBeforeSearch;
 
 	std::string searchInfo();
@@ -187,9 +187,9 @@ public:
 
 class Markdone: public Command {
 private:
-	// == EXECUTE ==
+	//== EXECUTE ==
 	int doneID;
-	// ==== UNDO ===
+	//==== UNDO ===
 	bool successMarkDone;
 	std::vector<Task>::iterator currIter;
 	std::vector<Task>::iterator taskIter;
@@ -206,9 +206,9 @@ public:
 
 class UnmarkDone: public Command {
 private:
-	// == EXECUTE ==
+	//== EXECUTE ==
 	int undoneID;
-	// ==== UNDO ===
+	//==== UNDO ===
 	bool successUnmarkDone;
 	std::vector<Task>::iterator currIter;
 	std::vector<Task>::iterator taskIter;
@@ -231,11 +231,11 @@ public:
 
 class View: public Command {
 private:
-	// == EXECUTE ==
+	//== EXECUTE ==
 	ViewType view;
 	std::vector<std::string> viewLabels;
 	PowerSearch pwrSearch;
-	// ==== UNDO ===
+	//==== UNDO ===
 	std::vector<Task> previousView;
 
 	bool viewAll();
@@ -255,7 +255,7 @@ public:
 
 class ClearAll: public Command {
 private:
-	// ==== UNDO ===
+	//==== UNDO ===
 	std::vector<Task> previousView;
 public:
 	ClearAll();
@@ -267,7 +267,7 @@ public:
 
 class DisplayAll: public Command {
 private:
-	// ==== UNDO ===
+	//==== UNDO ===
 	std::vector<Task> previousView;
 public:
 	DisplayAll();

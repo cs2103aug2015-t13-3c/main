@@ -7,7 +7,6 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TextBuddyTests {
 	TEST_CLASS(UtilitiesTest) {
 public:
-
 	TEST_METHOD(Utilities_fieldVecToString) {
 		TbLogger::getInstance()->clear();
 		Parser* parser = Parser::getInstance();
@@ -79,61 +78,58 @@ public:
 		Assert::AreEqual(expectedString,Utilities::replace(a,b,c));
 	}
 
-<<<<<<< HEAD
-	//added @haoye 20/10/15
+	// Added by Hao Ye 20/10/15
 	/*
 	TEST_METHOD(Utilities_taskDateAndTimeToDisplayString) {
-		Task test;
-		TaskType types[15] = {TODO,TODO,TODO,TODO,TODO,EVENT,EVENT,
-			EVENT,EVENT,EVENT,EVENT,EVENT,EVENT,EVENT,EVENT};
-		int startDates[15] = {
-			0,
-			151023,
-			151201,
-			151027,
-			151131
-		};
-		int endDates[15] = {
-			0,
-			151023,
-			151201,
-			151027,
-			151131
-		};
-		int startTimes[15] = {
-			1200,
-			900,
-			1800,
-			0,
-			0
-		};
-		int endTimes[15] = {
-			1200,
-			900,
-			1800,
-			0,
-			0
-		};
-		std::string expected[15] = {
-			"by 12.00 pm",
-			"by Friday 9.00 am",
-			"by 1/12/2015 6.00 pm",
-			"by next Tuesday",
-			"by 31/11/2015"
-		};
+	Task test;
+	TaskType types[15] = {TODO,TODO,TODO,TODO,TODO,EVENT,EVENT,
+	EVENT,EVENT,EVENT,EVENT,EVENT,EVENT,EVENT,EVENT};
+	int startDates[15] = {
+	0,
+	151023,
+	151201,
+	151027,
+	151131
+	};
+	int endDates[15] = {
+	0,
+	151023,
+	151201,
+	151027,
+	151131
+	};
+	int startTimes[15] = {
+	1200,
+	900,
+	1800,
+	0,
+	0
+	};
+	int endTimes[15] = {
+	1200,
+	900,
+	1800,
+	0,
+	0
+	};
+	std::string expected[15] = {
+	"by 12.00 pm",
+	"by Friday 9.00 am",
+	"by 1/12/2015 6.00 pm",
+	"by next Tuesday",
+	"by 31/11/2015"
+	};
 
-		for(int i=0 ; i< 5 ; ++i) {
-			test.setType(types[i]);
-			test.setStartDate(startDates[i]);
-			test.setEndDate(endDates[i]);
-			test.setStartTime(startTimes[i]);
-			test.setEndTime(endTimes[i]);
-			std::string result = Utilities::taskDateAndTimeToDisplayString(test);
-			Assert::AreEqual(result,expected[i]);
-		}
+	for(int i=0 ; i< 5 ; ++i) {
+	test.setType(types[i]);
+	test.setStartDate(startDates[i]);
+	test.setEndDate(endDates[i]);
+	test.setStartTime(startTimes[i]);
+	test.setEndTime(endTimes[i]);
+	std::string result = Utilities::taskDateAndTimeToDisplayString(test);
+	Assert::AreEqual(result,expected[i]);
+	}
 	}
 	*/
-=======
->>>>>>> origin/master
 	};
 }

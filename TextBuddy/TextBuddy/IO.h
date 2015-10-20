@@ -3,8 +3,8 @@
 #ifndef IO_H_
 #define IO_H_
 
-#include "Rapidjson\include\rapidjson\document.h"
 #include "Task.h"
+#include "Rapidjson\include\rapidjson\document.h"
 
 using namespace rapidjson;
 

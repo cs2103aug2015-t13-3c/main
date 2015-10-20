@@ -29,9 +29,9 @@ Logic::~Logic() {
 	delete updater;
 }
 
-// ==================================================
+//==================================================
 //                      METHODS
-// ==================================================
+//==================================================
 
 // Added by Ren Zhi 16/10/15
 Logic* Logic::getInstance() {
@@ -58,7 +58,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	default:
 		command->execute();
 		message = command->getMessage();
-//		history->add(*command);
+		//		history->add(*command);
 	}
 
 	assert(updater != nullptr);
@@ -88,7 +88,7 @@ Search* search;
 Markdone* markdone;
 UnmarkDone* unmarkdone;
 View* view;
-//Clearall* clearAll; //ClearAll subclass not created yet
+// Clearall* clearAll; // ClearAll subclass not created yet
 DisplayAll* displayAll;
 Load* load;
 Save* save;
@@ -146,7 +146,7 @@ userIndex = toMarkDone.getDoneID();
 
 try {
 id = getIdOfIndex(userIndex);
-if(id == -1) {												//error code
+if(id == -1) {												// Error code
 throw "User input exceeded bounds.";
 }
 } catch (std::string exceedBoundStr) {
@@ -204,7 +204,7 @@ int Logic::getSize(void) {
 return sizeOfArray;
 }
 
-//swaps everything in an array element
+// Swaps everything in an array element
 void Logic::swapElement(textInfo& ElemA, textInfo& ElemB) {
 std::string tempStr;
 int tempInt;
@@ -231,8 +231,8 @@ ElemB.endTime = tempInt;
 return;
 }
 
-//adds value to time while ensuring it still follows HHMM format
-//assume addValue is lesser than 60
+// Adds value to time while ensuring it still follows HHMM format
+// Assume addValue is lesser than 60
 //**problem for case of 2359, change later (need to add day parameter)
 int Logic::addTime(int time, int addValue) {
 if(addValue < 60) {
@@ -255,12 +255,12 @@ newTime = hours * 100 + minutes;
 
 return newTime;
 } else {
-return 9999;						//error		
+return 9999;						// Error		
 }
 }
 
-//copies infoArray into a given array
-//for testing purposes
+// Copies infoArray into a given array
+// For testing purposes
 void Logic::copyArray(struct textInfo stringArray[]) {
 for (int i = 0; i < sizeOfArray; i++) {
 infoArray[i].text = stringArray[i].text;
@@ -303,8 +303,8 @@ sizeOfArray = sizeOfArray - 1;
 return;
 }
 
-//returns information stored in the array element that index points to
-//information passed in order of text, startDate, startTime, endDate, endTime separated by "|" as of now
+// Returns information stored in the array element that index points to
+// Information passed in order of text, startDate, startTime, endDate, endTime separated by "|" as of now
 std::string Logic::returnInfo(int index) {
 
 if(index < sizeOfArray){
@@ -322,8 +322,8 @@ return "Nothing to return.";
 }
 }
 
-//sorts date and time in increasing order of startDate and startTime
-//eg: 0th element will contain the earliest due date/time
+// Sorts date and time in increasing order of startDate and startTime
+// eg: 0th element will contain the earliest due date/time
 void Logic::sortDateAndTime() {
 if(sizeOfArray != 0) {
 for (int i = 0; i < sizeOfArray; i++) {
@@ -334,7 +334,7 @@ swapElement(infoArray[i], infoArray[j]);
 }
 }
 
-//sorts date after time
+// Sorts date after time
 for (int i = 0; i < sizeOfArray; i++) {
 for (int j = i+1; j < sizeOfArray; j++) {
 if(infoArray[j].startDate < infoArray[i].startDate) {
@@ -345,11 +345,11 @@ swapElement(infoArray[i], infoArray[j]);
 }
 }
 
-//changes information in a given array element
+// Changes information in a given array element
 void Logic::changeInfo(std::string textInput, int startDateInput, int startTimeInput, 
 int endDateInput, int endTimeInput, int index) {
 
-//if text is not meant to be changed, textInput will be "*"
+// If text is not meant to be changed, textInput will be "*"
 if(textInput != "*") {
 infoArray[index].text = textInput;	
 }
@@ -374,7 +374,7 @@ return;
 }
 
 
-//searches for the first available slot from input date and time onwards
+// Searches for the first available slot from input date and time onwards
 std::string Logic::freeSlotSearch(int date, int time) {
 std::ostringstream freeSlot;
 
@@ -387,18 +387,17 @@ int freeTime = time;
 
 sortDateAndTime();
 
-//if date and time is in between ith array element,
-//move to next element, updating the possible free time to date and time right after
-//ith array element
+// If date and time is in between ith array element, move to next element,
+// updating the possible free time to date and time right after ith array element
 for (int i = 0; i < sizeOfArray; i++) {
 
-//below condition checks if date and time is in between the duration of ith array element
+// Below condition checks if date and time is in between the duration of ith array element
 if((infoArray[i].startDate < freeDate) || 
 ((infoArray[i].startDate == freeDate) && (infoArray[i].startTime <= freeTime))) {
 if((infoArray[i].endDate > freeDate) ||
 ((infoArray[i].endDate == freeDate) && (infoArray[i].endTime >= freeTime))) {
 
-//condition to prevent freeDate/freeTime from going back to the past
+// Condition to prevent freeDate/freeTime from going back to the past
 if((freeDate < infoArray[i].endDate) ||
 ((freeDate == infoArray[i].endDate) && (freeTime < infoArray[i].endTime))) {
 freeDate = infoArray[i].endDate;
