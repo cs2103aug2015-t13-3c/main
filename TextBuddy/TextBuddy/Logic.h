@@ -16,6 +16,7 @@ private:
 	History* history;
 	Parser parser;
 	IO io;
+
 	const static std::string ERROR_INVALID_COMMAND;
 	/*
 	const static std::string ERROR_INDEX_OUT_OF_BOUNDS;
