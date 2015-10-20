@@ -9,13 +9,13 @@
 #define COMMAND_H_
 
 // These are the possible command types
-// const std::string COMMAND_CLEAR_ALL = "clear";
 // const std::string COMMAND_SORT_ALL = "sort";
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
 const std::string COMMAND_MODIFY = "modify";
 const std::string COMMAND_SEARCH = "search";
 const std::string COMMAND_MARKDONE = "done";
+const std::string COMMAND_UNMARKDONE = "notdone";
 const std::string COMMAND_UNDO = "undo";
 const std::string COMMAND_VIEW = "view";
 const std::string COMMAND_CLEAR_ALL = "clear";
@@ -37,6 +37,7 @@ enum CommandType {
 	MODIFY,
 	SEARCH,
 	MARKDONE,
+	UNMARKDONE,
 	UNDO,
 	REDO,
 	VIEW,
@@ -91,8 +92,8 @@ public:
 	static int getSize();
 	static void clearTaskStore();
 
-	/*virtual*/ void execute();
-	/*virtual*/ void undo();
+	virtual void execute();
+	virtual void undo();
 };
 
 // ==================================================
@@ -222,7 +223,12 @@ public:
 
 class View: public Command {
 private:
+	// == EXECUTE ==
 	ViewType view;
+	// ==== UNDO ===
+	std::vector<Task> previousView;
+	
+	bool viewTaskType(TaskType type);
 public:
 	View(ViewType newView);
 	~View();
@@ -247,7 +253,9 @@ public:
 class Load: public Command {
 private:
 	std::string filePath;
+	IO io;
 public:
+	Load();
 	Load(std::string Load);
 	~Load();
 	std::string getFilePath();

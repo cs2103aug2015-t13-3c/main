@@ -9,6 +9,10 @@ namespace TextBuddyTests {
 	TEST_CLASS(LogicTest) {
 public:
 
+	TEST_METHOD(initiate_history) {
+		History *history = history->getInstance();
+	}
+
 	/*
 	TEST_METHOD(Logic_addTaskModifyTask) {
 	Logic logic;
@@ -73,28 +77,32 @@ public:
 	Assert::AreEqual(std::string("Sentence three."),iter->getName());
 	}
 	*/
-	/*
+
+	
+	// Modified by @Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processInfo) {
 		Logic* logic = Logic::getInstance();
 		Parser parser;
-		logic->clearTaskStore();	// Clear state (Aaron)
-
+		Command cmd;
+		cmd.clearTaskStore();	// Clear state
+		
 		// Add
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add then"));
 		logic->processCommand(std::string("Add this from 13 Oct to 15 Oct"));
-
-		std::vector<Task> copyTask;
+		
+		std::vector<Task> copyTask;	
 		std::vector<Task>::iterator iter;
 
-		copyTask = logic->getTaskStore();
+		copyTask = cmd.getTaskStore();
+		Assert::AreEqual((size_t)3,copyTask.size());
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("this"),iter->getName());
 		Assert::AreEqual(151013,iter->getStartDate());
 		Assert::AreEqual(151015,iter->getEndDate());
 		Assert::AreEqual(0,iter->getStartTime());
 		Assert::AreEqual(0,iter->getEndTime());
-
+		
 		++iter;
 		Assert::AreEqual(std::string("that"), iter->getName());
 		Assert::AreEqual(151014,iter->getStartDate());
@@ -103,24 +111,26 @@ public:
 
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
-
+		
 		//view
-		logic->viewTaskType(FLOATING);
-		copyTask = logic->getCurrentView();
+		logic->processCommand(std::string("View floating"));
+		copyTask = cmd.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("then"),iter->getName());
 
-		logic->copyView();
+		//display all
+		logic->processCommand(std::string("display all"));
 
 		// Delete
 		logic->processCommand(std::string("Delete 1"));
-		copyTask = logic->getTaskStore();
+		copyTask = cmd.getTaskStore();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("that"), iter->getName());
 
 		++iter;
 		Assert::AreEqual(std::string("then"), iter->getName());
-
+		
+		/*
 		// Modify
 		logic->processCommand(std::string("Modify 1 changed."));
 		copyTask = logic->getTaskStore();
@@ -133,30 +143,27 @@ public:
 		logic->processCommand(std::string("Modify 1 that"));
 		*/
 
-
+		
 		// Search
-		/*
-		std::string output = logic.processCommand(std::string("Search th"));	
-		Assert::AreEqual(std::string("that,then"), output);
-		*/
-		/* HERE
-		copyTask = logic.getCurrentView();
+		
+		logic->processCommand(std::string("Search he"));	
+		copyTask = cmd.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual(std::string("that"), iter->getName());
-
-		++iter;
+		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(std::string("then"), iter->getName());
-
+		
 		//MarkDone
-		logic.processCommand(std::string("Done 1"));
+		logic->processCommand(std::string("Done 1"));
 
-		copyTask = logic.getCurrentView();
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)0,copyTask.size());
+		copyTask = cmd.getTaskStore();
 		iter = copyTask.begin();
+		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
-		*/
-
-	//}
-
+		
+	}
+	
 	/*
 	TEST_METHOD(Logic_AddAndReturnInfoTest) {
 	Logic testLogic;

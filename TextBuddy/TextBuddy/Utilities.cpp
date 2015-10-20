@@ -413,11 +413,17 @@ std::string Utilities::removeSpaces(const std::string& s, const std::string& del
 
 std::string Utilities::replace(std::string str, std::string from, std::string to) {
 	int pos;
+	int fromLength = from.length();
+	std::string newString = "";
 	do {
 		pos = str.find(from);
-		if(pos != -1) str.replace(pos, from.length(), to);
+		if(pos != -1) {
+			newString += str.substr(0,pos) + to;
+			str = str.substr(pos+fromLength); //bugfix: infinite loop if str not updated (Ren Zhi)
+		}
 	} while (pos != -1);
-	return str;
+	newString += str;
+	return newString;
 }
 
 bool Utilities::isSubstring(std::string subString, std::string wordString) {

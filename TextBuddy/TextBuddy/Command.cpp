@@ -1,4 +1,6 @@
 // @@author Aaron Chong Jun Hao
+// Modified to Command Pattern (Ren Zhi)
+// Private methods originally by Kiat Boon
 
 #include "Command.h"
 #include "stdafx.h"
@@ -537,6 +539,7 @@ Undo::~Undo() {}
 
 View::View(ViewType newView) : Command(VIEW) {
 	view = newView;
+	previousView = currentView;
 }
 
 View::~View() {}
@@ -546,9 +549,32 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
+	switch (view) {
+	case VIEWTYPE_FLOATING:
+		viewTaskType(FLOATING);
+		break;
+	}
 }
 
 void View::undo() {
+	currentView = previousView;
+}
+
+// ============== VIEW : PRIVATE METHODS ============
+
+bool View::viewTaskType(TaskType type) {
+	currentView.clear();
+	std::vector<Task>::iterator iter;
+
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
+		if(iter->getType() == type) {
+			currentView.push_back(*iter);
+		}
+	}
+
+	sortDate(currentView);
+	return true;
+
 }
 
 // ==================================================
@@ -575,6 +601,9 @@ void DisplayAll::undo() {
 //                        LOAD
 // ==================================================
 
+Load::Load() : Command(LOAD) {
+	filePath = io.getFilePath();
+}
 Load::Load(std::string newFilePath) : Command(LOAD) {
 	filePath = newFilePath;
 }
@@ -588,9 +617,9 @@ std::string Load::getFilePath() {
 // TODO: Clear history after load, to avoid seg fault
 void Load::execute() {
 	Parser parser;
-	IO io;
-	std::string newFilePath = parser.parseFileName(filePath);
-	taskStore = io.loadFile(newFilePath);
+	
+	//std::string newFilePath = parser.parseFileName(filePath);
+	taskStore = io.loadFile(filePath);
 	copyView();
 	//TODO: update feedback
 }

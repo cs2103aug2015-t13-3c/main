@@ -1,6 +1,7 @@
 // @@author Chin Kiat Boon
 
 #include "Command.h"
+#include "Utilities.h"
 
 #ifndef POWERSEARCH_H_
 #define POWERSEARCH_H_
@@ -21,11 +22,14 @@ public:
 
 	//to be private
 	void setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime);		
+	void addFreeDate(int startDate, int startTime, int endDate, int endTime);
 
 	//to remain public
-	void searchInfo(std::string phr, int startDate, int endDate);
-	void searchFreeSlot(int startDate, int endDate);		//start and end of the period of interest
+	void searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime);
+	void searchFreeSlot(int startDate, int startTime, int endDate, int endTime);		//start and end of the period of interest
 	void searchLabel(std::string label);
+
+	//setters
 };
 
 #endif

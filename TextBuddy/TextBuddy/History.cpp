@@ -7,13 +7,10 @@ History::History(void) {}
 
 History::~History(void) {}
 
-History* History::theOne;
+History* History::theOne = new History();
 
 //========== PUBLIC METHODS ==========
 History* History::getInstance() {
-	if(theOne == NULL) {
-		theOne = new History();
-	}
 	return theOne;
 }
 

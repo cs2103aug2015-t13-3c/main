@@ -43,14 +43,15 @@ bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector) {
 // Throws an assert() if file contents are invalid
 std::vector<Task> IO::loadFile(std::string fileName) {
 	std::ifstream inputFile(fileName);
-	std::string inputFileString((std::istreambuf_iterator<char>(inputFile)),
-		std::istreambuf_iterator<char>());
 
 	std::vector<Task> taskVector;
 	if(!fileIsOpen(inputFile)) {
 		return taskVector;
 	}
-
+	
+	std::string inputFileString((std::istreambuf_iterator<char>(inputFile)),
+		std::istreambuf_iterator<char>());
+		
 	const char* inputFileText = inputFileString.c_str();
 
 	Document document;

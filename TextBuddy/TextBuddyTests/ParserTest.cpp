@@ -26,7 +26,38 @@ public:
 		expectedString = "test.txt";
 		userInput = "test";
 		Assert::AreEqual(expectedString,p.parseFileName(userInput));
+
+		//added by @Ren Zhi 19/10/15
+		expectedString = "C:\\\\Users\\\\Public\\\\test.txt";
+		userInput = "C:\\\Users\\Public\\test.txt";
+		Assert::AreEqual(expectedString,p.parseFileName(userInput));
 	}
+
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	//Added by Ren Zhi 19/10/15
+	TEST_METHOD(Parser_parse_Add) {
+		Add *add;
+		Command *cmd;
+		cmd = p.parse("Add that from 14 Oct to 16 Oct");
+		add = (Add*)cmd;
+
+		//Assert::AreEqual(ADD,cmd->getCommand());
+		
+		Task task = add->getNewTask();
+		//task.setStartDate(141015);
+		//task.setEndDate(161015);
+		//task.setName("that");
+		//task.setID(task.getRunningCount());
+		Assert::AreEqual(151014, task.getStartDate());
+		Assert::AreEqual(151016, task.getEndDate());
+		Assert::AreEqual(std::string("that"),task.getName());
+
+		add->clearTaskStore();
+		add->execute();
+		std::vector<Task> store = add->getTaskStore();
+		Assert::AreEqual((size_t)1, store.size());
+	}
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	TEST_METHOD(Parser_parse) {
 		// Clear before start

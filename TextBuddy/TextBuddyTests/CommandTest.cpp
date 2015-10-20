@@ -1,6 +1,7 @@
 // @@author Ng Ren Zhi
 
 #include "stdafx.h"
+#include "IO.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 void addThreeSentences(std::vector<Task> copyTask);
@@ -638,6 +639,18 @@ namespace TextBuddyTests
 			Assert::AreEqual((size_t)2,copyTask.size());
 		}
 						
+	};
+
+	TEST_CLASS(Command_Load)
+	{
+	public:
+
+		TEST_METHOD(Command_Load_Execute_empty)
+		{
+			IO io;
+			Load load(io.getFilePath());
+			load.execute();
+		}
 	};
 }
 
