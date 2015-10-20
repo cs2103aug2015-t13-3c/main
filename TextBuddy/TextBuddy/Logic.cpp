@@ -56,7 +56,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	default:
 		command->execute();
 		message = command->getMessage();
-		history->add(*command);
+//		history->add(*command);
 	}
 
 	assert(updater != nullptr);

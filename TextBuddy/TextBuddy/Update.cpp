@@ -11,15 +11,21 @@ Update::Update(std::vector<std::string>* labels,
 	this->dateAndTime = dateAndTime;
 	this->floatingTasks = floatingTasks;
 	this->priotiryTasks = priotiryTasks;
+	this->currentView = currentView;
 }
 
 void Update::update() {
 	if(!currentView->empty()) {
+		labels->clear();
+		description->clear();
+		dateAndTime->clear();
+		priotiryTasks->clear();
+		floatingTasks->clear();
 		std::vector<Task>::iterator i = currentView->begin();
 		while(i!=currentView->end()) {
 			labels->push_back(i->getLabel());
 			description->push_back(i->getName());
-			description->push_back(i->getDateAndTime_UI());
+			dateAndTime->push_back(i->getDateAndTime_UI());
 			priotiryTasks->push_back(i->getPriorityStatus());
 			if(i->getType() == FLOATING) {
 				floatingTasks->push_back(i->getName());

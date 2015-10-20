@@ -107,7 +107,6 @@ public:
 	bool setLabel(std::string newLabel);
 	bool addLabels(std::vector<std::string> newLabel);
 	bool deleteLabels(std::vector<std::string> newLabel);
-	void setDateAndTime_UI(std::string dateAndTime_UI);
 
 	bool markDone();		// Returns false if already done
 	bool unmarkDone();		// Returns false if already not done

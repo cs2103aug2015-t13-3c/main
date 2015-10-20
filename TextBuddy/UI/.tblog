@@ -94,3 +94,301 @@ Tue Oct 20 15:12:41 2015 Logger initialised
 Tue Oct 20 15:12:41 2015 Parser instantiated
 Tue Oct 20 15:12:41 2015 Parser instantiated
 Tue Oct 20 15:12:41 2015 Parser destructed
+Tue Oct 20 18:08:20 2015 Logger initialised
+Tue Oct 20 18:08:20 2015 Parser instantiated
+Tue Oct 20 18:08:20 2015 Parser instantiated
+Tue Oct 20 18:08:20 2015 Parser destructed
+Tue Oct 20 18:11:48 2015 Logger initialised
+Tue Oct 20 18:11:48 2015 Parser instantiated
+Tue Oct 20 18:11:48 2015 Parser instantiated
+Tue Oct 20 18:11:48 2015 Parser destructed
+Tue Oct 20 18:13:30 2015 Logger initialised
+Tue Oct 20 18:13:30 2015 Parser instantiated
+Tue Oct 20 18:13:30 2015 Parser instantiated
+Tue Oct 20 18:13:30 2015 Parser destructed
+Tue Oct 20 18:19:39 2015 Logger initialised
+Tue Oct 20 18:19:39 2015 Parser instantiated
+Tue Oct 20 18:19:39 2015 Parser instantiated
+Tue Oct 20 18:19:39 2015 Parser destructed
+Tue Oct 20 18:24:19 2015 Logger initialised
+Tue Oct 20 18:24:19 2015 Parser instantiated
+Tue Oct 20 18:24:19 2015 Parser instantiated
+Tue Oct 20 18:24:19 2015 Parser destructed
+Tue Oct 20 18:28:28 2015 Logger initialised
+Tue Oct 20 18:28:28 2015 Parser instantiated
+Tue Oct 20 18:28:28 2015 Parser instantiated
+Tue Oct 20 18:28:28 2015 Parser destructed
+Tue Oct 20 18:29:59 2015 Logger initialised
+Tue Oct 20 18:29:59 2015 Parser instantiated
+Tue Oct 20 18:29:59 2015 Parser instantiated
+Tue Oct 20 18:29:59 2015 Parser destructed
+Tue Oct 20 18:30:51 2015 Parsing "add"
+Tue Oct 20 18:30:51 2015 Parsing task
+Tue Oct 20 18:30:51 2015 Parsing field: name
+Tue Oct 20 18:30:51 2015 Parsing string: hello
+Tue Oct 20 18:30:51 2015 Parsed task
+Tue Oct 20 18:33:14 2015 Logger initialised
+Tue Oct 20 18:33:14 2015 Parser instantiated
+Tue Oct 20 18:33:14 2015 Parser instantiated
+Tue Oct 20 18:33:14 2015 Parser destructed
+Tue Oct 20 18:33:32 2015 Parsing "add"
+Tue Oct 20 18:33:32 2015 Parsing task
+Tue Oct 20 18:33:32 2015 Parsing field: name
+Tue Oct 20 18:33:32 2015 Parsing string: hello
+Tue Oct 20 18:33:32 2015 Parsed task
+Tue Oct 20 18:41:38 2015 Logger initialised
+Tue Oct 20 18:41:38 2015 Parser instantiated
+Tue Oct 20 18:41:38 2015 Parser instantiated
+Tue Oct 20 18:41:38 2015 Parser destructed
+Tue Oct 20 18:41:52 2015 Parsing "add"
+Tue Oct 20 18:41:52 2015 Parsing task
+Tue Oct 20 18:41:52 2015 Parsing field: name
+Tue Oct 20 18:41:52 2015 Parsing string: hello
+Tue Oct 20 18:41:52 2015 Parsed task
+Tue Oct 20 18:46:16 2015 Logger initialised
+Tue Oct 20 18:46:16 2015 Parser instantiated
+Tue Oct 20 18:46:16 2015 Parser instantiated
+Tue Oct 20 18:46:16 2015 Parser destructed
+Tue Oct 20 18:46:24 2015 Parsing "add"
+Tue Oct 20 18:46:24 2015 Parsing task
+Tue Oct 20 18:46:24 2015 Parsing field: name
+Tue Oct 20 18:46:24 2015 Parsing string: hello
+Tue Oct 20 18:46:24 2015 Parsed task
+Tue Oct 20 18:50:10 2015 Logger initialised
+Tue Oct 20 18:50:10 2015 Parser instantiated
+Tue Oct 20 18:50:10 2015 Parser instantiated
+Tue Oct 20 18:50:10 2015 Parser destructed
+Tue Oct 20 18:50:23 2015 Parsing "add"
+Tue Oct 20 18:50:23 2015 Parsing task
+Tue Oct 20 18:50:23 2015 Parsing field: name
+Tue Oct 20 18:50:23 2015 Parsing string: hello
+Tue Oct 20 18:50:23 2015 Parsed task
+Tue Oct 20 18:50:45 2015 Parser instantiated
+Tue Oct 20 18:50:45 2015 Parser destructed
+Tue Oct 20 18:54:29 2015 Logger initialised
+Tue Oct 20 18:54:29 2015 Parser instantiated
+Tue Oct 20 18:54:29 2015 Parser instantiated
+Tue Oct 20 18:54:29 2015 Parser destructed
+Tue Oct 20 18:54:41 2015 Parsing "add"
+Tue Oct 20 18:54:41 2015 Parsing task
+Tue Oct 20 18:54:41 2015 Parsing field: name
+Tue Oct 20 18:54:41 2015 Parsing string: ho
+Tue Oct 20 18:54:41 2015 Parsed task
+Tue Oct 20 18:54:41 2015 Parser instantiated
+Tue Oct 20 18:54:41 2015 Parser destructed
+Tue Oct 20 18:58:15 2015 Logger initialised
+Tue Oct 20 18:58:15 2015 Parser instantiated
+Tue Oct 20 18:58:15 2015 Parser instantiated
+Tue Oct 20 18:58:15 2015 Parser destructed
+Tue Oct 20 18:59:24 2015 Parsing "add"
+Tue Oct 20 18:59:24 2015 Parsing task
+Tue Oct 20 18:59:24 2015 Parsing field: name
+Tue Oct 20 18:59:24 2015 Parsing string: helo
+Tue Oct 20 18:59:24 2015 Parsed task
+Tue Oct 20 18:59:24 2015 Parser instantiated
+Tue Oct 20 18:59:24 2015 Parser destructed
+Tue Oct 20 19:06:24 2015 Logger initialised
+Tue Oct 20 19:06:24 2015 Parser instantiated
+Tue Oct 20 19:06:24 2015 Parser instantiated
+Tue Oct 20 19:06:24 2015 Parser destructed
+Tue Oct 20 19:06:28 2015 Parsing "add"
+Tue Oct 20 19:06:28 2015 Parsing task
+Tue Oct 20 19:06:28 2015 Parsing field: name
+Tue Oct 20 19:06:28 2015 Parsing string: helo
+Tue Oct 20 19:06:28 2015 Parsed task
+Tue Oct 20 19:08:25 2015 Logger initialised
+Tue Oct 20 19:08:25 2015 Parser instantiated
+Tue Oct 20 19:08:25 2015 Parser instantiated
+Tue Oct 20 19:08:25 2015 Parser destructed
+Tue Oct 20 19:08:29 2015 Parsing "add"
+Tue Oct 20 19:08:29 2015 Parsing task
+Tue Oct 20 19:08:29 2015 Parsing field: name
+Tue Oct 20 19:08:29 2015 Parsing string: hello
+Tue Oct 20 19:08:29 2015 Parsed task
+Tue Oct 20 19:08:39 2015 Parser instantiated
+Tue Oct 20 19:08:39 2015 Parser destructed
+Tue Oct 20 19:10:36 2015 Logger initialised
+Tue Oct 20 19:10:36 2015 Parser instantiated
+Tue Oct 20 19:10:36 2015 Parser instantiated
+Tue Oct 20 19:10:36 2015 Parser destructed
+Tue Oct 20 19:11:09 2015 Parsing "add"
+Tue Oct 20 19:11:09 2015 Parsing task
+Tue Oct 20 19:11:09 2015 Parsing field: name
+Tue Oct 20 19:11:09 2015 Parsing string: helo
+Tue Oct 20 19:11:09 2015 Parsed task
+Tue Oct 20 19:11:09 2015 Parser instantiated
+Tue Oct 20 19:11:09 2015 Parser destructed
+Tue Oct 20 19:11:14 2015 Parsing "add"
+Tue Oct 20 19:11:14 2015 Parsing task
+Tue Oct 20 19:11:14 2015 Parsing field: name
+Tue Oct 20 19:11:14 2015 Parsing string: niama
+Tue Oct 20 19:11:14 2015 Parsed task
+Tue Oct 20 19:11:14 2015 Parser instantiated
+Tue Oct 20 19:11:14 2015 Parser destructed
+Tue Oct 20 19:11:40 2015 Parsing "add"
+Tue Oct 20 19:11:40 2015 Parsing task
+Tue Oct 20 19:11:40 2015 Parsing field: name
+Tue Oct 20 19:11:40 2015 Parsing string: hall
+Tue Oct 20 19:11:40 2015 Parsed task
+Tue Oct 20 19:11:40 2015 Parser instantiated
+Tue Oct 20 19:11:40 2015 Parser destructed
+Tue Oct 20 19:11:56 2015 Parsing "add"
+Tue Oct 20 19:11:56 2015 Parsing task
+Tue Oct 20 19:11:56 2015 Parsing field: name
+Tue Oct 20 19:11:56 2015 Parsing string: halo
+Tue Oct 20 19:11:56 2015 Parsing field: by
+Tue Oct 20 19:11:56 2015 Parsing string: 11 pm
+Tue Oct 20 19:11:56 2015 Invalid date format: 11 pm
+Tue Oct 20 19:11:56 2015 Parsed task
+Tue Oct 20 19:11:56 2015 Parser instantiated
+Tue Oct 20 19:11:56 2015 Parser destructed
+Tue Oct 20 19:12:14 2015 Parsing "add"
+Tue Oct 20 19:12:14 2015 Parsing task
+Tue Oct 20 19:12:14 2015 Parsing field: name
+Tue Oct 20 19:12:14 2015 Parsing string: sohai
+Tue Oct 20 19:12:14 2015 Parsing field: :
+Tue Oct 20 19:12:14 2015 Parsing string: halo
+Tue Oct 20 19:12:14 2015 Parsed task
+Tue Oct 20 19:12:14 2015 Parser instantiated
+Tue Oct 20 19:12:14 2015 Parser destructed
+Tue Oct 20 19:12:35 2015 Parsing "modify"
+Tue Oct 20 19:12:35 2015 Parsing task
+Tue Oct 20 19:12:35 2015 Parsing field: name
+Tue Oct 20 19:12:35 2015 Parsing string: 
+Tue Oct 20 19:12:35 2015 Parsing field: star
+Tue Oct 20 19:12:35 2015 Parsed task
+Tue Oct 20 19:12:35 2015 Parser instantiated
+Tue Oct 20 19:12:35 2015 Parser destructed
+Tue Oct 20 19:13:00 2015 Parsing "exit"
+Tue Oct 20 19:17:17 2015 Logger initialised
+Tue Oct 20 19:17:17 2015 Parser instantiated
+Tue Oct 20 19:17:17 2015 Parser instantiated
+Tue Oct 20 19:17:17 2015 Parser destructed
+Tue Oct 20 19:17:24 2015 Parsing "add"
+Tue Oct 20 19:17:24 2015 Parsing task
+Tue Oct 20 19:17:25 2015 Parsing field: name
+Tue Oct 20 19:17:25 2015 Parsing string: helo
+Tue Oct 20 19:17:25 2015 Parsed task
+Tue Oct 20 19:17:25 2015 Parser instantiated
+Tue Oct 20 19:17:25 2015 Parser destructed
+Tue Oct 20 19:17:31 2015 Parsing "add"
+Tue Oct 20 19:17:31 2015 Parsing task
+Tue Oct 20 19:17:31 2015 Parsing field: name
+Tue Oct 20 19:17:31 2015 Parsing string: niama
+Tue Oct 20 19:17:31 2015 Parsed task
+Tue Oct 20 19:17:31 2015 Parser instantiated
+Tue Oct 20 19:17:31 2015 Parser destructed
+Tue Oct 20 19:18:09 2015 Parsing "add"
+Tue Oct 20 19:18:09 2015 Parsing task
+Tue Oct 20 19:18:09 2015 Parsing field: name
+Tue Oct 20 19:18:09 2015 Parsing string: cibai
+Tue Oct 20 19:18:09 2015 Parsing field: from
+Tue Oct 20 19:18:09 2015 Parsing string: 10 oct 11 am
+Tue Oct 20 19:18:10 2015 Invalid date format: 10 oct 11 am
+Tue Oct 20 19:18:10 2015 Parsing field: to
+Tue Oct 20 19:18:10 2015 Parsing string: 12 oct 1 pm
+Tue Oct 20 19:18:10 2015 Invalid date format: 12 oct 1 pm
+Tue Oct 20 19:18:10 2015 Parsed task
+Tue Oct 20 19:18:10 2015 Parser instantiated
+Tue Oct 20 19:18:10 2015 Parser destructed
+Tue Oct 20 19:19:40 2015 Parsing "add"
+Tue Oct 20 19:19:40 2015 Parsing task
+Tue Oct 20 19:19:40 2015 Parsing field: name
+Tue Oct 20 19:19:40 2015 Parsing string: harlo
+Tue Oct 20 19:19:40 2015 Parsing field: at
+Tue Oct 20 19:19:40 2015 Parsing string: 2 pm
+Tue Oct 20 19:19:40 2015 Parsed task
+Tue Oct 20 19:19:40 2015 Parser instantiated
+Tue Oct 20 19:19:40 2015 Parser destructed
+Tue Oct 20 19:19:59 2015 Parsing "add"
+Tue Oct 20 19:19:59 2015 Parsing task
+Tue Oct 20 19:19:59 2015 Parsing field: name
+Tue Oct 20 19:19:59 2015 Parsing string: harloo
+Tue Oct 20 19:19:59 2015 Parsing field: on
+Tue Oct 20 19:19:59 2015 Parsing string: fri
+Tue Oct 20 19:19:59 2015 Parsed task
+Tue Oct 20 19:19:59 2015 Parser instantiated
+Tue Oct 20 19:19:59 2015 Parser destructed
+Tue Oct 20 19:20:32 2015 Parsing "modify"
+Tue Oct 20 19:20:32 2015 Parsing task
+Tue Oct 20 19:20:32 2015 Parsing field: name
+Tue Oct 20 19:20:32 2015 Parsing string: 
+Tue Oct 20 19:20:32 2015 Parsing field: star
+Tue Oct 20 19:20:32 2015 Parsed task
+Tue Oct 20 19:20:32 2015 Parser instantiated
+Tue Oct 20 19:20:32 2015 Parser destructed
+Tue Oct 20 19:20:37 2015 Parsing "add"
+Tue Oct 20 19:20:37 2015 Parsing task
+Tue Oct 20 19:20:37 2015 Parsing field: name
+Tue Oct 20 19:20:37 2015 Parsing string: he
+Tue Oct 20 19:20:37 2015 Parsed task
+Tue Oct 20 19:20:37 2015 Parser instantiated
+Tue Oct 20 19:20:37 2015 Parser destructed
+Tue Oct 20 19:20:48 2015 Parsing "delete"
+Tue Oct 20 19:20:48 2015 Parser instantiated
+Tue Oct 20 19:20:48 2015 Parser destructed
+Tue Oct 20 19:20:58 2015 Parsing "modify"
+Tue Oct 20 19:20:58 2015 Parsing task
+Tue Oct 20 19:20:58 2015 Parsing field: name
+Tue Oct 20 19:20:58 2015 Parsing string: 
+Tue Oct 20 19:20:58 2015 Parsing field: :
+Tue Oct 20 19:20:58 2015 Parsing string: work
+Tue Oct 20 19:20:58 2015 Parsed task
+Tue Oct 20 19:20:58 2015 Parser instantiated
+Tue Oct 20 19:20:58 2015 Parser destructed
+Tue Oct 20 19:21:06 2015 Parsing "modify"
+Tue Oct 20 19:21:06 2015 Parsing task
+Tue Oct 20 19:21:06 2015 Parsing field: name
+Tue Oct 20 19:21:06 2015 Parsing string: 
+Tue Oct 20 19:21:06 2015 Parsing field: :
+Tue Oct 20 19:21:06 2015 Parsing string: work
+Tue Oct 20 19:21:06 2015 Parsed task
+Tue Oct 20 19:21:06 2015 Parser instantiated
+Tue Oct 20 19:21:06 2015 Parser destructed
+Tue Oct 20 19:21:10 2015 Parsing "display"
+Tue Oct 20 19:21:10 2015 Parser instantiated
+Tue Oct 20 19:21:10 2015 Parser destructed
+Tue Oct 20 19:21:18 2015 Parsing "modify"
+Tue Oct 20 19:21:18 2015 Parsing task
+Tue Oct 20 19:21:18 2015 Parsing field: name
+Tue Oct 20 19:21:18 2015 Parsing string: 
+Tue Oct 20 19:21:18 2015 Parsing field: :
+Tue Oct 20 19:21:18 2015 Parsing string: woel
+Tue Oct 20 19:21:18 2015 Parsed task
+Tue Oct 20 19:21:18 2015 Parser instantiated
+Tue Oct 20 19:21:18 2015 Parser destructed
+Tue Oct 20 19:21:27 2015 Parsing "modify"
+Tue Oct 20 19:21:27 2015 Parsing task
+Tue Oct 20 19:21:27 2015 Parsing field: name
+Tue Oct 20 19:21:27 2015 Parsing string: 
+Tue Oct 20 19:21:27 2015 Parsing field: :
+Tue Oct 20 19:21:27 2015 Parsing string: lo
+Tue Oct 20 19:21:27 2015 Parsed task
+Tue Oct 20 19:21:27 2015 Parser instantiated
+Tue Oct 20 19:21:27 2015 Parser destructed
+Tue Oct 20 19:21:31 2015 Parsing "add"
+Tue Oct 20 19:21:31 2015 Parsing task
+Tue Oct 20 19:21:31 2015 Parsing field: name
+Tue Oct 20 19:21:31 2015 Parsing string: ju
+Tue Oct 20 19:21:31 2015 Parsed task
+Tue Oct 20 19:21:31 2015 Parser instantiated
+Tue Oct 20 19:21:31 2015 Parser destructed
+Tue Oct 20 19:21:46 2015 Parsing "modify"
+Tue Oct 20 19:21:46 2015 Parsing task
+Tue Oct 20 19:21:46 2015 Parsing field: name
+Tue Oct 20 19:21:46 2015 Parsing string: lolo
+Tue Oct 20 19:21:46 2015 Parsed task
+Tue Oct 20 19:21:46 2015 Parser instantiated
+Tue Oct 20 19:21:46 2015 Parser destructed
+Tue Oct 20 19:21:51 2015 Parsing "modify"
+Tue Oct 20 19:21:51 2015 Parsing task
+Tue Oct 20 19:21:51 2015 Parsing field: name
+Tue Oct 20 19:21:51 2015 Parsing string: 
+Tue Oct 20 19:21:51 2015 Parsing field: star
+Tue Oct 20 19:21:51 2015 Parsed task
+Tue Oct 20 19:21:51 2015 Parser instantiated
+Tue Oct 20 19:21:51 2015 Parser destructed
+Tue Oct 20 19:22:15 2015 Parsing "view"
+Tue Oct 20 19:22:15 2015 Parser instantiated
+Tue Oct 20 19:22:15 2015 Parser destructed
+Tue Oct 20 19:22:19 2015 Parsing "exit"
