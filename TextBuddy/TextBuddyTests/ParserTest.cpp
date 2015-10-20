@@ -65,7 +65,7 @@ public:
 
 		/*
 		// Test for ADD
-		expectedString = "Name: A partridge in a pear tree\nStart Time: 1900\nEnd Date: 151016\nEnd Time: 2000\n";
+		expectedString = "Name: A partridge in a pear tree\nType: 0\nStart Time: 1900\nEnd Date: 151016\nEnd Time: 2000\n";
 		userInput = "add A partridge in a pear tree by fri from 7 pm to 8 pm";
 		*/
 
@@ -80,7 +80,7 @@ public:
 		expectedInt = 1;
 		userInput = "modify 1 Two turtle doves : label1 -: unlabel1 star dummy unstar dummy from today to tmr on fri by sat at 8 am";
 		expectedString = "name : -: star unstar from to from to at"; // Expected behaviour
-		std::string expectedString2 = "Name: Two turtle doves\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
+		std::string expectedString2 = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
 		
 
 		/*
@@ -237,7 +237,7 @@ public:
 	}
 
 	TEST_METHOD(Parser_parseTask) {
-		expectedString = "Name: Sing a song\nStart Time: 0\nEnd Date: 151231\nEnd Time: 0\n";
+		expectedString = "Name: Sing a song\nType: 2\nStart Time: 0\nEnd Date: 151231\nEnd Time: 0\n";
 		userInput = "Sing a song by 31 dec";
 		tempTask = *(p->parseTask(userInput));
 		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));

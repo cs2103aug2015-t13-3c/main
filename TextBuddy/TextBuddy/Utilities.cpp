@@ -248,10 +248,10 @@ std::string Utilities::taskToString(Task task) {
 	const int MAX_BYTES = 2550;
 	char buffer[MAX_BYTES] = "";
 
-	sprintf_s(buffer, "%s%s\n%s%d\n%s%d\n%s%d\n",
+	sprintf_s(buffer, "%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n",
 		"Name: ",		task.getName().c_str(),		// %s%s\n
-		/*
 		"Type: ",		task.getType(),				// %s%d\n
+		/*
 		"Labels: ",		task.getLabels().c_str(),	// %s%s\n
 		"Done: ",		task.getDoneStatus(),		// %s%d\n
 		"Priority: ",	task.getPriorityStatus(),	// %s%d\n
