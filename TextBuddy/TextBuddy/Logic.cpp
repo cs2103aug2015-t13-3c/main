@@ -45,6 +45,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	Command* command;
 	command = parser->parse(userCommand);
 	CommandType cmd = command->getCommand();
+	
 	switch (cmd) {
 	case UNDO:
 		history->undo();
@@ -58,7 +59,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	default:
 		command->execute();
 		message = command->getMessage();
-		// history->add(*command);
+		history->add(command);
 	}
 
 	assert(updater != nullptr);
@@ -79,6 +80,10 @@ void Logic::subscribe(std::vector<std::string>* labels,
 						  updater = new Update(labels, description, dateAndTime, floatingTasks,
 							  priorityTasks,currentView);
 						  updater->update();
+}
+
+void Logic::resetUpdaterNULL() {
+	updater = nullptr;
 }
 
 /*

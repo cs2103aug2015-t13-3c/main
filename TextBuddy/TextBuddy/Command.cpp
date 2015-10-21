@@ -234,6 +234,9 @@ Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
 	currViewIter = matchCurrentViewIndex(deleteID);
 	taskStoreIter = matchTaskStoreIndex(currViewIter->getID());
+	currViewPos =currViewIter - currentView.begin();
+	taskStorePos = taskStoreIter - taskStore.begin();
+
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -251,8 +254,17 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-	taskStore.insert(taskStoreIter,taskToBeDeleted);
-	currentView.insert(currViewIter,taskToBeDeleted);
+	if(taskStorePos < taskStore.size()-1) {
+		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
+	} else {
+		taskStore.push_back(taskToBeDeleted);
+	}
+
+	if(currViewPos < currentView.size()-1) {
+		currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
+	} else {
+		currentView.push_back(taskToBeDeleted);
+	}
 }
 
 std::string Delete::getMessage() {
@@ -284,6 +296,8 @@ Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(M
 	modifyID = taskID;
 	fieldsToModify = fields;
 	tempTask = task;
+	matchIndex(modifyID,currIter,taskIter);
+	originalTask = *currIter;
 }
 
 Modify::~Modify() {}
@@ -318,13 +332,6 @@ std::string Modify::getMessage() {
 // Modified by Hao Ye 14/10/15
 // Modified by Ren Zhi 20/10/15 updated add/deleteLabels
 void Modify::modifyInfo() {
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
-
-	int index = modifyID;
-	matchIndex(index,currIter,taskIter);
-	originalTask = *currIter;
-
 	std::vector<FieldType>::iterator fieldIter;
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
@@ -540,6 +547,14 @@ void UnmarkDone::unmarkDone() {
 Undo::Undo() : Command(UNDO) {}
 
 Undo::~Undo() {}
+
+//==================================================
+//                        REDO
+//==================================================
+
+Redo::Redo() : Command(REDO) {}
+
+Redo::~Redo() {}
 
 //==================================================
 //                        VIEW

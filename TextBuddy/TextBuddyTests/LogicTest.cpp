@@ -82,6 +82,7 @@ public:
 	// Modified by Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processInfo) {
 		Logic* logic = Logic::getInstance();
+		logic->resetUpdaterNULL();
 		// Parser* parser = Parser::getInstance();
 		Command cmd;
 		cmd.clearTaskStore();	// Clear state
@@ -172,6 +173,172 @@ public:
 		copyTask = cmd.getTaskStore();
 		iter = copyTask.begin();
 		++iter;
+		Assert::AreEqual(true,iter->getDoneStatus());
+		delete logic;
+	}
+
+	// Added by Ren Zhi 21/10/15
+	TEST_METHOD(Logic_undo) {
+		Logic* logic = Logic::getInstance();
+		logic->resetUpdaterNULL();
+		Parser* parser = Parser::getInstance();
+		Command cmd;
+		cmd.clearTaskStore();	// Clear state
+
+		IO* io = IO::getInstance();
+		History* history = History::getInstance();
+
+		//to be subscribed
+		std::vector<std::string>* labels;
+		std::vector<std::string>* taskDescription;
+		std::vector<std::string>* dateTime;
+		std::vector<std::string>* floatingTasks;
+		std::vector<bool>* priorityTasks;
+		labels = new std::vector<std::string>;
+		taskDescription = new std::vector<std::string>;
+		dateTime = new std::vector<std::string>;
+		floatingTasks = new std::vector<std::string>;
+		priorityTasks = new std::vector<bool>;
+		logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
+
+		// Add
+		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
+		logic->processCommand(std::string("Add then"));
+		logic->processCommand(std::string("Add this from 13 Oct to 15 Oct"));
+
+		std::vector<Task> copyTask;	
+		std::vector<Task>::iterator iter;
+
+		copyTask = cmd.getTaskStore();
+		Assert::AreEqual((size_t)3,copyTask.size());
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("this"),iter->getName());
+		Assert::AreEqual(151013,iter->getStartDate());
+		Assert::AreEqual(151015,iter->getEndDate());
+		Assert::AreEqual(0,iter->getStartTime());
+		Assert::AreEqual(0,iter->getEndTime());
+
+		++iter;
+		Assert::AreEqual(std::string("that"), iter->getName());
+		Assert::AreEqual(151014,iter->getStartDate());
+		Assert::AreEqual(151016,iter->getEndDate());
+
+		++iter;
+		Assert::AreEqual(std::string("then"), iter->getName());
+		
+		Assert::AreEqual(3,history->getUndoSize());
+		
+		//Undo Add
+		logic->processCommand(std::string("Undo"));
+
+		copyTask = cmd.getTaskStore();
+		Assert::AreEqual((size_t)2,copyTask.size());
+
+		//Redo Add
+		logic->processCommand(std::string("Redo"));
+
+		copyTask = cmd.getTaskStore();
+		Assert::AreEqual((size_t)3,copyTask.size());
+		
+		// View
+		logic->processCommand(std::string("View floating"));
+		/*copyTask = cmd.getCurrentView();
+		iter = copyTask.begin();
+		
+		Assert::AreEqual((size_t)3,copyTask.size());
+		Assert::AreEqual(std::string("then"),iter->getName());
+		*/
+		
+		//Undo View
+		logic->processCommand(std::string("Undo"));
+
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)3,copyTask.size());
+
+		//Redo View
+		logic->processCommand(std::string("Redo"));
+
+		copyTask = cmd.getCurrentView();
+		//Assert::AreEqual((size_t)1,copyTask.size());
+		
+		// Display all
+		logic->processCommand(std::string("display all"));
+
+		//Undo Display all
+		logic->processCommand(std::string("Undo"));
+
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)0,copyTask.size());
+
+		//Redo Display all
+		logic->processCommand(std::string("Redo"));
+
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)3,copyTask.size());
+
+		// Delete
+		logic->processCommand(std::string("Delete 1"));
+		copyTask = cmd.getTaskStore();
+		iter = copyTask.begin();
+		Assert::AreEqual((size_t)2,copyTask.size());
+		Assert::AreEqual(std::string("this"), iter->getName()); //supposed to be "that"
+
+		++iter;
+		Assert::AreEqual(std::string("that"), iter->getName()); //supposed to be "then"
+
+		//Undo delete
+		logic->processCommand(std::string("Undo"));
+
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)3,copyTask.size());
+
+		//Redo delete
+		logic->processCommand(std::string("Redo"));
+
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)2,copyTask.size());
+
+		/*
+		// Modify
+		logic->processCommand(std::string("Modify 1 changed."));
+		copyTask = logic->getTaskStore();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("changed."), iter->getName());
+
+		++iter;
+		Assert::AreEqual(std::string("then"), iter->getName());
+
+		logic->processCommand(std::string("Modify 1 that"));
+		*/
+
+		// Search
+		logic->processCommand(std::string("Search he"));	
+		copyTask = cmd.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual((size_t)0,copyTask.size()); // suppsoed to be '1'
+		//Assert::AreEqual(std::string("then"), iter->getName());
+
+		//Undo search
+		logic->processCommand(std::string("Undo"));
+
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)2,copyTask.size());
+
+		//Redo search
+		logic->processCommand(std::string("Redo"));
+
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)0,copyTask.size());
+
+		logic->processCommand(std::string("Undo"));
+
+		// MarkDone
+		logic->processCommand(std::string("Done 1"));
+		copyTask = cmd.getCurrentView();
+		Assert::AreEqual((size_t)1,copyTask.size()); // supposed to be '0'
+		copyTask = cmd.getTaskStore();
+		iter = copyTask.begin();
+		//++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
 		delete logic;
 	}

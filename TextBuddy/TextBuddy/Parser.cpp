@@ -138,7 +138,7 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case REDO:
-		// cmd = new Redo;
+		cmd = new Redo;
 		break;
 
 	case VIEW: {

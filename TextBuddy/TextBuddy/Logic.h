@@ -41,7 +41,7 @@ public:
 		std::vector<std::string>* dateAndTime,
 		std::vector<std::string>* floatingTasks,
 		std::vector<bool>* priotiryTasks);
-
+	void resetUpdaterNULL();
 	/*
 	int getSize();
 	std::vector<Task> loadFile(std::string fileName);

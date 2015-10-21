@@ -297,13 +297,6 @@ public:
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
 		Assert::AreEqual(150101,iter->getStartDate());
 
-		modifyTwo.undo();
-
-		copyTask = modifyTwo.getTaskStore();
-		iter = copyTask.begin();
-		++iter;
-		Assert::AreEqual(std::string("Sentence two."),iter->getName());
-
 		modifyThree.undo();
 
 		copyTask = modifyThree.getTaskStore();
@@ -312,6 +305,13 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 		Assert::AreEqual(0,iter->getStartDate());
+
+		modifyTwo.undo();
+
+		copyTask = modifyTwo.getTaskStore();
+		iter = copyTask.begin();
+		++iter;
+		Assert::AreEqual(std::string("Sentence two."),iter->getName());
 	}
 	};
 

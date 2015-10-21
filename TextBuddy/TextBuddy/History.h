@@ -11,14 +11,15 @@ private:
 	static History* theOne; // Singleton
 	History();
 
-	std::vector<Command> commandHistory;
-	std::vector<Command> redoHistory;
+	static std::vector<Command*> commandHistory;
+	static std::vector<Command*> redoHistory;
 
 public:
 	static History* getInstance();
 	~History();
+	int getUndoSize();
 
-	void add(Command cmd);
+	void add(Command *cmd);
 	void undo();
 	void redo();
 };

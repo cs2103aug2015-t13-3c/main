@@ -104,6 +104,9 @@ public:
 	virtual void execute();
 	virtual std::string getMessage();
 	virtual void undo();
+	// Note to self: virtual function calls only work when the
+	// derived class object is created from a base class POINTER
+	// must declare as P O I N T E R
 };
 
 //==================================================
@@ -136,6 +139,8 @@ private:
 	Task taskToBeDeleted;
 	std::vector<Task>::iterator currViewIter;
 	std::vector<Task>::iterator taskStoreIter;
+	int currViewPos;
+	int taskStorePos;
 
 	void deleteInfo();
 public:
@@ -152,6 +157,8 @@ class Modify: public Command {
 private:
 	//== EXECUTE ==
 	int modifyID; // ID on GUI, not taskID
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 	//==== UNDO ===
@@ -231,6 +238,12 @@ class Undo: public Command {
 public:
 	Undo();
 	~Undo();
+};
+
+class Redo: public Command {
+public:
+	Redo();
+	~Redo();
 };
 
 class View: public Command {
