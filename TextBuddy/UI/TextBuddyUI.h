@@ -299,6 +299,7 @@ namespace UserInterface {
 				delete userInput;
 			} catch(std::exception e) {
 				feedback->ForeColor = Color::Red;
+				printFeedBackMessage(e.what());
 				// suggestHelpPage()
 			}
 		}

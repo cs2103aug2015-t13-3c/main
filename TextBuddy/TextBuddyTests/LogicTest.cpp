@@ -173,6 +173,7 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
+		delete logic;
 	}
 
 	/*

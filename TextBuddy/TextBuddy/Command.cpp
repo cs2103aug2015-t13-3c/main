@@ -206,6 +206,11 @@ void Add::undo() {
 	taskToDelete.execute();
 }
 
+//added @haoye 21/10/2015
+std::string Add::getMessage() {
+	return("\"" + newTask.getName() + "\"" + " added");
+}
+
 //============== ADD : PRIVATE METHODS ===============
 
 bool Add::addInfo() {
@@ -248,6 +253,10 @@ void Delete::execute() {
 void Delete::undo() {
 	taskStore.insert(taskStoreIter,taskToBeDeleted);
 	currentView.insert(currViewIter,taskToBeDeleted);
+}
+
+std::string Delete::getMessage() {
+	return("\"" + taskToBeDeleted.getName() + "\"" + " deleted");
 }
 
 //============= DELETE : PRIVATE METHODS ===========
@@ -300,6 +309,10 @@ void Modify::undo() {
 	undoModify->execute();
 }
 
+std::string Modify::getMessage() {
+	return "successfully modified!";
+}
+
 //============= MODIFY : PRIVATE METHODS ===========
 
 // Modified by Hao Ye 14/10/15
@@ -344,7 +357,7 @@ void Modify::modifyInfo() {
 			taskIter->setEndTime(tempTask.getEndTime());
 			break;
 		case INVALID_FIELD:
-			std::cout << "Error in fetching field name" << std::endl;
+			throw std::runtime_error("Error in fetching field name"); 
 			break;
 		}
 		*currIter = *taskIter;
@@ -380,6 +393,10 @@ void Search::execute() {
 
 void Search::undo() {
 	currentView = currentViewBeforeSearch;
+}
+
+std::string Search::getMessage() {
+	return "results for \"" + searchPhrase;
 }
 
 //================ SEARCH : PRIVATE METHODS =================
