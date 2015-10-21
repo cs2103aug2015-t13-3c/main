@@ -125,6 +125,7 @@ public:
 
 	void execute();
 	void undo();
+	std::string getMessage();
 };
 
 class Delete: public Command {
@@ -144,6 +145,7 @@ public:
 
 	void execute();
 	void undo();
+	std::string getMessage();
 };
 
 class Modify: public Command {
@@ -165,6 +167,7 @@ public:
 
 	void execute();
 	void undo();
+	std::string getMessage();
 };
 
 class Search: public Command {
@@ -183,6 +186,7 @@ public:
 
 	void execute();
 	void undo();
+	std::string getMessage();
 };
 
 class Markdone: public Command {
