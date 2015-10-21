@@ -734,6 +734,7 @@ void Load::execute() {
 	// std::string newFilePath = parser->parseFileName(filePath);
 
 	taskStore = io->loadFile(filePath);
+	io->setFilePath(filePath,taskStore);
 	copyView();
 	// TODO: update feedback
 }
@@ -750,7 +751,6 @@ Save::Save() : Command(SAVE) {
 
 // Save to new file path
 Save::Save(std::string newFilePath) : Command(SAVE) {
-	io = IO::getInstance();
 	filePath = newFilePath;
 }
 

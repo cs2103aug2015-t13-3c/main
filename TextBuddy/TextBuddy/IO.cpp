@@ -8,13 +8,13 @@
 
 using namespace rapidjson;
 
-const std::string IO::lastSavedLocation = "lastSave.tbconfig";
+const std::string IO::lastSavedLocation = ".tbconfig";
+std::string IO::filePath = "mytasks.txt";
 
 IO* IO::theOne = new IO();
 
 IO::IO() {
 	std::ifstream lastSave(lastSavedLocation);
-	//std::getline(lastSave,filePath);
 	lastSave >> filePath;
 }
 
@@ -409,7 +409,7 @@ std::string IO::retrieveLabel(Task task) {
 	std::vector<std::string> labelVector = task.getLabels();
 	string = "[";
 
-	for(int i = 0; i < labelVector.size(); i++) {
+	for(unsigned int i = 0; i < labelVector.size(); i++) {
 		string += "\"" + labelVector[i] + "\"";
 		if (i+1 < labelVector.size()) {
 			string += ",\n\t\t\t\t";

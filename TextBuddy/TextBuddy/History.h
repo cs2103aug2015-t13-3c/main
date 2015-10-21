@@ -8,14 +8,14 @@
 // Holds a stack of executed commands
 class History {
 private:
-	static History *theOne; // Singleton
-	History(); 
+	static History* theOne; // Singleton
+	History();
 
 	std::vector<Command> commandHistory;
 	std::vector<Command> redoHistory;
 
 public:
-	static History *getInstance();
+	static History* getInstance();
 	~History();
 
 	void add(Command cmd);

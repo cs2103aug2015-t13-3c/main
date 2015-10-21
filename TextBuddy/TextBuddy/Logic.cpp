@@ -9,10 +9,8 @@ Logic* Logic::theOne = new Logic();
 
 Logic::Logic() {
 	history = History::getInstance();
-	// parser = Parser::getInstance();
+	parser = Parser::getInstance();
 	io = IO::getInstance();
-	Load initialLoad(io->getFilePath());
-	initialLoad.execute();
 	Command temp;
 	currentView = temp.getCurrentViewPtr();
 	updater = nullptr;
@@ -35,6 +33,8 @@ Logic::~Logic() {
 
 // Added by Ren Zhi 16/10/15
 Logic* Logic::getInstance() {
+	Load initialLoad(IO::getInstance()->getFilePath());
+	initialLoad.execute();
 	return theOne;
 }
 
@@ -43,7 +43,7 @@ Logic* Logic::getInstance() {
 std::string Logic::processCommand(std::string userCommand) {
 	std::string message;
 	Command* command;
-	command = parser.parse(userCommand);
+	command = parser->parse(userCommand);
 	CommandType cmd = command->getCommand();
 	switch (cmd) {
 	case UNDO:
@@ -58,13 +58,14 @@ std::string Logic::processCommand(std::string userCommand) {
 	default:
 		command->execute();
 		message = command->getMessage();
-		//		history->add(*command);
+		// history->add(*command);
 	}
 
 	assert(updater != nullptr);
 	updater->update();
-	Save saveFile;
-	saveFile.execute();
+	io->saveFile(io->getFilePath(),Command::getTaskStore());
+	// Save saveFile;
+	// saveFile.execute();
 	return message;
 }
 

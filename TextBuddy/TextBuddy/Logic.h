@@ -11,11 +11,12 @@
 
 class Logic {
 private:
+	static Logic* theOne; // Singleton
 	Logic();
-	static Logic *theOne; // Singleton
+
 	std::vector<Task>* currentView; 
 	History* history;
-	Parser parser;
+	Parser* parser;
 	IO* io;
 	Update* updater;
 
