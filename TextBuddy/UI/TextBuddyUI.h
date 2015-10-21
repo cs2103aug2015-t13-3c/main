@@ -42,7 +42,7 @@ namespace UserInterface {
 			dateTime = new std::vector<std::string>;
 			floatingTasks = new std::vector<std::string>;
 			priorityTasks = new std::vector<bool>;
-			logic = logic->getInstance();
+			logic = new Logic();
 			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 			floatingTaskIndex = 0;
 			originalRowPosition = 0;

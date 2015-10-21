@@ -11,7 +11,6 @@
 
 class Logic {
 private:
-	Logic();
 	static Logic *theOne; // Singleton
 	std::vector<Task>* currentView; 
 	History* history;
@@ -31,7 +30,8 @@ private:
 	// bool markPriority(Star toMarkStar);
 	*/
 public:
-	static Logic* getInstance();
+	Logic();
+	//static Logic* getInstance();
 	~Logic();
 
 	std::string processCommand(std::string userCommand);

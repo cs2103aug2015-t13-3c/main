@@ -5,7 +5,7 @@
 
 const std::string Logic::ERROR_INVALID_COMMAND = "Invalid Command Entered";
 
-Logic* Logic::theOne = new Logic();
+//Logic* Logic::theOne = new Logic();
 
 Logic::Logic() {
 	history = History::getInstance();
@@ -34,9 +34,11 @@ Logic::~Logic() {
 //==================================================
 
 // Added by Ren Zhi 16/10/15
+/*
 Logic* Logic::getInstance() {
 	return theOne;
 }
+*/
 
 // Modified by RenZhi 19/10/15: Implement command pattern
 // Modified by Aaron  20/10/15: Move execute into 'try' block

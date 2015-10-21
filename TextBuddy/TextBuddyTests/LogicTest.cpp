@@ -81,7 +81,8 @@ public:
 
 	// Modified by Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processInfo) {
-		Logic* logic = Logic::getInstance();
+//		Logic* logic = Logic::getInstance();
+		Logic* logic = new Logic();
 		// Parser* parser = Parser::getInstance();
 		Command cmd;
 		cmd.clearTaskStore();	// Clear state
@@ -173,6 +174,7 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
+		delete logic;
 	}
 
 	/*
