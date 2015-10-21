@@ -74,14 +74,24 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 	int freeTimeStart = startTime;
 
 	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
+	iter = tasksWithinPeriod.begin();
 
+	//need to take into account the period before start of first task
+	
 	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
 		if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
-			addFreeDate(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime());
-		} 
+			addFreeDate(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
+		}
+		//condition set to prevent freeDateStart from "going back"
+		if ((freeDateStart < iter->getEndDate()) || ((freeDateStart == iter->getEndDate()) && (freeTimeStart < iter->getEndTime()))) {
+			freeDateStart = iter->getEndDate();			
+			freeTimeStart = iter->getEndTime();
+		}
+	}
 
-		freeDateStart = iter->getEndDate();			
-		freeTimeStart = iter->getEndTime();
+	//account for period between: after the end of all tasks, and still within the period of interest 
+	if ((freeDateStart < endDate) || ((freeDateStart == endDate) && (freeTimeStart < endTime))) {
+		addFreeDate(freeDateStart, freeTimeStart, endDate, endTime);
 	}
 }
 

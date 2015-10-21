@@ -640,7 +640,7 @@ bool View::viewDone() {
 
 	currentView.clear();
 
-	for (iter == taskStore.begin(); iter != taskStore.end(); ++iter) {
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getDoneStatus() == true) {
 			currentView.push_back(*iter);
 		}
@@ -653,7 +653,7 @@ bool View::viewNotdone() {
 
 	currentView.clear();
 
-	for (iter == taskStore.begin(); iter != taskStore.end(); ++iter) {
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getDoneStatus() == false) {
 			currentView.push_back(*iter);
 		}

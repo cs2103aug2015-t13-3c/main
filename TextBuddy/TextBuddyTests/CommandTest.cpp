@@ -656,6 +656,185 @@ public:
 	}
 	};
 
+	TEST_CLASS(Command_View) {
+public:
+
+	TEST_METHOD(Command_View_TaskType) {
+		//implement for other task types too
+		Task taskOne;
+		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+		taskOne.setName("Sentence one.");
+		taskOne.setType(FLOATING);
+		taskOne.setStartDate(150910);
+		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
+		addOne.clearTaskStore();
+		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
+
+		std::vector<Task> copyTask;
+		std::vector<Task>::iterator iter;
+
+		Task taskTwo;
+		taskTwo.setName("Sentence two.");
+		taskTwo.setType(TODO);
+		taskTwo.setStartDate(151010);
+		Add addTwo(taskTwo);
+		addTwo.execute();
+
+		Task taskThree;
+		taskThree.setName("Sentence three.");
+		taskThree.setType(TODO);
+		taskThree.setStartDate(150809);
+		Add addThree(taskThree);
+		addThree.execute();
+
+		Task taskFour;
+		taskFour.setName("Sentence four.");
+		taskFour.setType(FLOATING);
+		taskFour.setStartDate(150910);
+		Add addFour(taskFour);
+		addFour.execute();
+
+		View viewFloating(VIEWTYPE_FLOATING, "");
+		viewFloating.execute();
+
+		copyTask = viewFloating.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("Sentence one."), iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("Sentence four."), iter->getName());
+		
+	}
+
+	TEST_METHOD(Command_View_All) {
+		Task taskOne;
+		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+		taskOne.setName("Sentence one.");
+		taskOne.setStartDate(150910);
+		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
+		addOne.clearTaskStore();
+		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
+
+		std::vector<Task> copyTask;
+		std::vector<Task>::iterator iter;
+
+		Task taskTwo;
+		taskTwo.setName("Sentence two.");
+		taskTwo.setStartDate(151010);
+		Add addTwo(taskTwo);
+		addTwo.execute();
+
+		Task taskThree;
+		taskThree.setName("Sentence three.");
+		taskThree.setStartDate(150809);
+		Add addThree(taskThree);
+		addThree.execute();
+
+		Task taskFour;
+		taskFour.setName("Sentence four.");
+		taskFour.setStartDate(150910);
+		Add addFour(taskFour);
+		addFour.execute();
+
+		View viewAll(VIEWTYPE_ALL, "");
+		viewAll.execute();
+
+		copyTask = viewAll.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("Sentence three."), iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("Sentence one."), iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("Sentence four."), iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("Sentence two."), iter->getName());
+		
+	}
+
+	TEST_METHOD(Command_View_Done) {
+		Task taskOne;
+		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+		taskOne.setName("Sentence one.");
+		taskOne.setStartDate(150910);
+		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
+		addOne.clearTaskStore();
+		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
+
+		std::vector<Task> copyTask;
+		std::vector<Task>::iterator iter;
+
+		Task taskTwo;
+		taskTwo.setName("Sentence two.");
+		taskTwo.setStartDate(151010);
+		Add addTwo(taskTwo);
+		addTwo.execute();
+
+		Task taskThree;
+		taskThree.setName("Sentence three.");
+		taskThree.setStartDate(150809);
+		taskThree.markDone();
+		Add addThree(taskThree);
+		addThree.execute();
+
+		Task taskFour;
+		taskFour.setName("Sentence four.");
+		taskFour.setStartDate(150910);
+		Add addFour(taskFour);
+		addFour.execute();
+
+		View viewPast(VIEWTYPE_PAST, "");
+		viewPast.execute();
+
+		copyTask = viewPast.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("Sentence three."), iter->getName());
+	}
+
+	TEST_METHOD(Command_View_Notdone) {
+		Task taskOne;
+		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+		taskOne.setName("Sentence one.");
+		taskOne.setStartDate(150910);
+		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
+		addOne.clearTaskStore();
+		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
+
+		std::vector<Task> copyTask;
+		std::vector<Task>::iterator iter;
+
+		Task taskTwo;
+		taskTwo.setName("Sentence two.");
+		taskTwo.setStartDate(151010);
+		Add addTwo(taskTwo);
+		addTwo.execute();
+
+		Task taskThree;
+		taskThree.setName("Sentence three.");
+		taskThree.setStartDate(150809);
+		taskThree.markDone();
+		Add addThree(taskThree);
+		addThree.execute();
+
+		Task taskFour;
+		taskFour.setName("Sentence four.");
+		taskFour.setStartDate(150910);
+		Add addFour(taskFour);
+		addFour.execute();
+
+		View viewNotDone(VIEWTYPE_NOTDONE, "");
+		viewNotDone.execute();
+
+		copyTask = viewNotDone.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("Sentence one."), iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("Sentence four."), iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("Sentence two."), iter->getName());
+		
+	}
+
+	};
+
 	TEST_CLASS(Command_Load) {
 public:
 	TEST_METHOD(Command_Load_Execute_empty) {
