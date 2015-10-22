@@ -289,6 +289,7 @@ public:
 	~DisplayAll();
 
 	void execute();
+	void formatDefaultView();
 	void undo();
 };
 
@@ -303,7 +304,6 @@ public:
 	std::string getFilePath();
 
 	void execute();
-	void formatDefaultView();
 };
 
 class Save: public Command {

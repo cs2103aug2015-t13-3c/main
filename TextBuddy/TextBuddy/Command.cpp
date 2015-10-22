@@ -741,7 +741,27 @@ DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
 	copyView();
+	formatDefaultView();
 }
+
+void DisplayAll::formatDefaultView() {
+	// requires refinement, possibly separating deadlines and events
+	std::vector<Task> startUpView;
+	std::vector<Task> noStar;
+	std::vector<Task>::iterator i = currentView.begin();
+	while(i != currentView.end()) {
+		if(i->getPriorityStatus()) {
+			startUpView.push_back(*i);
+		} else {
+			noStar.push_back(*i);
+		}
+		++i;
+	}
+	sortDate(noStar);
+	noStar.insert(noStar.begin(),startUpView.begin(),startUpView.end());
+	currentView = noStar;
+}
+
 
 void DisplayAll::undo() {
 	currentView = previousView;
@@ -777,22 +797,6 @@ void Load::execute() {
 
 	taskStore = io->loadFile(filePath);
 	io->setFilePath(filePath,taskStore);
-//	formatDefaultView();
-}
-
-void Load::formatDefaultView() {
-	// requires refinement, possibly separating deadlines and events
-	copyView();
-	std::vector<Task> startUpView;
-	std::vector<Task>::iterator i = currentView.begin();
-	while(i != currentView.end()) {
-		if(i->getPriorityStatus()) {
-			startUpView.push_back(*i);
-			currentView.erase(i);
-		} 
-	}
-	sortDate(currentView);
-	currentView.insert(currentView.begin(),startUpView.begin(),startUpView.end());
 }
 
 //==================================================

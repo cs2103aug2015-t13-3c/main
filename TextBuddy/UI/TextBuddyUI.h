@@ -47,6 +47,10 @@ namespace UserInterface {
 			priorityTasks = new std::vector<bool>;
 			logic = logic->getInstance();
 			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
+			input->Text = "display";
+			getInput();
+			processAndExecute();
+			input->Clear();
 			floatingTaskIndex = 0;
 			originalRowPosition = 0;
 			input->Focus();
@@ -81,11 +85,11 @@ namespace UserInterface {
 				delete priorityTasks;
 			}
 		}
-		// @@author generated
+		// @@windows form designer generated
 	private: System::Windows::Forms::RichTextBox^  input;
 	private: System::Windows::Forms::TextBox^  feedback;
 	private: System::Windows::Forms::RichTextBox^  floatingTaskDisplay;
-	private: System::ComponentModel::BackgroundWorker^  hotKey;
+
 	private: System::Windows::Forms::Timer^  updateFloatingTimer;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  id;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Label;
@@ -100,15 +104,14 @@ namespace UserInterface {
 			this->components = (gcnew System::ComponentModel::Container());
 			System::Windows::Forms::DataGridView^  display;
 			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			this->input = (gcnew System::Windows::Forms::RichTextBox());
-			this->feedback = (gcnew System::Windows::Forms::TextBox());
-			this->floatingTaskDisplay = (gcnew System::Windows::Forms::RichTextBox());
-			this->hotKey = (gcnew System::ComponentModel::BackgroundWorker());
-			this->updateFloatingTimer = (gcnew System::Windows::Forms::Timer(this->components));
 			this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Label = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dateAndTime = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->input = (gcnew System::Windows::Forms::RichTextBox());
+			this->feedback = (gcnew System::Windows::Forms::TextBox());
+			this->floatingTaskDisplay = (gcnew System::Windows::Forms::RichTextBox());
+			this->updateFloatingTimer = (gcnew System::Windows::Forms::Timer(this->components));
 			display = (gcnew System::Windows::Forms::DataGridView());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->BeginInit();
 			this->SuspendLayout();
@@ -143,6 +146,37 @@ namespace UserInterface {
 			display->ScrollBars = System::Windows::Forms::ScrollBars::None;
 			display->Size = System::Drawing::Size(525, 363);
 			display->TabIndex = 3;
+			// 
+			// id
+			// 
+			this->id->HeaderText = L"ID";
+			this->id->Name = L"id";
+			this->id->ReadOnly = true;
+			this->id->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+			this->id->Width = 20;
+			// 
+			// Label
+			// 
+			this->Label->HeaderText = L"Label";
+			this->Label->Name = L"Label";
+			this->Label->ReadOnly = true;
+			this->Label->Width = 80;
+			// 
+			// description
+			// 
+			this->description->HeaderText = L"        Description";
+			this->description->Name = L"description";
+			this->description->ReadOnly = true;
+			this->description->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+			this->description->Width = 270;
+			// 
+			// dateAndTime
+			// 
+			this->dateAndTime->HeaderText = L"Date/Time";
+			this->dateAndTime->Name = L"dateAndTime";
+			this->dateAndTime->ReadOnly = true;
+			this->dateAndTime->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+			this->dateAndTime->Width = 160;
 			// 
 			// input
 			// 
@@ -188,46 +222,11 @@ namespace UserInterface {
 			this->floatingTaskDisplay->TabIndex = 5;
 			this->floatingTaskDisplay->Text = L"";
 			// 
-			// hotKey
-			// 
-			this->hotKey->DoWork += gcnew System::ComponentModel::DoWorkEventHandler(this, &TextBuddyUI::hotKey_DoWork);
-			// 
 			// updateFloatingTimer
 			// 
 			this->updateFloatingTimer->Enabled = true;
 			this->updateFloatingTimer->Interval = 5000;
 			this->updateFloatingTimer->Tick += gcnew System::EventHandler(this, &TextBuddyUI::updateFloatingTimer_Tick);
-			// 
-			// id
-			// 
-			this->id->HeaderText = L"ID";
-			this->id->Name = L"id";
-			this->id->ReadOnly = true;
-			this->id->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-			this->id->Width = 20;
-			// 
-			// Label
-			// 
-			this->Label->HeaderText = L"Label";
-			this->Label->Name = L"Label";
-			this->Label->ReadOnly = true;
-			this->Label->Width = 80;
-			// 
-			// description
-			// 
-			this->description->HeaderText = L"        Description";
-			this->description->Name = L"description";
-			this->description->ReadOnly = true;
-			this->description->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-			this->description->Width = 270;
-			// 
-			// dateAndTime
-			// 
-			this->dateAndTime->HeaderText = L"Date/Time";
-			this->dateAndTime->Name = L"dateAndTime";
-			this->dateAndTime->ReadOnly = true;
-			this->dateAndTime->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-			this->dateAndTime->Width = 160;
 			// 
 			// TextBuddyUI
 			// 
@@ -247,6 +246,7 @@ namespace UserInterface {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
 		}
 
 #pragma endregion
@@ -331,32 +331,8 @@ namespace UserInterface {
 				} else {
 					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;
 				}
-				display->FirstDisplayedScrollingRowIndex = originalRowPosition;
+				display->FirstDisplayedScrollingRowIndex = 0;
 			}
-
-/*
-			for(unsigned int i=0 ; i<tasks.size() ; ++i) {
-				Task currentTask = tasks[i];
-				bool isUrgent = currentTask.getPriorityStatus();
-			//	TaskType type = currentTask.getType();
-				String^ name = gcnew String(currentTask.getName().c_str());
-				std::set<std::string> labels = currentTask.getLabels();
-				std::set<std::string>::iterator labelsCurr = labels.begin();
-				std::string l;
-				for(unsigned int j=0; j< labels.size(); ++j) {
-					l = l + *labelsCurr + " ";
-					labelsCurr++;
-				}
-				String^ label = gcnew String(l.c_str());
-				String^ dateTime = gcnew String(currentTask.getDateAndTime_UI().c_str());
-				display->Rows->Add((i+1).ToString(),label,name,dateTime);
-//				display->FirstDisplayedScrollingRowIndex = originalRowPosition;
-				if(isUrgent) {
-					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;
-				} else {
-					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;
-				}
-			}*/
 		}
 
 		void printFeedBackMessage(std::string message) {
@@ -490,23 +466,6 @@ private:
 					(*floatingTasks)[floatingTaskIndex].c_str());
 				floatingTaskDisplay->Text = title;
 				++floatingTaskIndex;
-		}
-	}
-private: 
-	System::Void hotKey_DoWork(System::Object^  sender, 
-			 System::ComponentModel::DoWorkEventArgs^  e) {
-		DWORD foreThread = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
-		DWORD appThread = GetCurrentThreadId();
-			//	const DWORD SW_SHOW = 5;
-
-		if (foreThread != appThread) {
-			AttachThreadInput(foreThread, appThread, true);
-		}
-		RegisterHotKey(NULL,NULL,MOD_ALT,0x54);
-		MSG msg;
-		if (GetMessage(&msg, nullptr, 0, 0)) {
-			MessageBox::Show("hotkey!");
-			SetForegroundWindow(static_cast<HWND>(Handle.ToPointer()));
 		}
 	}
 };
