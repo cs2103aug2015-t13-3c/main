@@ -1,8 +1,6 @@
 // @@author A0096720A (Chin Kiat Boon)
 
 #include "stdafx.h"
-#include "Logic.h"
-#include"IO.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -12,72 +10,6 @@ public:
 	TEST_METHOD(Logic_intitiateHistory) {
 		History *history = history->getInstance();
 	}
-
-	/*
-	TEST_METHOD(Logic_addTaskModifyTask) {
-	Logic logic;
-	logic.clearTaskStore();							// Clear state (Aaron)
-
-	// Add
-	// Note: Add has no more public setter methods (Aaron)
-
-	Task taskOne;
-	taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
-	taskOne.setName("Sentence one.");
-	Add thisTask(taskOne);							// Adds taskOne into taskStore (Step 1/2)
-	logic.addInfo(thisTask);						// Adds taskOne into taskStore (Step 2/2)
-
-	std::vector<Task> copyTask;
-	copyTask = logic.getTaskStore();
-
-	std::vector<Task>::iterator iter;
-	iter = copyTask.begin();
-	Assert::AreEqual(std::string("Sentence one."), iter->getName());
-
-	Task taskTwo;
-	taskTwo.setName("Sentence two.");
-	thisTask = *(new Add(taskTwo));
-	logic.addInfo(thisTask);
-
-	copyTask = logic.getTaskStore();
-	iter = copyTask.begin();
-	++iter;
-	Assert::AreEqual(std::string("Sentence two."),iter->getName());
-
-	Task taskThree;
-	taskThree.setName("Sentence three.");
-	thisTask = *(new Add(taskThree));
-	logic.addInfo(thisTask);
-
-	copyTask = logic.getTaskStore();
-	iter = copyTask.begin();
-	++iter;
-	++iter;
-	Assert::AreEqual(std::string("Sentence three."),iter->getName());
-
-	// Modify
-	// Note: Modify has no more public setter methods (Aaron)
-
-	std::vector<FieldType> testVector;
-	testVector.push_back(NAME);
-
-	int modifyID = 2;
-	std::vector<FieldType> fieldsToModify = testVector;
-	taskThree.setName("Changed.");
-	Task tempTask = taskThree;
-	Modify modTask(modifyID,fieldsToModify,tempTask);
-
-	logic.modifyInfo(modTask);
-	copyTask = logic.getTaskStore();
-	iter = copyTask.begin();
-	Assert::AreEqual(std::string("Sentence one."), iter->getName());
-	++iter;
-	Assert::AreEqual(std::string("Changed."),iter->getName());
-	++iter;
-	Assert::AreEqual(std::string("Sentence three."),iter->getName());
-	}
-	*/
-
 
 	// Modified by Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processInfo) {
@@ -275,29 +207,29 @@ public:
 
 		copyTask = cmd.getCurrentView();
 		Assert::AreEqual((size_t)3,copyTask.size());
-
+		
 		// Delete
 		logic->processCommand(std::string("Delete 1"));
 		copyTask = cmd.getTaskStore();
 		iter = copyTask.begin();
 		Assert::AreEqual((size_t)2,copyTask.size());
 		Assert::AreEqual(std::string("this"), iter->getName()); //supposed to be "that"
-
+		
 		++iter;
 		Assert::AreEqual(std::string("that"), iter->getName()); //supposed to be "then"
-
+		
 		//Undo delete
 		logic->processCommand(std::string("Undo"));
 
 		copyTask = cmd.getCurrentView();
 		Assert::AreEqual((size_t)3,copyTask.size());
-
+		
 		//Redo delete
 		logic->processCommand(std::string("Redo"));
 
 		copyTask = cmd.getCurrentView();
 		Assert::AreEqual((size_t)2,copyTask.size());
-
+		
 		/*
 		// Modify
 		logic->processCommand(std::string("Modify 1 changed."));
@@ -331,7 +263,7 @@ public:
 		Assert::AreEqual((size_t)0,copyTask.size());
 
 		logic->processCommand(std::string("Undo"));
-
+		
 		// MarkDone
 		logic->processCommand(std::string("Done 1"));
 		copyTask = cmd.getCurrentView();
@@ -343,7 +275,71 @@ public:
 		delete logic;
 	}
 
+	// @@author A0096720A-unused (Chin Kiat Boon)
 	/*
+	TEST_METHOD(Logic_addTaskModifyTask) {
+	Logic logic;
+	logic.clearTaskStore();							// Clear state (Aaron)
+
+	// Add
+	// Note: Add has no more public setter methods (Aaron)
+
+	Task taskOne;
+	taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+	taskOne.setName("Sentence one.");
+	Add thisTask(taskOne);							// Adds taskOne into taskStore (Step 1/2)
+	logic.addInfo(thisTask);						// Adds taskOne into taskStore (Step 2/2)
+
+	std::vector<Task> copyTask;
+	copyTask = logic.getTaskStore();
+
+	std::vector<Task>::iterator iter;
+	iter = copyTask.begin();
+	Assert::AreEqual(std::string("Sentence one."), iter->getName());
+
+	Task taskTwo;
+	taskTwo.setName("Sentence two.");
+	thisTask = *(new Add(taskTwo));
+	logic.addInfo(thisTask);
+
+	copyTask = logic.getTaskStore();
+	iter = copyTask.begin();
+	++iter;
+	Assert::AreEqual(std::string("Sentence two."),iter->getName());
+
+	Task taskThree;
+	taskThree.setName("Sentence three.");
+	thisTask = *(new Add(taskThree));
+	logic.addInfo(thisTask);
+
+	copyTask = logic.getTaskStore();
+	iter = copyTask.begin();
+	++iter;
+	++iter;
+	Assert::AreEqual(std::string("Sentence three."),iter->getName());
+
+	// Modify
+	// Note: Modify has no more public setter methods (Aaron)
+
+	std::vector<FieldType> testVector;
+	testVector.push_back(NAME);
+
+	int modifyID = 2;
+	std::vector<FieldType> fieldsToModify = testVector;
+	taskThree.setName("Changed.");
+	Task tempTask = taskThree;
+	Modify modTask(modifyID,fieldsToModify,tempTask);
+
+	logic.modifyInfo(modTask);
+	copyTask = logic.getTaskStore();
+	iter = copyTask.begin();
+	Assert::AreEqual(std::string("Sentence one."), iter->getName());
+	++iter;
+	Assert::AreEqual(std::string("Changed."),iter->getName());
+	++iter;
+	Assert::AreEqual(std::string("Sentence three."),iter->getName());
+	}
+
 	TEST_METHOD(Logic_AddAndReturnInfoTest) {
 	Logic testLogic;
 
@@ -424,6 +420,5 @@ public:
 	Assert::AreEqual(std::string("Bye World!|151126|1300|151126|1500"), testLogic.returnInfo(3));
 	}
 	*/
-
 	};
 }

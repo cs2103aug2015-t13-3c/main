@@ -1,6 +1,6 @@
 // @@author A0130463R (Ng Ren Zhi)
 
-// #include "stdafx.h"
+#include "stdafx.h"
 #include "History.h"
 
 History* History::theOne = new History();

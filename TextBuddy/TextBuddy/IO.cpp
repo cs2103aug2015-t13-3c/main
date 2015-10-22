@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "IO.h"
-//#include "Shlwapi.h"
+// #include "Shlwapi.h"
 
 // TODO: Refactor IO.cpp - remove repeated file names
 
@@ -148,7 +148,7 @@ Task IO::extractTaskFromJsonObject(Value& item) {
 		extractEndDate(newTask, item);
 		extractEndTime(newTask, item);
 	} catch (std::string error) {
-		std::cout << "Error occured: " << error << "\n";
+		throw std::runtime_error("Error occured: " + error);
 	}
 
 	return newTask;

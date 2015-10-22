@@ -3,9 +3,6 @@
 #ifndef TASK_H_
 #define TASK_H_
 
-#include <set>
-#include <vector>
-
 enum Day {
 	SUN,
 	MON, TUE, WED,
@@ -61,7 +58,7 @@ private:
 	std::string name;
 	TaskType type;
 	int uniqueID;
-	std::string label; 
+	// std::string label; 
 	std::set<std::string> labels;
 	std::string dateAndTime_UI;
 
@@ -87,7 +84,7 @@ public:
 	std::string getName();
 	TaskType getType();
 	int getID();
-	std::string getLabel();
+	std::string getLabelString();
 	std::vector<std::string> getLabels();
 	std::string getDateAndTime_UI();
 
@@ -104,9 +101,9 @@ public:
 	bool setName(std::string newName);
 	bool setType(TaskType newType);
 	bool setID(int newID);
-	//bool setLabel(std::string newLabel);
-	bool addLabels(std::vector<std::string> newLabel);
-	bool deleteLabels(std::vector<std::string> newLabel);
+	// bool setLabel(std::string newLabel);
+	bool addLabels(std::vector<std::string> newLabels);
+	bool deleteLabels(std::vector<std::string> oldLabels);
 
 	bool markDone();		// Returns false if already done
 	bool unmarkDone();		// Returns false if already not done

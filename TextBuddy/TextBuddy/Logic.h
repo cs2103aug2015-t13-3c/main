@@ -3,11 +3,10 @@
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
-// #include <assert.h>
-#include "Update.h"
 #include "History.h"
-#include "Parser.h"
 #include "IO.h"
+#include "Parser.h"
+#include "Update.h"
 
 class Logic {
 private:

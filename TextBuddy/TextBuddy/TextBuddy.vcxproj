@@ -43,6 +43,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -82,7 +84,9 @@
     <ClCompile Include="TbLogger.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="Update.cpp" />
     <ClCompile Include="Utilities.cpp" />

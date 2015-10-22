@@ -4,9 +4,7 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-#include <vector>
 #include "IO.h"
-#include "Task.h"
 #include "PowerSearch.h"
 
 // These are the valid Command keywords
@@ -106,7 +104,7 @@ public:
 	virtual void undo();
 	// Note to self: virtual function calls only work when the
 	// derived class object is created from a base class POINTER
-	// must declare as P O I N T E R
+	// must declare as P O I N T E R (Ren Zhi 22/10/15)
 };
 
 //==================================================

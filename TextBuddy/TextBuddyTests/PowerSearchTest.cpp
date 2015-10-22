@@ -1,7 +1,6 @@
 // @@author A0096720A (Chin Kiat Boon) 
 
 #include "stdafx.h"
-#include "PowerSearch.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

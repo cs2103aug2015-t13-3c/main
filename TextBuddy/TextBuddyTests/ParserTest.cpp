@@ -33,7 +33,6 @@ public:
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 	}
 
-	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	// Added by Ren Zhi 19/10/15
 	TEST_METHOD(Parser_parse_Add) {
 		Add *add;
@@ -57,7 +56,6 @@ public:
 		std::vector<Task> store = add->getTaskStore();
 		Assert::AreEqual((size_t)1, store.size());
 	}
-	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	TEST_METHOD(Parser_parse) {
 		// Clear before start
@@ -65,8 +63,8 @@ public:
 		std::string expectedString2;
 		
 		// Test for ADD
-		expectedString = "Name: A partridge in a pear tree\nType: 2\nStart Time: 0\nEnd Date: 151021\nEnd Time: 2000\n";
-		userInput = "add A partridge in a pear tree by 8 pm";
+		expectedString = "Name: A partridge in a pear tree\nType: 2\nStart Time: 0\nEnd Date: 151024\nEnd Time: 2000\n";
+		userInput = "add A partridge in a pear tree on sat by 8 pm";
 		
 
 		/*

@@ -1,5 +1,6 @@
-// @@author (Soon Hao Ye)
+// @@author A0126677U (Soon Hao Ye)
 
+#include "stdafx.h"
 #include "Update.h"
 
 Update::Update(std::vector<std::string>* labels,
@@ -25,7 +26,7 @@ void Update::update() {
 		floatingTasks->clear();
 		std::vector<Task>::iterator i = currentView->begin();
 		while(i!=currentView->end()) {
-			labels->push_back(i->getLabel());
+			labels->push_back(i->getLabelString());
 			description->push_back(i->getName());
 			dateAndTime->push_back(i->getDateAndTime_UI());
 			priotiryTasks->push_back(i->getPriorityStatus());

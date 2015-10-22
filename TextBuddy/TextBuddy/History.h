@@ -3,8 +3,6 @@
 #ifndef HISTORY_H_
 #define HISTORY_H_
 
-#include "Command.h"
-
 // Holds a stack of executed commands
 class History {
 private:

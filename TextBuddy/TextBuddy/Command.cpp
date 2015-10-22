@@ -1,9 +1,8 @@
 // @@author A0110376N (Aaron Chong Jun Hao)
-// Modified to Command Pattern by Ng Ren Zhi
+// Modified to Command Pattern by @@author A0130463R (Ng Ren Zhi)
 // Private methods originally by @@author A0096720A (Chin Kiat Boon)
 
 #include "stdafx.h"
-#include "Command.h"
 
 //==================================================
 //                      COMMAND
@@ -234,7 +233,7 @@ Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
 	currViewIter = matchCurrentViewIndex(deleteID);
 	taskStoreIter = matchTaskStoreIndex(currViewIter->getID());
-	currViewPos =currViewIter - currentView.begin();
+	currViewPos = currViewIter - currentView.begin();
 	taskStorePos = taskStoreIter - taskStore.begin();
 
 	taskToBeDeleted = *currViewIter;
@@ -254,13 +253,13 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-	if(taskStorePos < taskStore.size()-1) {
+	if((unsigned int)taskStorePos < taskStore.size()-1) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
 		taskStore.push_back(taskToBeDeleted);
 	}
 
-	if(currViewPos < currentView.size()-1) {
+	if((unsigned int)currViewPos < currentView.size()-1) {
 		currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
 	} else {
 		currentView.push_back(taskToBeDeleted);

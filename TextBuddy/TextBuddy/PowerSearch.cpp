@@ -1,7 +1,6 @@
 // @@author A0096720A (Chin Kiat Boon)
 
-#include <string>
-#include "Utilities.h"
+#include "stdafx.h"
 #include "PowerSearch.h"
 
 PowerSearch::PowerSearch(void) {}

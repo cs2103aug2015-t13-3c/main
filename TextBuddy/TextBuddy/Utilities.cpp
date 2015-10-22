@@ -254,7 +254,7 @@ std::string Utilities::taskToString(Task task) {
 		"Name: ",		task.getName().c_str(),		// %s%s\n
 		"Type: ",		task.getType(),				// %s%d\n
 		/*
-		"Labels: ",		task.getLabels().c_str(),	// %s%s\n
+		"Labels: ",		task.getLabelString().c_str(),	// %s%s\n
 		"Done: ",		task.getDoneStatus(),		// %s%d\n
 		"Priority: ",	task.getPriorityStatus(),	// %s%d\n
 		"Start Date: ",	task.getStartDate(),		// %s%d\n

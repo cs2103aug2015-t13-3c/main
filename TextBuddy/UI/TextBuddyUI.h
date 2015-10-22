@@ -1,7 +1,9 @@
+// @@author A0126677U (Soon Hao Ye)
+
 #pragma once
 
-#include "Logic.h"
 #include "stdafx.h"
+#include "Logic.h"
 #include <msclr\marshal_cppstd.h>
 
 // DEFINE KEYWORD STRINGS
@@ -78,7 +80,7 @@ namespace UserInterface {
 				delete priorityTasks;
 			}
 		}
-
+		// @@author generated
 	private: System::Windows::Forms::RichTextBox^  input;
 	private: System::Windows::Forms::TextBox^  feedback;
 	private: System::Windows::Forms::RichTextBox^  floatingTaskDisplay;

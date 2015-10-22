@@ -1,9 +1,4 @@
-// @@author (Soon Hao Ye)
-
-#include <vector>
-// #include <assert.h>
-// #include "Command.h"
-#include "Task.h"
+// @@author A0126677U (Soon Hao Ye)
 
 class Update {
 protected:

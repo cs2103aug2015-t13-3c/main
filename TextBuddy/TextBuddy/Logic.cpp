@@ -45,7 +45,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	Command* command;
 	command = parser->parse(userCommand);
 	CommandType cmd = command->getCommand();
-	
+
 	switch (cmd) {
 	case UNDO:
 		history->undo();
@@ -86,6 +86,7 @@ void Logic::resetUpdaterNULL() {
 	updater = nullptr;
 }
 
+// @@author A0096720A-unused (Chin Kiat Boon)
 /*
 Add* add;
 Delete* delet;
