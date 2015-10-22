@@ -153,8 +153,10 @@ std::string Task::getLabelString() {
 		++i;
 	}
 	//remove the last new line characters
-	for(int j=0 ; j<2 ; ++j) {
-		label.pop_back();
+	if(!label.empty()) {
+		for(int j=0 ; j<2 ; ++j) {
+			label.pop_back();
+		}
 	}
 	return label;
 }

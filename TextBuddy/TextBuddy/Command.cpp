@@ -231,15 +231,9 @@ bool Add::addInfo() {
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
-<<<<<<< HEAD
 	matchIndex(deleteID,currViewIter,taskStoreIter);
-=======
-	currViewIter = matchCurrentViewIndex(deleteID);
-	taskStoreIter = matchTaskStoreIndex(currViewIter->getID());
 	currViewPos = currViewIter - currentView.begin();
 	taskStorePos = taskStoreIter - taskStore.begin();
-
->>>>>>> origin/master
 	taskToBeDeleted = *currViewIter;
 }
 
