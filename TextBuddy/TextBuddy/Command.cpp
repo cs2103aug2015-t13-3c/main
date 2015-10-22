@@ -768,7 +768,7 @@ void Load::execute() {
 
 	taskStore = io->loadFile(filePath);
 	io->setFilePath(filePath,taskStore);
-	formatDefaultView();
+//	formatDefaultView();
 }
 
 void Load::formatDefaultView() {

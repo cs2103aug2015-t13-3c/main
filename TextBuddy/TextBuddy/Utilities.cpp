@@ -454,6 +454,9 @@ std::string Utilities::taskDateAndTimeToDisplayString(Task task) {
 
 	if(task.getType() == TODO) {
 		end = end + intDateToDayString(task.getEndDate());
+		if(task.getEndTime() != 0) {
+			end = end + "  " + intTimeTo12HourString(task.getEndTime());
+		}
 		return "by " + end ;
 	} else if(task.getType() == EVENT) {
 		if(startDate != 0) {
