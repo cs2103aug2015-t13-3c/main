@@ -614,8 +614,9 @@ void View::execute() {
 		// pwrSearch.setTasksWithinPeriod(currentTime, currentTime + 7);
 		break;
 
-		// case VIEWTYPE_LABELS:
-		//	viewLabel(label);
+	case VIEWTYPE_LABELS:
+		viewLabel(viewLabels);
+		break;
 
 	case VIEWTYPE_NOTDONE:
 		viewNotdone();
@@ -676,21 +677,24 @@ bool View::viewNotdone() {
 }
 // Delete viewLabel if we use search to search for label
 // If view is used to view labels, need to add string object for this method
-bool View::viewLabel(std::string label) {
+bool View::viewLabel(std::vector<std::string> label) {
 	std::vector<std::string> searchSet;
 
 	std::vector<Task>::iterator taskIter;
 	std::vector<std::string>::iterator setIter;
+	std::vector<std::string>::iterator labelIter;
 
 	currentView.clear();
 
-	for (taskIter == taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
+	for (taskIter = taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
 		searchSet = taskIter->getLabels();
 
-		for (setIter == searchSet.begin(); setIter != searchSet.end(); ++setIter) {
-			if (*setIter == label) {
-				currentView.push_back(*taskIter);
-				break;
+		for (setIter = searchSet.begin(); setIter != searchSet.end(); ++setIter) {
+			for (labelIter = label.begin(); labelIter != label.end(); ++labelIter) {
+				if (*setIter == *labelIter) {
+					currentView.push_back(*taskIter);
+					break;
+				}
 			}
 		}
 	}
