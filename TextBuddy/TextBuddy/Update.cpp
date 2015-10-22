@@ -17,7 +17,7 @@ Update::Update(std::vector<std::string>* labels,
 }
 
 void Update::update() {
-	if(!currentView->empty()) {
+	
 		labels->clear();
 		description->clear();
 		dateAndTime->clear();
@@ -34,5 +34,5 @@ void Update::update() {
 			}
 			++i;
 		}
-	}
+	
 }

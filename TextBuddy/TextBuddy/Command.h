@@ -292,6 +292,7 @@ public:
 	std::string getFilePath();
 
 	void execute();
+	void formatDefaultView();
 };
 
 class Save: public Command {

@@ -16,13 +16,6 @@ Logic::Logic() {
 	Command temp;
 	currentView = temp.getCurrentViewPtr();
 	updater = nullptr;
-	/*
-	std::vector<Task>::iterator i;
-	for(i=taskStore.begin() ; i!=taskStore.end(); ++i) {
-	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(*i);
-	i->setDateAndTime_UI(dateAndTime_UI);
-	}
-	*/
 }
 
 Logic::~Logic() {
@@ -60,7 +53,7 @@ std::string Logic::processCommand(std::string userCommand) {
 	default:
 		command->execute();
 		message = command->getMessage();
-		//		history->add(*command);
+		history->add(*command);
 	}
 
 	assert(updater != nullptr);

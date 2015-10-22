@@ -149,8 +149,12 @@ std::string Task::getLabel() {
 	std::string label;
 	std::set<std::string>::iterator i = labels.begin();
 	while(i != labels.end()) {
-		label = label + *i + " " ;
+		label = label + *i + "\r\n";
 		++i;
+	}
+	//remove the last new line characters
+	for(int j=0 ; j<2 ; ++j) {
+		label.pop_back();
 	}
 	return label;
 }

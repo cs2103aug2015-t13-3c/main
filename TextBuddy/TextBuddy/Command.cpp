@@ -176,7 +176,7 @@ std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 }
 
 std::string Command::getMessage() {
-	return "foobar";
+	return "";
 }
 
 //==================================================
@@ -232,8 +232,7 @@ bool Add::addInfo() {
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
-	currViewIter = matchCurrentViewIndex(deleteID);
-	taskStoreIter = matchTaskStoreIndex(currViewIter->getID());
+	matchIndex(deleteID,currViewIter,taskStoreIter);
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -265,12 +264,8 @@ std::string Delete::getMessage() {
 // Deleting is done according to the order of elements on currentView
 // Modified by Hao Ye 14/10/15
 void Delete::deleteInfo() {
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
-
-	matchIndex(deleteID,currIter,taskIter);
-	taskStore.erase(taskIter);
-	currentView.erase(currIter);
+	taskStore.erase(taskStoreIter);
+	currentView.erase(currViewIter);
 	sortDate(taskStore);
 }
 
@@ -489,9 +484,12 @@ void Markdone::undo() {
 // Modified by Hao Ye 14/10/15
 void Markdone::markDone() {
 	matchIndex(doneID,currIter,taskIter);
+
 	successMarkDone = taskIter->markDone();
 	if(successMarkDone) {
 		currentView.erase(currIter);
+		//temporary way to not display done tasks
+		taskStore.erase(taskIter);
 	} // Remove from current view only if mark done successful (Ren Zhi)
 }
 
@@ -751,8 +749,22 @@ void Load::execute() {
 	// std::string newFilePath = parser->parseFileName(filePath);
 
 	taskStore = io->loadFile(filePath);
+	formatDefaultView();
+}
+
+void Load::formatDefaultView() {
+	// requires refinement, possibly separating deadlines and events
 	copyView();
-	// TODO: update feedback
+	std::vector<Task> startUpView;
+	std::vector<Task>::iterator i = currentView.begin();
+	while(i != currentView.end()) {
+		if(i->getPriorityStatus()) {
+			startUpView.push_back(*i);
+			currentView.erase(i);
+		} 
+	}
+	sortDate(currentView);
+	currentView.insert(currentView.begin(),startUpView.begin(),startUpView.end());
 }
 
 //==================================================
