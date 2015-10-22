@@ -362,6 +362,7 @@ void Modify::modifyInfo() {
 		}
 		*currIter = *taskIter;
 		sortDate(taskStore);
+		copyView();				//added to update currentView immediately
 	}
 }
 
@@ -685,7 +686,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 
 	for (taskIter = taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
 		searchSet = taskIter->getLabels();
-
+		
 		for (setIter = searchSet.begin(); setIter != searchSet.end(); ++setIter) {
 			for (labelIter = label.begin(); labelIter != label.end(); ++labelIter) {
 				if (*setIter == *labelIter) {
