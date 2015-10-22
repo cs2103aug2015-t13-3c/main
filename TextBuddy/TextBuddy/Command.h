@@ -259,7 +259,7 @@ private:
 	bool viewTaskType(TaskType type);
 	bool viewDone();
 	bool viewNotdone();
-	bool viewLabel(std::string label);
+	bool viewLabel(std::vector<std::string> label);
 
 public:
 	View(ViewType newView,std::string labels);
