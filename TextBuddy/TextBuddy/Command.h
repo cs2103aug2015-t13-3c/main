@@ -4,9 +4,7 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-#include <vector>
 #include "IO.h"
-#include "Task.h"
 #include "PowerSearch.h"
 
 // These are the valid Command keywords
@@ -104,6 +102,9 @@ public:
 	virtual void execute();
 	virtual std::string getMessage();
 	virtual void undo();
+	// Note to self: virtual function calls only work when the
+	// derived class object is created from a base class POINTER
+	// must declare as P O I N T E R (Ren Zhi 22/10/15)
 };
 
 //==================================================
@@ -136,6 +137,8 @@ private:
 	Task taskToBeDeleted;
 	std::vector<Task>::iterator currViewIter;
 	std::vector<Task>::iterator taskStoreIter;
+	int currViewPos;
+	int taskStorePos;
 
 	void deleteInfo();
 public:
@@ -152,6 +155,8 @@ class Modify: public Command {
 private:
 	//== EXECUTE ==
 	int modifyID; // ID on GUI, not taskID
+	std::vector<Task>::iterator currIter;
+	std::vector<Task>::iterator taskIter;
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 	//==== UNDO ===
@@ -233,6 +238,12 @@ public:
 	~Undo();
 };
 
+class Redo: public Command {
+public:
+	Redo();
+	~Redo();
+};
+
 class View: public Command {
 private:
 	//== EXECUTE ==
@@ -246,7 +257,7 @@ private:
 	bool viewTaskType(TaskType type);
 	bool viewDone();
 	bool viewNotdone();
-	bool viewLabel(std::string label);
+	bool viewLabel(std::vector<std::string> label);
 
 public:
 	View(ViewType newView,std::string labels);

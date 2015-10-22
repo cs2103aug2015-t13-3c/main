@@ -2,19 +2,19 @@
 
 #include "stdafx.h"
 #include "IO.h"
-//#include "Shlwapi.h"
+// #include "Shlwapi.h"
 
 // TODO: Refactor IO.cpp - remove repeated file names
 
 using namespace rapidjson;
 
-const std::string IO::lastSavedLocation = "lastSave.tbconfig";
+const std::string IO::lastSavedLocation = ".tbconfig";
+std::string IO::filePath = "mytasks.txt";
 
 IO* IO::theOne = new IO();
 
 IO::IO() {
 	std::ifstream lastSave(lastSavedLocation);
-	//std::getline(lastSave,filePath);
 	lastSave >> filePath;
 }
 
@@ -148,7 +148,7 @@ Task IO::extractTaskFromJsonObject(Value& item) {
 		extractEndDate(newTask, item);
 		extractEndTime(newTask, item);
 	} catch (std::string error) {
-		std::cout << "Error occured: " << error << "\n";
+		throw std::runtime_error("Error occured: " + error);
 	}
 
 	return newTask;
@@ -409,7 +409,7 @@ std::string IO::retrieveLabel(Task task) {
 	std::vector<std::string> labelVector = task.getLabels();
 	string = "[";
 
-	for(int i = 0; i < labelVector.size(); i++) {
+	for(unsigned int i = 0; i < labelVector.size(); i++) {
 		string += "\"" + labelVector[i] + "\"";
 		if (i+1 < labelVector.size()) {
 			string += ",\n\t\t\t\t";

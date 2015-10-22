@@ -3,18 +3,19 @@
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
-// #include <assert.h>
-#include "Update.h"
 #include "History.h"
-#include "Parser.h"
 #include "IO.h"
+#include "Parser.h"
+#include "Update.h"
 
 class Logic {
 private:
-	static Logic *theOne; // Singleton
+	static Logic* theOne; // Singleton
+	Logic();
+
 	std::vector<Task>* currentView; 
 	History* history;
-	Parser parser;
+	Parser* parser;
 	IO* io;
 	Update* updater;
 
@@ -30,8 +31,7 @@ private:
 	// bool markPriority(Star toMarkStar);
 	*/
 public:
-	Logic();
-	//static Logic* getInstance();
+	static Logic* getInstance();
 	~Logic();
 
 	std::string processCommand(std::string userCommand);
@@ -40,7 +40,7 @@ public:
 		std::vector<std::string>* dateAndTime,
 		std::vector<std::string>* floatingTasks,
 		std::vector<bool>* priotiryTasks);
-
+	void resetUpdaterNULL();
 	/*
 	int getSize();
 	std::vector<Task> loadFile(std::string fileName);

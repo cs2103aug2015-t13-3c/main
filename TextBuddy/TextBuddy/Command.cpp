@@ -1,9 +1,8 @@
 // @@author A0110376N (Aaron Chong Jun Hao)
-// Modified to Command Pattern by Ng Ren Zhi
+// Modified to Command Pattern by @@author A0130463R (Ng Ren Zhi)
 // Private methods originally by @@author A0096720A (Chin Kiat Boon)
 
 #include "stdafx.h"
-#include "Command.h"
 
 //==================================================
 //                      COMMAND
@@ -232,7 +231,15 @@ bool Add::addInfo() {
 
 Delete::Delete(int taskID) : Command(DELETE) {
 	deleteID = taskID;
+<<<<<<< HEAD
 	matchIndex(deleteID,currViewIter,taskStoreIter);
+=======
+	currViewIter = matchCurrentViewIndex(deleteID);
+	taskStoreIter = matchTaskStoreIndex(currViewIter->getID());
+	currViewPos = currViewIter - currentView.begin();
+	taskStorePos = taskStoreIter - taskStore.begin();
+
+>>>>>>> origin/master
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -250,8 +257,17 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-	taskStore.insert(taskStoreIter,taskToBeDeleted);
-	currentView.insert(currViewIter,taskToBeDeleted);
+	if((unsigned int)taskStorePos < taskStore.size()-1) {
+		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
+	} else {
+		taskStore.push_back(taskToBeDeleted);
+	}
+
+	if((unsigned int)currViewPos < currentView.size()-1) {
+		currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
+	} else {
+		currentView.push_back(taskToBeDeleted);
+	}
 }
 
 std::string Delete::getMessage() {
@@ -279,6 +295,8 @@ Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(M
 	modifyID = taskID;
 	fieldsToModify = fields;
 	tempTask = task;
+	matchIndex(modifyID,currIter,taskIter);
+	originalTask = *currIter;
 }
 
 Modify::~Modify() {}
@@ -313,13 +331,6 @@ std::string Modify::getMessage() {
 // Modified by Hao Ye 14/10/15
 // Modified by Ren Zhi 20/10/15 updated add/deleteLabels
 void Modify::modifyInfo() {
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
-
-	int index = modifyID;
-	matchIndex(index,currIter,taskIter);
-	originalTask = *currIter;
-
 	std::vector<FieldType>::iterator fieldIter;
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
@@ -352,7 +363,7 @@ void Modify::modifyInfo() {
 			taskIter->setEndTime(tempTask.getEndTime());
 			break;
 		case INVALID_FIELD:
-			throw(std::runtime_error("Error in fetching field name")); 
+			throw std::runtime_error("Error in fetching field name"); 
 			break;
 		}
 		*currIter = *taskIter;
@@ -540,6 +551,14 @@ Undo::Undo() : Command(UNDO) {}
 Undo::~Undo() {}
 
 //==================================================
+//                        REDO
+//==================================================
+
+Redo::Redo() : Command(REDO) {}
+
+Redo::~Redo() {}
+
+//==================================================
 //                        VIEW
 //==================================================
 /* For reference
@@ -598,8 +617,9 @@ void View::execute() {
 		// pwrSearch.setTasksWithinPeriod(currentTime, currentTime + 7);
 		break;
 
-		// case VIEWTYPE_LABELS:
-		//	viewLabel(label);
+	case VIEWTYPE_LABELS:
+		viewLabel(viewLabels);
+		break;
 
 	case VIEWTYPE_NOTDONE:
 		viewNotdone();
@@ -638,7 +658,7 @@ bool View::viewDone() {
 
 	currentView.clear();
 
-	for (iter == taskStore.begin(); iter != taskStore.end(); ++iter) {
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getDoneStatus() == true) {
 			currentView.push_back(*iter);
 		}
@@ -651,7 +671,7 @@ bool View::viewNotdone() {
 
 	currentView.clear();
 
-	for (iter == taskStore.begin(); iter != taskStore.end(); ++iter) {
+	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getDoneStatus() == false) {
 			currentView.push_back(*iter);
 		}
@@ -660,21 +680,24 @@ bool View::viewNotdone() {
 }
 // Delete viewLabel if we use search to search for label
 // If view is used to view labels, need to add string object for this method
-bool View::viewLabel(std::string label) {
+bool View::viewLabel(std::vector<std::string> label) {
 	std::vector<std::string> searchSet;
 
 	std::vector<Task>::iterator taskIter;
 	std::vector<std::string>::iterator setIter;
+	std::vector<std::string>::iterator labelIter;
 
 	currentView.clear();
 
-	for (taskIter == taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
+	for (taskIter = taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
 		searchSet = taskIter->getLabels();
 
-		for (setIter == searchSet.begin(); setIter != searchSet.end(); ++setIter) {
-			if (*setIter == label) {
-				currentView.push_back(*taskIter);
-				break;
+		for (setIter = searchSet.begin(); setIter != searchSet.end(); ++setIter) {
+			for (labelIter = label.begin(); labelIter != label.end(); ++labelIter) {
+				if (*setIter == *labelIter) {
+					currentView.push_back(*taskIter);
+					break;
+				}
 			}
 		}
 	}
@@ -749,6 +772,7 @@ void Load::execute() {
 	// std::string newFilePath = parser->parseFileName(filePath);
 
 	taskStore = io->loadFile(filePath);
+	io->setFilePath(filePath,taskStore);
 	formatDefaultView();
 }
 
@@ -779,7 +803,6 @@ Save::Save() : Command(SAVE) {
 
 // Save to new file path
 Save::Save(std::string newFilePath) : Command(SAVE) {
-	io = IO::getInstance();
 	filePath = newFilePath;
 }
 

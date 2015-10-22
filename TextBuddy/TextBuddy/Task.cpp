@@ -8,7 +8,7 @@ Task::Task() {
 	name = "";
 	type = FLOATING;
 	uniqueID = 0;
-	label = "";
+	// label = "";
 
 	isDone = false;
 	isPriority = false;
@@ -145,7 +145,7 @@ std::vector<std::string> Task::getLabels() {
 	return labelVector;
 }
 
-std::string Task::getLabel() {
+std::string Task::getLabelString() {
 	std::string label;
 	std::set<std::string>::iterator i = labels.begin();
 	while(i != labels.end()) {
@@ -169,7 +169,7 @@ bool Task::tasksAreEqual(Task task1, Task task2) {
 		|| (task1.getEndDate() != task2.getEndDate())
 		|| (task1.getEndTime() != task2.getEndTime())
 		|| (task1.getID() != task2.getID())
-		|| (task1.getLabel() != task2.getLabel())
+		|| (task1.getLabelString() != task2.getLabelString())
 		|| (task1.getName() != task2.getName())
 		|| (task1.getPriorityStatus() != task2.getPriorityStatus())
 		|| (task1.getStartDate() != task2.getStartDate())

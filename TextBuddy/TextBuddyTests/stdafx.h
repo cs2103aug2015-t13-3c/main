@@ -6,17 +6,16 @@
 
 #include "targetver.h"
 
-// Headers for CppUnitTest
+// Header for CppUnitTest
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
-#include <iostream>
-#include <stdio.h>
 #include <fstream>
 #include <sstream>
 
 #include <algorithm>
 #include <string>
+#include <set>
 #include <vector>
 
 #include "TbLogger.h"
@@ -24,8 +23,8 @@
 #include "Command.h"
 #include "Utilities.h"
 
+#include "History.h"
 #include "IO.h"
 #include "Logic.h"
 #include "Parser.h"
-#include "History.h"
-
+#include "PowerSearch.h"

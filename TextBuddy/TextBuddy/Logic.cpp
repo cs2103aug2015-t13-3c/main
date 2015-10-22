@@ -5,14 +5,12 @@
 
 const std::string Logic::ERROR_INVALID_COMMAND = "Invalid Command Entered";
 
-//Logic* Logic::theOne = new Logic();
+Logic* Logic::theOne = new Logic();
 
 Logic::Logic() {
 	history = History::getInstance();
-	// parser = Parser::getInstance();
+	parser = Parser::getInstance();
 	io = IO::getInstance();
-	Load initialLoad(io->getFilePath());
-	initialLoad.execute();
 	Command temp;
 	currentView = temp.getCurrentViewPtr();
 	updater = nullptr;
@@ -27,19 +25,20 @@ Logic::~Logic() {
 //==================================================
 
 // Added by Ren Zhi 16/10/15
-/*
 Logic* Logic::getInstance() {
+	Load initialLoad(IO::getInstance()->getFilePath());
+	initialLoad.execute();
 	return theOne;
 }
-*/
 
 // Modified by RenZhi 19/10/15: Implement command pattern
 // Modified by Aaron  20/10/15: Move execute into 'try' block
 std::string Logic::processCommand(std::string userCommand) {
 	std::string message;
 	Command* command;
-	command = parser.parse(userCommand);
+	command = parser->parse(userCommand);
 	CommandType cmd = command->getCommand();
+
 	switch (cmd) {
 	case UNDO:
 		history->undo();
@@ -53,13 +52,14 @@ std::string Logic::processCommand(std::string userCommand) {
 	default:
 		command->execute();
 		message = command->getMessage();
-		history->add(*command);
+		history->add(command);
 	}
 
 	assert(updater != nullptr);
 	updater->update();
-	Save saveFile;
-	saveFile.execute();
+	io->saveFile(io->getFilePath(),Command::getTaskStore());
+	// Save saveFile;
+	// saveFile.execute();
 	return message;
 }
 
@@ -75,6 +75,11 @@ void Logic::subscribe(std::vector<std::string>* labels,
 						  updater->update();
 }
 
+void Logic::resetUpdaterNULL() {
+	updater = nullptr;
+}
+
+// @@author A0096720A-unused (Chin Kiat Boon)
 /*
 Add* add;
 Delete* delet;

@@ -1,6 +1,7 @@
 // @@author A0110376N (Aaron Chong Jun Hao)
 // Parser converts flexible natural language into commands and parameters for TextBuddy.
 
+#include "stdafx.h"
 #include "Parser.h"
 
 Parser* Parser::theOne;
@@ -138,7 +139,7 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case REDO:
-		// cmd = new Redo;
+		cmd = new Redo;
 		break;
 
 	case VIEW: {

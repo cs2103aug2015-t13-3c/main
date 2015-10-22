@@ -1,11 +1,17 @@
 // @@author A0130463R (Ng Ren Zhi)
 
-// #include "stdafx.h"
+#include "stdafx.h"
 #include "History.h"
 
 History* History::theOne = new History();
 
-History::History() {}
+std::vector<Command*> History::commandHistory;
+std::vector<Command*> History::redoHistory;
+
+History::History() {
+	commandHistory.clear();
+	redoHistory.clear();
+}
 
 History::~History() {}
 
@@ -14,8 +20,12 @@ History* History::getInstance() {
 	return theOne;
 }
 
+int History::getUndoSize() {
+	return commandHistory.size();
+}
+
 // Add new command into History stack
-void History::add(Command cmd) {
+void History::add(Command *cmd) {
 	// cmd.execute();
 	commandHistory.push_back(cmd);
 	redoHistory.clear();
@@ -26,8 +36,8 @@ void History::undo() {
 	if(commandHistory.size() == 0) {
 		throw std::runtime_error("Nothing to undo");
 	} else {
-		Command cmdToUndo = commandHistory.back();
-		cmdToUndo.undo();
+		Command* cmdToUndo = commandHistory.back();
+		cmdToUndo->undo();
 		redoHistory.push_back(cmdToUndo);
 		commandHistory.pop_back();
 	}
@@ -39,8 +49,8 @@ void History::redo() {
 	if(redoHistory.size() == 0) {
 		throw std::runtime_error("Nothing to redo");
 	} else {
-		Command cmdToRedo = redoHistory.back();
-		cmdToRedo.execute();
+		Command* cmdToRedo = redoHistory.back();
+		cmdToRedo->execute();
 		commandHistory.push_back(cmdToRedo);
 		redoHistory.pop_back();
 	}

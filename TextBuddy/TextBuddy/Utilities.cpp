@@ -44,6 +44,8 @@ CommandType Utilities::stringToCmdType(std::string cmdString) {
 		cmd = MARKDONE;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_UNDO)) {
 		cmd = UNDO;
+	} else if(equalsIgnoreCase(cmdString, COMMAND_REDO)) {
+		cmd = REDO;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_VIEW)) {
 		cmd = VIEW;
 	} else if(equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
@@ -252,7 +254,7 @@ std::string Utilities::taskToString(Task task) {
 		"Name: ",		task.getName().c_str(),		// %s%s\n
 		"Type: ",		task.getType(),				// %s%d\n
 		/*
-		"Labels: ",		task.getLabels().c_str(),	// %s%s\n
+		"Labels: ",		task.getLabelString().c_str(),	// %s%s\n
 		"Done: ",		task.getDoneStatus(),		// %s%d\n
 		"Priority: ",	task.getPriorityStatus(),	// %s%d\n
 		"Start Date: ",	task.getStartDate(),		// %s%d\n

@@ -4,11 +4,10 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
-#include "stdafx.h"
-
 class Parser {
 private:
 	static Parser* theOne;
+	Parser();
 	TbLogger* logger;
 
 	// This defines the file extension used by TextBuddy
@@ -21,7 +20,6 @@ private:
 	void log(Level level, std::string message);
 
 public:
-	Parser();
 	~Parser();
 
 	// This is the API

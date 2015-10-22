@@ -1,7 +1,9 @@
+// @@author A0126677U (Soon Hao Ye)
+
 #pragma once
 
-#include "Logic.h"
 #include "stdafx.h"
+#include "Logic.h"
 #include <msclr\marshal_cppstd.h>
 
 // DEFINE KEYWORD STRINGS
@@ -42,7 +44,7 @@ namespace UserInterface {
 			dateTime = new std::vector<std::string>;
 			floatingTasks = new std::vector<std::string>;
 			priorityTasks = new std::vector<bool>;
-			logic = new Logic();
+			logic = logic->getInstance();
 			logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 			floatingTaskIndex = 0;
 			originalRowPosition = 0;
@@ -78,7 +80,7 @@ namespace UserInterface {
 				delete priorityTasks;
 			}
 		}
-
+		// @@author generated
 	private: System::Windows::Forms::RichTextBox^  input;
 	private: System::Windows::Forms::TextBox^  feedback;
 	private: System::Windows::Forms::RichTextBox^  floatingTaskDisplay;

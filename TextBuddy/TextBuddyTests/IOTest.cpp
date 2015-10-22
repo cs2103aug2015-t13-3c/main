@@ -74,7 +74,7 @@ public:
 			Assert::AreEqual(task1.getEndDate() , task2.getEndDate());
 			Assert::AreEqual(task1.getEndTime() , task2.getEndTime());
 			Assert::AreEqual(task1.getID() , task2.getID());
-			Assert::AreEqual(task1.getLabel() , task2.getLabel());
+			Assert::AreEqual(task1.getLabelString() , task2.getLabelString());
 			Assert::AreEqual(task1.getName() , task2.getName());
 			Assert::AreEqual(task1.getPriorityStatus() , task2.getPriorityStatus());
 			Assert::AreEqual(task1.getStartDate() , task2.getStartDate());
@@ -113,7 +113,7 @@ public:
 			Assert::AreEqual(task1.getEndDate() , task2.getEndDate());
 			Assert::AreEqual(task1.getEndTime() , task2.getEndTime());
 			Assert::AreEqual(task1.getID() , task2.getID());
-			Assert::AreEqual(task1.getLabel() , task2.getLabel());
+			Assert::AreEqual(task1.getLabelString() , task2.getLabelString());
 			Assert::AreEqual(task1.getName() , task2.getName());
 			Assert::AreEqual(task1.getPriorityStatus() , task2.getPriorityStatus());
 			Assert::AreEqual(task1.getStartDate() , task2.getStartDate());

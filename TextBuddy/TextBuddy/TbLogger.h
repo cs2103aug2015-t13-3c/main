@@ -52,9 +52,9 @@ private:
 
 public:
 	char* getLocalTime();
-
-	~TbLogger();
 	static TbLogger* getInstance();
+	~TbLogger();
+	
 	void setLogLevel(Level level);
 	void log(Level level, std::string message);
 	void clear();
