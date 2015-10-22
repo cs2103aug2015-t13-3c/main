@@ -8,7 +8,7 @@ namespace TextBuddyTests {
 	TEST_CLASS(UtilitiesTest) {
 public:
 	TEST_METHOD(Utilities_fieldVecToString) {
-		TbLogger::getInstance()->clear();
+		TbLogger::getInstance()->clearLog();
 		Parser* parser = Parser::getInstance();
 		std::string expectedString = "from from to"; // Expected behaviour
 		std::vector<FieldType> fields = parser->extractFields("from on by");

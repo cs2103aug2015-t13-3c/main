@@ -358,7 +358,6 @@ void Modify::modifyInfo() {
 			break;
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
-			break;
 		}
 		*currIter = *taskIter;
 		sortDate(taskStore);
@@ -566,12 +565,13 @@ const std::string VIEW_WEEK = "week";
 const std::string VIEW_LABEL = "label";
 
 // These are the View enums
-// Count: 6 + VIEWTYPE_INVALID
+// Count: 7 + VIEWTYPE_INVALID
 enum ViewType {
 VIEWTYPE_ALL,
 VIEWTYPE_FLOATING,
-VIEWTYPE_PAST,
 VIEWTYPE_TODO,
+VIEWTYPE_NOTDONE,  // FLOATING + TODO
+VIEWTYPE_PAST,
 VIEWTYPE_WEEK,
 VIEWTYPE_LABELS,
 VIEWTYPE_INVALID
@@ -590,6 +590,9 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
+	TbLogger* logger = TbLogger::getInstance();
+	logger->log(DEBUG,"Viewing...");
+
 	switch (view) {
 	case VIEWTYPE_ALL:
 		viewAll();
@@ -607,9 +610,11 @@ void View::execute() {
 		viewDone();
 		break;
 
-	case VIEWTYPE_WEEK:
-		// pwrSearch.setTasksWithinPeriod(currentTime, currentTime + 7);
-		break;
+	case VIEWTYPE_WEEK: {
+		logger->log(DEBUG,"Viewing week");
+		int currentDate = logger->getDate();
+		pwrSearch.setTasksWithinPeriod(currentDate, 0, currentDate+7, 2359);
+		break;}
 
 	case VIEWTYPE_LABELS:
 		viewLabel(viewLabels);
@@ -617,6 +622,9 @@ void View::execute() {
 
 	case VIEWTYPE_NOTDONE:
 		viewNotdone();
+		break;
+
+	case VIEWTYPE_INVALID:
 		break;
 	}
 }
@@ -704,17 +712,19 @@ bool View::viewLabel(std::vector<std::string> label) {
 //==================================================
 // Added by Aaron 20/10/15
 ClearAll::ClearAll() : Command(CLEAR_ALL) {
-	currentView = *(new std::vector<Task>);
+	previousView = currentView;
 }
 
 ClearAll::~ClearAll() {}
 
 void ClearAll::execute() {
-	currentView = *(new std::vector<Task>);
+	currentView.clear();
+	taskStore.clear();
 }
 
 void ClearAll::undo() {
 	currentView = previousView;
+	taskStore = previousView;
 	// TODO: feedback
 }
 
@@ -749,7 +759,6 @@ Load::Load() : Command(LOAD) {
 
 // Load new file path
 Load::Load(std::string newFilePath) : Command(LOAD) {
-	IO* io = IO::getInstance();
 	filePath = newFilePath;
 }
 
@@ -825,5 +834,6 @@ Exit::Exit() : Command(EXIT) {}
 Exit::~Exit() {}
 
 void Exit::execute() {
+	TbLogger::getInstance()->close();
 	exit(0);
 }

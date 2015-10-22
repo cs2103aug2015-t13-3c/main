@@ -59,7 +59,7 @@ public:
 
 	TEST_METHOD(Parser_parse) {
 		// Clear before start
-		TbLogger::getInstance()->clear();
+		TbLogger::getInstance()->clearLog();
 		std::string expectedString2;
 		
 		// Test for ADD
@@ -159,7 +159,7 @@ public:
 		}
 
 		// Clear if successful
-		TbLogger::getInstance()->clear();
+		TbLogger::getInstance()->clearLog();
 	}
 
 	// Note: As parseDate() takes in regex like "this Monday",

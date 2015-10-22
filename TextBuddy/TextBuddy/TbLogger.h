@@ -57,7 +57,8 @@ public:
 	
 	void setLogLevel(Level level);
 	void log(Level level, std::string message);
-	void clear();
+	int getDate();
+	void clearLog();
 	void close();
 
 	// Currently disabled

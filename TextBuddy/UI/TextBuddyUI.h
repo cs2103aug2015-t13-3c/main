@@ -38,6 +38,7 @@ namespace UserInterface {
 	public:
 		// INITIALIZATION OF COMPONENTS AND REQUIRED VARIABLES
 		TextBuddyUI(void) {
+			logger = TbLogger::getInstance();
 			InitializeComponent();
 			labels = new std::vector<std::string>;
 			taskDescription = new std::vector<std::string>;
@@ -257,7 +258,8 @@ namespace UserInterface {
 	private:
 		std::string* userInput;
 		std::string* userFeedback_cppString;
-		Logic *logic;
+		Logic* logic;
+		TbLogger* logger;
 		int floatingTaskIndex;
 		int cursorPosition;
 		int originalRowPosition;

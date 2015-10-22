@@ -28,6 +28,18 @@ char* TbLogger::getLocalTime() {
 	return buffer;
 }
 
+int TbLogger::getDate() {
+	time_t rawtime = time(0);			// get current time
+	struct tm dayinfo;
+	localtime_s(&dayinfo,&rawtime);
+
+	int year =	dayinfo.tm_year - 100;	// tm_year: years since 1990
+	int month =	dayinfo.tm_mon + 1;		// tm_mon:  Jan starts at 0
+	int day =	dayinfo.tm_mday;
+	int date = year*10000 + month*100 + day;
+	return date;
+}
+
 TbLogger* TbLogger::getInstance() {
 	return logger;
 }
@@ -45,7 +57,7 @@ void TbLogger::log(Level level, std::string message) {
 	}
 }
 
-void TbLogger::clear() {
+void TbLogger::clearLog() {
 	remove(logFileName.c_str());
 	return;
 }
