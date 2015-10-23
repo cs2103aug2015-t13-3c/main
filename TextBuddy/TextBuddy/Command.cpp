@@ -75,15 +75,16 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 	if(taskVector.size() == 0) {
 		return false;
 	}
-	/*	
+		
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-	for (j = i+1; j != taskVector.end(); ++j) {
-	if(j -> getStartTime() < i.getStartTime) {
-	swapTaskPosition(i->getID(), j->getID());
+		for (j = i+1; j != taskVector.end(); ++j) {
+			if(j -> getStartTime() < i->getStartTime()) {
+				std::swap(*i, *j);
+			}
+		}
+
 	}
-	}
-	}
-	*/
+	
 
 	// Sorts date after time to ensure date is accurately sorted
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
