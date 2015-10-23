@@ -141,6 +141,7 @@ private:
 	int taskStorePos;
 
 	void deleteInfo();
+	void deleteInit();
 public:
 	Delete(int taskID);
 	~Delete();

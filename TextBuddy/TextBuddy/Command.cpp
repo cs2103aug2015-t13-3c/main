@@ -230,11 +230,7 @@ bool Add::addInfo() {
 //============ DELETE : PUBLIC METHODS =============
 
 Delete::Delete(int taskID) : Command(DELETE) {
-	deleteID = taskID;
-	matchIndex(deleteID,currViewIter,taskStoreIter);
-	currViewPos = currViewIter - currentView.begin();
-	taskStorePos = taskStoreIter - taskStore.begin();
-	taskToBeDeleted = *currViewIter;
+	deleteID = taskID;	
 }
 
 Delete::~Delete() {}
@@ -246,18 +242,19 @@ int Delete::getDeleteID() {
 void Delete::execute() {
 	// userIndex refers to the nth task of currentView presented to user
 	// eg. delete 1 means deleting the first task
+	deleteInit();
 	deleteInfo();
 }
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-	if((unsigned int)taskStorePos < taskStore.size()-1) {
+	if((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
 		taskStore.push_back(taskToBeDeleted);
 	}
 
-	if((unsigned int)currViewPos < currentView.size()-1) {
+	if((unsigned int)currViewPos < currentView.size()) {
 		currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
 	} else {
 		currentView.push_back(taskToBeDeleted);
@@ -277,6 +274,15 @@ void Delete::deleteInfo() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
+}
+
+// Added by Ren Zhi 24/10/15
+// Initialises undo info for delete command
+void Delete::deleteInit() {
+	matchIndex(deleteID,currViewIter,taskStoreIter);
+	currViewPos = currViewIter - currentView.begin();
+	taskStorePos = taskStoreIter - taskStore.begin();
+	taskToBeDeleted = *currViewIter;
 }
 
 //==================================================
