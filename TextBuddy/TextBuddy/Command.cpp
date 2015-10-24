@@ -77,14 +77,62 @@ bool Command::isDateLogical(Task task) {
 	return true;
 }
 
+// Sorts floating tasks to be at the bottom
+void Command::sortFloating(std::vector<Task> &taskVector) {
+
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
+	Task tempTask;
+	
+	// Bugfix: in-place sorting (Ren Zhi)
+	i = taskVector.begin();	// Points to start of unsorted part
+	k = taskVector.end();	// Points to end of unsorted part
+	while(i != k) {
+		if(i->getType() == FLOATING) {
+			tempTask = *i;
+
+			for (j = i+1; j != taskVector.end(); ++j) {
+				std::swap(*j, *(j-1)); 
+			}
+			*(j-1) = tempTask;
+			--k;
+		} else {
+			++i;
+		}
+	}
+}
+
+// Sorts priority tasks to be at the top
+void Command::sortPriority(std::vector<Task> &taskVector) {
+
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
+	Task tempTask;
+
+	i = taskVector.begin();
+	while (i != taskVector.end()) {
+		for (j = i; j != taskVector.end(); ++j) {
+			if (j->getPriorityStatus() == true) {
+				tempTask = *j;
+				for (k = j; k != i; --k) {
+					std::swap(*k, *(k-1)); 
+				}
+				*i = tempTask;
+				break;
+			}
+		}
+		++i;
+	}
+
+}
 // Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
 // Use this before returning to UI for display
 void Command::sortDate(std::vector<Task> &taskVector) {
 
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
-	std::vector<Task>::iterator k;
-	Task tempTask;
 	
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		for (j = i+1; j != taskVector.end(); ++j) {
@@ -104,44 +152,13 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
-	// Bugfix: in-place sorting (Ren Zhi)
-	// Sorts floating tasks to be at the bottom
-	i = taskVector.begin();	// Points to start of unsorted part
-	k = taskVector.end();	// Points to end of unsorted part
-	while(i != k) {
-		if(i->getType() == FLOATING) {
-			tempTask = *i;
+	sortFloating(taskVector);
+	sortPriority(taskVector);
 
-			for (j = i+1; j != taskVector.end(); ++j) {
-				std::swap(*j, *(j-1)); 
-			}
-			*(j-1) = tempTask;
-			--k;
-		} else {
-			++i;
-		}
-	}
-
-	// Sorts priority tasks to be at the top
-	i = taskVector.begin();
-	while (i != taskVector.end()) {
-		for (j = i; j != taskVector.end(); ++j) {
-			if (j->getPriorityStatus() == true) {
-				tempTask = *j;
-				for (k = j; k != i; --k) {
-					std::swap(*k, *(k-1)); 
-				}
-				*i = tempTask;
-				break;
-			}
-		}
-		++i;
-	}
 }
 
 void Command::removeDoneTask() {
 	std::vector<Task>::iterator i = currentView.begin();
-	//std::vector<Task>::iterator j;
 
 	while (i != currentView.end()) {
 		if (i->getDoneStatus() == true) {
