@@ -135,8 +135,8 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator j;
 	
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-	//	assert((i->getStartDate() < i->getEndDate()) || 
-	//		((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
+		assert((i->getStartDate() < i->getEndDate()) || 
+			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
 		for (j = i+1; j != taskVector.end(); ++j) {
 			if(j -> getStartTime() < i->getStartTime()) {
 				std::swap(*i, *j);

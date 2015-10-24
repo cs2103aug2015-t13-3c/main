@@ -504,10 +504,14 @@ public:
 		task.markDone();
 		Add addTwo(task);
 		addTwo.execute();
+		
+		//KB: to include done tasks
+		View viewAll(VIEWTYPE_ALL, "");
+		viewAll.execute();
 
 		// Start markDone
-		Markdone markdoneOne(1);
-		markdoneOne.execute();
+		Markdone markdoneOne(1);	
+		markdoneOne.execute();		
 
 		std::vector<Task> copyTask;
 		copyTask = addTwo.getCurrentView();
@@ -538,6 +542,9 @@ public:
 		task.markDone();
 		Add addTwo(task);
 		addTwo.execute();
+
+		View viewAll(VIEWTYPE_ALL, "");
+		viewAll.execute();
 
 		// Start markDone
 		Markdone markdoneOne(1);
@@ -590,6 +597,9 @@ public:
 		Add addTwo(task);
 		addTwo.execute();
 
+		View viewAll(VIEWTYPE_ALL, "");
+		viewAll.execute();
+
 		// Start unmarkDone
 		UnmarkDone unmarkdoneOne(1);
 		unmarkdoneOne.execute();
@@ -623,6 +633,9 @@ public:
 		task.markDone();
 		Add addTwo(task);
 		addTwo.execute();
+
+		View viewAll(VIEWTYPE_ALL, "");
+		viewAll.execute();
 
 		// Start unmarkDone
 		UnmarkDone unmarkdoneOne(1);
@@ -823,7 +836,7 @@ public:
 		Task taskTwo;
 		taskTwo.setName("Sentence two.");
 		taskTwo.setStartDate(151010);
-		taskTwo.setStartDate(151010);
+		taskTwo.setEndDate(151010);
 		Add addTwo(taskTwo);
 		addTwo.execute();
 
