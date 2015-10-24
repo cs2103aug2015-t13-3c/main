@@ -3,6 +3,7 @@
 // Private methods originally by Chin Kiat Boon
 
 #include "stdafx.h"
+#include "History.h"
 
 //==================================================
 //                      COMMAND
@@ -17,6 +18,14 @@ Command::Command(CommandType newCmd, std::string rawInput) {
 
 Command::~Command() {}
 
+// Check with Hanrui if formatting single-step getters like this will be penalised
+CommandType Command::getCommand() {return cmd;}
+std::string Command::getUserInput() {return userInput;}
+std::vector<Task> Command::getTaskStore() {return taskStore;}
+std::vector<Task> Command::getCurrentView() {return currentView;}
+std::vector<Task>* Command::getCurrentViewPtr() {return &currentView;}
+int Command::getSize() {return taskStore.size();}
+/*
 CommandType Command::getCommand() {
 	return cmd;
 }
@@ -40,6 +49,7 @@ std::vector<Task>* Command::getCurrentViewPtr() {
 int Command::getSize() {
 	return taskStore.size();
 }
+*/
 
 void Command::clearTaskStore() {
 	IO* io = IO::getInstance();
@@ -49,14 +59,9 @@ void Command::clearTaskStore() {
 	return;
 }
 
-// Virtual function does nothing
-void Command::execute() {
-}
-
-// Virtual function does nothing
-void Command::undo() {
-	throw std::runtime_error("Action cannot be undone");
-}
+// Virtual functions
+void Command::execute() {}
+void Command::undo() {throw std::runtime_error("Action cannot be undone");}
 
 //================ COMMAND : PROTECTED METHODS ==================
 
@@ -718,6 +723,7 @@ bool View::viewNotdone() {
 	}
 	return true;
 }
+
 // Delete viewLabel if we use search to search for label
 // If view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::vector<std::string> label) {
@@ -743,7 +749,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 	}
 
 	removeDoneTask();				// When viewing tasks based on task type, should done tasks be displayed?
-									// Nope, display done tasks only when viewing "all" and "past" (Aaron)
+	// Nope, display done tasks only when viewing "all" and "past" (Aaron)
 	return true;
 }
 
@@ -801,7 +807,6 @@ void DisplayAll::formatDefaultView() {
 	currentView = noStar;
 }
 
-
 void DisplayAll::undo() {
 	currentView = previousView;
 	// TODO: feedback
@@ -828,14 +833,17 @@ std::string Load::getFilePath() {
 	return filePath;
 }
 
-// TODO: Clear history after load, to avoid seg fault
 void Load::execute() {
 	// Note: filePath should already have been parsed (Aaron)
-	// Parser* parser = Parser::getInstance();
-	// std::string newFilePath = parser->parseFileName(filePath);
-
-	taskStore = io->loadFile(filePath);
-	io->setFilePath(filePath,taskStore);
+	std::vector<Task> temp = taskStore;
+	try {
+		taskStore = io->loadFile(filePath);		// Exception thrown if file does not exist
+		History::getInstance()->clearHistory(); // Clear history after load, to avoid seg fault
+		copyView();								// Update currentView
+	} catch (std::exception e) {
+		taskStore = temp;
+		throw e;
+	}
 }
 
 //==================================================

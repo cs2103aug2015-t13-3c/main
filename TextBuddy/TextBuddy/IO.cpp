@@ -49,26 +49,22 @@ bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector) {
 // Throws an assert() if file contents are invalid
 std::vector<Task> IO::loadFile(std::string fileName) {
 	std::ifstream inputFile(fileName);
-
-	std::vector<Task> taskVector;
 	if(!fileIsOpen(inputFile)) {
-		return taskVector;
+		throw std::runtime_error("File does not exist");
 	}
 
 	std::string inputFileString((std::istreambuf_iterator<char>(inputFile)),
 		std::istreambuf_iterator<char>());
-
 	const char* inputFileText = inputFileString.c_str();
 
 	Document document;
 	document.Parse(inputFileText);
-
 	assert(document.IsObject());
 	assert(document["TextBuddy Items"].IsArray());
 	Value& item = document["TextBuddy Items"];
 
+	std::vector<Task> taskVector;
 	if(item.Size() > 0) {
-
 		for(SizeType i = 0; i < item.Size(); i++) {
 			Task newTask = extractTaskFromJsonObject(item[i]);
 			taskVector.push_back(newTask);
@@ -76,9 +72,8 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 		initialiseRunningCount(taskVector);
 	}
 
-
 	inputFile.close();
-
+	filePath = fileName;
 	return taskVector;
 }
 
