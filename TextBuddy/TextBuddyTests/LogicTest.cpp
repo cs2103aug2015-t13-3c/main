@@ -420,5 +420,7 @@ public:
 	Assert::AreEqual(std::string("Bye World!|151126|1300|151126|1500"), testLogic.returnInfo(3));
 	}
 	*/
+
+
 	};
 }
