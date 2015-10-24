@@ -4,24 +4,23 @@
 #include "stdafx.h"
 #include "Parser.h"
 
-Parser* Parser::theOne;
+Parser* Parser::theOne = nullptr;
 
 Parser::Parser() {
 	logger = TbLogger::getInstance();
-	logger->setLogLevel(DEBUG);
 	logger->log(SYS,"Parser instantiated");
+	logger->setLogLevel(DEBUG);
 }
 
 Parser::~Parser() {
 	logger->log(SYS,"Parser destructed");
-	// logger->close(); // To be transferred to UI
 }
 
 // This defines the file extension used by TextBuddy
 const std::string Parser::FILE_EXTENSION = ".txt";
 
 void Parser::log(Level level, std::string message) {
-	// logger->log(level,message);
+	logger->log(level,message);
 	return;
 }
 
@@ -32,6 +31,9 @@ void Parser::log(Level level, std::string message) {
 //========== This is the API ==========
 
 Parser* Parser::getInstance() {
+	if(theOne == nullptr) {
+		theOne = new Parser();
+	}
 	return theOne;
 }
 
@@ -196,7 +198,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 	int newDate = INVALID_DATE_FORMAT;
 	int newTime = INVALID_TIME_FORMAT;
 
-	while(curr != userInput.end()) {
+	while(curr != userInput.end() || inputMode == PRIORITY_SET) {
 		inputString.clear();
 
 		while(curr != userInput.end()
@@ -237,10 +239,11 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->deleteLabels(Utilities::removeSlashKeywords(inputString));
 			break;
 		case PRIORITY_SET:
+			log(DEBUG,"Setting priority");
 			newTask->setPriority();
 			break;
 		case PRIORITY_UNSET:
-			newTask->unsetPriority();
+			// Unset by default
 			break;
 		case START_DATE:
 			newTask->setType(EVENT);
@@ -249,6 +252,9 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		case END_DATE:
 			if(newTask->getType() == FLOATING) {
 				newTask->setType(TODO);
+			}
+			if(newTask->getStartDate() == 0) {
+				newTask->setStartDate(newDate);
 			}
 			newTask->setEndDate(newDate);
 			break;
@@ -289,7 +295,11 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		}
 	}
 
-	log(INFO,"Parsed task");
+	if((newDate = newTask->getEndDate()) < newTask->getStartDate()) {
+		newTask->setEndDate(newDate+10000); // Set end date as next year
+	}
+
+	log(INFO,"Parsed task ID: " + std::to_string(newTask->getID()));
 	return newTask;
 }
 
@@ -357,10 +367,10 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 // Returns year in YY
 // Throws exception if invalid yearString
 int Parser::findYear(std::string yearString) {
-	time_t t = time(0); // get current time
+	time_t t = time(0);				// Get current time
 	struct tm now;
 	localtime_s(&now,&t);
-	int year = now.tm_year - 100; // get current year, tm_year: years since 1900
+	int year = now.tm_year - 100;	// Get current year, tm_year: years since 1900
 
 	if(yearString == "") {
 		return year;
@@ -467,7 +477,7 @@ int Parser::parseDay(std::vector<std::string> dayString) {
 	Day day =		  (Day)(now.tm_wday);
 	int date =				now.tm_mday;
 
-	if(*curr == "today") {
+	if(*curr == "today" || *curr == "later") {
 		curr++;
 	} else if(*curr == "tmr" || *curr == "tomorrow") {
 		date++;
