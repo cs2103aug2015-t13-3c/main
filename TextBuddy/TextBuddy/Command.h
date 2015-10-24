@@ -85,6 +85,8 @@ protected:
 	//if start date equals end date, returns false if start time is later than end time
 	bool isDateLogical(Task task);
 	void sortDate(std::vector<Task> &taskVector);
+	//removes done tasks from currentView
+	void removeDoneTask();
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
 		std::vector<Task>::iterator &taskIter);

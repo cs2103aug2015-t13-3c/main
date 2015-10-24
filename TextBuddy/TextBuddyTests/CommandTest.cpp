@@ -710,6 +710,7 @@ public:
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
 		taskOne.setStartDate(150910);
+		taskOne.setEndDate(150910);
 		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
 		addOne.clearTaskStore();
 		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
@@ -720,18 +721,22 @@ public:
 		Task taskTwo;
 		taskTwo.setName("Sentence two.");
 		taskTwo.setStartDate(151010);
+		taskTwo.setEndDate(151010);
 		Add addTwo(taskTwo);
 		addTwo.execute();
 
 		Task taskThree;
 		taskThree.setName("Sentence three.");
 		taskThree.setStartDate(150809);
+		taskThree.setEndDate(150809);
+		taskThree.markDone();
 		Add addThree(taskThree);
 		addThree.execute();
 
 		Task taskFour;
 		taskFour.setName("Sentence four.");
 		taskFour.setStartDate(150910);
+		taskFour.setEndDate(150910);
 		Add addFour(taskFour);
 		addFour.execute();
 
@@ -755,6 +760,7 @@ public:
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
 		taskOne.setStartDate(150910);
+		taskOne.setEndDate(150910);
 		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
 		addOne.clearTaskStore();
 		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
@@ -765,12 +771,14 @@ public:
 		Task taskTwo;
 		taskTwo.setName("Sentence two.");
 		taskTwo.setStartDate(151010);
+		taskTwo.setEndDate(151010);
 		Add addTwo(taskTwo);
 		addTwo.execute();
 
 		Task taskThree;
 		taskThree.setName("Sentence three.");
 		taskThree.setStartDate(150809);
+		taskThree.setEndDate(150809);
 		taskThree.markDone();
 		Add addThree(taskThree);
 		addThree.execute();
@@ -778,6 +786,7 @@ public:
 		Task taskFour;
 		taskFour.setName("Sentence four.");
 		taskFour.setStartDate(150910);
+		taskFour.setEndDate(150910);
 		Add addFour(taskFour);
 		addFour.execute();
 

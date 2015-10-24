@@ -123,7 +123,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	}
 
 	// Sorts priority tasks to be at the top
-	i = taskVector.begin(); // Points to start of unsorted part
+	i = taskVector.begin();
 	while (i != taskVector.end()) {
 		for (j = i; j != taskVector.end(); ++j) {
 			if (j->getPriorityStatus() == true) {
@@ -138,6 +138,20 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 		++i;
 	}
 }
+
+void Command::removeDoneTask() {
+	std::vector<Task>::iterator i = currentView.begin();
+	//std::vector<Task>::iterator j;
+
+	while (i != currentView.end()) {
+		if (i->getDoneStatus() == true) {
+			i = currentView.erase(i);
+		} else {
+			++i;
+		}
+	}
+}
+
 
 // For now, currentView is set to be the same as taskStore
 bool Command::copyView() {
@@ -235,6 +249,7 @@ bool Add::addInfo() {
 
 	sortDate(taskStore);
 	copyView();
+	removeDoneTask();
 	return true;
 }
 
@@ -289,6 +304,7 @@ void Delete::deleteInfo() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
+	removeDoneTask();
 }
 
 // Added by Ren Zhi 24/10/15
@@ -383,6 +399,7 @@ void Modify::modifyInfo() {
 		*currIter = *taskIter;
 		sortDate(taskStore);
 		copyView();				//added to update currentView immediately
+		removeDoneTask();
 	}
 }
 
@@ -514,8 +531,6 @@ void Markdone::markDone() {
 	successMarkDone = taskIter->markDone();
 	if(successMarkDone) {
 		currentView.erase(currIter);
-		//temporary way to not display done tasks
-		taskStore.erase(taskIter);
 	} // Remove from current view only if mark done successful (Ren Zhi)
 }
 
@@ -674,6 +689,7 @@ bool View::viewTaskType(TaskType type) {
 	}
 
 	sortDate(currentView);
+	removeDoneTask();				//when viewing tasks based on task type, should done tasks be displayed?
 	return true;
 }
 
@@ -726,6 +742,8 @@ bool View::viewLabel(std::vector<std::string> label) {
 		}
 	}
 
+	removeDoneTask();				//when viewing tasks based on task type, should done tasks be displayed?
+	
 	return true;
 }
 
