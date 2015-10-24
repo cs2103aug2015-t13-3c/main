@@ -8,7 +8,7 @@ Task::Task() {
 	name = "";
 	type = FLOATING;
 	uniqueID = 0;
-	// label = "";
+	labels = std::set<std::string>();
 
 	isDone = false;
 	isPriority = false;
@@ -49,7 +49,37 @@ int Task::getStartDate() {return startDate;}
 int Task::getStartTime() {return startTime;}
 int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
+std::vector<std::string> Task::getLabelsToDelete() {return labelsToDelete;}
 
+std::vector<std::string> Task::getLabels() {
+	std::vector<std::string> labelVector;
+	std::set<std::string>::iterator i = labels.begin();
+	while(i != labels.end()) {
+		labelVector.push_back(*i);
+		++i;
+	}
+	return labelVector;
+}
+
+std::string Task::getLabelString() {
+	std::string label;
+	std::set<std::string>::iterator i = labels.begin();
+	while(i != labels.end()) {
+		label = label + *i + "\r\n";
+		++i;
+	}
+	//remove the last new line characters
+	if(!label.empty()) {
+		for(int j=0 ; j<2 ; ++j) {
+			label.pop_back();
+		}
+	}
+	return label;
+}
+
+std::string Task::getDateAndTime_UI() {
+	return Utilities::taskDateAndTimeToDisplayString(*this);
+}
 
 //========== Setters ==========
 // Return true if successful
@@ -87,6 +117,19 @@ bool Task::deleteLabels(std::vector<std::string> badLabels) {
 			}
 		}
 	}
+	return true;
+}
+
+bool Task::setLabelsToDelete(std::vector<std::string> oldLabels) {
+	labelsToDelete = oldLabels;
+	return true;
+}
+
+bool Task::clearLabels() {
+	if(labels.size() == 0) {
+		return false;
+	}
+	labels.clear();
 	return true;
 }
 
@@ -128,36 +171,6 @@ bool Task::setEndDate(int newEndDate) {
 bool Task::setEndTime(int newEndTime) {
 	endTime = newEndTime;
 	return true;
-}
-
-std::vector<std::string> Task::getLabels() {
-	std::vector<std::string> labelVector;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		labelVector.push_back(*i);
-		++i;
-	}
-	return labelVector;
-}
-
-std::string Task::getLabelString() {
-	std::string label;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		label = label + *i + "\r\n";
-		++i;
-	}
-	//remove the last new line characters
-	if(!label.empty()) {
-		for(int j=0 ; j<2 ; ++j) {
-			label.pop_back();
-		}
-	}
-	return label;
-}
-
-std::string Task::getDateAndTime_UI() {
-	return Utilities::taskDateAndTimeToDisplayString(*this);
 }
 
 // For testing

@@ -17,11 +17,12 @@ const std::string FIELD_DATE_ON = "on";
 const std::string FIELD_TIME_AT = "at";
 
 // These are the Field enums
-// Count: 9 + INVALID_FIELD
+// Count: 10 + INVALID_FIELD
 enum FieldType {
 	NAME,
 	LABELS_ADD,
 	LABELS_DELETE,
+	LABELS_CLEAR,
 	PRIORITY_SET,
 	PRIORITY_UNSET,
 	START_DATE,
@@ -60,8 +61,10 @@ private:
 	std::string name;
 	TaskType type;
 	int uniqueID;
-	// std::string label; 
+	
 	std::set<std::string> labels;
+	std::vector<std::string> labelsToDelete;
+
 	std::string dateAndTime_UI;
 
 	bool isDone;
@@ -88,6 +91,7 @@ public:
 	int getID();
 	std::string getLabelString();
 	std::vector<std::string> getLabels();
+	std::vector<std::string> getLabelsToDelete();
 	std::string getDateAndTime_UI();
 
 	bool getDoneStatus();
@@ -103,9 +107,11 @@ public:
 	bool setName(std::string newName);
 	bool setType(TaskType newType);
 	bool setID(int newID);
-	// bool setLabel(std::string newLabel);
+	
 	bool addLabels(std::vector<std::string> newLabels);
-	bool deleteLabels(std::vector<std::string> oldLabels);
+	bool deleteLabels(std::vector<std::string> badLabels);
+	bool setLabelsToDelete(std::vector<std::string> oldLabels);
+	bool clearLabels();
 
 	bool markDone();		// Returns false if already done
 	bool unmarkDone();		// Returns false if already not done

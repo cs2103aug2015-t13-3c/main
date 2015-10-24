@@ -1,6 +1,6 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
-// Modified to Command Pattern by @@author A0130463R (Ng Ren Zhi)
-// Private methods originally by @@author A0096720A (Chin Kiat Boon)
+// Created and maintained by @@author A0110376N (Aaron Chong Jun Hao)
+// Modified to Command Pattern by Ng Ren Zhi
+// Private methods originally by Chin Kiat Boon
 
 #include "stdafx.h"
 
@@ -55,7 +55,7 @@ void Command::execute() {
 
 // Virtual function does nothing
 void Command::undo() {
-	throw ("Action cannot be undone");
+	throw std::runtime_error("Action cannot be undone");
 }
 
 //================ COMMAND : PROTECTED METHODS ==================
@@ -64,7 +64,6 @@ std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
-
 
 bool Command::isDateLogical(Task task) {
 	if (task.getStartDate() > task.getEndDate()) {
@@ -79,12 +78,11 @@ bool Command::isDateLogical(Task task) {
 
 // Sorts floating tasks to be at the bottom
 void Command::sortFloating(std::vector<Task> &taskVector) {
-
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
 	std::vector<Task>::iterator k;
 	Task tempTask;
-	
+
 	// Bugfix: in-place sorting (Ren Zhi)
 	i = taskVector.begin();	// Points to start of unsorted part
 	k = taskVector.end();	// Points to end of unsorted part
@@ -105,7 +103,6 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 
 // Sorts priority tasks to be at the top
 void Command::sortPriority(std::vector<Task> &taskVector) {
-
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
 	std::vector<Task>::iterator k;
@@ -125,15 +122,14 @@ void Command::sortPriority(std::vector<Task> &taskVector) {
 		}
 		++i;
 	}
-
 }
+
 // Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
 // Use this before returning to UI for display
 void Command::sortDate(std::vector<Task> &taskVector) {
-
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
-	
+
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		assert((i->getStartDate() < i->getEndDate()) || 
 			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
@@ -143,7 +139,6 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 			}
 		}
 	}
-	
 
 	// Sorts date after time to ensure date is accurately sorted
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
@@ -156,7 +151,6 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 
 	sortFloating(taskVector);
 	sortPriority(taskVector);
-
 }
 
 void Command::removeDoneTask() {
@@ -170,7 +164,6 @@ void Command::removeDoneTask() {
 		}
 	}
 }
-
 
 // For now, currentView is set to be the same as taskStore
 bool Command::copyView() {
@@ -257,7 +250,7 @@ std::string Add::getMessage() {
 
 bool Add::addInfo() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
-	
+
 	//added @kiatboon 24/10/15 
 	if (isDateLogical(newTask) == false) {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
@@ -394,7 +387,10 @@ void Modify::modifyInfo() {
 			taskIter->addLabels(tempTask.getLabels());
 			break;
 		case LABELS_DELETE:
-			taskIter->deleteLabels(taskIter->getLabels());
+			taskIter->deleteLabels(tempTask.getLabelsToDelete());
+			break;
+		case LABELS_CLEAR:
+			taskIter->clearLabels();
 			break;
 		case PRIORITY_SET:
 			taskIter->setPriority();
@@ -613,29 +609,7 @@ Redo::~Redo() {}
 //==================================================
 //                        VIEW
 //==================================================
-/* For reference
-// These are the valid View keywords
-// Count: 6
-const std::string VIEW_ALL = "all";
-const std::string VIEW_FLOATING = "floating";
-const std::string VIEW_PAST = "past";
-const std::string VIEW_TODO = "todo";
-const std::string VIEW_WEEK = "week";
-const std::string VIEW_LABEL = "label";
 
-// These are the View enums
-// Count: 7 + VIEWTYPE_INVALID
-enum ViewType {
-VIEWTYPE_ALL,
-VIEWTYPE_FLOATING,
-VIEWTYPE_TODO,
-VIEWTYPE_NOTDONE,  // FLOATING + TODO
-VIEWTYPE_PAST,
-VIEWTYPE_WEEK,
-VIEWTYPE_LABELS,
-VIEWTYPE_INVALID
-};
-*/
 View::View(ViewType newView, std::string restOfInput) : Command(VIEW) {
 	view = newView;
 	viewLabels = Utilities::stringToVec(restOfInput);
@@ -659,6 +633,10 @@ void View::execute() {
 
 	case VIEWTYPE_FLOATING:
 		viewTaskType(FLOATING);
+		break;
+
+	case VIEWTYPE_EVENT:
+		viewTaskType(EVENT);
 		break;
 
 	case VIEWTYPE_TODO:
@@ -764,8 +742,8 @@ bool View::viewLabel(std::vector<std::string> label) {
 		}
 	}
 
-	removeDoneTask();				//when viewing tasks based on task type, should done tasks be displayed?
-	
+	removeDoneTask();				// When viewing tasks based on task type, should done tasks be displayed?
+									// Nope, display done tasks only when viewing "all" and "past" (Aaron)
 	return true;
 }
 
