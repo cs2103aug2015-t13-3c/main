@@ -77,9 +77,14 @@ protected:
 	static std::vector<Task> taskStore;
 
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
+	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
 
 	bool copyView();
-	bool sortDate(std::vector<Task> &taskVector);
+
+	//returns false if start date is later than end date
+	//if start date equals end date, returns false if start time is later than end time
+	bool isDateLogical(Task task);
+	void sortDate(std::vector<Task> &taskVector);
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
 		std::vector<Task>::iterator &taskIter);

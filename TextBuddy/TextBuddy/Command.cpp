@@ -63,26 +63,35 @@ void Command::undo() {
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
+const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
+
+
+bool Command::isDateLogical(Task task) {
+	if (task.getStartDate() > task.getEndDate()) {
+		return false;
+	} else if (task.getStartDate() == task.getEndDate()) {
+		if (task.getStartTime() > task.getEndTime()) {
+			return false;
+		}
+	}
+	return true;
+}
 
 // Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
 // Use this before returning to UI for display
-bool Command::sortDate(std::vector<Task> &taskVector) {
+void Command::sortDate(std::vector<Task> &taskVector) {
 
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
 	std::vector<Task>::iterator k;
 	Task tempTask;
-	if(taskVector.size() == 0) {
-		return false;
-	}
-		
+	
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		for (j = i+1; j != taskVector.end(); ++j) {
 			if(j -> getStartTime() < i->getStartTime()) {
 				std::swap(*i, *j);
 			}
 		}
-
 	}
 	
 
@@ -128,7 +137,6 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 		}
 		++i;
 	}
-	return true;
 }
 
 // For now, currentView is set to be the same as taskStore
@@ -215,6 +223,12 @@ std::string Add::getMessage() {
 
 bool Add::addInfo() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
+	
+	//added @kiatboon 24/10/15 
+	if (isDateLogical(newTask) == false) {
+		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
+	}
+
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
 	currViewID = currentView.size();
