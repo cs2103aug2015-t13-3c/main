@@ -65,6 +65,24 @@ std::vector<Task> Command::currentView;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
 
+// Added by Ren Zhi 24/10/15
+// Initialises the corresponding iterators with the taskID
+// TaskID is the ID seen on GUI, not the unique task ID
+// Use for in-place insertion / deletion for undo methods
+void Command::initialiseIterators(int taskID) {
+	matchIndex(taskID,currViewIter,taskStoreIter);
+	currViewPos = currViewIter - currentView.begin();
+	taskStorePos = taskStoreIter - taskStore.begin();
+}
+
+// Added by Ren Zhi 24/10/15
+// Get iterators from their vector index
+// Use for in-place insertion / deletion for undo methods
+// Don't use previous iterator values, because it may go out-of-bounds
+void Command::getIterator() {
+	currViewIter = currentView.begin() + currViewPos;
+	taskStoreIter = taskStore.begin() + taskStorePos;
+}
 
 bool Command::isDateLogical(Task task) {
 	if (task.getStartDate() > task.getEndDate()) {
@@ -292,6 +310,7 @@ int Delete::getDeleteID() {
 void Delete::execute() {
 	// userIndex refers to the nth task of currentView presented to user
 	// eg. delete 1 means deleting the first task
+	initialiseIterators(deleteID);
 	deleteInit();
 	deleteInfo();
 }
@@ -330,9 +349,6 @@ void Delete::deleteInfo() {
 // Added by Ren Zhi 24/10/15
 // Initialises undo info for delete command
 void Delete::deleteInit() {
-	matchIndex(deleteID,currViewIter,taskStoreIter);
-	currViewPos = currViewIter - currentView.begin();
-	taskStorePos = taskStoreIter - taskStore.begin();
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -539,20 +555,24 @@ void Markdone::execute() {
 
 void Markdone::undo() {
 	if(successMarkDone) {
-		taskIter->unmarkDone();
-		currentView.insert(currIter,*taskIter);
-	}
+		getIterator();
+		taskStoreIter->unmarkDone();
+		currentView.insert(currViewIter,*taskStoreIter);
+	}	
 }
+
+
 
 //============= MARKDONE : PRIVATE METHODS ===========
 
 // Modified by Hao Ye 14/10/15
 void Markdone::markDone() {
-	matchIndex(doneID,currIter,taskIter);
+	initialiseIterators(doneID);
 
-	successMarkDone = taskIter->markDone();
+	successMarkDone = taskStoreIter->markDone();
+
 	if(successMarkDone) {
-		currentView.erase(currIter);
+		currentView.erase(currViewIter);
 	} // Remove from current view only if mark done successful (Ren Zhi)
 }
 
@@ -578,19 +598,20 @@ void UnmarkDone::execute() {
 
 void UnmarkDone::undo() {
 	if(successUnmarkDone) {
-		taskIter->markDone();
-		currentView.insert(currIter,*taskIter);
+		getIterator();
+		taskStoreIter->markDone();
+		currentView.insert(currViewIter,*taskStoreIter);
 	}
 }
 
 //=========== UNMARKDONE : PRIVATE METHODS ==========
 
 void UnmarkDone::unmarkDone() {
-	matchIndex(undoneID,currIter,taskIter);
-	successUnmarkDone = taskIter->unmarkDone();
+	initialiseIterators(undoneID);
+	successUnmarkDone = taskStoreIter->unmarkDone();
 
 	if(successUnmarkDone) {
-		currentView.erase(currIter);
+		currentView.erase(currViewIter);
 	} // Remove from current view only if unmark done successful (Ren Zhi)
 }
 

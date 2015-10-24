@@ -76,10 +76,19 @@ protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
 
+	//===== FOR UNDO =====
+	std::vector<Task>::iterator currViewIter;
+	std::vector<Task>::iterator taskStoreIter;
+	int currViewPos;
+	int taskStorePos;
+
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
 
 	bool copyView();
+
+	void initialiseIterators(int taskID);
+	void getIterator();
 
 	//returns false if start date is later than end date
 	//if start date equals end date, returns false if start time is later than end time
@@ -145,10 +154,6 @@ private:
 	int deleteID; // ID on GUI, not taskID
 	//==== UNDO ===
 	Task taskToBeDeleted;
-	std::vector<Task>::iterator currViewIter;
-	std::vector<Task>::iterator taskStoreIter;
-	int currViewPos;
-	int taskStorePos;
 
 	void deleteInfo();
 	void deleteInit();
@@ -211,8 +216,6 @@ private:
 	int doneID;
 	//==== UNDO ===
 	bool successMarkDone;
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
 
 	void markDone();
 public:
@@ -230,8 +233,6 @@ private:
 	int undoneID;
 	//==== UNDO ===
 	bool successUnmarkDone;
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
 
 	void unmarkDone();
 public:
