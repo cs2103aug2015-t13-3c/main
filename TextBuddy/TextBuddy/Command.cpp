@@ -146,6 +146,7 @@ void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 								 index = currIter->getID();
 								 taskIter = matchTaskStoreIndex(index);
 							 } else {
+								 TbLogger::getInstance()->log(WARN,"Invalid index: " + std::to_string(index));
 								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
 							 }
 }
@@ -296,8 +297,6 @@ Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(M
 	modifyID = taskID;
 	fieldsToModify = fields;
 	tempTask = task;
-	matchIndex(modifyID,currIter,taskIter);
-	originalTask = *currIter;
 }
 
 Modify::~Modify() {}
@@ -315,6 +314,8 @@ Task Modify::getTempTask() {
 }
 
 void Modify::execute() {
+	matchIndex(modifyID,currIter,taskIter);
+	originalTask = *currIter;
 	modifyInfo();
 }
 
@@ -329,8 +330,9 @@ std::string Modify::getMessage() {
 
 //============= MODIFY : PRIVATE METHODS ===========
 
-// Modified by Hao Ye 14/10/15
-// Modified by Ren Zhi 20/10/15 updated add/deleteLabels
+// Modified by Hao Ye	14/10/15
+// Modified by Ren Zhi	20/10/15 Updated add/deleteLabels
+// Modified by Aaron	24/10/15 Fix 'for' to only loop 'switch'
 void Modify::modifyInfo() {
 	std::vector<FieldType>::iterator fieldIter;
 
@@ -366,10 +368,11 @@ void Modify::modifyInfo() {
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
-		*currIter = *taskIter;
-		sortDate(taskStore);
-		copyView();				//added to update currentView immediately
 	}
+
+	*currIter =	*taskIter;
+	sortDate(taskStore);
+	copyView(); // Update currentView immediately
 }
 
 //==================================================
@@ -846,6 +849,6 @@ Exit::Exit() : Command(EXIT) {}
 Exit::~Exit() {}
 
 void Exit::execute() {
-	TbLogger::getInstance()->close();
+	delete TbLogger::getInstance();
 	exit(0);
 }
