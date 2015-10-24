@@ -299,7 +299,13 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		newTask->setEndDate(newDate+10000); // Set end date as next year
 	}
 
-	log(INFO,"Parsed task ID: " + std::to_string(newTask->getID()));
+	// Added by Kiat Boon 24/10/15
+	if (newTask->getType() == TODO) {
+		newTask->setStartDate(newTask->getEndDate());
+		newTask->setStartTime(newTask->getEndTime());
+	}
+
+	log(INFO,"Parsed task");
 	return newTask;
 }
 
