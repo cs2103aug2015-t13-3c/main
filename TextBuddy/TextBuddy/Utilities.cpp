@@ -252,6 +252,7 @@ std::string Utilities::dayToString(Day day) {
 std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 	std::vector<FieldType>::iterator curr = fieldsToModify.begin();
 	std::string newString;
+
 	while(curr != fieldsToModify.end()) {
 		switch(*curr) {
 		case NAME: newString += FIELD_NAME;
@@ -276,8 +277,10 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 			break;
 		case INVALID_FIELD:
 			newString += "FIELD_INVALID";
+			break;
 		}
 
+		TbLogger::getInstance(); // Somehow removing this crashes the program (Aaron)
 		if(++curr != fieldsToModify.end()) {
 			newString += " ";
 		}

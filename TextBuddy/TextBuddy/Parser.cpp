@@ -334,15 +334,15 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 		newField = Utilities::stringToFieldType(*curr);
 		if(newField == LABELS_DELETE
 			&& curr+1 != vecInput.end()
-			&& Utilities::stringToFieldType(*(curr+1)) != INVALID) {
+			&& Utilities::stringToFieldType(*(curr+1)) != INVALID_FIELD) {
 				fields.push_back(LABELS_CLEAR);
 		} else if(newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}
 		curr++;
 	}
-	
-	log(DEBUG,"Fields extracted: " + Utilities::fieldVecToString(fields));
+
+	TbLogger::getInstance()->log(DEBUG,"Fields extracted: " + Utilities::fieldVecToString(fields));
 	return fields;
 }
 

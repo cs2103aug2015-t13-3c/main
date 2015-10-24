@@ -114,6 +114,9 @@ bool Task::deleteLabels(std::vector<std::string> badLabels) {
 		for(labelsCurr=labels.begin();labelsCurr!=labels.end(); labelsCurr++) {
 			if(Utilities::equalsIgnoreCase(*badCurr,*labelsCurr)) {
 				labelsCurr = labels.erase(labelsCurr);
+				if(labelsCurr == labels.end()) {
+					break;
+				}
 			}
 		}
 	}
