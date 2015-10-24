@@ -56,3 +56,8 @@ void History::redo() {
 	}
 	return;
 }
+
+void History::clearHistory() {
+	commandHistory.clear();
+	redoHistory.clear();
+}

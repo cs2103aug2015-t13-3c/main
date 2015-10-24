@@ -1,8 +1,9 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
-// Modified to Command Pattern by @@author A0130463R (Ng Ren Zhi)
-// Private methods originally by @@author A0096720A (Chin Kiat Boon)
+// Created and maintained by @@author A0110376N (Aaron Chong Jun Hao)
+// Modified to Command Pattern by Ng Ren Zhi
+// Private methods originally by Chin Kiat Boon
 
 #include "stdafx.h"
+#include "History.h"
 
 //==================================================
 //                      COMMAND
@@ -17,6 +18,14 @@ Command::Command(CommandType newCmd, std::string rawInput) {
 
 Command::~Command() {}
 
+// Check with Hanrui if formatting single-step getters like this will be penalised
+CommandType Command::getCommand() {return cmd;}
+std::string Command::getUserInput() {return userInput;}
+std::vector<Task> Command::getTaskStore() {return taskStore;}
+std::vector<Task> Command::getCurrentView() {return currentView;}
+std::vector<Task>* Command::getCurrentViewPtr() {return &currentView;}
+int Command::getSize() {return taskStore.size();}
+/*
 CommandType Command::getCommand() {
 	return cmd;
 }
@@ -40,6 +49,7 @@ std::vector<Task>* Command::getCurrentViewPtr() {
 int Command::getSize() {
 	return taskStore.size();
 }
+*/
 
 void Command::clearTaskStore() {
 	IO* io = IO::getInstance();
@@ -49,14 +59,9 @@ void Command::clearTaskStore() {
 	return;
 }
 
-// Virtual function does nothing
-void Command::execute() {
-}
-
-// Virtual function does nothing
-void Command::undo() {
-	throw ("Action cannot be undone");
-}
+// Virtual functions
+void Command::execute() {}
+void Command::undo() {throw std::runtime_error("Action cannot be undone");}
 
 //================ COMMAND : PROTECTED METHODS ==================
 
@@ -97,12 +102,11 @@ bool Command::isDateLogical(Task task) {
 
 // Sorts floating tasks to be at the bottom
 void Command::sortFloating(std::vector<Task> &taskVector) {
-
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
 	std::vector<Task>::iterator k;
 	Task tempTask;
-	
+
 	// Bugfix: in-place sorting (Ren Zhi)
 	i = taskVector.begin();	// Points to start of unsorted part
 	k = taskVector.end();	// Points to end of unsorted part
@@ -123,7 +127,6 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 
 // Sorts priority tasks to be at the top
 void Command::sortPriority(std::vector<Task> &taskVector) {
-
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
 	std::vector<Task>::iterator k;
@@ -143,15 +146,14 @@ void Command::sortPriority(std::vector<Task> &taskVector) {
 		}
 		++i;
 	}
-
 }
+
 // Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
 // Use this before returning to UI for display
 void Command::sortDate(std::vector<Task> &taskVector) {
-
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
-	
+
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		assert((i->getStartDate() < i->getEndDate()) || 
 			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
@@ -161,7 +163,6 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 			}
 		}
 	}
-	
 
 	// Sorts date after time to ensure date is accurately sorted
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
@@ -174,7 +175,6 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 
 	sortFloating(taskVector);
 	sortPriority(taskVector);
-
 }
 
 void Command::removeDoneTask() {
@@ -188,7 +188,6 @@ void Command::removeDoneTask() {
 		}
 	}
 }
-
 
 // For now, currentView is set to be the same as taskStore
 bool Command::copyView() {
@@ -275,7 +274,7 @@ std::string Add::getMessage() {
 
 bool Add::addInfo() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
-	
+
 	//added @kiatboon 24/10/15 
 	if (isDateLogical(newTask) == false) {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
@@ -410,7 +409,10 @@ void Modify::modifyInfo() {
 			taskIter->addLabels(tempTask.getLabels());
 			break;
 		case LABELS_DELETE:
-			taskIter->deleteLabels(taskIter->getLabels());
+			taskIter->deleteLabels(tempTask.getLabelsToDelete());
+			break;
+		case LABELS_CLEAR:
+			taskIter->clearLabels();
 			break;
 		case PRIORITY_SET:
 			taskIter->setPriority();
@@ -433,6 +435,16 @@ void Modify::modifyInfo() {
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
+	}
+
+	if(taskIter->getStartDate()==0 && taskIter->getStartTime()==0
+		&& taskIter->getEndDate()==0 && taskIter->getEndTime()==0) {
+			taskIter->setType(FLOATING);
+	} else if(taskIter->getStartDate() == taskIter->getEndDate()
+		&& taskIter->getStartTime() == taskIter->getEndTime()) {
+			taskIter->setType(TODO);
+	} else {
+		taskIter->setType(EVENT);
 	}
 
 	*currIter =	*taskIter;
@@ -634,29 +646,7 @@ Redo::~Redo() {}
 //==================================================
 //                        VIEW
 //==================================================
-/* For reference
-// These are the valid View keywords
-// Count: 6
-const std::string VIEW_ALL = "all";
-const std::string VIEW_FLOATING = "floating";
-const std::string VIEW_PAST = "past";
-const std::string VIEW_TODO = "todo";
-const std::string VIEW_WEEK = "week";
-const std::string VIEW_LABEL = "label";
 
-// These are the View enums
-// Count: 7 + VIEWTYPE_INVALID
-enum ViewType {
-VIEWTYPE_ALL,
-VIEWTYPE_FLOATING,
-VIEWTYPE_TODO,
-VIEWTYPE_NOTDONE,  // FLOATING + TODO
-VIEWTYPE_PAST,
-VIEWTYPE_WEEK,
-VIEWTYPE_LABELS,
-VIEWTYPE_INVALID
-};
-*/
 View::View(ViewType newView, std::string restOfInput) : Command(VIEW) {
 	view = newView;
 	viewLabels = Utilities::stringToVec(restOfInput);
@@ -680,6 +670,10 @@ void View::execute() {
 
 	case VIEWTYPE_FLOATING:
 		viewTaskType(FLOATING);
+		break;
+
+	case VIEWTYPE_EVENT:
+		viewTaskType(EVENT);
 		break;
 
 	case VIEWTYPE_TODO:
@@ -761,6 +755,7 @@ bool View::viewNotdone() {
 	}
 	return true;
 }
+
 // Delete viewLabel if we use search to search for label
 // If view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::vector<std::string> label) {
@@ -785,8 +780,8 @@ bool View::viewLabel(std::vector<std::string> label) {
 		}
 	}
 
-	removeDoneTask();				//when viewing tasks based on task type, should done tasks be displayed?
-	
+	removeDoneTask();				// When viewing tasks based on task type, should done tasks be displayed?
+	// Nope, display done tasks only when viewing "all" and "past" (Aaron)
 	return true;
 }
 
@@ -844,7 +839,6 @@ void DisplayAll::formatDefaultView() {
 	currentView = noStar;
 }
 
-
 void DisplayAll::undo() {
 	currentView = previousView;
 	// TODO: feedback
@@ -871,14 +865,17 @@ std::string Load::getFilePath() {
 	return filePath;
 }
 
-// TODO: Clear history after load, to avoid seg fault
 void Load::execute() {
 	// Note: filePath should already have been parsed (Aaron)
-	// Parser* parser = Parser::getInstance();
-	// std::string newFilePath = parser->parseFileName(filePath);
-
-	taskStore = io->loadFile(filePath);
-	io->setFilePath(filePath,taskStore);
+	std::vector<Task> temp = taskStore;
+	try {
+		taskStore = io->loadFile(filePath);		// Exception thrown if file does not exist
+		History::getInstance()->clearHistory(); // Clear history after load, to avoid seg fault
+		copyView();								// Update currentView
+	} catch (std::exception e) {
+		taskStore = temp;
+		throw e;
+	}
 }
 
 //==================================================
@@ -921,6 +918,8 @@ Exit::Exit() : Command(EXIT) {}
 Exit::~Exit() {}
 
 void Exit::execute() {
+	IO* io = IO::getInstance();
+	io->saveFile(io->getFilePath(),taskStore); // In case user or system deletes file or .tbconfig
 	delete TbLogger::getInstance();
 	exit(0);
 }

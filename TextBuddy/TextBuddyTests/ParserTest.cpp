@@ -42,8 +42,8 @@ public:
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 
 		// Added by Ren Zhi 19/10/15
-		expectedString = "C:\\\\Users\\\\Public\\\\test.txt";
-		userInput = "C:\\Users\\Public\\test.txt";
+		expectedString = "C:\\\\Users\\\\%USERNAME%\\\\Downloads\\TEXT.txt";
+		userInput = "C:\\Users\\%USERNAME%\\Downloads\\TEXT.txt";
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 	}
 

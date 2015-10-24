@@ -20,6 +20,7 @@ public:
 	void add(Command *cmd);
 	void undo();
 	void redo();
+	void clearHistory();
 };
 
 #endif

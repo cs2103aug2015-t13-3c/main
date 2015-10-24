@@ -45,25 +45,27 @@ enum CommandType {
 };
 
 // These are the valid View keywords
-// Count: 7
+// Count: 8
 const std::string VIEW_ALL = "all";
 const std::string VIEW_FLOATING = "floating";
-const std::string VIEW_PAST = "past";
+const std::string VIEW_EVENT = "event";
 const std::string VIEW_TODO = "todo";
+const std::string VIEW_NOTDONE = "notdone";
+const std::string VIEW_PAST = "past";
 const std::string VIEW_WEEK = "week";
 const std::string VIEW_LABEL = "label";
-const std::string VIEW_NOTDONE = "notdone";
 
 // These are the View enums
-// Count: 6 + VIEWTYPE_INVALID
+// Count: 8 + VIEWTYPE_INVALID
 enum ViewType {
 	VIEWTYPE_ALL,
 	VIEWTYPE_FLOATING,
-	VIEWTYPE_PAST,
+	VIEWTYPE_EVENT,
 	VIEWTYPE_TODO,
+	VIEWTYPE_NOTDONE,
+	VIEWTYPE_PAST,
 	VIEWTYPE_WEEK,
 	VIEWTYPE_LABELS,
-	VIEWTYPE_NOTDONE,
 	VIEWTYPE_INVALID
 };
 

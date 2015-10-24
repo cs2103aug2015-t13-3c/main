@@ -167,14 +167,16 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 		view = VIEWTYPE_ALL;
 	} else if(equalsIgnoreCase(viewString,VIEW_FLOATING)) {
 		view = VIEWTYPE_FLOATING;
+	} else if(equalsIgnoreCase(viewString,VIEW_EVENT)) {
+		view = VIEWTYPE_EVENT;
 	} else if(equalsIgnoreCase(viewString,VIEW_TODO)) {
 		view = VIEWTYPE_TODO;
+	} else if(equalsIgnoreCase(viewString,VIEW_NOTDONE)) {
+		view = VIEWTYPE_NOTDONE;
 	} else if(equalsIgnoreCase(viewString,VIEW_PAST)) {
 		view = VIEWTYPE_PAST;
 	} else if(equalsIgnoreCase(viewString,VIEW_WEEK)) {
 		view = VIEWTYPE_WEEK;
-	} else if(equalsIgnoreCase(viewString,VIEW_NOTDONE)) {
-		view = VIEWTYPE_NOTDONE;
 	} else {
 		view = VIEWTYPE_LABELS;
 	}
@@ -185,6 +187,7 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 	case VIEWTYPE_INVALID:
 	case VIEWTYPE_ALL:
 	case VIEWTYPE_FLOATING:
+	case VIEWTYPE_EVENT:
 	case VIEWTYPE_TODO:
 	case VIEWTYPE_NOTDONE:
 	case VIEWTYPE_PAST:
@@ -246,6 +249,45 @@ std::string Utilities::dayToString(Day day) {
 	return dayString;
 }
 
+std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
+	std::vector<FieldType>::iterator curr = fieldsToModify.begin();
+	std::string newString;
+
+	while(curr != fieldsToModify.end()) {
+		switch(*curr) {
+		case NAME: newString += FIELD_NAME;
+			break;
+		case LABELS_ADD: newString += FIELD_LABEL_ADD;
+			break;
+		case LABELS_DELETE: newString += FIELD_LABEL_DELETE;
+			break;
+		case LABELS_CLEAR: newString += "LABELS_CLEAR";
+			break;
+		case PRIORITY_SET: newString += FIELD_PRIORITY_SET;
+			break;
+		case PRIORITY_UNSET: newString += FIELD_PRIORITY_UNSET;
+			break;
+		case START_DATE: newString += FIELD_DATE_FROM;
+			break;
+		case END_DATE: newString += FIELD_DATE_TO;
+			break;
+		case START_TIME: newString += FIELD_TIME_AT;
+			break;
+		case END_TIME: newString += "FIELD_END_TIME";
+			break;
+		case INVALID_FIELD:
+			newString += "FIELD_INVALID";
+			break;
+		}
+
+		TbLogger::getInstance(); // Somehow removing this crashes the program (Aaron)
+		if(++curr != fieldsToModify.end()) {
+			newString += " ";
+		}
+	}
+	return newString;
+}
+
 std::string Utilities::taskToString(Task task) {
 	const int MAX_BYTES = 2550;
 	char buffer[MAX_BYTES] = "";
@@ -279,39 +321,6 @@ std::string Utilities::taskTypeToString(TaskType type) {
 		break;
 	}
 	return typeString;
-}
-
-std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
-	std::vector<FieldType>::iterator curr = fieldsToModify.begin();
-	std::string newString;
-	while(curr != fieldsToModify.end()) {
-		if(*curr == NAME) {
-			newString += FIELD_NAME;
-		} else if(*curr == LABELS_ADD) {
-			newString += FIELD_LABEL_ADD;
-		} else if(*curr == LABELS_DELETE) {
-			newString += FIELD_LABEL_DELETE;
-		} else if(*curr == PRIORITY_SET) {
-			newString += FIELD_PRIORITY_SET;
-		} else if(*curr == PRIORITY_UNSET) {
-			newString += FIELD_PRIORITY_UNSET;
-		} else if(*curr == START_DATE) {
-			newString += FIELD_DATE_FROM;
-		} else if(*curr == END_DATE) {
-			newString += FIELD_DATE_TO;
-		} else if(*curr == START_TIME) {
-			newString += FIELD_TIME_AT;
-		} else {
-			newString += INVALID_FIELD;
-		}
-
-		TbLogger::getInstance()->log(DEBUG,"Current field string: " + newString);
-		curr++;
-		if(curr != fieldsToModify.end()) {
-			newString += " ";
-		}
-	}
-	return newString;
 }
 
 std::string Utilities::vecToString(std::vector<std::string> inputString) {

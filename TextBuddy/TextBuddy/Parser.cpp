@@ -236,7 +236,10 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->addLabels(Utilities::removeSlashKeywords(inputString));
 			break;
 		case LABELS_DELETE:
-			newTask->deleteLabels(Utilities::removeSlashKeywords(inputString));
+			newTask->setLabelsToDelete(Utilities::removeSlashKeywords(inputString));
+			break;
+		case LABELS_CLEAR:
+			// Nothing to set
 			break;
 		case PRIORITY_SET:
 			log(DEBUG,"Setting priority");
@@ -252,9 +255,9 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		case END_DATE:
 			if(newTask->getType() == FLOATING) {
 				newTask->setType(TODO);
-			}
-			if(newTask->getStartDate() == 0) {
-				newTask->setStartDate(newDate);
+			} else if((newTask->getType() == TODO)
+				|| (newTask->getType() == EVENT && newTask->getStartDate() == 0)) {
+					newTask->setStartDate(newDate);
 			}
 			newTask->setEndDate(newDate);
 			break;
@@ -329,12 +332,17 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 	FieldType newField;
 	while(curr != vecInput.end()) {
 		newField = Utilities::stringToFieldType(*curr);
-		if(newField != INVALID_FIELD) {
+		if(newField == LABELS_DELETE
+			&& curr+1 != vecInput.end()
+			&& Utilities::stringToFieldType(*(curr+1)) != INVALID_FIELD) {
+				fields.push_back(LABELS_CLEAR);
+		} else if(newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}
 		curr++;
 	}
 
+	TbLogger::getInstance()->log(DEBUG,"Fields extracted: " + Utilities::fieldVecToString(fields));
 	return fields;
 }
 
