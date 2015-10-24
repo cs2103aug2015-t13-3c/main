@@ -420,6 +420,16 @@ void Modify::modifyInfo() {
 		}
 	}
 
+	if(taskIter->getStartDate()==0 && taskIter->getStartTime()==0
+		&& taskIter->getEndDate()==0 && taskIter->getEndTime()==0) {
+			taskIter->setType(FLOATING);
+	} else if(taskIter->getStartDate() == taskIter->getEndDate()
+		&& taskIter->getStartTime() == taskIter->getEndTime()) {
+			taskIter->setType(TODO);
+	} else {
+		taskIter->setType(EVENT);
+	}
+
 	*currIter =	*taskIter;
 	sortDate(taskStore);
 	copyView(); // Update currentView immediately
