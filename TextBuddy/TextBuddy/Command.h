@@ -75,6 +75,7 @@ private:
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
+	static std::vector<Task> doneTaskStore;
 
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 
@@ -86,6 +87,7 @@ protected:
 	bool isValidIndex(int index);
 	std::vector<Task>::iterator matchCurrentViewIndex(int index);
 	std::vector<Task>::iterator matchTaskStoreIndex(int index);
+	std::vector<Task>::iterator matchDoneTaskStoreIndex(int index);
 
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
@@ -205,6 +207,7 @@ private:
 	std::vector<Task>::iterator taskIter;
 
 	void markDone();
+	bool markInit();
 public:
 	Markdone(int taskID);
 	~Markdone();
@@ -218,12 +221,14 @@ class UnmarkDone: public Command {
 private:
 	//== EXECUTE ==
 	int undoneID;
+	int taskUniqueID;
 	//==== UNDO ===
 	bool successUnmarkDone;
 	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
+	std::vector<Task>::iterator doneTaskIter;
 
 	void unmarkDone();
+	bool unmarkInit();
 public:
 	UnmarkDone(int taskID);
 	~UnmarkDone();

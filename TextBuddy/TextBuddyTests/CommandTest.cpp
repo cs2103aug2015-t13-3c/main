@@ -581,30 +581,44 @@ public:
 		addOne.execute();
 
 		task.setID(task.incrementRunningCount());
-		task.markDone();
+		task.setName("TWO");
 		Add addTwo(task);
 		addTwo.execute();
-
+		Markdone markdoneTwo(2);
+		markdoneTwo.execute();
+		
 		// Start unmarkDone
-		UnmarkDone unmarkdoneOne(1);
+		UnmarkDone unmarkdoneOne(1); // Already unmarked, so nothing should happen
 		unmarkdoneOne.execute();
-
+				
 		std::vector<Task> copyTask;
 		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)2,copyTask.size());
+		Assert::AreEqual((size_t)1,copyTask.size());
+		
+		View viewPast(VIEWTYPE_PAST,"");
+		viewPast.execute();
 
-		UnmarkDone unmarkdoneTwo(2);
+		copyTask = addTwo.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual(true,iter->getDoneStatus());
+		Assert::AreEqual(std::string("TWO"),iter->getName());
+
+		UnmarkDone unmarkdoneTwo(1);
 		unmarkdoneTwo.execute();
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
+		Assert::AreEqual(std::string("TWO"),iter->getName());
+		Assert::AreEqual(false,iter->getDoneStatus());
+		Assert::AreEqual((size_t)0,copyTask.size());
 		copyTask = addTwo.getTaskStore();
 		iter = copyTask.begin();
-		++iter;
-		Assert::AreEqual(false,iter->getDoneStatus());
+		Assert::AreEqual((size_t)2,copyTask.size());
+		//++iter;
+		//Assert::AreEqual(false,iter->getDoneStatus());
+		
 	}
 
 	TEST_METHOD(Command_UnmarkDone_undo) {
@@ -771,15 +785,17 @@ public:
 		Task taskThree;
 		taskThree.setName("Sentence three.");
 		taskThree.setStartDate(150809);
-		taskThree.markDone();
 		Add addThree(taskThree);
 		addThree.execute();
-
+		
 		Task taskFour;
 		taskFour.setName("Sentence four.");
 		taskFour.setStartDate(150910);
 		Add addFour(taskFour);
 		addFour.execute();
+
+		Markdone markdoneThree(3);
+		markdoneThree.execute();
 
 		View viewPast(VIEWTYPE_PAST, "");
 		viewPast.execute();
@@ -810,7 +826,6 @@ public:
 		Task taskThree;
 		taskThree.setName("Sentence three.");
 		taskThree.setStartDate(150809);
-		taskThree.markDone();
 		Add addThree(taskThree);
 		addThree.execute();
 
@@ -820,6 +835,8 @@ public:
 		Add addFour(taskFour);
 		addFour.execute();
 
+		Markdone markdoneThree(3);
+		markdoneThree.execute();
 		View viewNotDone(VIEWTYPE_NOTDONE, "");
 		viewNotDone.execute();
 

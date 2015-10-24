@@ -1,5 +1,5 @@
 // @@author A0110376N (Aaron Chong Jun Hao)
-// Modified to Command Pattern by @@author A0130463R (Ng Ren Zhi)
+// Modified to Command Pattern & added Undo methods by @@author A0130463R (Ng Ren Zhi)
 // Private methods originally by @@author A0096720A (Chin Kiat Boon)
 
 #include "stdafx.h"
@@ -44,6 +44,7 @@ int Command::getSize() {
 void Command::clearTaskStore() {
 	IO* io = IO::getInstance();
 	taskStore.clear();
+	doneTaskStore.clear();
 	currentView.clear();
 	remove(io->getFilePath().c_str());
 	return;
@@ -62,6 +63,7 @@ void Command::undo() {
 
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
+std::vector<Task> Command::doneTaskStore;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 
 // Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
@@ -174,6 +176,15 @@ std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 	return iter;
 }
 
+std::vector<Task>::iterator Command::matchDoneTaskStoreIndex(int index) {
+	std::vector<Task>::iterator iter = doneTaskStore.begin();
+	while(iter->getID() != index && iter != doneTaskStore.end()) {
+		++iter;
+	}
+	assert(iter != doneTaskStore.end());
+	return iter;
+}
+
 std::string Command::getMessage() {
 	return "";
 }
@@ -212,8 +223,10 @@ std::string Add::getMessage() {
 
 //============== ADD : PRIVATE METHODS ===============
 
+// Newly added tasks are all !isDone
 bool Add::addInfo() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
+
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
 	currViewID = currentView.size();
@@ -470,7 +483,7 @@ bool Search::amendView(std::string listOfIds) {
 //============= MARKDONE : PUBLIC METHODS ===========
 
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
-	doneID = taskID;
+	doneID = taskID; // GUI ID, not task unidque ID
 }
 
 Markdone::~Markdone() {}
@@ -485,23 +498,43 @@ void Markdone::execute() {
 
 void Markdone::undo() {
 	if(successMarkDone) {
-		taskIter->unmarkDone();
-		currentView.insert(currIter,*taskIter);
+		std::vector<Task>::iterator doneTaskIter;
+		assert(doneTaskStore.size() > 0);
+		doneTaskIter = doneTaskStore.end()-1;
+		doneTaskIter->unmarkDone();
+
+		currentView.insert(currIter,*doneTaskIter);
+		taskStore.insert(taskIter,*doneTaskIter);
+
+		doneTaskStore.pop_back();
 	}
 }
 
 //============= MARKDONE : PRIVATE METHODS ===========
 
 // Modified by Hao Ye 14/10/15
+// Modified by Ren Zhi 23/10/15 - updated method with doneTaskStore
+// Marks task as done and moves from taskStore to doneTaskStore
+// and remove from currentView
 void Markdone::markDone() {
-	matchIndex(doneID,currIter,taskIter);
+	if(markInit()) {
+		taskIter = matchTaskStoreIndex(currIter->getID());
 
-	successMarkDone = taskIter->markDone();
-	if(successMarkDone) {
-		currentView.erase(currIter);
-		//temporary way to not display done tasks
+		//move task from taskStore to doneTaskStore
+		doneTaskStore.push_back(*taskIter);
 		taskStore.erase(taskIter);
-	} // Remove from current view only if mark done successful (Ren Zhi)
+		//remove task from display
+		currentView.erase(currIter);
+	}
+}
+
+// Added by Ren Zhi 23/10/15
+// Returns false if Task was already marked done
+// Returns true if Task was previously !isDone and is now changed to isDone
+bool Markdone::markInit() {
+	currIter = matchCurrentViewIndex(doneID);
+	successMarkDone = currIter->markDone();
+	return successMarkDone;
 }
 
 //==================================================
@@ -512,6 +545,8 @@ void Markdone::markDone() {
 
 UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
 	undoneID = taskID;
+	currIter = matchCurrentViewIndex(undoneID);
+	taskUniqueID = currIter->getID();
 }
 
 UnmarkDone::~UnmarkDone() {}
@@ -526,20 +561,41 @@ void UnmarkDone::execute() {
 
 void UnmarkDone::undo() {
 	if(successUnmarkDone) {
+		std::vector<Task>::iterator taskIter;
+		assert(taskStore.size() > 0);
+		taskIter = matchTaskStoreIndex(taskUniqueID);
 		taskIter->markDone();
+
 		currentView.insert(currIter,*taskIter);
+		taskStore.insert(doneTaskIter,*taskIter);
+
+		taskStore.pop_back();
 	}
 }
 
 //=========== UNMARKDONE : PRIVATE METHODS ==========
 
+// Marks task as not done and moves from doneTaskStore to taskStore
+// and remove from currentView
 void UnmarkDone::unmarkDone() {
-	matchIndex(undoneID,currIter,taskIter);
-	successUnmarkDone = taskIter->unmarkDone();
+	if(unmarkInit()) {
+		doneTaskIter = matchDoneTaskStoreIndex(taskUniqueID);
 
-	if(successUnmarkDone) {
+		//move task from doneTaskStore to taskStore
+		taskStore.push_back(*doneTaskIter);
+		doneTaskStore.erase(doneTaskIter);
+		assert(false);
+		//remove task from display
 		currentView.erase(currIter);
-	} // Remove from current view only if unmark done successful (Ren Zhi)
+	}
+}
+
+// Added by Ren Zhi 23/10/15
+// Returns false if Task was previously !isDone
+// Returns true if Task was previously isDone and is now changed to !isDone
+bool UnmarkDone::unmarkInit() {
+	successUnmarkDone = currIter->unmarkDone();
+	return successUnmarkDone;
 }
 
 //==================================================
@@ -662,31 +718,23 @@ bool View::viewTaskType(TaskType type) {
 	return true;
 }
 
+// Modified by Ren Zhi 23/10/15 to use doneTaskStore in method
 bool View::viewDone() {
 	std::vector<Task>::iterator iter;
 
 	currentView.clear();
 
-	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
-		if (iter->getDoneStatus() == true) {
-			currentView.push_back(*iter);
-		}
-	}
+	currentView = doneTaskStore;
+
 	return true;
 }
 
+// Modified by Ren Zhi 23/10/15 after implementing doneTaskStore
 bool View::viewNotdone() {
-	std::vector<Task>::iterator iter;
-
-	currentView.clear();
-
-	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
-		if (iter->getDoneStatus() == false) {
-			currentView.push_back(*iter);
-		}
-	}
+	copyView();
 	return true;
 }
+
 // Delete viewLabel if we use search to search for label
 // If view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::vector<std::string> label) {
