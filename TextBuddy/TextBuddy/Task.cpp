@@ -68,12 +68,7 @@ bool Task::setID(int newID) {
 	uniqueID = newID;
 	return true;
 }
-/*
-bool Task::setLabel(std::string newLabel) {
-	labels.insert(newLabel);
-	return true;
-}
-*/
+
 bool Task::addLabels(std::vector<std::string> newLabels) {
 	std::vector<std::string>::iterator curr;
 	for(curr=newLabels.begin(); curr!=newLabels.end(); curr++) {

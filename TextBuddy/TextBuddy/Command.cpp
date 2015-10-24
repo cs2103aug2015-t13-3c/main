@@ -63,39 +63,29 @@ void Command::undo() {
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
+const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
 
-// Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
-// Use this before returning to UI for display
-bool Command::sortDate(std::vector<Task> &taskVector) {
+
+bool Command::isDateLogical(Task task) {
+	if (task.getStartDate() > task.getEndDate()) {
+		return false;
+	} else if (task.getStartDate() == task.getEndDate()) {
+		if (task.getStartTime() > task.getEndTime()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// Sorts floating tasks to be at the bottom
+void Command::sortFloating(std::vector<Task> &taskVector) {
 
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
 	std::vector<Task>::iterator k;
 	Task tempTask;
-	if(taskVector.size() == 0) {
-		return false;
-	}
-	/*	
-	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-	for (j = i+1; j != taskVector.end(); ++j) {
-	if(j -> getStartTime() < i.getStartTime) {
-	swapTaskPosition(i->getID(), j->getID());
-	}
-	}
-	}
-	*/
-
-	// Sorts date after time to ensure date is accurately sorted
-	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-		for (j = i+1; j != taskVector.end(); ++j) {
-			if(j -> getStartDate() < i -> getStartDate()) {
-				std::swap(*i, *j);
-			}
-		}
-	}
-
+	
 	// Bugfix: in-place sorting (Ren Zhi)
-	// Sorts floating tasks to be at the bottom
 	i = taskVector.begin();	// Points to start of unsorted part
 	k = taskVector.end();	// Points to end of unsorted part
 	while(i != k) {
@@ -111,9 +101,17 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 			++i;
 		}
 	}
+}
 
-	// Sorts priority tasks to be at the top
-	i = taskVector.begin(); // Points to start of unsorted part
+// Sorts priority tasks to be at the top
+void Command::sortPriority(std::vector<Task> &taskVector) {
+
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
+	Task tempTask;
+
+	i = taskVector.begin();
 	while (i != taskVector.end()) {
 		for (j = i; j != taskVector.end(); ++j) {
 			if (j->getPriorityStatus() == true) {
@@ -127,8 +125,52 @@ bool Command::sortDate(std::vector<Task> &taskVector) {
 		}
 		++i;
 	}
-	return true;
+
 }
+// Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
+// Use this before returning to UI for display
+void Command::sortDate(std::vector<Task> &taskVector) {
+
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	
+	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
+		assert((i->getStartDate() < i->getEndDate()) || 
+			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
+		for (j = i+1; j != taskVector.end(); ++j) {
+			if(j -> getStartTime() < i->getStartTime()) {
+				std::swap(*i, *j);
+			}
+		}
+	}
+	
+
+	// Sorts date after time to ensure date is accurately sorted
+	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
+		for (j = i+1; j != taskVector.end(); ++j) {
+			if(j -> getStartDate() < i -> getStartDate()) {
+				std::swap(*i, *j);
+			}
+		}
+	}
+
+	sortFloating(taskVector);
+	sortPriority(taskVector);
+
+}
+
+void Command::removeDoneTask() {
+	std::vector<Task>::iterator i = currentView.begin();
+
+	while (i != currentView.end()) {
+		if (i->getDoneStatus() == true) {
+			i = currentView.erase(i);
+		} else {
+			++i;
+		}
+	}
+}
+
 
 // For now, currentView is set to be the same as taskStore
 bool Command::copyView() {
@@ -145,6 +187,7 @@ void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 								 index = currIter->getID();
 								 taskIter = matchTaskStoreIndex(index);
 							 } else {
+								 TbLogger::getInstance()->log(WARN,"Invalid index: " + std::to_string(index));
 								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
 							 }
 }
@@ -214,12 +257,19 @@ std::string Add::getMessage() {
 
 bool Add::addInfo() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
+	
+	//added @kiatboon 24/10/15 
+	if (isDateLogical(newTask) == false) {
+		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
+	}
+
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
 	currViewID = currentView.size();
 
 	sortDate(taskStore);
 	copyView();
+	removeDoneTask();
 	return true;
 }
 
@@ -274,6 +324,7 @@ void Delete::deleteInfo() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
+	removeDoneTask();
 }
 
 // Added by Ren Zhi 24/10/15
@@ -295,8 +346,6 @@ Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(M
 	modifyID = taskID;
 	fieldsToModify = fields;
 	tempTask = task;
-	matchIndex(modifyID,currIter,taskIter);
-	originalTask = *currIter;
 }
 
 Modify::~Modify() {}
@@ -314,6 +363,8 @@ Task Modify::getTempTask() {
 }
 
 void Modify::execute() {
+	matchIndex(modifyID,currIter,taskIter);
+	originalTask = *currIter;
 	modifyInfo();
 }
 
@@ -328,8 +379,9 @@ std::string Modify::getMessage() {
 
 //============= MODIFY : PRIVATE METHODS ===========
 
-// Modified by Hao Ye 14/10/15
-// Modified by Ren Zhi 20/10/15 updated add/deleteLabels
+// Modified by Hao Ye	14/10/15
+// Modified by Ren Zhi	20/10/15 Updated add/deleteLabels
+// Modified by Aaron	24/10/15 Fix 'for' to only loop 'switch'
 void Modify::modifyInfo() {
 	std::vector<FieldType>::iterator fieldIter;
 
@@ -365,10 +417,12 @@ void Modify::modifyInfo() {
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
-		*currIter = *taskIter;
-		sortDate(taskStore);
-		copyView();				//added to update currentView immediately
 	}
+
+	*currIter =	*taskIter;
+	sortDate(taskStore);
+	copyView(); // Update currentView immediately
+	removeDoneTask();
 }
 
 //==================================================
@@ -499,8 +553,6 @@ void Markdone::markDone() {
 	successMarkDone = taskIter->markDone();
 	if(successMarkDone) {
 		currentView.erase(currIter);
-		//temporary way to not display done tasks
-		taskStore.erase(taskIter);
 	} // Remove from current view only if mark done successful (Ren Zhi)
 }
 
@@ -659,6 +711,7 @@ bool View::viewTaskType(TaskType type) {
 	}
 
 	sortDate(currentView);
+	removeDoneTask();				//when viewing tasks based on task type, should done tasks be displayed?
 	return true;
 }
 
@@ -711,6 +764,8 @@ bool View::viewLabel(std::vector<std::string> label) {
 		}
 	}
 
+	removeDoneTask();				//when viewing tasks based on task type, should done tasks be displayed?
+	
 	return true;
 }
 
@@ -845,6 +900,6 @@ Exit::Exit() : Command(EXIT) {}
 Exit::~Exit() {}
 
 void Exit::execute() {
-	TbLogger::getInstance()->close();
+	delete TbLogger::getInstance();
 	exit(0);
 }

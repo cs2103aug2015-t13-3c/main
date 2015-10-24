@@ -46,7 +46,7 @@ enum Level {
 class TbLogger {
 private:
 	static const std::string logFileName;
-	static TbLogger* logger;
+	static TbLogger* theOne;
 	Level logLevel;
 	TbLogger();
 

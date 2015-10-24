@@ -4,15 +4,16 @@
 
 const std::string TbLogger::logFileName = ".tblog";
 
-TbLogger* TbLogger::logger = new TbLogger;
+TbLogger* TbLogger::theOne = new TbLogger();
 
 TbLogger::TbLogger() {
 	logLevel = INFO;
 	log(SYS,"Logger initialised");
+	log(SYS,"Log level default: " + std::to_string(logLevel));
 }
 
 TbLogger::~TbLogger() {
-	log(SYS,"Logger closed");
+	log(SYS,"Logger terminated\n");
 }
 
 char* TbLogger::getLocalTime() {
@@ -41,10 +42,11 @@ int TbLogger::getDate() {
 }
 
 TbLogger* TbLogger::getInstance() {
-	return logger;
+	return theOne;
 }
 
 void TbLogger::setLogLevel(Level level) {
+	log(SYS,"Log level changed: " + std::to_string(level));
 	logLevel = level;
 }
 
@@ -59,29 +61,33 @@ void TbLogger::log(Level level, std::string message) {
 
 void TbLogger::clearLog() {
 	remove(logFileName.c_str());
+	log(SYS,"Log cleared");
+	log(SYS,"Logger initialised");
+	log(SYS,"Log level default: " + std::to_string(logLevel));
 	return;
 }
 
 void TbLogger::close() {
-	delete logger;
+	log(SYS,"Logger closed");
+	delete theOne;
 	return;
 }
 
 // Currently disabled
 /*
 bool TbLogger::setLogFileName(std::string fileName) {
-	std::ofstream newLogFile;
-	newLogFile.open(fileName, std::ofstream::out | std::ofstream::app);
+std::ofstream newLogFile;
+newLogFile.open(fileName, std::ofstream::out | std::ofstream::app);
 
-	if(newLogFile.is_open()) {
-		newLogFile.close();
+if(newLogFile.is_open()) {
+newLogFile.close();
 
-		log(FATAL,"TbLogger closed");
+log(FATAL,"TbLogger closed");
 
-		logFileName = fileName;
-		log(FATAL,"TbLogger initiated");
-		return true;
-	}
-	return false;
+logFileName = fileName;
+log(FATAL,"TbLogger initiated");
+return true;
+}
+return false;
 }
 */

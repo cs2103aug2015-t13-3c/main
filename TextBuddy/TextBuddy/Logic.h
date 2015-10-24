@@ -39,7 +39,7 @@ public:
 		std::vector<std::string>* description,
 		std::vector<std::string>* dateAndTime,
 		std::vector<std::string>* floatingTasks,
-		std::vector<bool>* priotiryTasks);
+		std::vector<bool>* priorityTasks);
 	void resetUpdaterNULL();
 	/*
 	int getSize();

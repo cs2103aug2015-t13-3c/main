@@ -7,13 +7,27 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TextBuddyTests {
 	TEST_CLASS(ParserTest) {
 public:
-	// Initialise common variables to be used in tests
+	// Declare common variables to be used in tests
+	TbLogger* logger;
 	Parser* p;
 	std::string userInput;
 	std::vector<std::string> inputString;
 	std::string expectedString;
 	int expectedInt;
 	Task tempTask;
+
+	TEST_CLASS_INITIALIZE(StartTestClass) {
+		TbLogger::getInstance()->clearLog();
+	}
+
+	TEST_METHOD_INITIALIZE(InitialiseLoggerAndParser) {
+		logger = TbLogger::getInstance();
+		p = Parser::getInstance();
+	}
+
+	TEST_METHOD_CLEANUP(EndTestMethod) {
+		TbLogger::getInstance()->log(SYS,"Test ended\n");
+	}
 
 	TEST_METHOD(Parser_parseFileName) {
 		userInput = "test.txt";
@@ -41,7 +55,7 @@ public:
 		add = (Add*)cmd;
 
 		// Assert::AreEqual(ADD,cmd->getCommand());
-		
+
 		Task task = add->getNewTask();
 		// task.setStartDate(141015);
 		// task.setEndDate(161015);
@@ -57,13 +71,71 @@ public:
 		Assert::AreEqual((size_t)1, store.size());
 	}
 
-	TEST_METHOD(Parser_parse) {
-		// Clear before start
-		TbLogger::getInstance()->clearLog();
+	void logicProcessCommandStub(Command* cmd,
+		Task &task,
+		int &taskID,
+		std::vector<FieldType> &fieldsToModify,
+		std::string &searchPhrase) {
+			CommandType cmdType = cmd->getCommand();
+
+			switch(cmdType) {
+			case ADD:
+				task = ((Add*)cmd)->getNewTask();
+				break;
+			case DELETE:
+				taskID = ((Delete*)cmd)->getDeleteID();
+				break;
+			case MODIFY:
+				taskID = ((Modify*)cmd)->getModifyID();
+				fieldsToModify = ((Modify*)cmd)->getFieldsToModify();
+				logger->log(DEBUG,"Fields to modify: " + Utilities::fieldVecToString(fieldsToModify));
+				task = ((Modify*)cmd)->getTempTask();
+				break;
+			case SEARCH:
+				searchPhrase = ((Search*)cmd)->getSearchPhrase();
+				break;
+			case MARKDONE:		// Mark task as done
+			case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
+			case VIEW:
+			case DISPLAY_ALL:	// Display all tasks
+			case LOAD:
+			case SAVE:			// Save to new file path
+			case EXIT:			// Exit program
+			case INVALID:		// Return error message to UI
+				break;
+			}
+	}
+
+	TEST_METHOD(Parser_parse_Modify) {
 		std::string expectedString2;
+		/*
+		expectedInt = 1;
+		expectedString = "name : -: star unstar from to from to at"; // Expected behaviour
+		expectedString2 = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
+		userInput = "modify 1 Two turtle doves : label1 -: unlabel1 star dummy unstar dummy from today to tmr on fri by sat at 8 am";
+		*/
+		expectedInt = 3;
+		expectedString = ": star";
+		userInput = "modify 3 : star";
+
+		Command* cmd = p->parse(userInput);
+
+		Task task;
+		int taskID = 0;
+		std::vector<FieldType> fieldsToModify;
+		std::string searchPhrase;
+
+		logicProcessCommandStub(cmd,task,taskID,fieldsToModify,searchPhrase);
+
+		Assert::AreEqual(expectedInt,taskID);
+		Assert::AreEqual(expectedString,Utilities::fieldVecToString(fieldsToModify));
+		// Assert::AreEqual(expectedString2,Utilities::taskToString(task));
+	}
+
+	TEST_METHOD(Parser_parse) {
 		
 		// Test for ADD
-		expectedString = "Name: A partridge in a pear tree\nType: 2\nStart Time: 0\nEnd Date: 151024\nEnd Time: 2000\n";
+		expectedString = "Name: A partridge in a pear tree\nType: TODO\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151024\nStart Time: 0\nEnd Date: 151024\nEnd Time: 2000\n";
 		userInput = "add A partridge in a pear tree on sat by 8 pm";
 		
 
@@ -71,14 +143,6 @@ public:
 		// Test for DELETE
 		expectedInt = 1;
 		userInput = "delete 1";
-		*/
-
-		/*
-		// Test for MODIFY
-		expectedInt = 1;
-		userInput = "modify 1 Two turtle doves : label1 -: unlabel1 star dummy unstar dummy from today to tmr on fri by sat at 8 am";
-		expectedString = "name : -: star unstar from to from to at"; // Expected behaviour
-		expectedString2 = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
 		*/
 
 		/*
@@ -91,57 +155,25 @@ public:
 		//         IMPLEMENTING PARSE() TO BE TESTED
 		//==================================================
 		Command* cmd = p->parse(userInput);
-
-		// For switch()
-		CommandType cmdType = cmd->getCommand();
-		// Declare objects outside switch()
 		Task task;
-		int taskID;
+		int taskID = 0;
 		std::vector<FieldType> fieldsToModify;
 		std::string searchPhrase;
 
-		// This shows a possible implementation for Logic::processCommand()
-		switch(cmdType) {
-		case ADD:
-			task = ((Add*)cmd)->getNewTask();
-			break;
-		case DELETE:
-			taskID = ((Delete*)cmd)->getDeleteID();
-			break;
-		case MODIFY:
-			taskID = ((Modify*)cmd)->getModifyID();
-			fieldsToModify = ((Modify*)cmd)->getFieldsToModify();
-			task = ((Modify*)cmd)->getTempTask();
-			break;
-		case SEARCH:
-			searchPhrase = ((Search*)cmd)->getSearchPhrase();
-			break;
-		case MARKDONE:		// Mark task as done
-		case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
-		case VIEW:
-		case DISPLAY_ALL:	// Display all tasks
-		case LOAD:
-		case SAVE:			// Save to new file path
-		case EXIT:			// Exit program
-		case INVALID:		// Return error message to UI
-			break;
-		}
+		logicProcessCommandStub(cmd,task,taskID,fieldsToModify,searchPhrase);
 
 		//==================================================
 		//          TEST-ASSERTING OUTPUT OF PARSE()
 		//==================================================
+		CommandType cmdType = cmd->getCommand();
 		switch(cmdType) {
 		case ADD:
-			// Assert::AreEqual(expectedString,cmd->getUserInput());
 			Assert::AreEqual(expectedString,Utilities::taskToString(task));
 			break;
 		case DELETE:
 			Assert::AreEqual(expectedInt,taskID);
 			break;
-		case MODIFY:
-			Assert::AreEqual(expectedInt,taskID);
-			Assert::AreEqual(expectedString,Utilities::fieldVecToString(fieldsToModify));
-			Assert::AreEqual(expectedString2,Utilities::taskToString(task));
+		case MODIFY: // Use separate TEST_METHOD(Parser_parse_Modify)
 			break;
 		case SEARCH:
 			Assert::AreEqual(expectedString,searchPhrase);
@@ -157,9 +189,6 @@ public:
 		case INVALID:
 			break;
 		}
-
-		// Clear if successful
-		TbLogger::getInstance()->clearLog();
 	}
 
 	// Note: As parseDate() takes in regex like "this Monday",
@@ -235,8 +264,18 @@ public:
 	}
 
 	TEST_METHOD(Parser_parseTask) {
-		expectedString = "Name: Sing a song\nType: 2\nStart Time: 0\nEnd Date: 151231\nEnd Time: 0\n";
+		expectedString = "Name: Sing a song\nType: TODO\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: 0\nEnd Date: 151231\nEnd Time: 0\n";
 		userInput = "Sing a song by 31 dec";
+		tempTask = *(p->parseTask(userInput));
+		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));
+
+		expectedString = "Name: Sing a song\nType: EVENT\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: 0\nEnd Date: 160101\nEnd Time: 0\n";
+		userInput = "Sing a song from 31 dec to 1 jan";
+		tempTask = *(p->parseTask(userInput));
+		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));
+
+		expectedString = "Name: \nType: FLOATING\nLabels: \nDone: 0\nPriority: 1\nStart Date: 0\nStart Time: 0\nEnd Date: 0\nEnd Time: 0\n";
+		userInput = ": star";
 		tempTask = *(p->parseTask(userInput));
 		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));
 	}
