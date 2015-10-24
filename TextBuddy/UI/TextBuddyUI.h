@@ -15,7 +15,7 @@
 #define DONE "done "
 #define TAG "tag "
 #define STAR "star "
-#define NOSTAR "nostar "
+#define NOSTAR "unstar "
 #define FROM " from "
 #define BY " by "
 #define TO " to "
@@ -327,7 +327,7 @@ namespace UserInterface {
 				String^ dt = gcnew String((*dateTime)[i].c_str());
 				display->Rows->Add(index,label,title,dt);
 				if((*priorityTasks)[i]) {
-					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;				
+					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Blue;				
 				} else {
 					display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;
 				}
