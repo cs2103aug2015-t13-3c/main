@@ -289,6 +289,12 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		}
 	}
 
+	//added @kiatboon 24/10/15, feel free to modify if necessary
+	if (newTask->getType() == TODO) {
+		newTask->setStartDate(newTask->getEndDate());
+		newTask->setStartTime(newTask->getEndTime());
+	}
+
 	log(INFO,"Parsed task");
 	return newTask;
 }
