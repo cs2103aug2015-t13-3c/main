@@ -8,14 +8,14 @@
 
 using namespace rapidjson;
 
-const std::string IO::lastSavedLocation = ".tbconfig";
 std::string IO::filePath = "mytasks.txt";
+const std::string IO::configPath = ".tbconfig";
 
 IO* IO::theOne = new IO();
 
 IO::IO() {
-	std::ifstream lastSave(lastSavedLocation);
-	lastSave >> filePath;
+	std::ifstream tbconfig(configPath);
+	tbconfig >> filePath;
 }
 
 IO::~IO() {}
@@ -127,8 +127,8 @@ return PathIsDirectory(newFullPathName);
 // Records down last saved location as .tbconfig file
 // for IO to find where to load when it launches
 void IO::setLastSavedLocation(std::string fileName) {
-	remove(lastSavedLocation.c_str());
-	std::ofstream lastSaved(lastSavedLocation);
+	remove(configPath.c_str());
+	std::ofstream lastSaved(configPath);
 	lastSaved << fileName;
 	lastSaved.close();
 }

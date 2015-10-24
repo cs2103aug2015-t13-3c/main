@@ -878,6 +878,8 @@ Exit::Exit() : Command(EXIT) {}
 Exit::~Exit() {}
 
 void Exit::execute() {
+	IO* io = IO::getInstance();
+	io->saveFile(io->getFilePath(),taskStore); // In case user or system deletes file or .tbconfig
 	delete TbLogger::getInstance();
 	exit(0);
 }

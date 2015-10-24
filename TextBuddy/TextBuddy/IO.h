@@ -12,7 +12,7 @@ private:
 	static IO* theOne;
 	IO();
 	static std::string filePath;
-	static const std::string lastSavedLocation;
+	static const std::string configPath;
 	void setLastSavedLocation(std::string fileName);
 
 	bool fileIsOpen(std::ifstream& inputFile);
