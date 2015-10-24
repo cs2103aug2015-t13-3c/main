@@ -250,18 +250,16 @@ std::string Utilities::taskToString(Task task) {
 	const int MAX_BYTES = 2550;
 	char buffer[MAX_BYTES] = "";
 
-	sprintf_s(buffer, "%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n",
-		"Name: ",		task.getName().c_str(),		// %s%s\n
-		"Type: ",		task.getType(),				// %s%d\n
-		/*
-		"Labels: ",		task.getLabelString().c_str(),	// %s%s\n
-		"Done: ",		task.getDoneStatus(),		// %s%d\n
-		"Priority: ",	task.getPriorityStatus(),	// %s%d\n
-		"Start Date: ",	task.getStartDate(),		// %s%d\n
-		*/
-		"Start Time: ",	task.getStartTime(),		// %s%d\n
-		"End Date: ",	task.getEndDate(),			// %s%d\n
-		"End Time: ",	task.getEndTime()			// %s%d\n
+	sprintf_s(buffer, "%s%s\n%s%s\n%s%s\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n%s%d\n",
+		"Name: ",		task.getName().c_str(),						// %s%s\n
+		"Type: ",		taskTypeToString(task.getType()).c_str(),	// %s%s\n
+		"Labels: ",		task.getLabelString().c_str(),				// %s%s\n
+		"Done: ",		task.getDoneStatus(),						// %s%d\n
+		"Priority: ",	task.getPriorityStatus(),					// %s%d\n
+		"Start Date: ",	task.getStartDate(),						// %s%d\n
+		"Start Time: ",	task.getStartTime(),						// %s%d\n
+		"End Date: ",	task.getEndDate(),							// %s%d\n
+		"End Time: ",	task.getEndTime()							// %s%d\n
 		);
 	return buffer;
 }

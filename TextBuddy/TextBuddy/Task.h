@@ -3,6 +3,34 @@
 #ifndef TASK_H_
 #define TASK_H_
 
+// These are the valid Field keywords
+// Count: 10
+const std::string FIELD_NAME = "name";
+const std::string FIELD_LABEL_ADD = ":";
+const std::string FIELD_LABEL_DELETE = "-:";
+const std::string FIELD_PRIORITY_SET = "star";
+const std::string FIELD_PRIORITY_UNSET = "unstar";
+const std::string FIELD_DATE_FROM = "from";
+const std::string FIELD_DATE_TO = "to";
+const std::string FIELD_DATE_BY = "by";
+const std::string FIELD_DATE_ON = "on";
+const std::string FIELD_TIME_AT = "at";
+
+// These are the Field enums
+// Count: 9 + INVALID_FIELD
+enum FieldType {
+	NAME,
+	LABELS_ADD,
+	LABELS_DELETE,
+	PRIORITY_SET,
+	PRIORITY_UNSET,
+	START_DATE,
+	START_TIME,
+	END_DATE,
+	END_TIME,
+	INVALID_FIELD,
+};
+
 enum Day {
 	SUN,
 	MON, TUE, WED,
@@ -18,37 +46,11 @@ enum Month {
 	OCT, NOV, DEC
 };
 
-enum FieldType {
-	NAME,
-	LABELS_ADD,
-	LABELS_DELETE,
-	PRIORITY_SET,
-	PRIORITY_UNSET,
-	START_DATE,
-	START_TIME,
-	END_DATE,
-	END_TIME,
-	INVALID_FIELD,
-};
-
 enum TaskType {
 	FLOATING,
 	EVENT,
 	TODO
 };
-
-// These are the valid Field keywords
-// Count: 10
-const std::string FIELD_NAME = "name";
-const std::string FIELD_LABEL_ADD = ":";
-const std::string FIELD_LABEL_DELETE = "-:";
-const std::string FIELD_PRIORITY_SET = "star";
-const std::string FIELD_PRIORITY_UNSET = "unstar";
-const std::string FIELD_DATE_FROM = "from";
-const std::string FIELD_DATE_TO = "to";
-const std::string FIELD_DATE_BY = "by";
-const std::string FIELD_DATE_ON = "on";
-const std::string FIELD_TIME_AT = "at";
 
 class Task {
 private:

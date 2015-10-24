@@ -120,7 +120,7 @@ public:
 		IO* io = IO::getInstance();
 		History* history = History::getInstance();
 
-		//to be subscribed
+		// To be subscribed
 		std::vector<std::string>* labels;
 		std::vector<std::string>* taskDescription;
 		std::vector<std::string>* dateTime;

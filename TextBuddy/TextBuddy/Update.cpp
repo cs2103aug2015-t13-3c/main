@@ -17,8 +17,9 @@ Update::Update(std::vector<std::string>* labels,
 	this->currentView = currentView;
 }
 
+Update::~Update() {}
+
 void Update::update() {
-	
 		labels->clear();
 		description->clear();
 		dateAndTime->clear();
@@ -35,5 +36,4 @@ void Update::update() {
 			}
 			++i;
 		}
-	
 }

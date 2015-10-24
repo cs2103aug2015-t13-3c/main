@@ -3,14 +3,14 @@
 #include "stdafx.h"
 #include "PowerSearch.h"
 
-PowerSearch::PowerSearch(void) {}
+PowerSearch::PowerSearch() {}
 
 PowerSearch::PowerSearch(std::vector<Task> cmdTaskStore, std::vector<Task> cmdCurrentView) {
 	taskStore = cmdTaskStore;
 	currentView = cmdCurrentView;
 }
 
-PowerSearch::~PowerSearch(void) {}
+PowerSearch::~PowerSearch() {}
 
 //========== Private Methods ==========
 void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {
