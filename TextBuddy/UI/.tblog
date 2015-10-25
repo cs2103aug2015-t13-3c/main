@@ -1053,3 +1053,41 @@ Sun Oct 25 19:38:54 2015 Parsing "view"
 Sun Oct 25 19:38:54 2015 Viewing...
 Sun Oct 25 19:38:59 2015 Parsing "view"
 Sun Oct 25 19:38:59 2015 Viewing...
+Sun Oct 25 21:02:26 2015 Logger initialised
+Sun Oct 25 21:02:26 2015 Log level default: 1
+Sun Oct 25 21:02:26 2015 Parser instantiated
+Sun Oct 25 21:02:26 2015 Log level changed: 0
+Sun Oct 25 21:02:27 2015 Parsing "display"
+Sun Oct 25 21:04:41 2015 Parsing "add"
+Sun Oct 25 21:04:41 2015 Parsing task
+Sun Oct 25 21:04:41 2015 Parsing field: name
+Sun Oct 25 21:04:41 2015 Parsing string: shaker fries no salt pls
+Sun Oct 25 21:04:41 2015 Parsing field: by
+Sun Oct 25 21:04:41 2015 Parsing string: 11.59 pm
+Sun Oct 25 21:04:41 2015 Invalid date format: 11.59 pm
+Sun Oct 25 21:04:41 2015 Parsed task
+Sun Oct 25 21:04:57 2015 Parsing "modify"
+Sun Oct 25 21:04:57 2015 Fields extracted: :
+Sun Oct 25 21:04:57 2015 Parsing task
+Sun Oct 25 21:04:57 2015 Parsing field: name
+Sun Oct 25 21:04:57 2015 Parsing string: 
+Sun Oct 25 21:04:57 2015 Parsing field: :
+Sun Oct 25 21:04:57 2015 Parsing string: macs
+Sun Oct 25 21:04:57 2015 Parsed task
+Sun Oct 25 21:05:00 2015 Parsing "undo"
+Sun Oct 25 21:05:02 2015 Parsing "undo"
+Sun Oct 25 21:05:06 2015 Parsing "redo"
+Sun Oct 25 21:05:07 2015 Parsing "redo"
+Sun Oct 25 21:18:18 2015 Parsing "search"
+Sun Oct 25 21:18:18 2015 Parsing "search"
+Sun Oct 25 21:18:18 2015 Parsing "search"
+Sun Oct 25 21:18:32 2015 Parsing "display"
+Sun Oct 25 21:19:14 2015 Parsing "modify"
+Sun Oct 25 21:19:14 2015 Fields extracted: to
+Sun Oct 25 21:19:14 2015 Parsing task
+Sun Oct 25 21:19:14 2015 Parsing field: name
+Sun Oct 25 21:19:14 2015 Parsing string: 
+Sun Oct 25 21:19:14 2015 Parsing field: on
+Sun Oct 25 21:19:14 2015 Parsing string: 24/10/15
+Sun Oct 25 21:19:14 2015 Invalid date format: 24/10/15
+Sun Oct 25 21:19:14 2015 Parsed task
