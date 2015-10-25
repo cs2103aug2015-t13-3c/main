@@ -10,11 +10,13 @@ public:
 	// Declare common variables to be used in tests
 	TbLogger* logger;
 	Parser* p;
+	Command* cmd;
+	Task task;
+
 	std::string userInput;
-	std::vector<std::string> inputString;
-	std::string expectedString;
-	int expectedInt;
-	Task tempTask;
+	std::vector<std::string> inputVec;
+	std::string				 expectedString;
+	int						 expectedInt;
 
 	TEST_CLASS_INITIALIZE(StartTestClass) {
 		TbLogger::getInstance()->clearLog();
@@ -30,45 +32,67 @@ public:
 	}
 
 	TEST_METHOD(Parser_parseFileName) {
+		//===== Normal =====
 		userInput = "test.txt";
 		Assert::AreEqual(userInput,p->parseFileName(userInput));
 
-		expectedString = "\\\\test.txt";
-		userInput = "/test.txt";
-		Assert::AreEqual(expectedString,p->parseFileName(userInput));
-
+		//===== No file extension =====
 		expectedString = "test.txt";
 		userInput = "test";
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 
-		// Added by Ren Zhi 19/10/15
-		expectedString = "C:\\\\Users\\\\%USERNAME%\\\\Downloads\\TEXT.txt";
+		//===== Single forward slash =====
+		expectedString = "\\\\test.txt";
+		userInput = "/test.txt";
+		Assert::AreEqual(expectedString,p->parseFileName(userInput));
+
+		// ===== Single backslash =====
+		// Note: Seen as double here because '\' is a reserved character
+		expectedString = "C:\\\\Users\\\\%USERNAME%\\\\Downloads\\\\TEXT.txt";
 		userInput = "C:\\Users\\%USERNAME%\\Downloads\\TEXT.txt";
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 	}
 
-	// Added by Ren Zhi 19/10/15
 	TEST_METHOD(Parser_parse_Add) {
-		Add *add;
-		Command *cmd;
-		cmd = p->parse("Add that from 14 Oct to 16 Oct");
+		cmd->clearTaskStore();
+		Add* add;
+		size_t storeSizeBeforeAdd;
+
+		//===== TODO with multipleWordsName, endDate and endTime =====
+		userInput = "add A partridge in a pear tree on sat by 8 pm";
+		cmd = p->parse(userInput);
 		add = (Add*)cmd;
-
-		// Assert::AreEqual(ADD,cmd->getCommand());
-
-		Task task = add->getNewTask();
-		// task.setStartDate(141015);
-		// task.setEndDate(161015);
-		// task.setName("that");
-		// task.setID(task.getRunningCount());
-		Assert::AreEqual(151014, task.getStartDate());
-		Assert::AreEqual(151016, task.getEndDate());
-		Assert::AreEqual(std::string("that"),task.getName());
-
-		add->clearTaskStore();
+		storeSizeBeforeAdd = add->getTaskStore().size();
 		add->execute();
-		std::vector<Task> store = add->getTaskStore();
-		Assert::AreEqual((size_t)1, store.size());
+		task = add->getTaskStore().back();
+		Assert::AreEqual(storeSizeBeforeAdd+1, add->getTaskStore().size());
+		Assert::AreEqual(std::string("A partridge in a pear tree"),task.getName());
+		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151031, task.getStartDate());
+		Assert::AreEqual(2000, task.getStartTime());
+		Assert::AreEqual(151031, task.getEndDate());
+		Assert::AreEqual(2000, task.getEndTime());
+
+		//===== EVENT with singleWordName, startDate and startTime =====
+		userInput = "Add that from 14 Oct to 16 Oct";
+		cmd = p->parse(userInput);
+		add = (Add*)cmd;
+		storeSizeBeforeAdd = add->getTaskStore().size();
+		add->execute();
+		task = add->getNewTask();
+		Assert::AreEqual(storeSizeBeforeAdd+1, add->getTaskStore().size());
+		Assert::AreEqual(std::string("that"),task.getName());
+		Assert::AreEqual(std::string("EVENT"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151014, task.getStartDate());
+		// Assert::AreEqual(2000, task.getStartTime());
+		Assert::AreEqual(151016, task.getEndDate());
+		// Assert::AreEqual(2000, task.getEndTime());
 	}
 
 	void logicProcessCommandStub(Command* cmd,
@@ -106,12 +130,18 @@ public:
 			}
 	}
 
+	TEST_METHOD(Parser_parse_Delete) {
+		expectedInt = 1;
+		userInput = "delete 1";
+		cmd = p->parse(userInput);
+		Delete* deleteCmd = (Delete*)cmd;
+		Assert::AreEqual(expectedInt,deleteCmd->getDeleteID());
+	}
+
 	TEST_METHOD(Parser_parse_Modify) {
-		std::string expectedString2;
 		/*
 		expectedInt = 1;
-		expectedString = "name : -: star unstar from to from to at"; // Expected behaviour
-		expectedString2 = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
+		expectedString = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
 		userInput = "modify 1 Two turtle doves : label1 -: unlabel1 star dummy unstar dummy from today to tmr on fri by sat at 8 am";
 		*/
 		expectedInt = 3;
@@ -132,30 +162,12 @@ public:
 		// Assert::AreEqual(expectedString2,Utilities::taskToString(task));
 	}
 
-	TEST_METHOD(Parser_parse) {
-		
-		// Test for ADD
-		expectedString = "Name: A partridge in a pear tree\nType: TODO\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151024\nStart Time: 0\nEnd Date: 151024\nEnd Time: 2000\n";
-		userInput = "add A partridge in a pear tree on sat by 8 pm";
-		
-
-		/*
-		// Test for DELETE
-		expectedInt = 1;
-		userInput = "delete 1";
-		*/
-
-		/*
-		// Test for SEARCH
+	TEST_METHOD(Parser_parse_nonCRUD) {
+		//===== Test for SEARCH =====
 		expectedString = "answerToLife";
 		userInput = "search answerToLife";
-		*/
 
-		//==================================================
-		//         IMPLEMENTING PARSE() TO BE TESTED
-		//==================================================
-		Command* cmd = p->parse(userInput);
-		Task task;
+		cmd = p->parse(userInput);
 		int taskID = 0;
 		std::vector<FieldType> fieldsToModify;
 		std::string searchPhrase;
@@ -167,19 +179,17 @@ public:
 		//==================================================
 		CommandType cmdType = cmd->getCommand();
 		switch(cmdType) {
-		case ADD:
-			Assert::AreEqual(expectedString,Utilities::taskToString(task));
-			break;
-		case DELETE:
-			Assert::AreEqual(expectedInt,taskID);
-			break;
-		case MODIFY: // Use separate TEST_METHOD(Parser_parse_Modify)
+		case ADD:		// Use TEST_METHOD(Parser_parse_Add)
+		case DELETE:	// Use TEST_METHOD(Parser_parse_Delete)
+		case MODIFY:	// Use TEST_METHOD(Parser_parse_Modify)
 			break;
 		case SEARCH:
 			Assert::AreEqual(expectedString,searchPhrase);
 			break;
 		case MARKDONE:
+		case UNMARKDONE:
 		case UNDO:
+		case REDO:
 		case VIEW:
 		case CLEAR_ALL:
 		case DISPLAY_ALL:
@@ -199,30 +209,30 @@ public:
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
 
 		userInput = "invalid";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
 
 		userInput = "1 invalid";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
 
 		userInput = "7 pm";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
 
 		// Valid date formats
 		expectedInt = 151231;
 		userInput = "31 dec";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
 
 		userInput = "31 dec 15";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
 	}
 
 	TEST_METHOD(Parser_parseDay) {
@@ -231,53 +241,53 @@ public:
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "7 pm";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
 
 		// Change to appropriate date for today/tmr before running this test
 		/*
 		expectedInt = 151018;
 		userInput = "today";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
 
 		expectedInt = 151019;
 		userInput = "tmr";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
 		*/
 
-		expectedInt = 151019;
+		expectedInt = 151026;
 		userInput = "mon";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
 
-		expectedInt = 151024;
+		expectedInt = 151031;
 		userInput = "this sat";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
 
-		expectedInt = 151025;
+		expectedInt = 151101;
 		userInput = "next sun";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
 	}
 
 	TEST_METHOD(Parser_parseTask) {
-		expectedString = "Name: Sing a song\nType: TODO\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: 0\nEnd Date: 151231\nEnd Time: 0\n";
+		expectedString = "Name: Sing a song\nType: TODO\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: -1\nEnd Date: 151231\nEnd Time: -1\n";
 		userInput = "Sing a song by 31 dec";
-		tempTask = *(p->parseTask(userInput));
-		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));
+		task = *(p->parseTask(userInput));
+		Assert::AreEqual(expectedString,Utilities::taskToString(task));
 
-		expectedString = "Name: Sing a song\nType: EVENT\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: 0\nEnd Date: 160101\nEnd Time: 0\n";
+		expectedString = "Name: Sing a song\nType: EVENT\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: -1\nEnd Date: 160101\nEnd Time: -1\n";
 		userInput = "Sing a song from 31 dec to 1 jan";
-		tempTask = *(p->parseTask(userInput));
-		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));
+		task = *(p->parseTask(userInput));
+		Assert::AreEqual(expectedString,Utilities::taskToString(task));
 
-		expectedString = "Name: \nType: FLOATING\nLabels: \nDone: 0\nPriority: 1\nStart Date: 0\nStart Time: 0\nEnd Date: 0\nEnd Time: 0\n";
+		expectedString = "Name: \nType: FLOATING\nLabels: \nDone: 0\nPriority: 1\nStart Date: 0\nStart Time: -1\nEnd Date: 0\nEnd Time: -1\n";
 		userInput = ": star";
-		tempTask = *(p->parseTask(userInput));
-		Assert::AreEqual(expectedString,Utilities::taskToString(tempTask));
+		task = *(p->parseTask(userInput));
+		Assert::AreEqual(expectedString,Utilities::taskToString(task));
 	}
 
 	TEST_METHOD(Parser_parseTime) {
@@ -285,94 +295,94 @@ public:
 		expectedInt = -1;
 
 		userInput = "invalid";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "0";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "0.";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = ".0";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "0.0";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "0.1";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "2400";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "2360";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "24.00";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "23.60";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "23.59 am";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		userInput = "23.59 pm";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		// Valid time formats
 
 		expectedInt = 100;
 		userInput = "100";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		expectedInt = 2359;
 		userInput = "23.59";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		expectedInt = 0;
 		userInput = "12 am";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		expectedInt = 0;
 		userInput = "12.00 am";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		expectedInt = 100;
 		userInput = "1.00 am";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		expectedInt = 1159;
 		userInput = "11.59 am";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		expectedInt = 1200;
 		userInput = "12 pm";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 
 		expectedInt = 1200;
 		userInput = "12.00 pm";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseTime(inputString));
+		inputVec = Utilities::stringToVec(userInput);
+		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 	}
 
 	};

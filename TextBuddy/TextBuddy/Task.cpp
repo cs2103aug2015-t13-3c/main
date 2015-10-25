@@ -14,10 +14,10 @@ Task::Task() {
 	isPriority = false;
 
 	startDate = 0;				// YYMMDD, supports 2015-2099
-	startTime = INVALID_TIME;	// HHMM, 24-hour format
+	startTime = TIME_NOT_SET;	// HHMM, 24-hour format
 
 	endDate = 0;
-	endTime = INVALID_TIME;
+	endTime = TIME_NOT_SET;
 }
 
 Task::~Task() {}
@@ -89,11 +89,11 @@ std::string Task::getDate_UI() {
 }
 
 std::string Task::getTime_UI() {
-	if(endTime == INVALID_TIME) {
+	if(endTime == TIME_NOT_SET) {
 		return "";
 	}
 	std::string time = Utilities::getTime(endTime);
-	if(startTime != INVALID_TIME) {
+	if(startTime != TIME_NOT_SET) {
 		time = Utilities::getTime(startTime)  + " - " + time;
 	}
 	return time;

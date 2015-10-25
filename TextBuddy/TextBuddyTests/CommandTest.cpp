@@ -1,9 +1,9 @@
 // Ng Ren Zhi @@author A0130463R
 
 #include "stdafx.h"
-#include "IO.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
 void addThreeSentences(std::vector<Task> copyTask);
 
 namespace TextBuddyTests {
@@ -687,7 +687,7 @@ public:
 public:
 
 	TEST_METHOD(Command_View_TaskType) {
-		//implement for other task types too
+		// TODO: Implement for other task types too
 		Task taskOne;
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
@@ -733,7 +733,6 @@ public:
 		Assert::AreEqual(std::string("Sentence one."), iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence four."), iter->getName());
-		
 	}
 
 	TEST_METHOD(Command_View_All) {
@@ -782,8 +781,7 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("Sentence four."), iter->getName());
 		++iter;
-		Assert::AreEqual(std::string("Sentence two."), iter->getName());
-		
+		Assert::AreEqual(std::string("Sentence two."), iter->getName());	
 	}
 
 	TEST_METHOD(Command_View_Done) {
@@ -873,21 +871,23 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("Sentence four."), iter->getName());
 		++iter;
-		Assert::AreEqual(std::string("Sentence two."), iter->getName());
-		
+		Assert::AreEqual(std::string("Sentence two."), iter->getName());	
 	}
-
 	};
 
+	// Added by Aaron Chong Jun Hao @@author A0110376N
 	TEST_CLASS(Command_Load) {
 public:
 	TEST_METHOD(Command_Load_Execute_empty) {
-		IO* io = IO::getInstance();
-		Load load(io->getFilePath());
-		load.execute();
+		try {
+			IO* io = IO::getInstance();
+			Load load(io->getFilePath());
+			load.execute();
+		} catch (std::exception e) {
+			Assert::AreEqual("File does not exist",e.what());
+		}
 	}
 	};
-
 }
 
 void addThreeSentences(std::vector<Task> copyTask) {

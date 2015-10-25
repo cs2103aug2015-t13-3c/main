@@ -3,6 +3,9 @@
 #ifndef TASK_H_
 #define TASK_H_
 
+// This is the default initialisation for time, since 0 represents "12 am"
+static const int TIME_NOT_SET = -1;
+
 // These are the valid Field keywords
 // Count: 10
 const std::string FIELD_NAME = "name";
@@ -75,8 +78,6 @@ private:
 	int endTime;
 
 public:
-	static const int INVALID_TIME = -1;
-
 	static int getRunningCount();
 	static int incrementRunningCount();			// For new tasks
 	static void setRunningCount(int lastCount); // For startup
