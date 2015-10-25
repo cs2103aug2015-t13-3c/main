@@ -1,0 +1,36 @@
+{
+	"TextBuddy Items":
+	[
+		{
+			"name": "bar",
+			"type": "EVENT",
+			"uniqueID": 8,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151130,
+			"startTime": -1,
+
+			"endDate": 151201,
+			"endTime": 1800
+		}
+		,
+		{
+			"name": "foo",
+			"type": "FLOATING",
+			"uniqueID": 7,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
+		}
+	]
+}

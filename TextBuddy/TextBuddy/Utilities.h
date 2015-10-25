@@ -1,4 +1,4 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
+// Aaron Chong Jun Hao @@author A0110376N
 // Methods are listed in order of return type, then alphabetical order
 
 #ifndef UTILITIES_H_
@@ -51,7 +51,7 @@ public:
 	static std::string	replace(std::string str, std::string from, std::string to);
 
 	//========== String-for-Display Formatters ==========
-	// @@author A0126677U (Soon Hao Ye)
+	// Soon Hao Ye @@author A0126677U
 	static int getLocalDay();
 	static int getLocalMonth();
 	// Returns only the last 2 digits of the year (Eg. 15 for 2015)

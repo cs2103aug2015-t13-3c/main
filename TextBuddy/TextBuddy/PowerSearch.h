@@ -1,4 +1,4 @@
-// @@author A0096720A (Chin Kiat Boon)
+// Chin Kiat Boon @@author A0096720A
 
 #ifndef POWERSEARCH_H_
 #define POWERSEARCH_H_

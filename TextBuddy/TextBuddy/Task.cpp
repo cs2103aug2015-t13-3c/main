@@ -1,4 +1,4 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
+// Aaron Chong Jun Hao @@author A0110376N
 
 #include "stdafx.h"
 
@@ -13,8 +13,8 @@ Task::Task() {
 	isDone = false;
 	isPriority = false;
 
-	startDate = 0; // YYMMDD, supports 2015-2099
-	startTime = INVALID_TIME; // HHMM, 24-hour format
+	startDate = 0;				// YYMMDD, supports 2015-2099
+	startTime = INVALID_TIME;	// HHMM, 24-hour format
 
 	endDate = 0;
 	endTime = INVALID_TIME;
@@ -89,12 +89,12 @@ std::string Task::getDate_UI() {
 }
 
 std::string Task::getTime_UI() {
-	if(startTime == INVALID_TIME) {
+	if(endTime == INVALID_TIME) {
 		return "";
 	}
-	std::string time = Utilities::getTime(startTime);
-	if(startTime != endTime) {
-		time = time + " - " + Utilities::getTime(endTime);
+	std::string time = Utilities::getTime(endTime);
+	if(startTime != INVALID_TIME) {
+		time = Utilities::getTime(startTime)  + " - " + time;
 	}
 	return time;
 }

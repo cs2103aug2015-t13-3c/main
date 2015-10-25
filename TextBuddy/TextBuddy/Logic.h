@@ -1,4 +1,4 @@
-// @@author A0096720A (Chin Kiat Boon)
+// Chin Kiat Boon @@author A0096720A
 
 #ifndef LOGIC_H_
 #define LOGIC_H_

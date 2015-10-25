@@ -1,4 +1,4 @@
-// @@author A0126677U (Soon Hao Ye)
+// Soon Hao Ye @@author A0126677U
 
 #include "TextBuddyUI.h"
 
@@ -7,6 +7,7 @@ using namespace UserInterface;
 using namespace System::Windows::Forms;
 using namespace System::Threading;
 
+[STAThread]
 int main() {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);

@@ -1,8 +1,7 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
+// Aaron Chong Jun Hao @@author A0110376N
 
 #ifndef TASK_H_
 #define TASK_H_
-#define INVALID_TIME -1
 
 // These are the valid Field keywords
 // Count: 10
@@ -76,6 +75,8 @@ private:
 	int endTime;
 
 public:
+	static const int INVALID_TIME = -1;
+
 	static int getRunningCount();
 	static int incrementRunningCount();			// For new tasks
 	static void setRunningCount(int lastCount); // For startup

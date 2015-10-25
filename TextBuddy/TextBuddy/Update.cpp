@@ -1,4 +1,4 @@
-// @@author A0126677U (Soon Hao Ye)
+// Soon Hao Ye @@author A0126677U
 
 #include "stdafx.h"
 #include "Update.h"
@@ -42,7 +42,7 @@ void Update::update() {
 				color->push_back(0);
 			} else if(i->getPriorityStatus()) {
 				color->push_back(1);
-			} else if(i->isUrgent()) {
+			} else if(i->isUrgent() && i->getType() == TaskType::TODO) {
 				color->push_back(2);
 			} else {
 				color->push_back(3);
