@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "Logic.h"
 
+const std::string Logic::ERROR_NO_INPUT = "No Input";
 const std::string Logic::ERROR_INVALID_COMMAND = "Invalid Command Entered";
 
 Logic* Logic::theOne = new Logic();
@@ -17,6 +18,7 @@ Logic::Logic() {
 }
 
 Logic::~Logic() {
+	updater->~Update();
 	delete updater;
 }
 
@@ -32,8 +34,10 @@ Logic* Logic::getInstance() {
 }
 
 // Modified by RenZhi 19/10/15: Implement command pattern
-// Modified by Aaron  20/10/15: Move execute into 'try' block
 std::string Logic::processCommand(std::string userCommand) {
+	if(userCommand.empty()) {
+		throw std::runtime_error(ERROR_NO_INPUT);
+	}
 	std::string message;
 	Command* command;
 	command = parser->parse(userCommand);
@@ -67,10 +71,10 @@ void Logic::subscribe(std::vector<std::string>* labels,
 					  std::vector<std::string>* floatingTasks,
 					  std::vector<int>* color) {
 
-						  assert(updater == nullptr);
-						  updater = new Update(labels, description, taskDate,
-							  taskTime, floatingTasks, color, currentView);
-						  updater->update();
+	assert(updater == nullptr);
+	updater = new Update(labels, description, taskDate,
+	taskTime, floatingTasks, color, currentView);
+	updater->update();
 }
 
 void Logic::resetUpdaterNULL() {

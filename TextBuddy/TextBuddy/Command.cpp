@@ -27,27 +27,27 @@ std::vector<Task>* Command::getCurrentViewPtr() {return &currentView;}
 int Command::getSize() {return taskStore.size();}
 /*
 CommandType Command::getCommand() {
-	return cmd;
+return cmd;
 }
 
 std::string Command::getUserInput() {
-	return userInput;
+return userInput;
 }
 
 std::vector<Task> Command::getTaskStore() {
-	return taskStore;
+return taskStore;
 }
 
 std::vector<Task> Command::getCurrentView() {
-	return currentView;
+return currentView;
 }
 
 std::vector<Task>* Command::getCurrentViewPtr() {
-	return &currentView;
+return &currentView;
 }
 
 int Command::getSize() {
-	return taskStore.size();
+return taskStore.size();
 }
 */
 
@@ -185,9 +185,16 @@ void Command::removeDoneTasks() {
 }
 
 // Set currentView to be the same as taskStore
-bool Command::syncCurrentView() {
+bool Command::copyView() {
 	currentView = taskStore;
 	return true;
+}
+
+// Added by Ren Zhi 25/10/15
+// Updates only the modified task on the UI 
+void Command::updateView() {
+	*currViewIter = *taskStoreIter;
+	return;
 }
 
 // Added on 14/10/15 by Soon Hao Ye @@author A0126677U
@@ -266,6 +273,7 @@ std::string Add::getMessage() {
 //============== ADD : PRIVATE METHODS ===============
 
 // Modified on 24/10/15 by Chin Kiat Boon @@author A0096720A
+// Modified on 25/10/15 by Ng Ren Zhi @@author A0130463
 bool Add::doAdd() {
 
 	if (isDateLogical(newTask) == false) {
@@ -277,7 +285,8 @@ bool Add::doAdd() {
 	currViewID = currentView.size();
 
 	sortDate(taskStore);
-	syncCurrentView();
+	sortDate(currentView);
+	// UI only adds the new task, it doesn't coy the entire taskStore over again
 	removeDoneTasks();
 	return true;
 }
@@ -372,7 +381,7 @@ Task Modify::getTempTask() {
 void Modify::execute() {
 	initialiseIterators(modifyID);
 	originalTask = *currViewIter;
-	doModify();
+	modifyInfo();
 }
 
 void Modify::undo() {
@@ -387,10 +396,11 @@ std::string Modify::getMessage() {
 //============= MODIFY : PRIVATE METHODS ===========
 
 // Modified on 24/10/15 by Aaron Chong Jun Hao @@author A0110376N
-void Modify::doModify() {
+void Modify::modifyInfo() {
 	std::vector<FieldType>::iterator fieldIter;
+
 	// assert(std::string("Sentence two.") == taskStoreIter->getName());
-		
+
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
 		case NAME:
@@ -428,19 +438,46 @@ void Modify::doModify() {
 		}
 	}
 
-	if(taskStoreIter->getStartDate()==0 && taskStoreIter->getStartTime()==0
-		&& taskStoreIter->getEndDate()==0 && taskStoreIter->getEndTime()==0) {
-			taskStoreIter->setType(FLOATING);
-	} else if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
-		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
-			taskStoreIter->setType(TODO);
-	} else {
-		taskStoreIter->setType(EVENT);
-	}
-
-	*currViewIter =	*taskStoreIter;
+	updateTaskTypes();
+	updateView();
 	sortDate(taskStore);
 }
+
+//<<<<<Update task type methods added by Ren Zhi 25/10/15
+// If  == 0 &&  == 0: FLOATING
+// If end date == start date: TODO
+// All others: EVENTS
+
+void Modify::updateTaskTypes() {
+	if(!updateFLOATING()) {
+		if(!updateTODO()) {
+			updateEVENT();
+		}
+	}
+}
+
+bool Modify::updateFLOATING() {
+	if(taskStoreIter->getStartDate()==0 && taskStoreIter->getStartTime()==-1 &&
+		taskStoreIter->getEndDate()==0 && taskStoreIter->getEndTime()==-1) {
+		taskStoreIter->setType(FLOATING);
+		return true;
+	}
+	return false;
+}
+
+bool Modify::updateTODO() {
+	if(taskStoreIter->getStartDate()==taskStoreIter->getEndDate() && taskStoreIter->getStartTime()==taskStoreIter->getEndTime()) {
+		taskStoreIter->setType(TODO);
+		return true;
+	}
+	return false;
+}
+
+bool Modify::updateEVENT() {
+	taskStoreIter->setType(EVENT);
+	return true;
+}
+
 
 //==================================================
 //                       SEARCH
@@ -772,7 +809,7 @@ DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {
 DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
-	syncCurrentView();
+	copyView();
 	formatDefaultView();
 }
 
@@ -782,10 +819,12 @@ void DisplayAll::formatDefaultView() {
 	std::vector<Task> noStar;
 	std::vector<Task>::iterator i = currentView.begin();
 	while(i != currentView.end()) {
-		if(i->getPriorityStatus()) {
-			startUpView.push_back(*i);
-		} else {
-			noStar.push_back(*i);
+		if(!(i->getDoneStatus())) {
+			if(i->getPriorityStatus()) {
+				startUpView.push_back(*i);
+			} else {
+				noStar.push_back(*i);
+			}
 		}
 		++i;
 	}
@@ -849,7 +888,7 @@ void Load::execute() {
 	try {
 		taskStore = io->loadFile(filePath);		// Exception thrown if file does not exist
 		History::getInstance()->clearHistory(); // Clear history after load, to avoid seg fault
-		syncCurrentView();
+		copyView();
 	} catch (std::exception e) {
 		taskStore = temp;
 		throw e;

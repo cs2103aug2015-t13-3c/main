@@ -2,9 +2,9 @@
 	"TextBuddy Items":
 	[
 		{
-			"name": "hello3",
+			"name": "foo",
 			"type": "EVENT",
-			"uniqueID": 5,
+			"uniqueID": 9,
 			"label": [],
 
 			"isDone": false,
@@ -14,39 +14,55 @@
 			"startTime": -1,
 
 			"endDate": 151025,
-			"endTime": 1600
+			"endTime": 1800
 		}
 		,
 		{
-			"name": "hello",
+			"name": "foo",
 			"type": "EVENT",
-			"uniqueID": 3,
+			"uniqueID": 10,
 			"label": [],
 
-			"isDone": false,
+			"isDone": true,
 			"isPriority": false,
 
-			"startDate": 151110,
+			"startDate": 151025,
 			"startTime": -1,
 
-			"endDate": 151111,
-			"endTime": 1700
+			"endDate": 151025,
+			"endTime": 1900
 		}
 		,
 		{
-			"name": "hello3",
-			"type": "FLOATING",
-			"uniqueID": 4,
+			"name": "task",
+			"type": "EVENT",
+			"uniqueID": 11,
 			"label": [],
 
 			"isDone": false,
 			"isPriority": false,
 
-			"startDate": 0,
+			"startDate": 151025,
 			"startTime": -1,
 
-			"endDate": 0,
-			"endTime": -1
+			"endDate": 151025,
+			"endTime": 1900
+		}
+		,
+		{
+			"name": "foo",
+			"type": "EVENT",
+			"uniqueID": 12,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151025,
+			"startTime": -1,
+
+			"endDate": 151025,
+			"endTime": 1500
 		}
 	]
 }

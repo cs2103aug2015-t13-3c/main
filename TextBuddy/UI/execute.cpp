@@ -11,10 +11,8 @@ System::Void TextBuddyUI::input_KeyUp_1(System::Object^  sender,
 		getInput();
 		processAndExecute();
 		input->Clear();
-	} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right){
+	} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right && e->KeyCode != Keys::Back){
 		highlightSyntax();
-		autoComplete();
-	} else {
 		autoComplete();
 	}
 	if(e->KeyCode == Keys::Back) {

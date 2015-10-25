@@ -12,6 +12,7 @@
 #define MODIFY "modify "
 #define SEARCH "search "
 #define DISPLAY "display "
+#define VIEW "view"
 #define DONE "done "
 #define STAR "star "
 #define FROM " from "
@@ -63,17 +64,17 @@ namespace UserInterface {
 				 this->components = (gcnew System::ComponentModel::Container());
 				 System::Windows::Forms::DataGridView^  display;
 				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+				 this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->Label = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->time = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 				 this->input = (gcnew System::Windows::Forms::RichTextBox());
 				 this->feedback = (gcnew System::Windows::Forms::TextBox());
 				 this->floatingTaskDisplay = (gcnew System::Windows::Forms::RichTextBox());
 				 this->updateFloatingTimer = (gcnew System::Windows::Forms::Timer(this->components));
 				 this->currentTime = (gcnew System::Windows::Forms::TextBox());
 				 this->updateCurrentTime = (gcnew System::Windows::Forms::Timer(this->components));
-				 this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-				 this->Label = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-				 this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-				 this->date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-				 this->time = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 				 display = (gcnew System::Windows::Forms::DataGridView());
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->BeginInit();
 				 this->SuspendLayout();
@@ -108,6 +109,45 @@ namespace UserInterface {
 				 display->ScrollBars = System::Windows::Forms::ScrollBars::None;
 				 display->Size = System::Drawing::Size(525, 363);
 				 display->TabIndex = 3;
+				 // 
+				 // id
+				 // 
+				 this->id->HeaderText = L"ID";
+				 this->id->Name = L"id";
+				 this->id->ReadOnly = true;
+				 this->id->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+				 this->id->Width = 20;
+				 // 
+				 // Label
+				 // 
+				 this->Label->HeaderText = L"Label";
+				 this->Label->Name = L"Label";
+				 this->Label->ReadOnly = true;
+				 this->Label->Width = 80;
+				 // 
+				 // description
+				 // 
+				 this->description->HeaderText = L"        Description";
+				 this->description->Name = L"description";
+				 this->description->ReadOnly = true;
+				 this->description->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+				 this->description->Width = 270;
+				 // 
+				 // date
+				 // 
+				 this->date->HeaderText = L"Date";
+				 this->date->Name = L"date";
+				 this->date->ReadOnly = true;
+				 this->date->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+				 this->date->Width = 80;
+				 // 
+				 // time
+				 // 
+				 this->time->HeaderText = L"Time";
+				 this->time->Name = L"time";
+				 this->time->ReadOnly = true;
+				 this->time->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+				 this->time->Width = 80;
 				 // 
 				 // input
 				 // 
@@ -174,45 +214,6 @@ namespace UserInterface {
 				 this->updateCurrentTime->Enabled = true;
 				 this->updateCurrentTime->Interval = 5000;
 				 this->updateCurrentTime->Tick += gcnew System::EventHandler(this, &TextBuddyUI::updateCurrentTime_Tick);
-				 // 
-				 // id
-				 // 
-				 this->id->HeaderText = L"ID";
-				 this->id->Name = L"id";
-				 this->id->ReadOnly = true;
-				 this->id->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-				 this->id->Width = 20;
-				 // 
-				 // Label
-				 // 
-				 this->Label->HeaderText = L"Label";
-				 this->Label->Name = L"Label";
-				 this->Label->ReadOnly = true;
-				 this->Label->Width = 80;
-				 // 
-				 // description
-				 // 
-				 this->description->HeaderText = L"        Description";
-				 this->description->Name = L"description";
-				 this->description->ReadOnly = true;
-				 this->description->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-				 this->description->Width = 270;
-				 // 
-				 // date
-				 // 
-				 this->date->HeaderText = L"Date";
-				 this->date->Name = L"date";
-				 this->date->ReadOnly = true;
-				 this->date->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-				 this->date->Width = 80;
-				 // 
-				 // time
-				 // 
-				 this->time->HeaderText = L"Time";
-				 this->time->Name = L"time";
-				 this->time->ReadOnly = true;
-				 this->time->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-				 this->time->Width = 80;
 				 // 
 				 // TextBuddyUI
 				 // 
@@ -328,6 +329,8 @@ namespace UserInterface {
 		automatically performs search and updates display as user types
 		=====================================================================*/
 		void autoComplete();
+		void searchAutoComplete();
+		void commandAutoComplete();
 		void undoSearch();
 
 		void scrollDown();

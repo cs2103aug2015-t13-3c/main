@@ -10,6 +10,13 @@ void TextBuddyUI::highlightSyntax() {
 		int position = findKeyword(keyword);
 		if(keywordIsFound(position)) {
 			highlightKeywords(position,keyword);
+			if(keyword == AT) {
+				position = input->Find(keyword,position+1,input->Text->Length,
+					RichTextBoxFinds::NoHighlight);
+				if(keywordIsFound(position)) {
+					highlightKeywords(position,keyword);
+				}
+			}
 		} 
 	}
 }
