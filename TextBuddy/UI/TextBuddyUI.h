@@ -55,6 +55,11 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
+
+
+
+
+
 	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
@@ -212,6 +217,7 @@ namespace UserInterface {
 				 this->time->HeaderText = L"Time";
 				 this->time->Name = L"time";
 				 this->time->ReadOnly = true;
+				 this->time->Resizable = System::Windows::Forms::DataGridViewTriState::False;
 				 this->time->Width = 80;
 				 // 
 				 // TextBuddyUI

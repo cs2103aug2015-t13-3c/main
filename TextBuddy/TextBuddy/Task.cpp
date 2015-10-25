@@ -51,31 +51,6 @@ int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
 std::vector<std::string> Task::getLabelsToDelete() {return labelsToDelete;}
 
-std::vector<std::string> Task::getLabels() {
-	std::vector<std::string> labelVector;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		labelVector.push_back(*i);
-		++i;
-	}
-	return labelVector;
-}
-
-std::string Task::getLabelString() {
-	std::string label;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		label = label + *i + "\r\n";
-		++i;
-	}
-	//remove the last new line characters
-	if(!label.empty()) {
-		for(int j=0 ; j<2 ; ++j) {
-			label.pop_back();
-		}
-	}
-	return label;
-}
 
 std::string Task::getDate_UI() {
 	if(startDate == 0) {
@@ -89,12 +64,12 @@ std::string Task::getDate_UI() {
 }
 
 std::string Task::getTime_UI() {
-	if(startTime == INVALID_TIME) {
+	if(endTime == INVALID_TIME) {
 		return "";
 	}
-	std::string time = Utilities::getTime(startTime);
-	if(startTime != endTime) {
-		time = time + " - " + Utilities::getTime(endTime);
+	std::string time = Utilities::getTime(endTime);
+	if(startTime != INVALID_TIME) {
+		time = Utilities::getTime(startTime)  + " - " + time;
 	}
 	return time;
 }

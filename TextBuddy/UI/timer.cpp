@@ -4,7 +4,7 @@ using namespace UserInterface;
 
 System::Void TextBuddyUI::updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
 	if(floatingTasks != nullptr) {
-		if(!floatingTasks->empty()) {
+		if(floatingTasks->empty()) {
 			floatingTaskDisplay->Text = "";
 			return;
 		}
