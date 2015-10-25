@@ -65,8 +65,6 @@ private:
 	std::set<std::string> labels;
 	std::vector<std::string> labelsToDelete;
 
-	std::string dateAndTime_UI;
-
 	bool isDone;
 	bool isPriority;
 
@@ -77,6 +75,8 @@ private:
 	int endTime;
 
 public:
+	static const int INVALID_TIME = -1;
+
 	static int getRunningCount();
 	static int incrementRunningCount();			// For new tasks
 	static void setRunningCount(int lastCount); // For startup
@@ -92,7 +92,7 @@ public:
 	std::string getLabelString();
 	std::vector<std::string> getLabels();
 	std::vector<std::string> getLabelsToDelete();
-	std::string getDateAndTime_UI();
+
 
 	bool getDoneStatus();
 	bool getPriorityStatus();
@@ -103,11 +103,14 @@ public:
 	int getEndDate();
 	int getEndTime();
 
+	std::string getDate_UI();
+	std::string getTime_UI();
+
 	// Setters, return true if successful
 	bool setName(std::string newName);
 	bool setType(TaskType newType);
 	bool setID(int newID);
-	
+
 	bool addLabels(std::vector<std::string> newLabels);
 	bool deleteLabels(std::vector<std::string> badLabels);
 	bool setLabelsToDelete(std::vector<std::string> oldLabels);
@@ -124,6 +127,8 @@ public:
 
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
+
+	bool isUrgent();
 };
 
 #endif

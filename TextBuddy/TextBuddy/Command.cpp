@@ -267,7 +267,6 @@ std::string Add::getMessage() {
 
 // Modified on 24/10/15 by Chin Kiat Boon @@author A0096720A
 bool Add::doAdd() {
-	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
 
 	if (isDateLogical(newTask) == false) {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);

@@ -14,10 +14,10 @@ Task::Task() {
 	isPriority = false;
 
 	startDate = 0; // YYMMDD, supports 2015-2099
-	startTime = 0; // HHMM, 24-hour format
+	startTime = INVALID_TIME; // HHMM, 24-hour format
 
 	endDate = 0;
-	endTime = 0;
+	endTime = INVALID_TIME;
 }
 
 Task::~Task() {}
@@ -77,9 +77,28 @@ std::string Task::getLabelString() {
 	return label;
 }
 
-std::string Task::getDateAndTime_UI() {
-	return Utilities::taskDateAndTimeToDisplayString(*this);
+std::string Task::getDate_UI() {
+	if(startDate == 0) {
+		return "";
+	}
+	std::string date = Utilities::getDate(startDate);
+	if(startDate != endDate) {
+		date = date + " - " + Utilities::getDate(endDate);
+	}
+	return date;
 }
+
+std::string Task::getTime_UI() {
+	if(startTime == INVALID_TIME) {
+		return "";
+	}
+	std::string time = Utilities::getTime(startTime);
+	if(startTime != endTime) {
+		time = time + " - " + Utilities::getTime(endTime);
+	}
+	return time;
+}
+
 
 //========== Setters ==========
 // Return true if successful
@@ -174,6 +193,47 @@ bool Task::setEndDate(int newEndDate) {
 bool Task::setEndTime(int newEndTime) {
 	endTime = newEndTime;
 	return true;
+}
+
+bool Task::isUrgent() {
+	int currentDay = Utilities::getLocalDay();
+	int currentMonth = Utilities::getLocalMonth();
+	int currentYear = Utilities::getLocalYear();
+
+	int day = startDate % 100;
+	int month = (startDate % 10000)/100;
+	int year = startDate/10000;
+	
+	if(day == currentDay && month == currentMonth && year == currentYear) {
+		return true;
+	} 
+	return false;
+}
+
+std::vector<std::string> Task::getLabels() {
+	std::vector<std::string> labelVector;
+	std::set<std::string>::iterator i = labels.begin();
+	while(i != labels.end()) {
+		labelVector.push_back(*i);
+		++i;
+	}
+	return labelVector;
+}
+
+std::string Task::getLabelString() {
+	std::string label;
+	std::set<std::string>::iterator i = labels.begin();
+	while(i != labels.end()) {
+		label = label + *i + "\r\n";
+		++i;
+	}
+	//remove the last new line characters
+	if(!label.empty()) {
+		for(int j=0 ; j<2 ; ++j) {
+			label.pop_back();
+		}
+	}
+	return label;
 }
 
 // For testing
