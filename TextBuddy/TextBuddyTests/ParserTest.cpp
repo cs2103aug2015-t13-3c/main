@@ -76,7 +76,7 @@ public:
 		Assert::AreEqual(151031, task.getEndDate());
 		Assert::AreEqual(2000, task.getEndTime());
 
-		//===== EVENT with singleWordName, startDate and startTime =====
+		//===== EVENT with singleWordName, startDate and endDate =====
 		userInput = "Add that from 14 Oct to 16 Oct";
 		cmd = p->parse(userInput);
 		add = (Add*)cmd;
@@ -90,9 +90,27 @@ public:
 		// Assert::AreEqual(false,task.getDoneStatus());
 		// Assert::AreEqual(false,task.getPriorityStatus());
 		Assert::AreEqual(151014, task.getStartDate());
-		// Assert::AreEqual(2000, task.getStartTime());
+		// Assert::AreEqual(-1, task.getStartTime());
 		Assert::AreEqual(151016, task.getEndDate());
-		// Assert::AreEqual(2000, task.getEndTime());
+		// Assert::AreEqual(-1, task.getEndTime());
+
+		//===== EVENT with singleWordName, startTime and endTime =====
+		userInput = "Add fishing from 12 am to 11.59 pm";
+		cmd = p->parse(userInput);
+		add = (Add*)cmd;
+		storeSizeBeforeAdd = add->getTaskStore().size();
+		add->execute();
+		task = add->getNewTask();
+		Assert::AreEqual(storeSizeBeforeAdd+1, add->getTaskStore().size());
+		Assert::AreEqual(std::string("fishing"),task.getName());
+		Assert::AreEqual(std::string("EVENT"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		// Assert::AreEqual(0, task.getStartDate());
+		Assert::AreEqual(0, task.getStartTime());
+		// Assert::AreEqual(0, task.getEndDate());
+		Assert::AreEqual(2359, task.getEndTime());
 	}
 
 	void logicProcessCommandStub(Command* cmd,

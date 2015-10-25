@@ -263,7 +263,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			break;
 		case START_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-				if(newTask->getStartTime() == 0) {
+				if(newTask->getStartTime() == TIME_NOT_SET) {
 					newTask->setStartTime(newTime);
 				}
 			} else {

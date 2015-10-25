@@ -4,7 +4,7 @@
 #define TASK_H_
 
 // This is the default initialisation for time, since 0 represents "12 am"
-static const int TIME_NOT_SET = -1;
+const int TIME_NOT_SET = -1;
 
 // These are the valid Field keywords
 // Count: 10
@@ -64,7 +64,7 @@ private:
 	std::string name;
 	TaskType type;
 	int uniqueID;
-	
+
 	std::set<std::string> labels;
 	std::vector<std::string> labelsToDelete;
 
@@ -79,9 +79,9 @@ private:
 
 public:
 	static int getRunningCount();
-	static int incrementRunningCount();			// For new tasks
-	static void setRunningCount(int lastCount); // For startup
-	static bool tasksAreEqual(Task task1, Task task2); // For testing
+	static int incrementRunningCount();					// For new tasks
+	static void setRunningCount(int lastCount);			// For startup
+	static bool tasksAreEqual(Task task1, Task task2);	// For testing
 
 	Task();
 	~Task();
@@ -93,7 +93,6 @@ public:
 	std::string getLabelString();
 	std::vector<std::string> getLabels();
 	std::vector<std::string> getLabelsToDelete();
-
 
 	bool getDoneStatus();
 	bool getPriorityStatus();
