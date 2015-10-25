@@ -27,27 +27,27 @@ std::vector<Task>* Command::getCurrentViewPtr() {return &currentView;}
 int Command::getSize() {return taskStore.size();}
 /*
 CommandType Command::getCommand() {
-	return cmd;
+return cmd;
 }
 
 std::string Command::getUserInput() {
-	return userInput;
+return userInput;
 }
 
 std::vector<Task> Command::getTaskStore() {
-	return taskStore;
+return taskStore;
 }
 
 std::vector<Task> Command::getCurrentView() {
-	return currentView;
+return currentView;
 }
 
 std::vector<Task>* Command::getCurrentViewPtr() {
-	return &currentView;
+return &currentView;
 }
 
 int Command::getSize() {
-	return taskStore.size();
+return taskStore.size();
 }
 */
 
@@ -390,7 +390,7 @@ std::string Modify::getMessage() {
 void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 	// assert(std::string("Sentence two.") == taskStoreIter->getName());
-		
+
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
 		case NAME:
@@ -782,10 +782,12 @@ void DisplayAll::formatDefaultView() {
 	std::vector<Task> noStar;
 	std::vector<Task>::iterator i = currentView.begin();
 	while(i != currentView.end()) {
-		if(i->getPriorityStatus()) {
-			startUpView.push_back(*i);
-		} else {
-			noStar.push_back(*i);
+		if(!(i->getDoneStatus())) {
+			if(i->getPriorityStatus()) {
+				startUpView.push_back(*i);
+			} else {
+				noStar.push_back(*i);
+			}
 		}
 		++i;
 	}

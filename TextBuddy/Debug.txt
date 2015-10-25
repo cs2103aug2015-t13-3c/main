@@ -2,6 +2,38 @@
 	"TextBuddy Items":
 	[
 		{
+			"name": "foobar",
+			"type": "EVENT",
+			"uniqueID": 8,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151025,
+			"startTime": -1,
+
+			"endDate": 151025,
+			"endTime": 2100
+		}
+		,
+		{
+			"name": "foo",
+			"type": "EVENT",
+			"uniqueID": 8,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151025,
+			"startTime": -1,
+
+			"endDate": 151025,
+			"endTime": 2100
+		}
+		,
+		{
 			"name": "bar",
 			"type": "EVENT",
 			"uniqueID": 8,

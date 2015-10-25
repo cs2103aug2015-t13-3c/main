@@ -877,3 +877,179 @@ Sun Oct 25 13:31:24 2015 Parsed task
 Sun Oct 25 13:31:29 2015 Parsing "exit"
 Sun Oct 25 13:31:29 2015 Logger terminated
 
+Sun Oct 25 18:09:04 2015 Logger initialised
+Sun Oct 25 18:09:04 2015 Log level default: 1
+Sun Oct 25 18:09:04 2015 Parser instantiated
+Sun Oct 25 18:09:04 2015 Log level changed: 0
+Sun Oct 25 18:09:04 2015 Parsing "display"
+Sun Oct 25 18:11:15 2015 Logger initialised
+Sun Oct 25 18:11:15 2015 Log level default: 1
+Sun Oct 25 18:11:15 2015 Parser instantiated
+Sun Oct 25 18:11:15 2015 Log level changed: 0
+Sun Oct 25 18:11:15 2015 Parsing "display"
+Sun Oct 25 18:13:20 2015 Logger initialised
+Sun Oct 25 18:13:20 2015 Log level default: 1
+Sun Oct 25 18:13:20 2015 Parser instantiated
+Sun Oct 25 18:13:20 2015 Log level changed: 0
+Sun Oct 25 18:13:20 2015 Parsing "display"
+Sun Oct 25 18:14:26 2015 Parsing "exit"
+Sun Oct 25 18:14:26 2015 Logger terminated
+
+Sun Oct 25 18:19:11 2015 Logger initialised
+Sun Oct 25 18:19:11 2015 Log level default: 1
+Sun Oct 25 18:19:11 2015 Parser instantiated
+Sun Oct 25 18:19:11 2015 Log level changed: 0
+Sun Oct 25 18:19:11 2015 Parsing "display"
+Sun Oct 25 18:25:02 2015 Logger initialised
+Sun Oct 25 18:25:02 2015 Log level default: 1
+Sun Oct 25 18:25:02 2015 Parser instantiated
+Sun Oct 25 18:25:02 2015 Log level changed: 0
+Sun Oct 25 18:25:03 2015 Parsing "display"
+Sun Oct 25 18:26:35 2015 Logger initialised
+Sun Oct 25 18:26:35 2015 Log level default: 1
+Sun Oct 25 18:26:35 2015 Parser instantiated
+Sun Oct 25 18:26:35 2015 Log level changed: 0
+Sun Oct 25 18:26:53 2015 Parsing "display"
+Sun Oct 25 18:27:41 2015 Logger initialised
+Sun Oct 25 18:27:41 2015 Log level default: 1
+Sun Oct 25 18:27:41 2015 Parser instantiated
+Sun Oct 25 18:27:41 2015 Log level changed: 0
+Sun Oct 25 18:27:42 2015 Parsing "display"
+Sun Oct 25 18:30:13 2015 Logger initialised
+Sun Oct 25 18:30:13 2015 Log level default: 1
+Sun Oct 25 18:30:13 2015 Parser instantiated
+Sun Oct 25 18:30:13 2015 Log level changed: 0
+Sun Oct 25 18:30:17 2015 Parsing "display"
+Sun Oct 25 18:38:49 2015 Logger initialised
+Sun Oct 25 18:38:49 2015 Log level default: 1
+Sun Oct 25 18:38:49 2015 Parser instantiated
+Sun Oct 25 18:38:49 2015 Log level changed: 0
+Sun Oct 25 18:38:49 2015 Parsing "display"
+Sun Oct 25 18:39:04 2015 Parsing "add"
+Sun Oct 25 18:39:04 2015 Parsing task
+Sun Oct 25 18:39:04 2015 Parsing field: name
+Sun Oct 25 18:39:04 2015 Parsing string: foo
+Sun Oct 25 18:39:04 2015 Parsing field: by
+Sun Oct 25 18:39:04 2015 Parsing string: 11 nov 10 am
+Sun Oct 25 18:39:04 2015 Invalid date format: 11 nov 10 am
+Sun Oct 25 18:39:04 2015 Parsed task
+Sun Oct 25 18:39:30 2015 Parsing "add"
+Sun Oct 25 18:39:31 2015 Parsing task
+Sun Oct 25 18:39:31 2015 Parsing field: name
+Sun Oct 25 18:39:31 2015 Parsing string: foo
+Sun Oct 25 18:39:31 2015 Parsing field: by
+Sun Oct 25 18:39:31 2015 Parsing string: 10 nov
+Sun Oct 25 18:39:31 2015 Parsed task
+Sun Oct 25 18:39:36 2015 Parsing "undo"
+Sun Oct 25 18:39:38 2015 Parsing "undo"
+Sun Oct 25 18:39:42 2015 Parsing "undo"
+Sun Oct 25 18:40:41 2015 Parsing "add"
+Sun Oct 25 18:40:41 2015 Parsing task
+Sun Oct 25 18:40:41 2015 Parsing field: name
+Sun Oct 25 18:40:41 2015 Parsing string: foo
+Sun Oct 25 18:40:41 2015 Parsing field: by
+Sun Oct 25 18:40:41 2015 Parsing string: 5 pm
+Sun Oct 25 18:40:41 2015 Invalid date format: 5 pm
+Sun Oct 25 18:40:41 2015 Parsed task
+Sun Oct 25 18:40:54 2015 Parsing "add"
+Sun Oct 25 18:40:54 2015 Parsing task
+Sun Oct 25 18:40:54 2015 Parsing field: name
+Sun Oct 25 18:40:54 2015 Parsing string: foo
+Sun Oct 25 18:40:54 2015 Parsing field: by
+Sun Oct 25 18:40:54 2015 Parsing string: 11 nov
+Sun Oct 25 18:40:54 2015 Parsing field: at
+Sun Oct 25 18:40:54 2015 Parsing string: 6 pm
+Sun Oct 25 18:40:54 2015 Parsed task
+Sun Oct 25 18:41:01 2015 Parsing "undo"
+Sun Oct 25 18:41:04 2015 Parsing "undo"
+Sun Oct 25 18:41:06 2015 Parsing "undo"
+Sun Oct 25 18:41:10 2015 Parsing "clear"
+Sun Oct 25 18:41:25 2015 Parsing "add"
+Sun Oct 25 18:41:25 2015 Parsing task
+Sun Oct 25 18:41:25 2015 Parsing field: name
+Sun Oct 25 18:41:25 2015 Parsing string: foo
+Sun Oct 25 18:41:25 2015 Parsing field: from
+Sun Oct 25 18:41:25 2015 Parsing string: 12 pm
+Sun Oct 25 18:41:25 2015 Invalid date format: 12 pm
+Sun Oct 25 18:41:25 2015 Parsing field: to
+Sun Oct 25 18:41:25 2015 Parsing string: 6 pm
+Sun Oct 25 18:41:25 2015 Invalid date format: 6 pm
+Sun Oct 25 18:41:25 2015 Parsed task
+Sun Oct 25 18:41:59 2015 Parsing "add"
+Sun Oct 25 18:41:59 2015 Parsing task
+Sun Oct 25 18:41:59 2015 Parsing field: name
+Sun Oct 25 18:41:59 2015 Parsing string: foo
+Sun Oct 25 18:41:59 2015 Parsing field: at
+Sun Oct 25 18:41:59 2015 Parsing string: 6 pm
+Sun Oct 25 18:41:59 2015 Parsing field: to
+Sun Oct 25 18:41:59 2015 Parsing string: 7 pm
+Sun Oct 25 18:41:59 2015 Invalid date format: 7 pm
+Sun Oct 25 18:41:59 2015 Parsed task
+Sun Oct 25 18:43:51 2015 Parsing "add"
+Sun Oct 25 18:43:51 2015 Parsing task
+Sun Oct 25 18:43:51 2015 Parsing field: name
+Sun Oct 25 18:43:51 2015 Parsing string: task
+Sun Oct 25 18:43:51 2015 Parsing field: from
+Sun Oct 25 18:43:51 2015 Parsing string: 4 pm
+Sun Oct 25 18:43:51 2015 Invalid date format: 4 pm
+Sun Oct 25 18:43:51 2015 Parsing field: to
+Sun Oct 25 18:43:51 2015 Parsing string: 7 pm
+Sun Oct 25 18:43:51 2015 Invalid date format: 7 pm
+Sun Oct 25 18:43:51 2015 Parsed task
+Sun Oct 25 18:44:59 2015 Parsing "done"
+Sun Oct 25 18:45:04 2015 Parsing "view"
+Sun Oct 25 18:45:04 2015 Viewing...
+Sun Oct 25 18:45:10 2015 Parsing "exit"
+Sun Oct 25 18:45:10 2015 Logger terminated
+
+Sun Oct 25 18:58:41 2015 Logger initialised
+Sun Oct 25 18:58:41 2015 Log level default: 1
+Sun Oct 25 18:58:41 2015 Parser instantiated
+Sun Oct 25 18:58:41 2015 Log level changed: 0
+Sun Oct 25 18:58:43 2015 Parsing "display"
+Sun Oct 25 19:18:38 2015 Logger initialised
+Sun Oct 25 19:18:38 2015 Log level default: 1
+Sun Oct 25 19:18:38 2015 Parser instantiated
+Sun Oct 25 19:18:38 2015 Log level changed: 0
+Sun Oct 25 19:18:39 2015 Parsing "display"
+Sun Oct 25 19:22:18 2015 Logger initialised
+Sun Oct 25 19:22:18 2015 Log level default: 1
+Sun Oct 25 19:22:18 2015 Parser instantiated
+Sun Oct 25 19:22:18 2015 Log level changed: 0
+Sun Oct 25 19:22:18 2015 Parsing "display"
+Sun Oct 25 19:23:03 2015 Parsing "exit"
+Sun Oct 25 19:23:03 2015 Logger terminated
+
+Sun Oct 25 19:24:26 2015 Logger initialised
+Sun Oct 25 19:24:26 2015 Log level default: 1
+Sun Oct 25 19:24:26 2015 Parser instantiated
+Sun Oct 25 19:24:26 2015 Log level changed: 0
+Sun Oct 25 19:24:29 2015 Parsing "display"
+Sun Oct 25 19:24:48 2015 Parsing "add"
+Sun Oct 25 19:24:48 2015 Parsing task
+Sun Oct 25 19:24:48 2015 Parsing field: name
+Sun Oct 25 19:24:48 2015 Parsing string: foo
+Sun Oct 25 19:24:48 2015 Parsing field: by
+Sun Oct 25 19:24:48 2015 Parsing string: 3 pm
+Sun Oct 25 19:24:48 2015 Invalid date format: 3 pm
+Sun Oct 25 19:24:48 2015 Parsed task
+Sun Oct 25 19:28:50 2015 Logger initialised
+Sun Oct 25 19:28:50 2015 Log level default: 1
+Sun Oct 25 19:28:50 2015 Parser instantiated
+Sun Oct 25 19:28:50 2015 Log level changed: 0
+Sun Oct 25 19:28:50 2015 Parsing "display"
+Sun Oct 25 19:38:07 2015 Logger initialised
+Sun Oct 25 19:38:07 2015 Log level default: 1
+Sun Oct 25 19:38:07 2015 Parser instantiated
+Sun Oct 25 19:38:07 2015 Log level changed: 0
+Sun Oct 25 19:38:11 2015 Parsing "display"
+Sun Oct 25 19:38:34 2015 Parsing "view"
+Sun Oct 25 19:38:34 2015 Viewing...
+Sun Oct 25 19:38:39 2015 Parsing "view"
+Sun Oct 25 19:38:39 2015 Viewing...
+Sun Oct 25 19:38:49 2015 Parsing "view"
+Sun Oct 25 19:38:49 2015 Viewing...
+Sun Oct 25 19:38:54 2015 Parsing "view"
+Sun Oct 25 19:38:54 2015 Viewing...
+Sun Oct 25 19:38:59 2015 Parsing "view"
+Sun Oct 25 19:38:59 2015 Viewing...

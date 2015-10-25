@@ -43,6 +43,7 @@ TextBuddyUI::TextBuddyUI() {
 	keywords->Add(MODIFY);
 	keywords->Add(SEARCH);
 	keywords->Add(DISPLAY);
+	keywords->Add(VIEW);
 	keywords->Add(DONE);
 	keywords->Add(STAR);
 	keywords->Add(FROM);
@@ -55,11 +56,5 @@ TextBuddyUI::TextBuddyUI() {
 TextBuddyUI::~TextBuddyUI() {
 	if(components) {
 		delete components;
-		delete floatingTasks;
-		delete labels;
-		delete taskDescription;
-		delete taskDate;
-		delete taskTime;
-		delete color;
 	}
 }

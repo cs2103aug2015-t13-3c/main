@@ -19,6 +19,7 @@ private:
 	IO* io;
 	Update* updater;
 
+	const static std::string Logic::ERROR_NO_INPUT;
 	const static std::string ERROR_INVALID_COMMAND;
 	/*
 	int getIdOfIndex(int userIndex);
