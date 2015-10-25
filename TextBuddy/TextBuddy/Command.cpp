@@ -106,14 +106,18 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 	// In-place sorting
 	i = taskVector.begin();	// Points to start of unsorted part
 	k = taskVector.end();	// Points to end of unsorted part
-	while(i != k) {
+	while(i < k) {
 		if(i->getType() == FLOATING) {
 			tempTask = *i;
 			for (j = i+1; j != taskVector.end(); ++j) {
 				std::swap(*j, *(j-1)); 
 			}
 			*(j-1) = tempTask;
+			if(k == taskVector.begin()) {
+				break;
+			} else {
 			--k;
+			}
 		} else {
 			++i;
 		}
@@ -286,7 +290,7 @@ bool Add::doAdd() {
 
 	sortDate(taskStore);
 	sortDate(currentView);
-	// UI only adds the new task, it doesn't coy the entire taskStore over again
+	// UI only adds the new task, it doesn't copy the entire taskStore over again
 	removeDoneTasks();
 	return true;
 }
@@ -385,8 +389,16 @@ void Modify::execute() {
 }
 
 void Modify::undo() {
+	taskStore.erase(taskStoreIter);
+	currentView.erase(currViewIter);
+	taskStore.insert(taskStoreIter,originalTask);
+	currentView.insert(currViewIter,originalTask);
+
+	/*
 	Modify *undoModify = new Modify(modifyID, fieldsToModify, originalTask);
 	undoModify->execute();
+	moveToPrevPos();
+	*/
 }
 
 std::string Modify::getMessage() {
@@ -398,8 +410,6 @@ std::string Modify::getMessage() {
 // Modified on 24/10/15 by Aaron Chong Jun Hao @@author A0110376N
 void Modify::modifyInfo() {
 	std::vector<FieldType>::iterator fieldIter;
-
-	// assert(std::string("Sentence two.") == taskStoreIter->getName());
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
@@ -433,6 +443,10 @@ void Modify::modifyInfo() {
 		case END_TIME:
 			taskStoreIter->setEndTime(tempTask.getEndTime());
 			break;
+		case TODO_DATE:
+			taskStoreIter->setEndDate(tempTask.getEndDate());
+			taskStoreIter->setStartDate(tempTask.getStartDate());
+			break;
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
@@ -441,10 +455,12 @@ void Modify::modifyInfo() {
 	updateTaskTypes();
 	updateView();
 	sortDate(taskStore);
+	initialiseIterators(modifyID);
+
 }
 
 //<<<<<Update task type methods added by Ren Zhi 25/10/15
-// If  == 0 &&  == 0: FLOATING
+// If start date == 0 && end date == 0: FLOATING
 // If end date == start date: TODO
 // All others: EVENTS
 
@@ -478,6 +494,16 @@ bool Modify::updateEVENT() {
 	return true;
 }
 
+// Moves modified back to previous position before executing
+// In case sequence was swapped during sorting
+void Modify::moveToPrevPos() {
+	std::vector<Task>::iterator preCurrViewIter;
+	Task tempTask = *currViewIter;
+	currentView.erase(currViewIter);
+
+	preCurrViewIter = currentView.begin() + prevCurrPos;
+	currentView.insert(preCurrViewIter, tempTask);
+}
 
 //==================================================
 //                       SEARCH

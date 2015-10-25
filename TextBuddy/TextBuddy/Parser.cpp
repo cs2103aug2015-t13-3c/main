@@ -252,6 +252,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			newTask->setType(EVENT);
 			newTask->setStartDate(newDate);
 			break;
+		case TODO_DATE:
 		case END_DATE:
 			if(newTask->getType() == FLOATING) {
 				newTask->setType(TODO);
@@ -269,6 +270,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			} else {
 				break;
 			}
+		case TODO_TIME:
 		case END_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
 				if(newTask->getEndDate() == 0 || newTask->getEndDate() == INVALID_DATE_FORMAT) {

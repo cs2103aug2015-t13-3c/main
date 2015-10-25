@@ -175,8 +175,10 @@ private:
 	Task tempTask;
 	//==== UNDO ===
 	Task originalTask;
+	int prevCurrPos;
 
 	void modifyInfo();
+	void moveToPrevPos();
 
 	void updateTaskTypes();
 	bool updateFLOATING();

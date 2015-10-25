@@ -17,7 +17,7 @@ public:
 
 	TEST_METHOD(Utilities_fieldVecToString) {
 		Parser* parser = Parser::getInstance();
-		std::string expectedString = "from to to"; // Expected behaviour
+		std::string expectedString = "from on on"; // Expected behaviour
 		std::vector<FieldType> fields = parser->extractFields("from on by");
 		Assert::AreEqual(expectedString,Utilities::fieldVecToString(fields));
 	}
