@@ -12,7 +12,7 @@
 #define MODIFY "modify "
 #define SEARCH "search "
 #define DISPLAY "display "
-#define VIEW "view"
+#define VIEW "view "
 #define DONE "done "
 #define STAR "star "
 #define FROM " from "
@@ -331,6 +331,8 @@ namespace UserInterface {
 		void autoComplete();
 		void searchAutoComplete();
 		void commandAutoComplete();
+		void viewAutoComplete();
+		void putSuggestedText(String^ keyword);
 		void undoSearch();
 
 		void scrollDown();

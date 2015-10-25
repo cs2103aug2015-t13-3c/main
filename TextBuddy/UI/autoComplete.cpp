@@ -7,6 +7,7 @@ using namespace UserInterface;
 void TextBuddyUI::autoComplete() {
 	searchAutoComplete();
 	commandAutoComplete();
+	viewAutoComplete();
 }
 
 void TextBuddyUI::searchAutoComplete() {
@@ -24,14 +25,66 @@ void TextBuddyUI::commandAutoComplete() {
 		if(command == STAR || String::IsNullOrEmpty(input->Text) ) {
 			return;
 		}
-		if(command->IndexOf(input->Text[0]) == 0) {
+		if(command == DEL || command == DONE || command == DISPLAY) {
+			if(input->Text->Length > 1) {
+				if(command->IndexOf(input->Text[0]) == 0 && 
+					command->IndexOf(input->Text[1]) == 1) {
+						if(cursorPosition < command->Length) {
+							input->Text = command;
+							int length = (command->Length) - 2 ;
+							input->Select(cursorPosition,length);
+						}
+				}
+			}
+		} else if(command->IndexOf(input->Text[0]) == 0) {
 			if(cursorPosition < command->Length) {
 				input->Text = command;
-				input->Select(cursorPosition,(command->Length) - 1);
+				int length = (command->Length) - 2 ;
+				input->Select(cursorPosition,length);
 			}
 		}
 
 	}
+}
+
+void TextBuddyUI::viewAutoComplete() {
+	int position = findKeyword(VIEW);
+	if(keywordIsFound(position) && position == 0) {
+		if(input->Text->Length > 5) {
+			char c = input->Text[5];
+			if(c == 'a') {
+				String^ keyword = "all";
+				putSuggestedText(keyword);
+			} else if(c == 'e') { 
+				String^ keyword = "event";
+				putSuggestedText(keyword);
+			} else if(c == 'f') {
+				String^ keyword = "floating";
+				putSuggestedText(keyword);
+			} else if(c == 'p') {
+				String^ keyword = "past";
+				putSuggestedText(keyword);
+			} else if(c == 's') {
+				String^ keyword = "star";
+				putSuggestedText(keyword);
+			} else if(c == 't') {
+				String^ keyword = "todo";
+				putSuggestedText(keyword);
+			} else if(c == 'w') {
+				String^ keyword = "week";
+				putSuggestedText(keyword);
+			} else {
+				// testing
+				//putSuggestedText("bla");
+			}
+		}
+	}
+}
+
+void TextBuddyUI::putSuggestedText(String^ keyword) {
+	input->Select(cursorPosition-1,1);
+	input->SelectedText = keyword;
+	input->Select(cursorPosition,keyword->Length);
 }
 
 void TextBuddyUI::undoSearch() {

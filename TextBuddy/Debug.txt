@@ -2,57 +2,41 @@
 	"TextBuddy Items":
 	[
 		{
-			"name": "foobar",
-			"type": "EVENT",
-			"uniqueID": 8,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151025,
-			"startTime": -1,
-
-			"endDate": 151025,
-			"endTime": 2100
-		}
-		,
-		{
 			"name": "foo",
 			"type": "EVENT",
-			"uniqueID": 8,
+			"uniqueID": 9,
 			"label": [],
 
 			"isDone": false,
-			"isPriority": false,
+			"isPriority": true,
 
 			"startDate": 151025,
-			"startTime": -1,
+			"startTime": 0,
 
 			"endDate": 151025,
-			"endTime": 2100
+			"endTime": 300
 		}
 		,
 		{
 			"name": "bar",
-			"type": "EVENT",
+			"type": "TODO",
 			"uniqueID": 8,
-			"label": [],
+			"label": ["work"],
 
 			"isDone": false,
 			"isPriority": false,
 
-			"startDate": 151130,
-			"startTime": -1,
+			"startDate": 151025,
+			"startTime": 0,
 
-			"endDate": 151201,
-			"endTime": 1800
+			"endDate": 151025,
+			"endTime": 0
 		}
 		,
 		{
-			"name": "foo",
+			"name": "foobar",
 			"type": "FLOATING",
-			"uniqueID": 7,
+			"uniqueID": 9,
 			"label": [],
 
 			"isDone": false,

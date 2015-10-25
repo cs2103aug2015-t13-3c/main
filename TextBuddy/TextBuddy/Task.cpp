@@ -93,7 +93,7 @@ std::string Task::getTime_UI() {
 		return "";
 	}
 	std::string time = Utilities::getTime(endTime);
-	if(startTime != TIME_NOT_SET) {
+	if(startTime != endTime) {
 		time = Utilities::getTime(startTime)  + " - " + time;
 	}
 	return time;
