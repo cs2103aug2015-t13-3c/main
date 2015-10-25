@@ -29,7 +29,11 @@ Logic::~Logic() {
 // Added by Ren Zhi 16/10/15
 Logic* Logic::getInstance() {
 	Load initialLoad(IO::getInstance()->getFilePath());
-	initialLoad.execute();
+	try {
+		initialLoad.execute();
+	} catch (std::exception e) {
+		TbLogger::getInstance()->log(WARN,"File not found: " + IO::getInstance()->getFilePath());
+	}
 	return theOne;
 }
 
@@ -71,10 +75,10 @@ void Logic::subscribe(std::vector<std::string>* labels,
 					  std::vector<std::string>* floatingTasks,
 					  std::vector<int>* color) {
 
-	assert(updater == nullptr);
-	updater = new Update(labels, description, taskDate,
-	taskTime, floatingTasks, color, currentView);
-	updater->update();
+						  assert(updater == nullptr);
+						  updater = new Update(labels, description, taskDate,
+							  taskTime, floatingTasks, color, currentView);
+						  updater->update();
 }
 
 void Logic::resetUpdaterNULL() {
