@@ -253,9 +253,11 @@ public:
 		int IDthree = iter->getID();
 
 		fields.push_back(END_DATE);
-		Assert::AreEqual((size_t)2,fields.size());
+		fields.push_back(START_DATE);
+		Assert::AreEqual((size_t)3,fields.size());
 		modifiedTask.setName("New Sentence Three");
 		modifiedTask.setEndDate(150101);
+		modifiedTask.setStartDate(150101);
 		Modify modifyThree(3, fields, modifiedTask);
 
 		modifyThree.execute();
@@ -263,8 +265,10 @@ public:
 		copyTask = modifyThree.getTaskStore();
 		iter = copyTask.begin();
 		Assert::AreEqual(IDthree,iter->getID());
+				Assert::AreEqual(150101,iter->getEndDate());
+		Assert::AreEqual(150101,iter->getStartDate());
+		Assert::AreEqual(-1,iter->getStartTime());
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
-		Assert::AreEqual(150101,iter->getEndDate());
 		++iter;
 		Assert::AreEqual(std::string("Sentence one."),iter->getName());
 		++iter;
