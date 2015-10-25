@@ -1,4 +1,4 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
+// Aaron Chong Jun Hao @@author A0110376N
 
 #include "stdafx.h"
 
@@ -13,8 +13,8 @@ Task::Task() {
 	isDone = false;
 	isPriority = false;
 
-	startDate = 0; // YYMMDD, supports 2015-2099
-	startTime = INVALID_TIME; // HHMM, 24-hour format
+	startDate = 0;				// YYMMDD, supports 2015-2099
+	startTime = INVALID_TIME;	// HHMM, 24-hour format
 
 	endDate = 0;
 	endTime = INVALID_TIME;
@@ -208,32 +208,6 @@ bool Task::isUrgent() {
 		return true;
 	} 
 	return false;
-}
-
-std::vector<std::string> Task::getLabels() {
-	std::vector<std::string> labelVector;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		labelVector.push_back(*i);
-		++i;
-	}
-	return labelVector;
-}
-
-std::string Task::getLabelString() {
-	std::string label;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		label = label + *i + "\r\n";
-		++i;
-	}
-	//remove the last new line characters
-	if(!label.empty()) {
-		for(int j=0 ; j<2 ; ++j) {
-			label.pop_back();
-		}
-	}
-	return label;
 }
 
 // For testing

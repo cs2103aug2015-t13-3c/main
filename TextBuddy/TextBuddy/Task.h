@@ -1,4 +1,4 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
+// Aaron Chong Jun Hao @@author A0110376N
 
 #ifndef TASK_H_
 #define TASK_H_

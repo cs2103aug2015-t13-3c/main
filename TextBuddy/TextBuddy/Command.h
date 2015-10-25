@@ -1,4 +1,4 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
+// Created and maintained by Aaron Chong Jun Hao @@author A0110376N
 // Modified to Command Pattern by Ng Ren Zhi
 
 #ifndef COMMAND_H_

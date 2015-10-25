@@ -1,4 +1,4 @@
-// @@author A0126677U (Soon Hao Ye)
+// Soon Hao Ye @@author A0126677U
 
 #include "stdafx.h"
 #include "Update.h"

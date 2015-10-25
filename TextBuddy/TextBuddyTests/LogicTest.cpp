@@ -1,4 +1,4 @@
-// @@author A0096720A (Chin Kiat Boon)
+// Chin Kiat Boon @@author A0096720A
 
 #include "stdafx.h"
 

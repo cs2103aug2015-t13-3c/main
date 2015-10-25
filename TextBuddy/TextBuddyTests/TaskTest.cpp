@@ -1,6 +1,6 @@
+// Soon Hao Ye @@author A0126677U
+
 #include "stdafx.h"
-#include "CppUnitTest.h"
-#include "Task.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

@@ -1,3 +1,5 @@
+// Soon Hao Ye @@author A0126677U
+
 #include "TextBuddyUI.h"
 
 using namespace UserInterface;

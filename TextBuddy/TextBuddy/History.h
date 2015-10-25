@@ -1,4 +1,4 @@
-// @@author A0130463R (Ng Ren Zhi)
+// Ng Ren Zhi @@author A0130463R
 
 #ifndef HISTORY_H_
 #define HISTORY_H_

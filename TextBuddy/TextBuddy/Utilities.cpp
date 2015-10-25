@@ -1,4 +1,4 @@
-// @@author A0110376N (Aaron Chong Jun Hao)
+// Aaron Chong Jun Hao @@author A0110376N
 // Methods are listed in order of return type, then alphabetical order
 
 #include "stdafx.h"
@@ -448,7 +448,7 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 }
 
 
-// @@author A0126677U (Soon Hao Ye)
+// Soon Hao Ye @@author A0126677U
 
 int Utilities::getLocalDay() {
 	time_t t = time(0); 
