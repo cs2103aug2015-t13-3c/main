@@ -243,27 +243,32 @@ public:
 
 		modifyTwo.execute();
 
-		copyTask = modifyTwo.getTaskStore();
+		copyTask = modifyTwo.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("Sentence one."),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
+		int IDthree = iter->getID();
 
-		fields.push_back(START_DATE);
+		fields.push_back(END_DATE);
+		Assert::AreEqual((size_t)2,fields.size());
 		modifiedTask.setName("New Sentence Three");
-		modifiedTask.setStartDate(150101);
+		modifiedTask.setEndDate(150101);
 		Modify modifyThree(3, fields, modifiedTask);
 
 		modifyThree.execute();
 
 		copyTask = modifyThree.getTaskStore();
 		iter = copyTask.begin();
-		++iter;
-		++iter;
+		Assert::AreEqual(IDthree,iter->getID());
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
-		Assert::AreEqual(150101,iter->getStartDate());
+		Assert::AreEqual(150101,iter->getEndDate());
+		++iter;
+		Assert::AreEqual(std::string("Sentence one."),iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
 	}
 
 	TEST_METHOD(Command_Modify_undo) {
@@ -287,9 +292,9 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 
-		fields.push_back(START_DATE);
+		fields.push_back(END_DATE);
 		modifiedTask.setName("New Sentence Three");
-		modifiedTask.setStartDate(150101);
+		//modifiedTask.setStartDate(150101);
 		modifiedTask.setEndDate(150101);
 		Modify modifyThree(3, fields, modifiedTask);
 
@@ -297,16 +302,20 @@ public:
 
 		copyTask = modifyThree.getTaskStore();
 		iter = copyTask.begin();
-		++iter;
-		++iter;
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
-		Assert::AreEqual(150101,iter->getStartDate());
+		Assert::AreEqual(150101,iter->getEndDate());
+		++iter;
+		Assert::AreEqual(std::string("Sentence one."),iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());		
 
 		modifyThree.undo();
 
 		copyTask = modifyThree.getTaskStore();
 		iter = copyTask.begin();
+		Assert::AreEqual(std::string("Sentence one."),iter->getName());
 		++iter;
+		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 		Assert::AreEqual(0,iter->getStartDate());
@@ -897,6 +906,7 @@ void addThreeSentences(std::vector<Task> copyTask) {
 
 	Task taskTwo;
 	taskTwo.setName("Sentence two.");
+	taskTwo.setID(Task::incrementRunningCount());
 	Add addTwo(taskTwo);
 	addTwo.execute();
 
@@ -907,6 +917,7 @@ void addThreeSentences(std::vector<Task> copyTask) {
 
 	Task taskThree;
 	taskThree.setName("Sentence three.");
+	taskThree.setID(Task::incrementRunningCount());
 	Add addThree(taskThree);
 	addThree.execute();
 

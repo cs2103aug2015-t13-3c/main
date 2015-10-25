@@ -370,8 +370,8 @@ Task Modify::getTempTask() {
 }
 
 void Modify::execute() {
-	matchIndex(modifyID,currIter,taskIter);
-	originalTask = *currIter;
+	initialiseIterators(modifyID);
+	originalTask = *currViewIter;
 	doModify();
 }
 
@@ -389,58 +389,57 @@ std::string Modify::getMessage() {
 // Modified on 24/10/15 by Aaron Chong Jun Hao @@author A0110376N
 void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
-
+	// assert(std::string("Sentence two.") == taskStoreIter->getName());
+		
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
 		case NAME:
-			taskIter->setName(tempTask.getName());			
+			taskStoreIter->setName(tempTask.getName());			
 			break;
 		case LABELS_ADD:
-			taskIter->addLabels(tempTask.getLabels());
+			taskStoreIter->addLabels(tempTask.getLabels());
 			break;
 		case LABELS_DELETE:
-			taskIter->deleteLabels(tempTask.getLabelsToDelete());
+			taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
 			break;
 		case LABELS_CLEAR:
-			taskIter->clearLabels();
+			taskStoreIter->clearLabels();
 			break;
 		case PRIORITY_SET:
-			taskIter->setPriority();
+			taskStoreIter->setPriority();
 			break;
 		case PRIORITY_UNSET:
-			taskIter->unsetPriority();
+			taskStoreIter->unsetPriority();
 			break;
 		case START_DATE:
-			taskIter->setStartDate(tempTask.getStartDate());
+			taskStoreIter->setStartDate(tempTask.getStartDate());
 			break;
 		case START_TIME:
-			taskIter->setStartTime(tempTask.getStartTime());
+			taskStoreIter->setStartTime(tempTask.getStartTime());
 			break;
 		case END_DATE:
-			taskIter->setEndDate(tempTask.getEndDate());
+			taskStoreIter->setEndDate(tempTask.getEndDate());
 			break;
 		case END_TIME:
-			taskIter->setEndTime(tempTask.getEndTime());
+			taskStoreIter->setEndTime(tempTask.getEndTime());
 			break;
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
 	}
 
-	if(taskIter->getStartDate()==0 && taskIter->getStartTime()==0
-		&& taskIter->getEndDate()==0 && taskIter->getEndTime()==0) {
-			taskIter->setType(FLOATING);
-	} else if(taskIter->getStartDate() == taskIter->getEndDate()
-		&& taskIter->getStartTime() == taskIter->getEndTime()) {
-			taskIter->setType(TODO);
+	if(taskStoreIter->getStartDate()==0 && taskStoreIter->getStartTime()==0
+		&& taskStoreIter->getEndDate()==0 && taskStoreIter->getEndTime()==0) {
+			taskStoreIter->setType(FLOATING);
+	} else if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
+		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
+			taskStoreIter->setType(TODO);
 	} else {
-		taskIter->setType(EVENT);
+		taskStoreIter->setType(EVENT);
 	}
 
-	*currIter =	*taskIter;
+	*currViewIter =	*taskStoreIter;
 	sortDate(taskStore);
-	syncCurrentView();
-	removeDoneTasks();
 }
 
 //==================================================
