@@ -4,17 +4,19 @@ class Update {
 protected:
 	std::vector<std::string>* labels;
 	std::vector<std::string>* description;
-	std::vector<std::string>* dateAndTime;
+	std::vector<std::string>* taskDate;
+	std::vector<std::string>* taskTime;
 	std::vector<std::string>* floatingTasks;
-	std::vector<bool>* priorityTasks;
+	std::vector<int>* color;
 	std::vector<Task>* currentView;
 
 public:
 	Update(std::vector<std::string>* labels,
 			std::vector<std::string>* description,
-			std::vector<std::string>* dateAndTime,
+			std::vector<std::string>* taskDate,
+			std::vector<std::string>* taskTime,
 			std::vector<std::string>* floatingTasks,
-			std::vector<bool> *priorityTasks,
+			std::vector<int>* color,
 			std::vector<Task>* currentView);
 	~Update();
 	void update();

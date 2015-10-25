@@ -65,13 +65,14 @@ std::string Logic::processCommand(std::string userCommand) {
 
 void Logic::subscribe(std::vector<std::string>* labels,
 					  std::vector<std::string>* description,
-					  std::vector<std::string>* dateAndTime,
+					  std::vector<std::string>* taskDate,
+					  std::vector<std::string>* taskTime,
 					  std::vector<std::string>* floatingTasks,
-					  std::vector<bool>* priorityTasks) {
+					  std::vector<int>* color) {
 
 						  assert(updater == nullptr);
-						  updater = new Update(labels, description, dateAndTime, floatingTasks,
-							  priorityTasks,currentView);
+						  updater = new Update(labels, description, taskDate,
+							  taskTime, floatingTasks, color, currentView);
 						  updater->update();
 }
 

@@ -5,15 +5,17 @@
 
 Update::Update(std::vector<std::string>* labels,
 			std::vector<std::string>* description,
-			std::vector<std::string>* dateAndTime,
+			std::vector<std::string>* taskDate,
+			std::vector<std::string>* taskTime,
 			std::vector<std::string>* floatingTasks,
-			std::vector<bool>* priorityTasks,
+			std::vector<int>* color,
 			std::vector<Task>* currentView ) {
 	this->labels = labels;
 	this->description = description;
-	this->dateAndTime = dateAndTime;
+	this->taskDate = taskDate;
+	this->taskTime = taskTime;
 	this->floatingTasks = floatingTasks;
-	this->priorityTasks = priorityTasks;
+	this->color = color;
 	this->currentView = currentView;
 }
 
@@ -22,15 +24,29 @@ Update::~Update() {}
 void Update::update() {
 		labels->clear();
 		description->clear();
-		dateAndTime->clear();
-		priorityTasks->clear();
+		taskDate->clear();
+		taskTime->clear();
+		color->clear();
 		floatingTasks->clear();
 		std::vector<Task>::iterator i = currentView->begin();
 		while(i!=currentView->end()) {
 			labels->push_back(i->getLabelString());
 			description->push_back(i->getName());
-			dateAndTime->push_back(i->getDateAndTime_UI());
-			priorityTasks->push_back(i->getPriorityStatus());
+			taskDate->push_back(i->getDate_UI());
+			taskTime->push_back(i->getTime_UI());
+			// 0 : grey
+			// 1 : blue
+			// 2 : red
+			// 3 : black
+			if(i->getDoneStatus()) {
+				color->push_back(0);
+			} else if(i->getPriorityStatus()) {
+				color->push_back(1);
+			} else if(i->isUrgent()) {
+				color->push_back(2);
+			} else {
+				color->push_back(3);
+			}
 			if(i->getType() == FLOATING) {
 				floatingTasks->push_back(i->getName());
 			}

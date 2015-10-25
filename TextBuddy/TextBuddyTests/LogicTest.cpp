@@ -33,7 +33,7 @@ public:
 		dateTime = new std::vector<std::string>;
 		floatingTasks = new std::vector<std::string>;
 		priorityTasks = new std::vector<bool>;
-		logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
+//		logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 
 		// Add
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
@@ -131,7 +131,7 @@ public:
 		dateTime = new std::vector<std::string>;
 		floatingTasks = new std::vector<std::string>;
 		priorityTasks = new std::vector<bool>;
-		logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
+//		logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 
 		// Add
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
