@@ -210,32 +210,6 @@ bool Task::isUrgent() {
 	return false;
 }
 
-std::vector<std::string> Task::getLabels() {
-	std::vector<std::string> labelVector;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		labelVector.push_back(*i);
-		++i;
-	}
-	return labelVector;
-}
-
-std::string Task::getLabelString() {
-	std::string label;
-	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
-		label = label + *i + "\r\n";
-		++i;
-	}
-	//remove the last new line characters
-	if(!label.empty()) {
-		for(int j=0 ; j<2 ; ++j) {
-			label.pop_back();
-		}
-	}
-	return label;
-}
-
 // For testing
 bool Task::tasksAreEqual(Task task1, Task task2) {
 	if(    (task1.getDoneStatus() != task2.getDoneStatus())

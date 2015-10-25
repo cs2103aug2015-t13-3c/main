@@ -27,27 +27,27 @@ std::vector<Task>* Command::getCurrentViewPtr() {return &currentView;}
 int Command::getSize() {return taskStore.size();}
 /*
 CommandType Command::getCommand() {
-	return cmd;
+return cmd;
 }
 
 std::string Command::getUserInput() {
-	return userInput;
+return userInput;
 }
 
 std::vector<Task> Command::getTaskStore() {
-	return taskStore;
+return taskStore;
 }
 
 std::vector<Task> Command::getCurrentView() {
-	return currentView;
+return currentView;
 }
 
 std::vector<Task>* Command::getCurrentViewPtr() {
-	return &currentView;
+return &currentView;
 }
 
 int Command::getSize() {
-	return taskStore.size();
+return taskStore.size();
 }
 */
 
@@ -193,6 +193,13 @@ void Command::removeDoneTask() {
 bool Command::copyView() {
 	currentView = taskStore;
 	return true;
+}
+
+// Added by Ren Zhi 25/10/15
+// Updates only the modified task on the UI 
+void Command::updateView() {
+	*currViewIter = *taskStoreIter;
+	return;
 }
 
 // Added by Hao Ye 14/10/15
@@ -378,8 +385,8 @@ Task Modify::getTempTask() {
 }
 
 void Modify::execute() {
-initialiseIterators(modifyID);
-originalTask = *currViewIter;
+	initialiseIterators(modifyID);
+	originalTask = *currViewIter;
 	modifyInfo();
 }
 
@@ -399,8 +406,7 @@ std::string Modify::getMessage() {
 // Modified by Aaron	24/10/15 Fix 'for' to only loop 'switch'
 void Modify::modifyInfo() {
 	std::vector<FieldType>::iterator fieldIter;
-	//assert(std::string("Sentence two.") == taskStoreIter->getName());
-		
+	
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
 		case NAME:
@@ -438,19 +444,46 @@ void Modify::modifyInfo() {
 		}
 	}
 
-	if(taskStoreIter->getStartDate()==0 && taskStoreIter->getStartTime()==0
-		&& taskStoreIter->getEndDate()==0 && taskStoreIter->getEndTime()==0) {
-			taskStoreIter->setType(FLOATING);
-	} else if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
-		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
-			taskStoreIter->setType(TODO);
-	} else {
-		taskStoreIter->setType(EVENT);
-	}
-
-	*currViewIter =	*taskStoreIter;
+	updateTaskTypes();
+	updateView();
 	sortDate(taskStore);
 }
+
+//<<<<<Update task type methods added by Ren Zhi 25/10/15
+// If  == 0 &&  == 0: FLOATING
+// If end date == start date: TODO
+// All others: EVENTS
+
+void Modify::updateTaskTypes() {
+	if(!updateFLOATING()) {
+		if(!updateTODO()) {
+			updateEVENT();
+		}
+	}
+}
+
+bool Modify::updateFLOATING() {
+	if(taskStoreIter->getStartDate()==0 && taskStoreIter->getStartTime()==-1 &&
+		taskStoreIter->getEndDate()==0 && taskStoreIter->getEndTime()==-1) {
+		taskStoreIter->setType(FLOATING);
+		return true;
+	}
+	return false;
+}
+
+bool Modify::updateTODO() {
+	if(taskStoreIter->getStartDate()==taskStoreIter->getEndDate() && taskStoreIter->getStartTime()==taskStoreIter->getEndTime()) {
+		taskStoreIter->setType(TODO);
+		return true;
+	}
+	return false;
+}
+
+bool Modify::updateEVENT() {
+	taskStoreIter->setType(EVENT);
+	return true;
+}
+
 
 //==================================================
 //                       SEARCH
@@ -768,7 +801,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 
 	for (taskIter = taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
 		searchSet = taskIter->getLabels();
-		
+
 		for (setIter = searchSet.begin(); setIter != searchSet.end(); ++setIter) {
 			for (labelIter = label.begin(); labelIter != label.end(); ++labelIter) {
 				if (*setIter == *labelIter) {

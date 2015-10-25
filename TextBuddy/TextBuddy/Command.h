@@ -88,6 +88,7 @@ protected:
 	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
 
 	bool copyView();
+	void updateView();
 
 	void initialiseIterators(int taskID);
 	void getIterator();
@@ -179,6 +180,11 @@ private:
 	Task originalTask;
 
 	void modifyInfo();
+
+	void updateTaskTypes();
+	bool updateFLOATING();
+	bool updateTODO();
+	bool updateEVENT();
 public:
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	~Modify();
