@@ -77,7 +77,7 @@ void Logic::resetUpdaterNULL() {
 	updater = nullptr;
 }
 
-// @@author A0096720A-unused (Chin Kiat Boon)
+// Chin Kiat Boon @@author A0096720A-unused
 /*
 Add* add;
 Delete* delet;

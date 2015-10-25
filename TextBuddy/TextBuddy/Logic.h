@@ -20,16 +20,7 @@ private:
 	Update* updater;
 
 	const static std::string ERROR_INVALID_COMMAND;
-	/*
-	int getIdOfIndex(int userIndex);
-	bool isValidIndex(int index);
-	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
-	std::vector<Task>::iterator &taskIter);
-	std::vector<Task>::iterator matchCurrentViewIndex(int index);
-	std::vector<Task>::iterator matchTaskViewIndex(int index);
-	void markDone(Markdone toMarkDone);
-	// bool markPriority(Star toMarkStar);
-	*/
+
 public:
 	static Logic* getInstance();
 	~Logic();
@@ -42,24 +33,37 @@ public:
 		std::vector<std::string>* floatingTasks,
 		std::vector<int>* color);
 	void resetUpdaterNULL();
-	/*
-	int getSize();
-	std::vector<Task> loadFile(std::string fileName);
-	std::vector<Task> getCurrentView();
-	std::vector<Task> getTaskStore();
-	std::vector<Task> getFloatingTasks();
-	void amendView(std::string listOfIds); // Amends currentView to store searched elements
-	void clearTaskStore();
-	void copyView();
-	void sortDate(std::vector<Task> &taskVector);
-	void viewTaskType(TaskType type); // Allows for viewing of a particular task type
-	void addInfo(Add taskName);
-	void deleteInfo(Delete idToDelete);
-	void modifyInfo(Modify toModify);
-	void saveFile(std::string fileName);
-	std::string searchInfo(Search toSearch);
-	*/
 };
+
+// Chin Kiat Boon @@author A0096720A-unused
+/*
+private:
+int getIdOfIndex(int userIndex);
+bool isValidIndex(int index);
+void matchIndex(int index, std::vector<Task>::iterator &currIter, 
+std::vector<Task>::iterator &taskIter);
+std::vector<Task>::iterator matchCurrentViewIndex(int index);
+std::vector<Task>::iterator matchTaskViewIndex(int index);
+void markDone(Markdone toMarkDone);
+// bool markPriority(Star toMarkStar);
+
+public:
+int getSize();
+std::vector<Task> loadFile(std::string fileName);
+std::vector<Task> getCurrentView();
+std::vector<Task> getTaskStore();
+std::vector<Task> getFloatingTasks();
+void amendView(std::string listOfIds); // Amends currentView to store searched elements
+void clearTaskStore();
+void copyView();
+void sortDate(std::vector<Task> &taskVector);
+void viewTaskType(TaskType type); // Allows for viewing of a particular task type
+void addInfo(Add taskName);
+void deleteInfo(Delete idToDelete);
+void modifyInfo(Modify toModify);
+void saveFile(std::string fileName);
+std::string searchInfo(Search toSearch);
+*/
 
 /* Keep for reference */
 /*

@@ -12,10 +12,9 @@ public:
 	}
 
 	// Modified by Ren Zhi 19/10/15
-	TEST_METHOD(Logic_processInfo) {
+	TEST_METHOD(Logic_processCommand) {
 		Logic* logic = Logic::getInstance();
 		logic->resetUpdaterNULL();
-		// Parser* parser = Parser::getInstance();
 		Command cmd;
 		cmd.clearTaskStore();	// Clear state
 
