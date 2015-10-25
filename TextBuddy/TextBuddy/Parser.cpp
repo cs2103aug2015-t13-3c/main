@@ -309,7 +309,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		newTask->setStartTime(newTask->getEndTime());
 	}
 
-	log(INFO,"Parsed task");
+	log(INFO,"Parsed task of type: " + Utilities::taskTypeToString(newTask->getType()));
 	return newTask;
 }
 
