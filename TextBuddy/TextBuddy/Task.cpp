@@ -89,12 +89,12 @@ std::string Task::getDate_UI() {
 }
 
 std::string Task::getTime_UI() {
-	if(startTime == INVALID_TIME) {
+	if(endTime == INVALID_TIME) {
 		return "";
 	}
-	std::string time = Utilities::getTime(startTime);
-	if(startTime != endTime) {
-		time = time + " - " + Utilities::getTime(endTime);
+	std::string time = Utilities::getTime(endTime);
+	if(startTime != INVALID_TIME) {
+		time = Utilities::getTime(startTime)  + " - " + time;
 	}
 	return time;
 }

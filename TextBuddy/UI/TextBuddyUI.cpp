@@ -7,6 +7,7 @@ using namespace UserInterface;
 using namespace System::Windows::Forms;
 using namespace System::Threading;
 
+[STAThread]
 int main() {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);

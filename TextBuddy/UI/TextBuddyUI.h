@@ -39,14 +39,12 @@ namespace UserInterface {
 	protected:
 		~TextBuddyUI();
 
+		// @@author generated
 		// @@windows form designer generated
 	private: System::Windows::Forms::RichTextBox^  input;
 	private: System::Windows::Forms::TextBox^  feedback;
 	private: System::Windows::Forms::RichTextBox^  floatingTaskDisplay;
 	private: System::Windows::Forms::Timer^  updateFloatingTimer;
-
-
-
 
 	private: System::Windows::Forms::TextBox^  currentTime;
 	private: System::Windows::Forms::Timer^  updateCurrentTime;
@@ -55,6 +53,7 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
+
 	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
@@ -212,6 +211,7 @@ namespace UserInterface {
 				 this->time->HeaderText = L"Time";
 				 this->time->Name = L"time";
 				 this->time->ReadOnly = true;
+				 this->time->Resizable = System::Windows::Forms::DataGridViewTriState::False;
 				 this->time->Width = 80;
 				 // 
 				 // TextBuddyUI
@@ -238,10 +238,10 @@ namespace UserInterface {
 
 #pragma endregion
 
+			 //****************** AUTHOR : Soon Hao Ye *******************
 			 // Soon Hao Ye @@author A0126677U
-			 //*********************** AUTHOR : Soon Hao Ye ********************************
 
-			 //================== PRIVATE VARIABLES=====================================
+			 //==================== PRIVATE VARIABLES ====================
 	private:
 		std::string* userInput;
 		std::string* userFeedback_cppString;
@@ -332,6 +332,5 @@ namespace UserInterface {
 
 		void scrollDown();
 		void scrollUp();
-
 	};
 }

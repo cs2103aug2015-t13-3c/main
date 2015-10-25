@@ -43,20 +43,20 @@ namespace TextBuddyTests {
 			// Task with 1 single time
 			startDate = 0;
 			endDate = 0;
-			startTime = 1500;
-			endTime = 1500;
+			startTime = -1;
+			endTime = 1800;
 			task.setStartDate(startDate);
 			task.setEndDate(endDate);
 			task.setStartTime(startTime);
 			task.setEndTime(endTime);
 			expectedDate = "";
-			expectedTime = "3.00 pm";
+			expectedTime = "6.00 pm";
 			Assert::AreEqual(expectedDate,task.getDate_UI());
 			Assert::AreEqual(expectedTime,task.getTime_UI());
 
 			// Task with 2 different time
-			endTime = 1800;
-			task.setEndTime(endTime);
+			startTime = 1500;
+			task.setStartTime(startTime);
 			expectedDate = "";
 			expectedTime = "3.00 pm - 6.00 pm";
 			Assert::AreEqual(expectedDate,task.getDate_UI());
