@@ -331,7 +331,7 @@ public:
 		io = IO::getInstance();
 		std::vector<Task> taskVector;
 		Task task = *parser->parseTask("dummy");
-		std::string userInput = "C:/Users/Public/test";
+		std::string userInput = "C:/Users/%USERNAME%/Downloads/TEXT";
 		std::string newFilePath = parser->parseFileName(userInput);
 		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 

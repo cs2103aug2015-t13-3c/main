@@ -45,25 +45,27 @@ enum CommandType {
 };
 
 // These are the valid View keywords
-// Count: 7
+// Count: 8
 const std::string VIEW_ALL = "all";
 const std::string VIEW_FLOATING = "floating";
-const std::string VIEW_PAST = "past";
+const std::string VIEW_EVENT = "event";
 const std::string VIEW_TODO = "todo";
+const std::string VIEW_NOTDONE = "notdone";
+const std::string VIEW_PAST = "past";
 const std::string VIEW_WEEK = "week";
 const std::string VIEW_LABEL = "label";
-const std::string VIEW_NOTDONE = "notdone";
 
 // These are the View enums
-// Count: 6 + VIEWTYPE_INVALID
+// Count: 8 + VIEWTYPE_INVALID
 enum ViewType {
 	VIEWTYPE_ALL,
 	VIEWTYPE_FLOATING,
-	VIEWTYPE_PAST,
+	VIEWTYPE_EVENT,
 	VIEWTYPE_TODO,
+	VIEWTYPE_NOTDONE,
+	VIEWTYPE_PAST,
 	VIEWTYPE_WEEK,
 	VIEWTYPE_LABELS,
-	VIEWTYPE_NOTDONE,
 	VIEWTYPE_INVALID
 };
 
@@ -76,10 +78,19 @@ protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
 
+	//===== FOR UNDO =====
+	std::vector<Task>::iterator currViewIter;
+	std::vector<Task>::iterator taskStoreIter;
+	int currViewPos;
+	int taskStorePos;
+
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
 
 	bool copyView();
+
+	void initialiseIterators(int taskID);
+	void getIterator();
 
 	//returns false if start date is later than end date
 	//if start date equals end date, returns false if start time is later than end time
@@ -145,10 +156,6 @@ private:
 	int deleteID; // ID on GUI, not taskID
 	//==== UNDO ===
 	Task taskToBeDeleted;
-	std::vector<Task>::iterator currViewIter;
-	std::vector<Task>::iterator taskStoreIter;
-	int currViewPos;
-	int taskStorePos;
 
 	void deleteInfo();
 	void deleteInit();
@@ -211,8 +218,6 @@ private:
 	int doneID;
 	//==== UNDO ===
 	bool successMarkDone;
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
 
 	void markDone();
 public:
@@ -230,8 +235,6 @@ private:
 	int undoneID;
 	//==== UNDO ===
 	bool successUnmarkDone;
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
 
 	void unmarkDone();
 public:

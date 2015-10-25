@@ -292,7 +292,6 @@ namespace UserInterface {
 		-Date/Time
 		=====================================================================*/
 		void updateDisplay();
-
 		void printFeedBackMessage(std::string message);
 
 		/*=====================================================================
