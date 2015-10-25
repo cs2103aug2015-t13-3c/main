@@ -1,4 +1,4 @@
-// Created and maintained by @@author A0110376N (Aaron Chong Jun Hao)
+// Created and maintained by Aaron Chong Jun Hao @@author A0110376N
 // Modified to Command Pattern by Ng Ren Zhi
 // Private methods originally by Chin Kiat Boon
 
@@ -70,7 +70,7 @@ std::vector<Task> Command::currentView;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
 
-// Added by Ren Zhi 24/10/15
+// Added on 24/10/15 by Ng Ren Zhi @@author A0130463R
 // Initialises the corresponding iterators with the taskID
 // TaskID is the ID seen on GUI, not the unique task ID
 // Use for in-place insertion / deletion for undo methods
@@ -80,7 +80,6 @@ void Command::initialiseIterators(int taskID) {
 	taskStorePos = taskStoreIter - taskStore.begin();
 }
 
-// Added by Ren Zhi 24/10/15
 // Get iterators from their vector index
 // Use for in-place insertion / deletion for undo methods
 // Don't use previous iterator values, because it may go out-of-bounds
@@ -90,12 +89,9 @@ void Command::getIterator() {
 }
 
 bool Command::isDateLogical(Task task) {
-	if (task.getStartDate() > task.getEndDate()) {
-		return false;
-	} else if (task.getStartDate() == task.getEndDate()) {
-		if (task.getStartTime() > task.getEndTime()) {
+	if (   (task.getStartDate() >  task.getEndDate())
+		|| (task.getStartDate() == task.getEndDate() && task.getStartTime() > task.getEndTime())) {
 			return false;
-		}
 	}
 	return true;
 }
@@ -107,13 +103,12 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator k;
 	Task tempTask;
 
-	// Bugfix: in-place sorting (Ren Zhi)
+	// In-place sorting
 	i = taskVector.begin();	// Points to start of unsorted part
 	k = taskVector.end();	// Points to end of unsorted part
 	while(i != k) {
 		if(i->getType() == FLOATING) {
 			tempTask = *i;
-
 			for (j = i+1; j != taskVector.end(); ++j) {
 				std::swap(*j, *(j-1)); 
 			}
@@ -156,7 +151,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		assert((i->getStartDate() < i->getEndDate()) || 
-			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
+			(i->getStartDate() == i->getEndDate() && i->getStartTime() <= i->getEndTime()));
 		for (j = i+1; j != taskVector.end(); ++j) {
 			if(j -> getStartTime() < i->getStartTime()) {
 				std::swap(*i, *j);
@@ -177,7 +172,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	sortPriority(taskVector);
 }
 
-void Command::removeDoneTask() {
+void Command::removeDoneTasks() {
 	std::vector<Task>::iterator i = currentView.begin();
 
 	while (i != currentView.end()) {
@@ -189,14 +184,13 @@ void Command::removeDoneTask() {
 	}
 }
 
-// For now, currentView is set to be the same as taskStore
-bool Command::copyView() {
+// Set currentView to be the same as taskStore
+bool Command::syncCurrentView() {
 	currentView = taskStore;
 	return true;
 }
 
-// Added by Hao Ye 14/10/15
-// Replaces getIdOfIndex()
+// Added on 14/10/15 by Soon Hao Ye @@author A0126677U
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
 							 if(isValidIndex(index)) {	
@@ -255,7 +249,7 @@ Task Add::getNewTask() {
 }
 
 void Add::execute() {
-	addInfo();
+	doAdd();
 }
 
 // Add must have executed before undoing,
@@ -265,17 +259,16 @@ void Add::undo() {
 	taskToDelete.execute();
 }
 
-//added @haoye 21/10/2015
 std::string Add::getMessage() {
 	return("\"" + newTask.getName() + "\"" + " added");
 }
 
 //============== ADD : PRIVATE METHODS ===============
 
-bool Add::addInfo() {
+// Modified on 24/10/15 by Chin Kiat Boon @@author A0096720A
+bool Add::doAdd() {
 	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
 
-	//added @kiatboon 24/10/15 
 	if (isDateLogical(newTask) == false) {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
 	}
@@ -285,8 +278,8 @@ bool Add::addInfo() {
 	currViewID = currentView.size();
 
 	sortDate(taskStore);
-	copyView();
-	removeDoneTask();
+	syncCurrentView();
+	removeDoneTasks();
 	return true;
 }
 
@@ -310,8 +303,8 @@ void Delete::execute() {
 	// userIndex refers to the nth task of currentView presented to user
 	// eg. delete 1 means deleting the first task
 	initialiseIterators(deleteID);
-	deleteInit();
-	deleteInfo();
+	prepDelete();
+	doDelete();
 }
 
 // Adds the deleted task back to the exact location it was before
@@ -337,17 +330,17 @@ std::string Delete::getMessage() {
 
 // Searches for Task to delete using ID
 // Deleting is done according to the order of elements on currentView
-// Modified by Hao Ye 14/10/15
-void Delete::deleteInfo() {
+// Modified on 14/10/15 by Soon Hao Ye @@author A0126677U
+void Delete::doDelete() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
-	removeDoneTask();
+	removeDoneTasks();
 }
 
-// Added by Ren Zhi 24/10/15
+// Added on 24/10/15 by Ng Ren Zhi @@author A0130463R
 // Initialises undo info for delete command
-void Delete::deleteInit() {
+void Delete::prepDelete() {
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -380,7 +373,7 @@ Task Modify::getTempTask() {
 void Modify::execute() {
 	matchIndex(modifyID,currIter,taskIter);
 	originalTask = *currIter;
-	modifyInfo();
+	doModify();
 }
 
 void Modify::undo() {
@@ -394,10 +387,8 @@ std::string Modify::getMessage() {
 
 //============= MODIFY : PRIVATE METHODS ===========
 
-// Modified by Hao Ye	14/10/15
-// Modified by Ren Zhi	20/10/15 Updated add/deleteLabels
-// Modified by Aaron	24/10/15 Fix 'for' to only loop 'switch'
-void Modify::modifyInfo() {
+// Modified on 24/10/15 by Aaron Chong Jun Hao @@author A0110376N
+void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
@@ -449,8 +440,8 @@ void Modify::modifyInfo() {
 
 	*currIter =	*taskIter;
 	sortDate(taskStore);
-	copyView(); // Update currentView immediately
-	removeDoneTask();
+	syncCurrentView();
+	removeDoneTasks();
 }
 
 //==================================================
@@ -470,12 +461,10 @@ std::string Search::getSearchPhrase() {
 	return searchPhrase;
 }
 
+// Returns a string of names
+// If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
-	// Currently search returns string of names
-	// currentView is also amended, can refer to items from currentView after every processInfo cmd
-	// eg. add/delete will display new list under UI
-	// If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
-	std::string output = searchInfo();
+	std::string output = doSearch();
 	amendView(output);
 }
 
@@ -490,7 +479,7 @@ std::string Search::getMessage() {
 //================ SEARCH : PRIVATE METHODS =================
 
 // Searches name for a phrase match, returns IDs of all matching tasks
-std::string Search::searchInfo() {
+std::string Search::doSearch() {
 	std::ostringstream indexString;
 	std::string taskName;
 	std::string returnString;
@@ -514,18 +503,17 @@ std::string Search::searchInfo() {
 	return returnString;
 }
 
-// The list is separated by commas
+// Processes a list separated by commas
 bool Search::amendView(std::string listOfIds) {
-	std::string idToken;
+	currentView.clear();
+
 	int id;
 	int index;
+	std::string idToken;
 	std::vector<Task>::iterator iter;
-
-	currentView.clear();
 
 	while (listOfIds != "") {
 		index = listOfIds.find(",");
-
 		if(index == -1) {
 			idToken = listOfIds;
 			listOfIds = "";
@@ -573,25 +561,23 @@ void Markdone::undo() {
 	}	
 }
 
-
-
 //============= MARKDONE : PRIVATE METHODS ===========
 
-// Modified by Hao Ye 14/10/15
+// Modified on 14/10/15 by Soon Hao Ye @@author A0126677U
 void Markdone::markDone() {
 	initialiseIterators(doneID);
 
 	successMarkDone = taskStoreIter->markDone();
-
 	if(successMarkDone) {
 		currentView.erase(currViewIter);
-	} // Remove from current view only if mark done successful (Ren Zhi)
+	}
 }
 
 //==================================================
 //                      UNMARKDONE
 //==================================================
-// Added by Ren Zhi 19/10/15
+// Added on 19/10/15 by Ng Ren Zhi @@author A0130463R
+
 //=========== UNMARKDONE : PUBLIC METHODS ==========
 
 UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
@@ -620,28 +606,12 @@ void UnmarkDone::undo() {
 
 void UnmarkDone::unmarkDone() {
 	initialiseIterators(undoneID);
-	successUnmarkDone = taskStoreIter->unmarkDone();
 
+	successUnmarkDone = taskStoreIter->unmarkDone();
 	if(successUnmarkDone) {
 		currentView.erase(currViewIter);
-	} // Remove from current view only if unmark done successful (Ren Zhi)
+	}
 }
-
-//==================================================
-//                        UNDO
-//==================================================
-
-Undo::Undo() : Command(UNDO) {}
-
-Undo::~Undo() {}
-
-//==================================================
-//                        REDO
-//==================================================
-
-Redo::Redo() : Command(REDO) {}
-
-Redo::~Redo() {}
 
 //==================================================
 //                        VIEW
@@ -667,37 +637,29 @@ void View::execute() {
 	case VIEWTYPE_ALL:
 		viewAll();
 		break;
-
 	case VIEWTYPE_FLOATING:
 		viewTaskType(FLOATING);
 		break;
-
 	case VIEWTYPE_EVENT:
 		viewTaskType(EVENT);
 		break;
-
-	case VIEWTYPE_TODO:
+	case VIEWTYPE_TODO:	
 		viewTaskType(TODO);
 		break;
-
-	case VIEWTYPE_PAST:
+	case VIEWTYPE_PAST:	
 		viewDone();
 		break;
-
 	case VIEWTYPE_WEEK: {
 		logger->log(DEBUG,"Viewing week");
 		int currentDate = logger->getDate();
 		pwrSearch.setTasksWithinPeriod(currentDate, 0, currentDate+7, 2359);
 		break;}
-
 	case VIEWTYPE_LABELS:
 		viewLabel(viewLabels);
 		break;
-
 	case VIEWTYPE_NOTDONE:
 		viewNotdone();
 		break;
-
 	case VIEWTYPE_INVALID:
 		break;
 	}
@@ -708,7 +670,7 @@ void View::undo() {
 }
 
 //============== VIEW : PRIVATE METHODS ============
-// Added by Kiat Boon 20/10/15
+// Added on 20/10/15 by Chin Kiat Boon @@author A0096720A
 
 bool View::viewAll() {
 	currentView = taskStore;
@@ -726,15 +688,14 @@ bool View::viewTaskType(TaskType type) {
 	}
 
 	sortDate(currentView);
-	removeDoneTask();				//when viewing tasks based on task type, should done tasks be displayed?
+	removeDoneTasks();		// Done tasks only displayed when viewing "all" or "past" (Aaron)
 	return true;
 }
 
 bool View::viewDone() {
-	std::vector<Task>::iterator iter;
-
 	currentView.clear();
 
+	std::vector<Task>::iterator iter;
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getDoneStatus() == true) {
 			currentView.push_back(*iter);
@@ -744,10 +705,9 @@ bool View::viewDone() {
 }
 
 bool View::viewNotdone() {
-	std::vector<Task>::iterator iter;
-
 	currentView.clear();
 
+	std::vector<Task>::iterator iter;
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 		if (iter->getDoneStatus() == false) {
 			currentView.push_back(*iter);
@@ -759,17 +719,15 @@ bool View::viewNotdone() {
 // Delete viewLabel if we use search to search for label
 // If view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::vector<std::string> label) {
-	std::vector<std::string> searchSet;
+	currentView.clear();
 
+	std::vector<std::string> searchSet;
 	std::vector<Task>::iterator taskIter;
 	std::vector<std::string>::iterator setIter;
 	std::vector<std::string>::iterator labelIter;
 
-	currentView.clear();
-
 	for (taskIter = taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
 		searchSet = taskIter->getLabels();
-		
 		for (setIter = searchSet.begin(); setIter != searchSet.end(); ++setIter) {
 			for (labelIter = label.begin(); labelIter != label.end(); ++labelIter) {
 				if (*setIter == *labelIter) {
@@ -780,15 +738,14 @@ bool View::viewLabel(std::vector<std::string> label) {
 		}
 	}
 
-	removeDoneTask();				// When viewing tasks based on task type, should done tasks be displayed?
-	// Nope, display done tasks only when viewing "all" and "past" (Aaron)
+	removeDoneTasks();	// Display done tasks only when viewing "all" and "past" (Aaron)
 	return true;
 }
 
 //==================================================
 //                    CLEAR_ALL
 //==================================================
-// Added by Aaron 20/10/15
+// Added on 20/10/15 by Aaron Chong Jun Hao @@author A0110376N
 ClearAll::ClearAll() : Command(CLEAR_ALL) {
 	previousView = currentView;
 }
@@ -817,12 +774,12 @@ DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {
 DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
-	copyView();
+	syncCurrentView();
 	formatDefaultView();
 }
 
 void DisplayAll::formatDefaultView() {
-	// requires refinement, possibly separating deadlines and events
+	// Requires refinement, possibly separating deadlines and events
 	std::vector<Task> startUpView;
 	std::vector<Task> noStar;
 	std::vector<Task>::iterator i = currentView.begin();
@@ -845,6 +802,30 @@ void DisplayAll::undo() {
 }
 
 //==================================================
+//                        UNDO
+//==================================================
+
+Undo::Undo() : Command(UNDO) {}
+
+Undo::~Undo() {}
+
+void Undo::execute() {
+	History::getInstance()->undo();
+}
+
+//==================================================
+//                        REDO
+//==================================================
+
+Redo::Redo() : Command(REDO) {}
+
+Redo::~Redo() {}
+
+void Redo::execute() {
+	History::getInstance()->redo();
+}
+
+//==================================================
 //                        LOAD
 //==================================================
 
@@ -854,7 +835,7 @@ Load::Load() : Command(LOAD) {
 	filePath = io->getFilePath();
 }
 
-// Load new file path
+// Load new file path, which is already parsed
 Load::Load(std::string newFilePath) : Command(LOAD) {
 	filePath = newFilePath;
 }
@@ -866,12 +847,11 @@ std::string Load::getFilePath() {
 }
 
 void Load::execute() {
-	// Note: filePath should already have been parsed (Aaron)
 	std::vector<Task> temp = taskStore;
 	try {
 		taskStore = io->loadFile(filePath);		// Exception thrown if file does not exist
 		History::getInstance()->clearHistory(); // Clear history after load, to avoid seg fault
-		copyView();								// Update currentView
+		syncCurrentView();
 	} catch (std::exception e) {
 		taskStore = temp;
 		throw e;
@@ -888,7 +868,7 @@ Save::Save() : Command(SAVE) {
 	filePath = io->getFilePath();
 }
 
-// Save to new file path
+// Save to new file path, which is already parsed
 Save::Save(std::string newFilePath) : Command(SAVE) {
 	filePath = newFilePath;
 }
@@ -900,12 +880,7 @@ std::string Save::getFilePath() {
 }
 
 void Save::execute() {
-	// Note: filePath should already have been parsed (Aaron)
-	// Parser* parser = Parser::getInstance();
-	// std::string newFilePath = parser->parseFileName(filePath);
-
-	// setFilePath returns false if unable to change file path
-	io->setFilePath(filePath,taskStore);
+	io->setFilePath(filePath,taskStore); // Returns false if unable to change file path
 	// TODO: feedback
 }
 

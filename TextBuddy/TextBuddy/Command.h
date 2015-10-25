@@ -87,20 +87,17 @@ protected:
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
 
-	bool copyView();
-
+	bool syncCurrentView();
 	void initialiseIterators(int taskID);
 	void getIterator();
 
-	//returns false if start date is later than end date
-	//if start date equals end date, returns false if start time is later than end time
+	// Returns false if start is later than end, by checking date then time
 	bool isDateLogical(Task task);
 
 	void sortFloating(std::vector<Task> &taskVector);
 	void sortPriority(std::vector<Task> &taskVector);
 	void sortDate(std::vector<Task> &taskVector);
-	//removes done tasks from currentView
-	void removeDoneTask();
+	void removeDoneTasks(); // Removes done tasks from currentView
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
 		std::vector<Task>::iterator &taskIter);
@@ -119,13 +116,12 @@ public:
 	static int getSize();
 	static void clearTaskStore();
 
+	// To use virtual functions, declare and use a base class POINTER
+	// to create a derived class object (Ren Zhi)
 	virtual ~Command();
 	virtual void execute();
-	virtual std::string getMessage();
 	virtual void undo();
-	// Note to self: virtual function calls only work when the
-	// derived class object is created from a base class POINTER
-	// must declare as P O I N T E R (Ren Zhi 22/10/15)
+	virtual std::string getMessage();
 };
 
 //==================================================
@@ -139,7 +135,7 @@ private:
 	//==== UNDO ===
 	int currViewID;
 
-	bool addInfo();
+	bool doAdd();
 public:
 	Add(Task task);
 	~Add();
@@ -157,8 +153,8 @@ private:
 	//==== UNDO ===
 	Task taskToBeDeleted;
 
-	void deleteInfo();
-	void deleteInit();
+	void prepDelete();
+	void doDelete();
 public:
 	Delete(int taskID);
 	~Delete();
@@ -180,7 +176,7 @@ private:
 	//==== UNDO ===
 	Task originalTask;
 
-	void modifyInfo();
+	void doModify();
 public:
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	~Modify();
@@ -200,7 +196,7 @@ private:
 	//==== UNDO ===
 	std::vector<Task> currentViewBeforeSearch;
 
-	std::string searchInfo();
+	std::string doSearch();
 	bool amendView(std::string listOfIds);
 public:
 	Search(std::string phraseString);
@@ -246,18 +242,6 @@ public:
 	void undo();
 };
 
-class Undo: public Command {
-public:
-	Undo();
-	~Undo();
-};
-
-class Redo: public Command {
-public:
-	Redo();
-	~Redo();
-};
-
 class View: public Command {
 private:
 	//== EXECUTE ==
@@ -272,7 +256,6 @@ private:
 	bool viewDone();
 	bool viewNotdone();
 	bool viewLabel(std::vector<std::string> label);
-
 public:
 	View(ViewType newView,std::string labels);
 	~View();
@@ -286,6 +269,7 @@ class ClearAll: public Command {
 private:
 	//==== UNDO ===
 	std::vector<Task> previousView;
+
 public:
 	ClearAll();
 	~ClearAll();
@@ -298,19 +282,37 @@ class DisplayAll: public Command {
 private:
 	//==== UNDO ===
 	std::vector<Task> previousView;
+	
+	void formatDefaultView();
 public:
 	DisplayAll();
 	~DisplayAll();
 
 	void execute();
-	void formatDefaultView();
 	void undo();
+};
+
+class Undo: public Command {
+public:
+	Undo();
+	~Undo();
+
+	void execute();
+};
+
+class Redo: public Command {
+public:
+	Redo();
+	~Redo();
+
+	void execute();
 };
 
 class Load: public Command {
 private:
 	IO* io;
 	std::string filePath;
+
 public:
 	Load();
 	Load(std::string Load);
@@ -324,6 +326,7 @@ class Save: public Command {
 private:
 	IO* io;
 	std::string filePath;
+
 public:
 	Save();
 	Save(std::string filePath);	
@@ -331,7 +334,6 @@ public:
 	std::string getFilePath();
 
 	void execute();
-	// No undo() for Save
 };
 
 class Exit: public Command {
