@@ -173,8 +173,6 @@ class Modify: public Command {
 private:
 	//== EXECUTE ==
 	int modifyID; // ID on GUI, not taskID
-	std::vector<Task>::iterator currIter;
-	std::vector<Task>::iterator taskIter;
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
 	//==== UNDO ===
