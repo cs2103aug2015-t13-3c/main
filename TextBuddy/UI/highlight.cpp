@@ -1,0 +1,31 @@
+#include "TextBuddyUI.h"
+
+using namespace UserInterface;
+
+void TextBuddyUI::highlightSyntax() {		
+	input->SelectionColor = Color::Black;
+	for each(String^ keyword in keywords) {
+		int position = findKeyword(keyword);
+		if(keywordIsFound(position)) {
+			highlightKeywords(position,keyword);
+		} 
+	}
+}
+
+int TextBuddyUI::findKeyword(String^ keyword) {
+	int position; 
+	position = input->Find(keyword,0,input->Text->Length,
+		RichTextBoxFinds::NoHighlight);
+	return position;
+}
+
+bool TextBuddyUI::keywordIsFound(int position) {
+	return position >= 0;
+}
+
+void TextBuddyUI::highlightKeywords(int position, String^ keyword) {
+	input->Select(position,keyword->Length);
+	input->SelectionColor = Color::Blue;
+	input->Select(cursorPosition,0);
+	input->SelectionColor = Color::Black;
+}

@@ -438,92 +438,64 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 	return (tolower(l) == tolower(r));
 }
 
+
+// @@author A0126677U (Soon Hao Ye)
+
+int Utilities::getLocalDay() {
+	time_t t = time(0); 
+	struct tm now;
+	localtime_s(&now,&t);  
+	return now.tm_mday;
+}
+
+int Utilities::getLocalMonth() {
+	time_t t = time(0); 
+	struct tm now;
+	localtime_s(&now,&t);  
+	return now.tm_mon + 1;
+}
+
+int Utilities::getLocalYear() {
+	time_t t = time(0); 
+	struct tm now;
+	localtime_s(&now,&t);  
+	return now.tm_year - 100 ;
+}
+
 //==================================================
 //           STRING-FOR-DISPLAY FORMATTERS
 //==================================================
-// @@author A0126677U (Soon Hao Ye)
+std::string Utilities::getDate(int date) {
+	assert(time != 0);
+	int localYear = getLocalYear(); 
+	int day = date % 100;
+	int month = (date % 10000)/100;
+	int year = date/10000;
 
-std::string Utilities::taskDateAndTimeToDisplayString(Task task) {
-	std::string placeHolder;
-	std::string start;
-	std::string end;
-	int startDate = task.getStartDate();
-	int startTime = task.getStartTime();
-
-	if(task.getType() == TODO) {
-		end = end + intDateToDayString(task.getEndDate());
-		if(task.getEndTime() != 0) {
-			end = end + "  " + intTimeTo12HourString(task.getEndTime());
-		}
-		return "by " + end ;
-	} else if(task.getType() == EVENT) {
-		if(startDate != 0) {
-			start = intDateToDayString(startDate);		
-		}
-		if(startTime != 0) {
-			start = start + " " + intTimeTo12HourString(startTime);		
-		}
-		if(task.getEndDate() != startDate) {
-			end = end + intDateToDayString(task.getEndDate());
-			placeHolder = " to ";
-		}
-		if(task.getEndTime() != 0 && task.getStartTime() != task.getEndTime()) {
-			end = end + " " + intTimeTo12HourString(task.getEndTime());
-			placeHolder = " to ";
-		}
-		return start + placeHolder +  end ;
-	} else {
-		return "";
+	std::string d = std::to_string(day) + "/" + std::to_string(month);
+	if(year != localYear) {
+		d = d + "/" + std::to_string(year);
 	}
+	return d;
 }
 
-std::string Utilities::intTimeTo12HourString(int time) {
+std::string Utilities::getTime(int time) {
+	assert(time >= 0);
 	double time2;
 	std::stringstream stream;
+	std::string amOrPm;
 	if(time < 1200) {
-		time2 = time/100.0 ;
-		stream << std::fixed << std::setprecision(2) << time2;
-		return stream.str() + " am";
+		if(time == 0) {
+			time = 1200;
+		}
+		amOrPm = " am";
 	} else {
 		if(time > 1259) {
 			time = time - 1200;
 		}
-		stream.clear();
-		time2 = time/100.0 ;
-		stream << std::fixed << std::setprecision(2) << time2;
-		return stream.str() + " pm";
+		amOrPm = " pm";
 	}	
-}
-
-std::string Utilities::intDateToDayString(int taskDate) {
-	time_t t = time(0); // get current time
-	struct tm now;
-	localtime_s(&now,&t);
-
-	// int localYear = now.tm_year - 100;
-	int localMonth = now.tm_mon + 1;
-	int localDay = now.tm_mday;
-	int localWDay = (now.tm_wday);
-
-	std::string date_UI;
-
-	int date = taskDate;
-	int day = date % 100;
-	int month = (date % 10000)/100;
-	int year = date/10000; 
-	int differenceInDays = day - localDay;
-	if(month == localMonth && day >= localDay && differenceInDays < 8) {	
-		int dayOfWeek = (localWDay + differenceInDays);			
-		if(dayOfWeek > 6) {
-			dayOfWeek = dayOfWeek % 7;
-			date_UI = dayToString((Day)dayOfWeek);
-			date_UI = "next " + date_UI;
-		} else {
-			date_UI = dayToString((Day)dayOfWeek);
-		}
-	} else {
-		date_UI = std::to_string(day) + "/" + std::to_string(month) + "/" +
-			std::to_string(year);
-	}
-	return date_UI;
+	time2 = time/100.0 ;
+	stream << std::fixed << std::setprecision(2) << time2;
+	return stream.str() + amOrPm ;
 }

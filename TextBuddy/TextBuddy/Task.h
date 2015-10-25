@@ -2,6 +2,7 @@
 
 #ifndef TASK_H_
 #define TASK_H_
+#define INVALID_TIME -1
 
 // These are the valid Field keywords
 // Count: 10
@@ -62,7 +63,6 @@ private:
 	int uniqueID;
 	// std::string label; 
 	std::set<std::string> labels;
-	std::string dateAndTime_UI;
 
 	bool isDone;
 	bool isPriority;
@@ -88,7 +88,6 @@ public:
 	int getID();
 	std::string getLabelString();
 	std::vector<std::string> getLabels();
-	std::string getDateAndTime_UI();
 
 	bool getDoneStatus();
 	bool getPriorityStatus();
@@ -99,11 +98,13 @@ public:
 	int getEndDate();
 	int getEndTime();
 
+	std::string getDate_UI();
+	std::string getTime_UI();
+
 	// Setters, return true if successful
 	bool setName(std::string newName);
 	bool setType(TaskType newType);
 	bool setID(int newID);
-	// bool setLabel(std::string newLabel);
 	bool addLabels(std::vector<std::string> newLabels);
 	bool deleteLabels(std::vector<std::string> oldLabels);
 
@@ -118,6 +119,8 @@ public:
 
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
+
+	bool isUrgent();
 };
 
 #endif

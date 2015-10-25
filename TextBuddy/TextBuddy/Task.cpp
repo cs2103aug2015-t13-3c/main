@@ -14,10 +14,10 @@ Task::Task() {
 	isPriority = false;
 
 	startDate = 0; // YYMMDD, supports 2015-2099
-	startTime = 0; // HHMM, 24-hour format
+	startTime = INVALID_TIME; // HHMM, 24-hour format
 
 	endDate = 0;
-	endTime = 0;
+	endTime = INVALID_TIME;
 }
 
 Task::~Task() {}
@@ -50,6 +50,27 @@ int Task::getStartTime() {return startTime;}
 int Task::getEndDate() {return endDate;}
 int Task::getEndTime() {return endTime;}
 
+std::string Task::getDate_UI() {
+	if(startDate == 0) {
+		return "";
+	}
+	std::string date = Utilities::getDate(startDate);
+	if(startDate != endDate) {
+		date = date + " - " + Utilities::getDate(endDate);
+	}
+	return date;
+}
+
+std::string Task::getTime_UI() {
+	if(startTime == INVALID_TIME) {
+		return "";
+	}
+	std::string time = Utilities::getTime(startTime);
+	if(startTime != endTime) {
+		time = time + " - " + Utilities::getTime(endTime);
+	}
+	return time;
+}
 
 //========== Setters ==========
 // Return true if successful
@@ -130,6 +151,21 @@ bool Task::setEndTime(int newEndTime) {
 	return true;
 }
 
+bool Task::isUrgent() {
+	int currentDay = Utilities::getLocalDay();
+	int currentMonth = Utilities::getLocalMonth();
+	int currentYear = Utilities::getLocalYear();
+
+	int day = startDate % 100;
+	int month = (startDate % 10000)/100;
+	int year = startDate/10000;
+	
+	if(day == currentDay && month == currentMonth && year == currentYear) {
+		return true;
+	} 
+	return false;
+}
+
 std::vector<std::string> Task::getLabels() {
 	std::vector<std::string> labelVector;
 	std::set<std::string>::iterator i = labels.begin();
@@ -154,10 +190,6 @@ std::string Task::getLabelString() {
 		}
 	}
 	return label;
-}
-
-std::string Task::getDateAndTime_UI() {
-	return Utilities::taskDateAndTimeToDisplayString(*this);
 }
 
 // For testing

@@ -52,9 +52,12 @@ public:
 
 	//========== String-for-Display Formatters ==========
 	// @@author A0126677U (Soon Hao Ye)
-	static std::string taskDateAndTimeToDisplayString(Task task);
-	static std::string intDateToDayString(int taskDate);
-	static std::string intTimeTo12HourString(int time);
+	static int getLocalDay();
+	static int getLocalMonth();
+	// Returns only the last 2 digits of the year (Eg. 15 for 2015)
+	static int getLocalYear();
+	static std::string	getDate(int date);
+	static std::string	getTime(int time);
 };
 
 #endif

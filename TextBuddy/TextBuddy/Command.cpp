@@ -255,9 +255,7 @@ std::string Add::getMessage() {
 
 //============== ADD : PRIVATE METHODS ===============
 
-bool Add::addInfo() {
-	std::string dateAndTime_UI = Utilities::taskDateAndTimeToDisplayString(newTask);
-	
+bool Add::addInfo() {	
 	//added @kiatboon 24/10/15 
 	if (isDateLogical(newTask) == false) {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
