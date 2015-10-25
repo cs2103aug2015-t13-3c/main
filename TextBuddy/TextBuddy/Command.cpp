@@ -90,7 +90,8 @@ void Command::getIterator() {
 
 bool Command::isDateLogical(Task task) {
 	if (   (task.getStartDate() >  task.getEndDate())
-		|| (task.getStartDate() == task.getEndDate() && task.getStartTime() > task.getEndTime())) {
+		|| (task.getStartDate() == task.getEndDate() && task.getStartTime() > task.getEndTime())
+		|| (task.getStartDate() < task.getEndDate() && task.getStartTime() > task.getEndTime())) {
 			return false;
 	}
 	return true;
