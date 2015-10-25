@@ -1,4 +1,4 @@
-// @@author A0096720A (Chin Kiat Boon)
+// Chin Kiat Boon @@author A0096720A
 
 #include "stdafx.h"
 #include "Logic.h"
@@ -40,14 +40,11 @@ std::string Logic::processCommand(std::string userCommand) {
 	CommandType cmd = command->getCommand();
 
 	switch (cmd) {
-	case UNDO:
-		history->undo();
-		break;
-	case REDO:
-		history->redo();
-		break;
 	case INVALID:
 		throw std::runtime_error(ERROR_INVALID_COMMAND);
+	case UNDO:
+	case REDO:
+		command->execute();
 		break;
 	default:
 		command->execute();
