@@ -177,7 +177,7 @@ private:
 	Task originalTask;
 	int prevCurrPos;
 
-	void modifyInfo();
+	void doModify();
 	void moveToPrevPos();
 
 	void updateTaskTypes();

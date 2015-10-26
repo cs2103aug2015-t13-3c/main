@@ -386,7 +386,7 @@ Task Modify::getTempTask() {
 void Modify::execute() {
 	initialiseIterators(modifyID);
 	originalTask = *currViewIter;
-	modifyInfo();
+	doModify();
 }
 
 void Modify::undo() {
@@ -409,7 +409,7 @@ std::string Modify::getMessage() {
 //============= MODIFY : PRIVATE METHODS ===========
 
 // Modified on 24/10/15 by Aaron Chong Jun Hao @@author A0110376N
-void Modify::modifyInfo() {
+void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
