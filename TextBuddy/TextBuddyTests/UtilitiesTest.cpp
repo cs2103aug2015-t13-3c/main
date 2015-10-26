@@ -16,9 +16,19 @@ public:
 	}
 
 	TEST_METHOD(Utilities_fieldVecToString) {
-		Parser* parser = Parser::getInstance();
-		std::string expectedString = "from on on"; // Expected behaviour
-		std::vector<FieldType> fields = parser->extractFields("from on by");
+		std::string expectedString = "name : -: LABELS_CLEAR star unstar from at to FIELD_END_TIME FIELD_INVALID";
+		std::vector<FieldType> fields;
+		fields.push_back(NAME);
+		fields.push_back(LABELS_ADD);
+		fields.push_back(LABELS_DELETE);
+		fields.push_back(LABELS_CLEAR);
+		fields.push_back(PRIORITY_SET);
+		fields.push_back(PRIORITY_UNSET);
+		fields.push_back(START_DATE);
+		fields.push_back(START_TIME);
+		fields.push_back(END_DATE);
+		fields.push_back(END_TIME);
+		fields.push_back(INVALID_FIELD);
 		Assert::AreEqual(expectedString,Utilities::fieldVecToString(fields));
 	}
 

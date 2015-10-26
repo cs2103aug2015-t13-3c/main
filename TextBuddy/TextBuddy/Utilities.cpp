@@ -257,28 +257,41 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 
 	while(curr != fieldsToModify.end()) {
 		switch(*curr) {
-		case NAME: newString += FIELD_NAME;
+		case NAME:
+			newString += FIELD_NAME;
 			break;
-		case LABELS_ADD: newString += FIELD_LABEL_ADD;
+		case LABELS_ADD:
+			newString += FIELD_LABEL_ADD;
 			break;
-		case LABELS_DELETE: newString += FIELD_LABEL_DELETE;
+		case LABELS_DELETE:
+			newString += FIELD_LABEL_DELETE;
 			break;
-		case LABELS_CLEAR: newString += "LABELS_CLEAR";
+		case LABELS_CLEAR:
+			newString += "LABELS_CLEAR";
 			break;
-		case PRIORITY_SET: newString += FIELD_PRIORITY_SET;
+		case PRIORITY_SET:
+			newString += FIELD_PRIORITY_SET;
 			break;
-		case PRIORITY_UNSET: newString += FIELD_PRIORITY_UNSET;
+		case PRIORITY_UNSET:
+			newString += FIELD_PRIORITY_UNSET;
 			break;
-		case START_DATE: newString += FIELD_DATE_FROM;
+		case START_DATE:
+			newString += FIELD_DATE_FROM;
 			break;
-		case TODO_DATE: newString += FIELD_DATE_ON;
+		case START_TIME:
+			newString += FIELD_TIME_AT;
 			break;
-		case END_DATE: newString += FIELD_DATE_TO;
+		case END_DATE:
+			newString += FIELD_DATE_TO;
 			break;
-		case START_TIME: newString += FIELD_TIME_AT;
+		case END_TIME:
+			newString += "FIELD_END_TIME";
 			break;
-		case END_TIME: newString += "FIELD_END_TIME";
+			/*
+			case TODO_DATE:
+			newString += FIELD_DATE_ON;
 			break;
+			*/
 		case INVALID_FIELD:
 			newString += "FIELD_INVALID";
 			break;

@@ -249,47 +249,54 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			// Unset by default
 			break;
 		case START_DATE:
+			log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(EVENT));
 			newTask->setType(EVENT);
 			log(DEBUG,"Setting startDate: " + std::to_string(newDate));
 			newTask->setStartDate(newDate);
 			break;
-		case TODO_DATE:
+		// case TODO_DATE:
 		case END_DATE:
 			if(newTask->getType() == FLOATING) {
 				log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(TODO));
 				newTask->setType(TODO);
 			} else if(newTask->getType() == TODO
-				|| (newTask->getType() == EVENT && newTask->getStartDate() == 0)) {
-					log(DEBUG,"Checking task type: " + Utilities::taskTypeToString(newTask->getType()));
-					log(DEBUG,"Checking startDate: " + std::to_string(newTask->getStartDate()));
-					log(DEBUG,"Setting endDate as startDate: " + std::to_string(newDate));
+				|| (newTask->getType() == EVENT && newTask->getStartDate() == DATE_NOT_SET)) {
+					log(DEBUG,"Setting startDate as endDate: " + std::to_string(newDate));
 					newTask->setStartDate(newDate);
 			}
 			newTask->setEndDate(newDate);
 			break;
 		case START_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+				log(DEBUG,"Parsed newTime: " + std::to_string(newTime));
+				log(DEBUG,"Checking startTime: " + std::to_string(newTime));
 				if(newTask->getStartTime() == TIME_NOT_SET) {
 					newTask->setStartTime(newTime);
 				}
 			} else {
 				break;
 			}
-		case TODO_TIME:
+		// case TODO_TIME:
 		case END_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-				if(newTask->getEndDate() == 0 || newTask->getEndDate() == INVALID_DATE_FORMAT) {
-					newTask->setEndDate(parseDay(Utilities::stringToVec("today")));
+				if(newTask->getStartDate() == DATE_NOT_SET) {
+					if(newTask->getEndDate() == DATE_NOT_SET) {
+						log(DEBUG,"Overwriting startDate: " + std::to_string(newTask->getStartDate()));
+						newTask->setStartDate(parseDay(Utilities::stringToVec("today")));
+					} else {
+						newTask->setStartDate(newTask->getEndDate());
+					}
 				}
-				if(newTask->getStartDate() == 0 || newTask->getStartDate() == INVALID_DATE_FORMAT) {
-					log(DEBUG,"Overwriting startDate: " + std::to_string(newTask->getStartDate()));
-					newTask->setStartDate(newTask->getEndDate());
+				if(newTask->getEndDate() == DATE_NOT_SET) {
+					newTask->setEndDate(newTask->getStartDate());
 				}
 
 				newTask->setEndTime(newTime);
 				if(newTask->getStartTime()!=TIME_NOT_SET && newTask->getStartTime()!=newTask->getEndTime()) {
 					newTask->setType(EVENT);
-				} else if(newTask->getType() == FLOATING) {
+				} else if(newTask->getType()==EVENT && newTask->getStartTime()==TIME_NOT_SET) {
+					newTask->setStartTime(newTime);
+				} else if(newTask->getType()==FLOATING) {
 					newTask->setType(TODO);
 				}
 			}
@@ -311,7 +318,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		newTask->setEndDate(newDate+10000); // Set end date as next year
 	}
 
-	if (newTask->getType() == TODO) {
+	if(newTask->getType() == TODO) {
 		newTask->setStartDate(newTask->getEndDate());
 		newTask->setStartTime(newTask->getEndTime());
 	}

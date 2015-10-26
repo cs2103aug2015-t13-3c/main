@@ -9,61 +9,48 @@ namespace TextBuddyTests {
 	TEST_CLASS(LoadFileTest) {
 public:
 	IO* io;
-	// Use only if incorrect input
-	/*
-	TEST_METHOD(IO_loadFile_correctStringReadIn)
-	{
-	// Test if what is read to rapidJSON is the correct file contents
-	std::ifstream inputFile("JSONTEXT.txt");
-	std::string hardstring = "\"TextBuddy Items\":\n[\n]";
+	std::vector<Task> emptyVector;
+	std::vector<Task> actualVector;
 
-	std::string inputFileText((std::istreambuf_iterator<char>(inputFile)),
-	std::istreambuf_iterator<char>());
-
-	Assert::AreEqual(hardstring, inputFileText);
+	TEST_METHOD_INITIALIZE(GetInstanceIO) {
+		io = IO::getInstance();
 	}
-	*/
 
 	TEST_METHOD(IO_loadFile_emptyFile) {
 		// Empty file should load empty vector
-		io = IO::getInstance();
-		
-		std::vector<Task> emptyVector;
 		io->saveFile("TEXT.txt", emptyVector);
-		std::vector<Task> actualVector = io->loadFile("TEXT.txt");
 
+		actualVector = io->loadFile("TEXT.txt");
 		Assert::AreEqual(emptyVector.size(), actualVector.size());
 	}
 
 	TEST_METHOD(IO_loadFile_fileDoesntExist) {
-		io = IO::getInstance();
-		
-		// Empty file should load empty vector
-		std::vector<Task> actualVector = io->loadFile("");
-		std::vector<Task> emptyVector;
-
-		Assert::AreEqual(emptyVector.size(), actualVector.size());
+		// Non-existent file should load empty vector
+		try {
+			actualVector = io->loadFile(""); // Exception thrown if file does not exist
+		} catch (std::exception e) {
+			Assert::AreEqual("File does not exist",e.what());
+			Assert::AreEqual(emptyVector.size(),actualVector.size());
+		}
 	}
 
 	TEST_METHOD(IO_loadFile_loadGibberish) {
-		io = IO::getInstance();
-		
-		// Empty file should load empty vector
-		std::vector<Task> actualVector = io->loadFile("");
-		std::vector<Task> emptyVector;
-
-		Assert::AreEqual(emptyVector.size(), actualVector.size());
+		// Gibberish file name should load empty vector
+		try {
+			actualVector = io->loadFile("~`!@#$%^&*()_-+="); // Exception thrown if file does not exist
+		} catch (std::exception e) {
+			Assert::AreEqual("File does not exist",e.what());
+			Assert::AreEqual(emptyVector.size(),actualVector.size());
+		}
 	}
 
 	TEST_METHOD(IO_loadFile_oneTask) {
-		io = IO::getInstance();
-		
 		std::vector<Task> textVector;
 		Task newTask;
 		textVector.push_back(newTask);
 		io->saveFile("TEXT.txt", textVector);
 
-		std::vector<Task> actualVector = io->loadFile("TEXT.txt");
+		actualVector = io->loadFile("TEXT.txt");
 		Assert::AreEqual(textVector.size(), actualVector.size());
 
 		for(unsigned int i = 0; i < actualVector.size(); i++) {
@@ -80,7 +67,6 @@ public:
 			Assert::AreEqual(task1.getStartDate() , task2.getStartDate());
 			Assert::AreEqual(task1.getStartTime() , task2.getStartTime());
 			Assert::AreEqual(Utilities::taskTypeToString(task1.getType()) , Utilities::taskTypeToString(task2.getType()));
-			
 			/*
 			// Assert::AreEqual cannot compare vectors and Tasks
 			if(!Task::tasksAreEqual(textVector[i], actualVector[i])) {
@@ -92,8 +78,6 @@ public:
 	}
 
 	TEST_METHOD(IO_loadFile_threeTasks) {
-		io = IO::getInstance();
-		
 		std::vector<Task> textVector;
 		Task newTask;
 		textVector.push_back(newTask);
@@ -102,7 +86,6 @@ public:
 		io->saveFile("TEXT.txt", textVector);
 
 		std::vector<Task> actualVector = io->loadFile("TEXT.txt");
-
 		Assert::AreEqual(textVector.size(), actualVector.size());
 
 		for(unsigned int i = 0; i < actualVector.size(); i++) {
@@ -129,14 +112,29 @@ public:
 		}
 	}
 
+	// Use only if incorrect input
+	// TEST_METHOD(IO_loadFile_correctStringReadIn)	{
+	/*
+	// Test if what is read to rapidJSON is the correct file contents
+	std::ifstream inputFile("JSONTEXT.txt");
+	std::string hardstring = "\"TextBuddy Items\":\n[\n]";
+	std::string inputFileText((std::istreambuf_iterator<char>(inputFile)),
+
+	std::istreambuf_iterator<char>());
+	Assert::AreEqual(hardstring, inputFileText);
+	}
+	*/
 	};
 
 	//========== SaveFileTest ==========
 	TEST_CLASS(SaveFileTest) {
 public:
 	IO* io;
-	TEST_METHOD(IO_saveFile_fileDoesntExist) {
+	TEST_METHOD_INITIALIZE(GetInstanceForIO) {
 		io = IO::getInstance();
+	}
+
+	TEST_METHOD(IO_saveFile_fileDoesntExist) {
 		// Cannot open file to save
 		std::vector<Task> emptyVector;
 		bool success = io->saveFile("", emptyVector);
@@ -144,34 +142,13 @@ public:
 		Assert::AreEqual(false, success);
 	}
 
-	TEST_METHOD(IO_saveFile_noText) {
-		//io = IO::getInstance();
-		/*std::vector<Task> emptyVector;
-		std::string expectedText[] = {"{","\t\"TextBuddy Items\":", "\t[","\t]","}"};
-
-		bool success;// = io->saveFile("TEXT.txt", emptyVector);
-
-		std::vector<std::string> actualText;// = io->getText("TEXT.txt");
-
-		// NOTE: vecToString method doesnt work
-		// REPLY: Please refer to UtilitiesTest.cpp (Aaron)
-
-		// std::vector<std::string> actualTextVector = io->getText("TEXT.txt");
-		// std::string actualText = Utilities::vecToString(actualTextVector);
-
-		for(unsigned int i = 0; i < actualText.size(); i++) {
-			Assert::AreEqual(expectedText[i], actualText[i]);
-		}
-		*/
-	}
-
 	TEST_METHOD(IO_saveFile_oneLine) {
-		io = IO::getInstance();
 		std::vector<Task> textVector;
 		Task newTask;
 		textVector.push_back(newTask);
 
 		bool success = io->saveFile("TEXT.txt", textVector);
+		Assert::AreEqual(true,success);
 		std::vector<std::string> actualText = io->getText("TEXT.txt");
 
 		std::string expectedText[] = {
@@ -196,17 +173,15 @@ public:
 			"}"
 		};
 
-		// TODO: assert areEqual for diff vector sizes
+		// TODO: Assert::AreEqual for diff vector sizes
 		Assert::AreEqual((size_t) 17, actualText.size());
 
 		for(unsigned int i = 0; i < actualText.size(); i++) {
 			Assert::AreEqual(expectedText[i], actualText[i]);
 		}
-
 	}
 
 	TEST_METHOD(IO_saveFile_threeLines) {
-		io = IO::getInstance();
 		std::vector<Task> textVector;
 		Task newTask;
 		newTask.setID(Task::incrementRunningCount()); // Added to fix uniqueID (Aaron)
@@ -215,6 +190,7 @@ public:
 		textVector.push_back(newTask);
 
 		bool success = io->saveFile("TEXT.txt", textVector);
+		Assert::AreEqual(true,success);
 		std::vector<std::string> actualText = io->getText("TEXT.txt");
 
 		std::string expectedText[] = {
@@ -272,26 +248,27 @@ public:
 		for(unsigned int i = 0; i < actualText.size(); i++) {
 			Assert::AreEqual(expectedText[i], actualText[i]);
 		}
-
 	}
 
-	};
-
+	// TEST_METHOD(IO_saveFile_noText) {
 	/*
-	TEST_CLASS(ChangeDirectoryTest)
-	{
-	public:
-
-	TEST_METHOD(IO_changeDirectory_invalidPath)
-	{
 	io = IO::getInstance();
-	// Cannot open file to save
-	std::string pathName = "Desktop";
-	bool success = io->changeSourceFileLocation(pathName);
+	std::vector<Task> emptyVector;
+	std::string expectedText[] = {"{","\t\"TextBuddy Items\":", "\t[","\t]","}"};
 
-	Assert::AreEqual(false, success);
+	bool success = io->saveFile("TEXT.txt", emptyVector);
+
+	std::vector<std::string> actualText = io->getText("TEXT.txt");
+
+	// std::vector<std::string> actualTextVector = io->getText("TEXT.txt");
+	// std::string actualText = Utilities::vecToString(actualTextVector);
+
+	for(unsigned int i = 0; i < actualText.size(); i++) {
+	Assert::AreEqual(expectedText[i], actualText[i]);
+	}
 	}
 	*/
+	};
 
 	//========== SetFilePathTest ==========
 	TEST_CLASS(SetFilePathTest) {
@@ -325,13 +302,12 @@ public:
 		remove(newFilePath.c_str());
 	}
 
-	// Note: Replace yourusername with the appropriate string first
 	TEST_METHOD(IO_setFilePath_userDirectory) {
 		parser = Parser::getInstance();
 		io = IO::getInstance();
 		std::vector<Task> taskVector;
 		Task task = *parser->parseTask("dummy");
-		std::string userInput = "C:/Users/%USERNAME%/Downloads/TEXT";
+		std::string userInput = "C:/Users/Public/TEXT";
 		std::string newFilePath = parser->parseFileName(userInput);
 		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 
@@ -340,4 +316,18 @@ public:
 	}
 
 	};
+
+	// Ng Ren Zhi @@author A0130463R-unused
+	//========== ChangeDirectoryTest ==========
+	/*
+	TEST_CLASS(ChangeDirectoryTest)	{
+	public:
+	TEST_METHOD(IO_changeDirectory_invalidPath)	{
+	io = IO::getInstance();
+	// Cannot open file to save
+	std::string pathName = "Desktop";
+	bool success = io->changeSourceFileLocation(pathName);
+	Assert::AreEqual(false, success);
+	}
+	*/
 }

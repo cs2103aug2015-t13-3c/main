@@ -22,7 +22,7 @@ public:
 		TbLogger::getInstance()->clearLog();
 	}
 
-	TEST_METHOD_INITIALIZE(InitialiseLoggerAndParser) {
+	TEST_METHOD_INITIALIZE(GetInstanceLoggerAndParser) {
 		logger = TbLogger::getInstance();
 		p = Parser::getInstance();
 	}
@@ -58,7 +58,7 @@ public:
 		Add* add;
 		size_t storeSizeBeforeAdd;
 
-		//===== TODO with multipleWordsName, endDate and endTime =====
+		//===== EVENT with multipleWordsName, endDate and endTime =====
 		userInput = "add A partridge in a pear tree on sat by 8 pm";
 		cmd = p->parse(userInput);
 		add = (Add*)cmd;
@@ -67,7 +67,7 @@ public:
 		task = add->getTaskStore().back();
 		Assert::AreEqual(storeSizeBeforeAdd+1, add->getTaskStore().size());
 		Assert::AreEqual(std::string("A partridge in a pear tree"),task.getName());
-		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
+		Assert::AreEqual(std::string("EVENT"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());
 		// Assert::AreEqual(false,task.getDoneStatus());
 		// Assert::AreEqual(false,task.getPriorityStatus());
@@ -417,6 +417,13 @@ public:
 		userInput = "12.00 pm";
 		inputVec = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
+	}
+
+	TEST_METHOD(Parser_extractFields) {
+		expectedString = "from from to"; // Expected behaviour
+		// expectedString = "from on on";
+		std::vector<FieldType> fields = p->extractFields("from on by");
+		Assert::AreEqual(expectedString,Utilities::fieldVecToString(fields));
 	}
 
 	};
