@@ -24,11 +24,14 @@ void Parser::log(Level level, std::string message) {
 	return;
 }
 
+void Parser::logSetTaskType(TaskType type) {
+	log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(type));
+	return;
+}
+
 //==================================================
 //                      METHODS
 //==================================================
-
-//========== This is the API ==========
 
 Parser* Parser::getInstance() {
 	if(theOne == nullptr) {
@@ -188,127 +191,27 @@ Command* Parser::parse(std::string userInput) {
 
 Task* Parser::parseTask(std::string restOfCommand) {
 	log(INFO,"Parsing task");
+	log(DEBUG,"Parsing field keyword: name");
+	FieldType inputMode = NAME;
+
 	std::vector<std::string> userInput = Utilities::stringToVec(restOfCommand);
 	std::vector<std::string>::iterator curr = userInput.begin();
-	Task* newTask = new Task;
-	FieldType inputMode = NAME;
-	log(DEBUG,"Parsing field: name");
-
 	std::vector<std::string> inputString;
-	int newDate = DATE_NOT_SET;
-	int newTime = TIME_NOT_SET;
+	Task* newTask = new Task;
+	bool isTODO = false;
 
 	while(curr != userInput.end() || inputMode == PRIORITY_SET) {
 		inputString.clear();
 
-		while(curr != userInput.end()
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_NAME)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL_ADD)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_LABEL_DELETE)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_PRIORITY_SET)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_PRIORITY_UNSET)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_ON)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_FROM)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_TO)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_DATE_BY)
-			&& !Utilities::equalsIgnoreCase(*curr, FIELD_TIME_AT)) {
-				inputString.push_back(*curr);
-				curr++;
-		}
-		log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
-
-		if( (inputMode==START_DATE || inputMode==END_DATE || inputMode==TODO_DATE)
-			&& ((newDate=parseDate(inputString)) == INVALID_DATE_FORMAT)
-			&& ((newDate=parseDay(inputString)) == INVALID_DATE_FORMAT)) {
-				log(DEBUG,"Invalid date format: " + Utilities::vecToString(inputString));
-				if(inputMode == START_DATE) {
-					inputMode = START_TIME;
-				} else if(inputMode == END_DATE) {
-					inputMode = END_TIME;
-				} else if(inputMode == TODO_DATE) {
-					inputMode = TODO_TIME;
-				}
+		while(curr!=userInput.end() && !Utilities::isFieldKeyword(*curr)) {
+			inputString.push_back(*curr);
+			curr++;
 		}
 
-		switch(inputMode) {
-		case NAME:
-			newTask->setName(Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
-			break;
-		case LABELS_ADD:
-			newTask->addLabels(Utilities::removeSlashKeywords(inputString));
-			break;
-		case LABELS_DELETE:
-			newTask->setLabelsToDelete(Utilities::removeSlashKeywords(inputString));
-			break;
-		case LABELS_CLEAR:
-			// Nothing to set
-			break;
-		case PRIORITY_SET:
-			log(DEBUG,"Setting priority");
-			newTask->setPriority();
-			break;
-		case PRIORITY_UNSET:
-			// Unset by default
-			break;
-		case START_DATE:
-			log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(EVENT));
-			newTask->setType(EVENT);
-			log(DEBUG,"Setting startDate: " + std::to_string(newDate));
-			newTask->setStartDate(newDate);
-			break;
-		case TODO_DATE:
-		case END_DATE:
-			if(newTask->getType() == FLOATING) {
-				log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(TODO));
-				newTask->setType(TODO);
-			} else if(newTask->getType() == TODO
-				|| (newTask->getType() == EVENT && newTask->getStartDate() == DATE_NOT_SET)) {
-					log(DEBUG,"Setting startDate as endDate: " + std::to_string(newDate));
-					newTask->setStartDate(newDate);
-			}
-			newTask->setEndDate(newDate);
-			break;
-		case START_TIME:
-			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-				log(DEBUG,"Parsed newTime: " + std::to_string(newTime));
-				log(DEBUG,"Checking startTime: " + std::to_string(newTime));
-				if(newTask->getStartTime() == TIME_NOT_SET) {
-					newTask->setStartTime(newTime);
-				}
-			} else {
-				break;
-			}
-		case TODO_TIME:
-		case END_TIME:
-			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-				if(newTask->getStartDate() == DATE_NOT_SET) {
-					if(newTask->getEndDate() == DATE_NOT_SET) {
-						log(DEBUG,"Overwriting startDate: " + std::to_string(newTask->getStartDate()));
-						newTask->setStartDate(parseDay(Utilities::stringToVec("today")));
-					} else {
-						newTask->setStartDate(newTask->getEndDate());
-					}
-				}
-				if(newTask->getEndDate() == DATE_NOT_SET) {
-					newTask->setEndDate(newTask->getStartDate());
-				}
-
-				newTask->setEndTime(newTime);
-				if(newTask->getStartTime()!=TIME_NOT_SET && newTask->getStartTime()!=newTask->getEndTime()) {
-					newTask->setType(EVENT);
-				} else if(newTask->getType()==EVENT && newTask->getStartTime()==TIME_NOT_SET) {
-					newTask->setStartTime(newTime);
-				} else if(newTask->getType()==FLOATING) {
-					newTask->setType(TODO);
-				}
-			}
-			break;
-		case INVALID_FIELD:
-			break;
-		}
+		placeInField(newTask,isTODO,inputMode,inputString);
 
 		if(curr != userInput.end()) {
-			log(DEBUG,"Parsing field: " + *curr);
+			log(DEBUG,"Parsing field keyword: " + *curr);
 			inputMode = Utilities::stringToFieldType(*curr);
 			curr++;
 		} else {
@@ -316,11 +219,13 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		}
 	}
 
-	if((newDate = newTask->getEndDate()) < newTask->getStartDate()) {
-		newTask->setEndDate(newDate+10000); // Set end date as next year
+	int endDate;
+	if((endDate=newTask->getEndDate()) < newTask->getStartDate()) {
+		newTask->setEndDate(endDate+10000); // Set end date as next year
 	}
 
-	if(newTask->getType() == TODO) {
+	if(isTODO) {
+		newTask->setType(TODO);
 		newTask->setStartDate(newTask->getEndDate());
 		newTask->setStartTime(newTask->getEndTime());
 	}
@@ -328,107 +233,6 @@ Task* Parser::parseTask(std::string restOfCommand) {
 	log(INFO,"Parsed task of type: " + Utilities::taskTypeToString(newTask->getType()));
 	return newTask;
 }
-
-
-//========== These support user methods ==========
-
-std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
-	assert(restOfInput != "");
-	std::vector<std::string> vecInput = Utilities::stringToVec(restOfInput);
-	std::vector<std::string>::iterator curr = vecInput.begin();
-	std::vector<FieldType> fields;
-
-	if(Utilities::isInt(*curr)){
-		curr++;
-	}
-
-	if(Utilities::stringToFieldType(*curr) == INVALID_FIELD) {
-		fields.push_back(NAME);
-	}
-
-	FieldType newField;
-	while(curr != vecInput.end()) {
-		newField = Utilities::stringToFieldType(*curr);
-		if(newField == LABELS_DELETE
-			&& curr+1 != vecInput.end()
-			&& Utilities::stringToFieldType(*(curr+1)) != INVALID_FIELD) {
-				fields.push_back(LABELS_CLEAR);
-				/*
-				} else if(newField == TODO_DATE
-				&& curr+1 != vecInput.end()
-				&& curr+2 != vecInput.end()
-				&& parseDate(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT
-				&& parseDay(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT) {
-				fields.push_back(TODO_TIME);
-				*/
-		} else if(newField != INVALID_FIELD) {
-			fields.push_back(newField);
-		}
-		curr++;
-	}
-
-	TbLogger::getInstance()->log(DEBUG,"Fields extracted: " + Utilities::fieldVecToString(fields));
-	return fields;
-}
-
-int Parser::findMaxDays(Month month, int year) { // default year is 2015
-	int maxDays = 0;
-	bool isLeap;
-	switch(month) {
-	case JAN:
-	case MAR:
-	case MAY:
-	case JUL:
-	case AUG:
-	case OCT:
-	case DEC:
-		maxDays = 31;
-		break;
-	case APR:
-	case JUN:
-	case SEP:
-	case NOV:
-		maxDays = 30;
-		break;
-	case FEB:
-		isLeap = ((year%4==0 && year%100!=0) || year%400==0);
-		if(isLeap) {
-			maxDays = 29;
-		} else {
-			maxDays = 28;
-		}
-	case INVALID_MONTH:
-		break;
-	}
-	return maxDays;
-}
-
-// Returns year in YY
-// Throws exception if invalid yearString
-int Parser::findYear(std::string yearString) {
-	time_t t = time(0);				// Get current time
-	struct tm now;
-	localtime_s(&now,&t);
-	int year = now.tm_year - 100;	// Get current year, tm_year: years since 1900
-
-	if(yearString == "") {
-		return year;
-	} else if(Utilities::isPositiveNonZeroInt(yearString)) {
-		if(Utilities::stringToInt(yearString) == year
-			|| Utilities::stringToInt(yearString) == 2000+year) {
-				return year;
-		} else if(Utilities::stringToInt(yearString) == year+1
-			|| Utilities::stringToInt(yearString) == 2000+year+1) {
-				return year+1;
-		}
-	} else {
-		throw std::runtime_error("Invalid year string: " + yearString + "\n");
-	}
-	return year;
-}
-
-
-//========== These handle task parameters ==========
 
 // Processes dates in these formats:
 // - DDD DDDD
@@ -632,4 +436,204 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 	}
 
 	return time;
+}
+
+void Parser::convertFieldDateToTime(FieldType &inputMode) {
+	if(inputMode == START_DATE) {
+		inputMode = START_TIME;
+	} else if(inputMode == END_DATE) {
+		inputMode = END_TIME;
+	} else if(inputMode == TODO_DATE) {
+		inputMode = TODO_TIME;
+	}
+	return;
+}
+
+void Parser::placeInField(Task* newTask, bool &isTODO, FieldType inputMode, std::vector<std::string> inputString) {
+	int newDate = DATE_NOT_SET;
+	int newTime = TIME_NOT_SET;
+
+	log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
+
+	if(Utilities::isDateField(inputMode)
+		&& (newDate=parseDate(inputString)) == INVALID_DATE_FORMAT
+		&& (newDate=parseDay(inputString)) == INVALID_DATE_FORMAT) {
+			convertFieldDateToTime(inputMode);
+	}
+
+	if((inputMode==TODO_DATE || inputMode==TODO_TIME)
+		&& newTask->getType()==FLOATING) {
+			isTODO = true;
+	} else if(isTODO && inputMode==START_TIME) {
+		inputMode = TODO_TIME;
+	}
+
+	switch(inputMode) {
+	case NAME:
+		newTask->setName(Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
+		break;
+	case LABELS_ADD:
+		newTask->addLabels(Utilities::removeSlashKeywords(inputString));
+		break;
+	case LABELS_DELETE:
+		newTask->setLabelsToDelete(Utilities::removeSlashKeywords(inputString));
+		break;
+	case LABELS_CLEAR:
+		// Nothing to set
+		break;
+	case PRIORITY_SET:
+		newTask->setPriority();
+		break;
+	case PRIORITY_UNSET:
+		// Unset by default
+		break;
+	case START_DATE:
+		logSetTaskType(EVENT);
+		newTask->setType(EVENT);
+		newTask->setStartDate(newDate);
+		break;
+	case TODO_DATE:
+	case END_DATE:
+		if(newTask->getType() == FLOATING) {
+			logSetTaskType(TODO);
+			isTODO = true;
+		} else if(isTODO
+			|| (newTask->getType()==EVENT && newTask->getStartDate()==DATE_NOT_SET)) {
+				newTask->setStartDate(newDate);
+		}
+		newTask->setEndDate(newDate);
+		break;
+	case START_TIME:
+		logSetTaskType(EVENT);
+		newTask->setType(EVENT);
+		if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if(newTask->getStartTime() == TIME_NOT_SET) {
+				newTask->setStartTime(newTime);
+			}
+		} else {
+			break;
+		}
+	case TODO_TIME:
+	case END_TIME:
+		if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if(newTask->getStartDate() == DATE_NOT_SET) {
+				if(newTask->getEndDate() == DATE_NOT_SET) {
+					newTask->setStartDate(parseDay(Utilities::stringToVec("today")));
+				} else {
+					newTask->setStartDate(newTask->getEndDate());
+				}
+			}
+			if(newTask->getEndDate() == DATE_NOT_SET) {
+				newTask->setEndDate(newTask->getStartDate());
+			}
+
+			newTask->setEndTime(newTime);
+			if(newTask->getStartTime()!=TIME_NOT_SET && newTask->getStartTime()!=newTask->getEndTime()) {
+				logSetTaskType(EVENT);
+				newTask->setType(EVENT);
+			} else if(newTask->getType()==EVENT && newTask->getStartTime()==TIME_NOT_SET) {
+				newTask->setStartTime(newTime);
+			} else if(newTask->getType()==FLOATING) {
+				logSetTaskType(TODO);
+				isTODO = true;
+			}
+		}
+		break;
+	case INVALID_FIELD:
+		break;
+	}
+	return;
+}
+
+std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
+	assert(restOfInput != "");
+	std::vector<std::string> vecInput = Utilities::stringToVec(restOfInput);
+	std::vector<std::string>::iterator curr = vecInput.begin();
+	std::vector<FieldType> fields;
+
+	if(Utilities::isInt(*curr)){
+		curr++;
+	}
+
+	if(Utilities::stringToFieldType(*curr) == INVALID_FIELD) {
+		fields.push_back(NAME);
+	}
+
+	FieldType newField;
+	while(curr != vecInput.end()) {
+		newField = Utilities::stringToFieldType(*curr);
+		if(newField == LABELS_DELETE
+			&& curr+1 != vecInput.end()
+			&& Utilities::stringToFieldType(*(curr+1)) != INVALID_FIELD) {
+				fields.push_back(LABELS_CLEAR);
+		} else if(newField == TODO_DATE
+			&& curr+1 != vecInput.end()
+			&& curr+2 != vecInput.end()
+			&& parseDate(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT
+			&& parseDay(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT) {
+				fields.push_back(TODO_TIME);
+		} else if(newField != INVALID_FIELD) {
+			fields.push_back(newField);
+		}
+		curr++;
+	}
+
+	log(DEBUG,"Fields extracted: " + Utilities::fieldVecToString(fields));
+	return fields;
+}
+
+int Parser::findMaxDays(Month month, int year) { // default year is 2015
+	int maxDays = 0;
+	bool isLeap;
+	switch(month) {
+	case JAN:
+	case MAR:
+	case MAY:
+	case JUL:
+	case AUG:
+	case OCT:
+	case DEC:
+		maxDays = 31;
+		break;
+	case APR:
+	case JUN:
+	case SEP:
+	case NOV:
+		maxDays = 30;
+		break;
+	case FEB:
+		isLeap = ((year%4==0 && year%100!=0) || year%400==0);
+		if(isLeap) {
+			maxDays = 29;
+		} else {
+			maxDays = 28;
+		}
+	case INVALID_MONTH:
+		break;
+	}
+	return maxDays;
+}
+
+// Returns year in YY
+// Throws exception if invalid yearString
+int Parser::findYear(std::string yearString) {
+	time_t t = time(0);				// Get current time
+	struct tm now;
+	localtime_s(&now,&t);
+	int year = now.tm_year - 100;	// Get current year, tm_year: years since 1900
+
+	if(yearString == "") {
+		return year;
+	} else if(Utilities::isPositiveNonZeroInt(yearString)) {
+		if(Utilities::stringToInt(yearString) == year
+			|| Utilities::stringToInt(yearString) == 2000+year) {
+				return year;
+		} else if(Utilities::stringToInt(yearString) == year+1
+			|| Utilities::stringToInt(yearString) == 2000+year+1) {
+				return year+1;
+		}
+	} else {
+		throw std::runtime_error("Invalid year string: " + yearString + "\n");
+	}
+	return year;
 }

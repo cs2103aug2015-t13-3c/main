@@ -29,34 +29,34 @@ int Utilities::stringToInt(std::string str) {
 	}
 }
 
-CommandType Utilities::stringToCmdType(std::string cmdString) {
+CommandType Utilities::stringToCmdType(std::string str) {
 	CommandType cmd;
 
-	if(equalsIgnoreCase(cmdString, COMMAND_ADD))	{
+	if(equalsIgnoreCase(str, COMMAND_ADD))	{
 		cmd = ADD;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_DELETE)) {
+	} else if(equalsIgnoreCase(str, COMMAND_DELETE)) {
 		cmd = DELETE;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_MODIFY)) {
+	} else if(equalsIgnoreCase(str, COMMAND_MODIFY)) {
 		cmd = MODIFY;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_SEARCH)) {
+	} else if(equalsIgnoreCase(str, COMMAND_SEARCH)) {
 		cmd = SEARCH;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_MARKDONE)) {
+	} else if(equalsIgnoreCase(str, COMMAND_MARKDONE)) {
 		cmd = MARKDONE;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_UNDO)) {
+	} else if(equalsIgnoreCase(str, COMMAND_UNDO)) {
 		cmd = UNDO;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_REDO)) {
+	} else if(equalsIgnoreCase(str, COMMAND_REDO)) {
 		cmd = REDO;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_VIEW)) {
+	} else if(equalsIgnoreCase(str, COMMAND_VIEW)) {
 		cmd = VIEW;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_CLEAR_ALL)) {
+	} else if(equalsIgnoreCase(str, COMMAND_CLEAR_ALL)) {
 		cmd = CLEAR_ALL;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_DISPLAY_ALL)) {
+	} else if(equalsIgnoreCase(str, COMMAND_DISPLAY_ALL)) {
 		cmd = DISPLAY_ALL;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_LOAD)) {
+	} else if(equalsIgnoreCase(str, COMMAND_LOAD)) {
 		cmd = LOAD;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_SAVE)) {
+	} else if(equalsIgnoreCase(str, COMMAND_SAVE)) {
 		cmd = SAVE;
-	} else if(equalsIgnoreCase(cmdString, COMMAND_EXIT)) {
+	} else if(equalsIgnoreCase(str, COMMAND_EXIT)) {
 		cmd = EXIT;
 	} else {
 		cmd = INVALID;
@@ -130,7 +130,6 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
 		field = PRIORITY_UNSET;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
-		// field = TODO_DATE;
 		field = START_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
 		field = START_DATE;
@@ -138,7 +137,6 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
 		field = TODO_DATE;
-		// field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
 		field = START_TIME;
 	} else {
@@ -199,10 +197,9 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 	}
 }
 
-// This converts std::string to std::vector<std::string> based on delimiter space
-std::vector<std::string> Utilities::stringToVec(std::string commandParametersString) {
+std::vector<std::string> Utilities::stringToVec(std::string str) {
 	std::vector<std::string> tokens;
-	std::istringstream iss(commandParametersString);
+	std::istringstream iss(str);
 	std::copy(std::istream_iterator<std::string>(iss),
 		std::istream_iterator<std::string>(),
 		std::back_inserter<std::vector<std::string>>(tokens));
@@ -251,11 +248,11 @@ std::string Utilities::dayToString(Day day) {
 	return dayString;
 }
 
-std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
-	std::vector<FieldType>::iterator curr = fieldsToModify.begin();
+std::string Utilities::fieldVecToString(std::vector<FieldType> fields) {
+	std::vector<FieldType>::iterator curr = fields.begin();
 	std::string newString;
 
-	while(curr != fieldsToModify.end()) {
+	while(curr != fields.end()) {
 		switch(*curr) {
 		case NAME:
 			newString += FIELD_NAME;
@@ -281,17 +278,15 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 		case START_TIME:
 			newString += FIELD_TIME_AT;
 			break;
-		case TODO_DATE:
-			/*
-			newString += FIELD_DATE_ON;
-			break;
-			*/
 		case END_DATE:
 			newString += FIELD_DATE_TO;
 			break;
-		case TODO_TIME:
 		case END_TIME:
 			newString += "FIELD_END_TIME";
+			break;
+		case TODO_DATE:
+		case TODO_TIME:
+			newString += FIELD_DATE_BY;
 			break;
 		case INVALID_FIELD:
 			newString += "FIELD_INVALID";
@@ -299,7 +294,7 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 		}
 
 		TbLogger::getInstance(); // Somehow removing this crashes the program (Aaron)
-		if(++curr != fieldsToModify.end()) {
+		if(++curr != fields.end()) {
 			newString += " ";
 		}
 	}
@@ -341,12 +336,12 @@ std::string Utilities::taskTypeToString(TaskType type) {
 	return typeString;
 }
 
-std::string Utilities::vecToString(std::vector<std::string> inputString) {
+std::string Utilities::vecToString(std::vector<std::string> vecString) {
 	std::string newString;
 	std::vector<std::string>::iterator curr;
-	for(curr=inputString.begin(); curr!=inputString.end(); ) {
+	for(curr=vecString.begin(); curr!=vecString.end(); ) {
 		newString += *curr;
-		if(++curr != inputString.end()) {
+		if(++curr != vecString.end()) {
 			newString += " ";
 		}
 	}
@@ -371,23 +366,30 @@ bool Utilities::containsAny(std::string searchWord, std::string words) {
 	return false;
 }
 
-bool Utilities::isInt(std::string intString) {
-	return !(intString.empty()) && intString.find_first_not_of("0123456789")==std::string::npos;
+bool Utilities::isInt(std::string str) {
+	return !(str.empty()) && str.find_first_not_of("0123456789")==std::string::npos;
 }
 
-bool Utilities::isKeyword(std::string str) {
+bool Utilities::isDateField(FieldType field) {
+	if(field==START_DATE || field==END_DATE || field==TODO_DATE) {
+		return true;
+	}
+	return false;
+}
+
+bool Utilities::isFieldKeyword(std::string str) {
 	return stringToFieldType(str)!=INVALID_FIELD;
 }
 
-std::vector<std::string> Utilities::removeSlashKeywords(std::vector<std::string> inputString) {
+std::vector<std::string> Utilities::removeSlashKeywords(std::vector<std::string> vecString) {
 	std::vector<std::string>::iterator curr;
 	std::string subString;
-	for(curr=inputString.begin(); curr!=inputString.end(); curr++) {
-		if( ((*curr)[0] == '/' || (*curr)[0] == '\\') && isKeyword(subString = (*curr).substr(1)) ) {
+	for(curr=vecString.begin(); curr!=vecString.end(); curr++) {
+		if( ((*curr)[0] == '/' || (*curr)[0] == '\\') && isFieldKeyword(subString = (*curr).substr(1)) ) {
 			*curr = subString;
 		}
 	}
-	return inputString;
+	return vecString;
 }
 
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
@@ -416,13 +418,13 @@ bool Utilities::equalsIgnoreCase(const std::string& str1, const std::string& str
 	return true;
 }
 
-std::string Utilities::getFirstWord(std::string userCommand) {
-	return stringToVec(userCommand)[0];
+std::string Utilities::getFirstWord(std::string words) {
+	return stringToVec(words)[0];
 }
 
-std::string Utilities::removeFirstWord(std::string userCommand) {
-	std::string commandTypeString = getFirstWord(userCommand);
-	std::string parameters = removeSpaces(replace(userCommand, commandTypeString, ""));
+std::string Utilities::removeFirstWord(std::string words) {
+	std::string commandTypeString = getFirstWord(words);
+	std::string parameters = removeSpaces(replace(words, commandTypeString, ""));
 	return parameters;
 }
 
@@ -451,11 +453,11 @@ std::string Utilities::replace(std::string str, std::string from, std::string to
 	return newString;
 }
 
-bool Utilities::isSubstring(std::string subString, std::string wordString) {
+bool Utilities::isSubstring(std::string subString, std::string words) {
 	bool isFound = false;
-	std::string::iterator pos = std::search(wordString.begin(), wordString.end(), 
+	std::string::iterator pos = std::search(words.begin(), words.end(), 
 		subString.begin(),subString.end(),equalsIgnoreCase_char);
-	if(pos != wordString.end()) {
+	if(pos != words.end()) {
 		isFound = true;
 	}
 	return isFound;
@@ -465,33 +467,11 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 	return (tolower(l) == tolower(r));
 }
 
-
 // Soon Hao Ye @@author A0126677U
-
-int Utilities::getLocalDay() {
-	time_t t = time(0); 
-	struct tm now;
-	localtime_s(&now,&t);  
-	return now.tm_mday;
-}
-
-int Utilities::getLocalMonth() {
-	time_t t = time(0); 
-	struct tm now;
-	localtime_s(&now,&t);  
-	return now.tm_mon + 1;
-}
-
-int Utilities::getLocalYear() {
-	time_t t = time(0); 
-	struct tm now;
-	localtime_s(&now,&t);  
-	return now.tm_year - 100 ;
-}
-
 //==================================================
 //           STRING-FOR-DISPLAY FORMATTERS
 //==================================================
+
 std::string Utilities::getDate(int date) {
 	assert(time != 0);
 	int localYear = getLocalYear(); 
@@ -525,4 +505,25 @@ std::string Utilities::getTime(int time) {
 	time2 = time/100.0 ;
 	stream << std::fixed << std::setprecision(2) << time2;
 	return stream.str() + amOrPm ;
+}
+
+int Utilities::getLocalDay() {
+	time_t t = time(0); 
+	struct tm now;
+	localtime_s(&now,&t);  
+	return now.tm_mday;
+}
+
+int Utilities::getLocalMonth() {
+	time_t t = time(0); 
+	struct tm now;
+	localtime_s(&now,&t);  
+	return now.tm_mon + 1;
+}
+
+int Utilities::getLocalYear() {
+	time_t t = time(0); 
+	struct tm now;
+	localtime_s(&now,&t);  
+	return now.tm_year - 100 ;
 }

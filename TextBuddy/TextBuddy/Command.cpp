@@ -195,7 +195,6 @@ bool Command::copyView() {
 	return true;
 }
 
-// Added by Ren Zhi 25/10/15
 // Updates only the modified task on the UI 
 void Command::updateView() {
 	*currViewIter = *taskStoreIter;
@@ -249,6 +248,7 @@ std::string Command::getMessage() {
 //==================================================
 
 //============== ADD : PUBLIC METHODS ===============
+
 Add::Add(Task task) : Command(ADD) {
 	newTask = task;
 	currViewID = 0;
@@ -280,7 +280,6 @@ std::string Add::getMessage() {
 // Modified on 24/10/15 by Chin Kiat Boon @@author A0096720A
 // Modified on 25/10/15 by Ng Ren Zhi @@author A0130463
 bool Add::doAdd() {
-
 	if (isDateLogical(newTask) == false) {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
 	}
@@ -291,7 +290,6 @@ bool Add::doAdd() {
 
 	sortDate(taskStore);
 	sortDate(currentView);
-	// UI only adds the new task, it doesn't copy the entire taskStore over again
 	removeDoneTasks();
 	return true;
 }
@@ -343,7 +341,6 @@ std::string Delete::getMessage() {
 
 // Searches for Task to delete using ID
 // Deleting is done according to the order of elements on currentView
-// Modified on 14/10/15 by Soon Hao Ye @@author A0126677U
 void Delete::doDelete() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
@@ -411,6 +408,7 @@ std::string Modify::getMessage() {
 // Modified on 24/10/15 by Aaron Chong Jun Hao @@author A0110376N
 void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
+	bool isTODO = false;
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
@@ -445,30 +443,35 @@ void Modify::doModify() {
 			taskStoreIter->setEndTime(tempTask.getEndTime());
 			break;
 		case TODO_DATE:
+			isTODO = true;
 			taskStoreIter->setEndDate(tempTask.getEndDate());
-			taskStoreIter->setStartDate(tempTask.getStartDate());
+			// taskStoreIter->setStartDate(tempTask.getStartDate());
 			break;
 		case TODO_TIME:
+			isTODO = true;
 			taskStoreIter->setEndTime(tempTask.getEndTime());
-			taskStoreIter->setStartTime(tempTask.getStartTime());
+			// taskStoreIter->setStartTime(tempTask.getStartTime());
 			break;
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
 	}
 
+	if(isTODO) {
+		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
+		taskStoreIter->setStartTime(taskStoreIter->getEndTime());
+	}
+
 	updateTaskTypes();
 	updateView();
 	sortDate(taskStore);
 	initialiseIterators(modifyID);
-
 }
 
 //<<<<<Update task type methods added by Ren Zhi 25/10/15
 // If start date == 0 && end date == 0: FLOATING
 // If end date == start date: TODO
 // All others: EVENTS
-
 void Modify::updateTaskTypes() {
 	if(!updateFLOATING()) {
 		if(!updateTODO()) {
@@ -478,8 +481,8 @@ void Modify::updateTaskTypes() {
 }
 
 bool Modify::updateFLOATING() {
-	if(taskStoreIter->getStartDate()==0 && taskStoreIter->getStartTime()==-1 &&
-		taskStoreIter->getEndDate()==0 && taskStoreIter->getEndTime()==-1) {
+	if(taskStoreIter->getStartDate()==DATE_NOT_SET && taskStoreIter->getStartTime()==TIME_NOT_SET
+		&& taskStoreIter->getEndDate()==DATE_NOT_SET && taskStoreIter->getEndTime()==TIME_NOT_SET) {
 			taskStoreIter->setType(FLOATING);
 			return true;
 	}
@@ -487,7 +490,8 @@ bool Modify::updateFLOATING() {
 }
 
 bool Modify::updateTODO() {
-	if(taskStoreIter->getStartDate()==taskStoreIter->getEndDate() && taskStoreIter->getStartTime()==taskStoreIter->getEndTime()) {
+	if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
+		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
 		taskStoreIter->setType(TODO);
 		return true;
 	}
@@ -629,7 +633,6 @@ void Markdone::undo() {
 
 //============= MARKDONE : PRIVATE METHODS ===========
 
-// Modified on 14/10/15 by Soon Hao Ye @@author A0126677U
 void Markdone::markDone() {
 	initialiseIterators(doneID);
 
@@ -812,6 +815,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 //                    CLEAR_ALL
 //==================================================
 // Added on 20/10/15 by Aaron Chong Jun Hao @@author A0110376N
+
 ClearAll::ClearAll() : Command(CLEAR_ALL) {
 	previousView = currentView;
 }

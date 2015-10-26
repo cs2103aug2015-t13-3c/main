@@ -39,9 +39,9 @@ public:
 		Assert::AreEqual(expectedString,Utilities::vecToString(inputString));
 	}
 
-	TEST_METHOD(Utilities_isKeyword) {
-		Assert::AreEqual(false,Utilities::isKeyword("add"));
-		Assert::AreEqual(true,Utilities::isKeyword("at"));
+	TEST_METHOD(Utilities_isFieldKeyword) {
+		Assert::AreEqual(false,Utilities::isFieldKeyword("add"));
+		Assert::AreEqual(true,Utilities::isFieldKeyword("at"));
 	}
 
 	TEST_METHOD(Utilities_removeSlashKeywords) {

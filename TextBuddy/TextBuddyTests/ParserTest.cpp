@@ -139,6 +139,7 @@ public:
 			case MARKDONE:		// Mark task as done
 			case UNMARKDONE:	// Mark task as not done
 			case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
+			case REDO:			// Redo last undo, if any
 			case VIEW:			// Process view
 			case DISPLAY_ALL:	// Display all tasks
 			case LOAD:			// Load file
@@ -418,13 +419,6 @@ public:
 		userInput = "12.00 pm";
 		inputVec = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
-	}
-
-	TEST_METHOD(Parser_extractFields) {
-		expectedString = "from from to"; // Expected behaviour
-		// expectedString = "from on on";
-		std::vector<FieldType> fields = p->extractFields("from on by");
-		Assert::AreEqual(expectedString,Utilities::fieldVecToString(fields));
 	}
 
 	};

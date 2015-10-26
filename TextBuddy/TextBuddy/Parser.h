@@ -8,7 +8,10 @@ class Parser {
 private:
 	static Parser* theOne;
 	Parser();
+
 	TbLogger* logger;
+	void log(Level level, std::string message);
+	void logSetTaskType(TaskType type);
 
 	// This defines the file extension used by TextBuddy
 	static const std::string FILE_EXTENSION;
@@ -17,27 +20,27 @@ private:
 	static const int INVALID_DATE_FORMAT = -1;
 	static const int INVALID_TIME_FORMAT = -1;
 
-	void log(Level level, std::string message);
+	void convertFieldDateToTime(FieldType &inputMode);
+	void placeInField(Task* newTask, bool &isTODO,
+		FieldType inputMode, std::vector<std::string> inputString);	
+
+	std::vector<FieldType> extractFields(std::string restOfInput);
+
+	int findMaxDays(Month month, int year=2015);
+	int findYear(std::string yearString="");
 
 public:
-	~Parser();
+	Task* parseTask(std::string restOfCommand);
+	int parseDate(std::vector<std::string> dateString);
+	int parseDay(std::vector<std::string> dayString);
+	int parseTime(std::vector<std::string> timeString);
 
 	// This is the API
+	~Parser();
 	static Parser* getInstance();
 	std::string parseFileName(char* argv[]);
 	std::string parseFileName(std::string stringFilePath);
 	Command* parse(std::string userInput);
-	Task* parseTask(std::string restOfCommand);
-
-	// These support user methods
-	std::vector<FieldType> extractFields(std::string restOfInput);
-	int findMaxDays(Month month, int year=2015);
-	int findYear(std::string yearString="");
-
-	// These handle task parameters
-	int parseDate(std::vector<std::string> dateString);
-	int parseDay(std::vector<std::string> dayString);
-	int parseTime(std::vector<std::string> timeString);
 };
 
 #endif

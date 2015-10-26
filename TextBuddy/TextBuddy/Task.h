@@ -21,7 +21,7 @@ const std::string FIELD_DATE_ON = "on";
 const std::string FIELD_TIME_AT = "at";
 
 // These are the Field enums
-// Count: 10 + INVALID_FIELD
+// Count: 10 + 2 TODO + INVALID_FIELD
 enum FieldType {
 	NAME,
 	LABELS_ADD,
