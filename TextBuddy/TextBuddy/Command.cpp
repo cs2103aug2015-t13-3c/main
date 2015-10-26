@@ -117,7 +117,7 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 			if(k == taskVector.begin()) {
 				break;
 			} else {
-			--k;
+				--k;
 			}
 		} else {
 			++i;
@@ -448,6 +448,10 @@ void Modify::doModify() {
 			taskStoreIter->setEndDate(tempTask.getEndDate());
 			taskStoreIter->setStartDate(tempTask.getStartDate());
 			break;
+		case TODO_TIME:
+			taskStoreIter->setEndTime(tempTask.getEndTime());
+			taskStoreIter->setStartTime(tempTask.getStartTime());
+			break;
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
@@ -476,8 +480,8 @@ void Modify::updateTaskTypes() {
 bool Modify::updateFLOATING() {
 	if(taskStoreIter->getStartDate()==0 && taskStoreIter->getStartTime()==-1 &&
 		taskStoreIter->getEndDate()==0 && taskStoreIter->getEndTime()==-1) {
-		taskStoreIter->setType(FLOATING);
-		return true;
+			taskStoreIter->setType(FLOATING);
+			return true;
 	}
 	return false;
 }

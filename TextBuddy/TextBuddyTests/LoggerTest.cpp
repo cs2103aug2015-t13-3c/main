@@ -19,11 +19,10 @@ public:
 		asctime_s(buffer,26,timeinfo);
 		buffer[strlen(buffer)-1]=0;
 
-		TbLogger* logger = TbLogger::getInstance();
+		TbLogger* logger = TbLogger::getInstance(); // Somehow removing this crashes the program (Aaron)
 		// Note: Visual check is consistent even though test fails
 		// Assert::AreEqual(buffer,logger->getLocalTime());
 	}
 
 	};
-
 }

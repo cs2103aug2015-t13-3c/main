@@ -217,14 +217,16 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		}
 		log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
 
-		if( (inputMode == START_DATE || inputMode == END_DATE)
-			&& ((newDate = parseDate(inputString)) == INVALID_DATE_FORMAT)
-			&& ((newDate = parseDay(inputString)) == INVALID_DATE_FORMAT)) {
+		if( (inputMode==START_DATE || inputMode==END_DATE || inputMode==TODO_DATE)
+			&& ((newDate=parseDate(inputString)) == INVALID_DATE_FORMAT)
+			&& ((newDate=parseDay(inputString)) == INVALID_DATE_FORMAT)) {
 				log(DEBUG,"Invalid date format: " + Utilities::vecToString(inputString));
 				if(inputMode == START_DATE) {
 					inputMode = START_TIME;
 				} else if(inputMode == END_DATE) {
 					inputMode = END_TIME;
+				} else if(inputMode == TODO_DATE) {
+					inputMode = TODO_TIME;
 				}
 		}
 
@@ -254,7 +256,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			log(DEBUG,"Setting startDate: " + std::to_string(newDate));
 			newTask->setStartDate(newDate);
 			break;
-		// case TODO_DATE:
+		case TODO_DATE:
 		case END_DATE:
 			if(newTask->getType() == FLOATING) {
 				log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(TODO));
@@ -276,7 +278,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			} else {
 				break;
 			}
-		// case TODO_TIME:
+		case TODO_TIME:
 		case END_TIME:
 			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
 				if(newTask->getStartDate() == DATE_NOT_SET) {
@@ -351,6 +353,14 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 			&& curr+1 != vecInput.end()
 			&& Utilities::stringToFieldType(*(curr+1)) != INVALID_FIELD) {
 				fields.push_back(LABELS_CLEAR);
+				/*
+				} else if(newField == TODO_DATE
+				&& curr+1 != vecInput.end()
+				&& curr+2 != vecInput.end()
+				&& parseDate(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT
+				&& parseDay(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT) {
+				fields.push_back(TODO_TIME);
+				*/
 		} else if(newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}

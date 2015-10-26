@@ -137,8 +137,8 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
 		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
-		// field = TODO_DATE;
-		field = END_DATE;
+		field = TODO_DATE;
+		// field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
 		field = START_TIME;
 	} else {
@@ -281,17 +281,18 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fieldsToModify) {
 		case START_TIME:
 			newString += FIELD_TIME_AT;
 			break;
-		case END_DATE:
-			newString += FIELD_DATE_TO;
-			break;
-		case END_TIME:
-			newString += "FIELD_END_TIME";
-			break;
+		case TODO_DATE:
 			/*
-			case TODO_DATE:
 			newString += FIELD_DATE_ON;
 			break;
 			*/
+		case END_DATE:
+			newString += FIELD_DATE_TO;
+			break;
+		case TODO_TIME:
+		case END_TIME:
+			newString += "FIELD_END_TIME";
+			break;
 		case INVALID_FIELD:
 			newString += "FIELD_INVALID";
 			break;

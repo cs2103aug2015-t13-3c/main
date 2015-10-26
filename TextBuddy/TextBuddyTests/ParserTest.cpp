@@ -137,10 +137,11 @@ public:
 				searchPhrase = ((Search*)cmd)->getSearchPhrase();
 				break;
 			case MARKDONE:		// Mark task as done
+			case UNMARKDONE:	// Mark task as not done
 			case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
-			case VIEW:
+			case VIEW:			// Process view
 			case DISPLAY_ALL:	// Display all tasks
-			case LOAD:
+			case LOAD:			// Load file
 			case SAVE:			// Save to new file path
 			case EXIT:			// Exit program
 			case INVALID:		// Return error message to UI

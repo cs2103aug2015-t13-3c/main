@@ -34,7 +34,7 @@ enum FieldType {
 	END_DATE,
 	END_TIME,
 	TODO_DATE,
-	// TODO_TIME,
+	TODO_TIME,
 	INVALID_FIELD,
 };
 
