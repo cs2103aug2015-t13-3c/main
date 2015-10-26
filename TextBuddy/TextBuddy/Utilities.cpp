@@ -130,13 +130,15 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
 		field = PRIORITY_UNSET;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
-		field = TODO_DATE;
+		// field = TODO_DATE;
+		field = START_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
 		field = START_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
 		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
-		field = TODO_DATE;
+		// field = TODO_DATE;
+		field = END_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
 		field = START_TIME;
 	} else {

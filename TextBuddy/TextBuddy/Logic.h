@@ -10,7 +10,7 @@
 
 class Logic {
 private:
-	static Logic* theOne; // Singleton
+	static Logic* theOne;
 	Logic();
 
 	std::vector<Task>* currentView; 

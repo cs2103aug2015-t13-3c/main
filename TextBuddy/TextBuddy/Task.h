@@ -3,8 +3,9 @@
 #ifndef TASK_H_
 #define TASK_H_
 
-// This is the default initialisation for time, since 0 represents "12 am"
-const int TIME_NOT_SET = -1;
+// This is the default initialisation for date and time
+const int DATE_NOT_SET = 0;
+const int TIME_NOT_SET = -1;	// 0 represents "12 am"
 
 // These are the valid Field keywords
 // Count: 10

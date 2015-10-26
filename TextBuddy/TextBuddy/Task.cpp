@@ -13,10 +13,10 @@ Task::Task() {
 	isDone = false;
 	isPriority = false;
 
-	startDate = 0;				// YYMMDD, supports 2015-2099
+	startDate = DATE_NOT_SET;	// YYMMDD, supports 2015-2099
 	startTime = TIME_NOT_SET;	// HHMM, 24-hour format
 
-	endDate = 0;
+	endDate = DATE_NOT_SET;
 	endTime = TIME_NOT_SET;
 }
 

@@ -292,16 +292,32 @@ public:
 	}
 
 	TEST_METHOD(Parser_parseTask) {
+		//===== TODO with endDate =====
 		expectedString = "Name: Sing a song\nType: TODO\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: -1\nEnd Date: 151231\nEnd Time: -1\n";
 		userInput = "Sing a song by 31 dec";
 		task = *(p->parseTask(userInput));
 		Assert::AreEqual(expectedString,Utilities::taskToString(task));
 
+		//===== EVENT with startDate and endDate =====
 		expectedString = "Name: Sing a song\nType: EVENT\nLabels: \nDone: 0\nPriority: 0\nStart Date: 151231\nStart Time: -1\nEnd Date: 160101\nEnd Time: -1\n";
 		userInput = "Sing a song from 31 dec to 1 jan";
 		task = *(p->parseTask(userInput));
 		Assert::AreEqual(expectedString,Utilities::taskToString(task));
 
+		//===== EVENT with startDate, startTime, endDate, endTime =====
+		userInput = "Camp from fri at 6 pm to next sun at 4 pm";
+		task = *(p->parseTask(userInput));
+		Assert::AreEqual(std::string("Camp"),task.getName());
+		Assert::AreEqual(std::string("EVENT"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151030, task.getStartDate());
+		Assert::AreEqual(1800, task.getStartTime());
+		Assert::AreEqual(151101, task.getEndDate());
+		Assert::AreEqual(1600, task.getEndTime());
+
+		//===== (Modify) FLOATING with emptyAddLabels and setPriority =====
 		expectedString = "Name: \nType: FLOATING\nLabels: \nDone: 0\nPriority: 1\nStart Date: 0\nStart Time: -1\nEnd Date: 0\nEnd Time: -1\n";
 		userInput = ": star";
 		task = *(p->parseTask(userInput));

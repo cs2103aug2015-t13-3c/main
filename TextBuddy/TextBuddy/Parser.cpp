@@ -195,8 +195,8 @@ Task* Parser::parseTask(std::string restOfCommand) {
 	log(DEBUG,"Parsing field: name");
 
 	std::vector<std::string> inputString;
-	int newDate = INVALID_DATE_FORMAT;
-	int newTime = INVALID_TIME_FORMAT;
+	int newDate = DATE_NOT_SET;
+	int newTime = TIME_NOT_SET;
 
 	while(curr != userInput.end() || inputMode == PRIORITY_SET) {
 		inputString.clear();
@@ -218,8 +218,8 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
 
 		if( (inputMode == START_DATE || inputMode == END_DATE)
-			&& (newDate = parseDate(inputString)) == INVALID_DATE_FORMAT
-			&& (newDate = parseDay(inputString)) == INVALID_DATE_FORMAT) {
+			&& ((newDate = parseDate(inputString)) == INVALID_DATE_FORMAT)
+			&& ((newDate = parseDay(inputString)) == INVALID_DATE_FORMAT)) {
 				log(DEBUG,"Invalid date format: " + Utilities::vecToString(inputString));
 				if(inputMode == START_DATE) {
 					inputMode = START_TIME;
@@ -250,14 +250,19 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			break;
 		case START_DATE:
 			newTask->setType(EVENT);
+			log(DEBUG,"Setting startDate: " + std::to_string(newDate));
 			newTask->setStartDate(newDate);
 			break;
 		case TODO_DATE:
 		case END_DATE:
 			if(newTask->getType() == FLOATING) {
+				log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(TODO));
 				newTask->setType(TODO);
 			} else if(newTask->getType() == TODO
 				|| (newTask->getType() == EVENT && newTask->getStartDate() == 0)) {
+					log(DEBUG,"Checking task type: " + Utilities::taskTypeToString(newTask->getType()));
+					log(DEBUG,"Checking startDate: " + std::to_string(newTask->getStartDate()));
+					log(DEBUG,"Setting endDate as startDate: " + std::to_string(newDate));
 					newTask->setStartDate(newDate);
 			}
 			newTask->setEndDate(newDate);
@@ -277,13 +282,14 @@ Task* Parser::parseTask(std::string restOfCommand) {
 					newTask->setEndDate(parseDay(Utilities::stringToVec("today")));
 				}
 				if(newTask->getStartDate() == 0 || newTask->getStartDate() == INVALID_DATE_FORMAT) {
+					log(DEBUG,"Overwriting startDate: " + std::to_string(newTask->getStartDate()));
 					newTask->setStartDate(newTask->getEndDate());
 				}
-				
+
 				newTask->setEndTime(newTime);
 				if(newTask->getStartTime()!=TIME_NOT_SET && newTask->getStartTime()!=newTask->getEndTime()) {
 					newTask->setType(EVENT);
-				} else {
+				} else if(newTask->getType() == FLOATING) {
 					newTask->setType(TODO);
 				}
 			}
@@ -305,7 +311,6 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		newTask->setEndDate(newDate+10000); // Set end date as next year
 	}
 
-	// Added by Kiat Boon 24/10/15
 	if (newTask->getType() == TODO) {
 		newTask->setStartDate(newTask->getEndDate());
 		newTask->setStartTime(newTask->getEndTime());
@@ -462,6 +467,8 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 		&& (1<=dateInput && dateInput<=maxDays)) {
 			newDate = yearInput*10000 + (int)monthInput*100 + dateInput;
 	}
+
+	log(DEBUG,"Parsed date: " + std::to_string(newDate));
 	return newDate;
 }
 
@@ -533,6 +540,7 @@ int Parser::parseDay(std::vector<std::string> dayString) {
 		}
 	}
 
+	log(DEBUG,"Parsed day: " + std::to_string(newDate));
 	return newDate;
 }
 
