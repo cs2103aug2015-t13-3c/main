@@ -12,16 +12,19 @@ private:
 
 public:
 	PowerSearch(void);
-	PowerSearch(std::vector<Task> cmdTaskStore, std::vector<Task> cmdCurrentView);
 	~PowerSearch(void);
 	
 	// To be private
 	void addPeriod(int startDate, int startTime, int endDate, int endTime);
 	void setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime);
-	bool isWithinFreePeriod(Task freePeriod, int daysNeeded, int timeNeeded);
+	int daysInMth(int month, int year);
+	int numOfMin(int date, int time);
+	bool isWithinFreePeriod(Task freePeriod, int daysNeeded, int hrsNeeded, int minsNeeded);
 	// To remain public
 	void searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime);
-	void searchFreeSlot(int startDate, int startTime, int endDate, int endTime); // start and end of the period of interest
+	void setFreePeriods(int startDate, int startTime, int endDate, int endTime);
+	void searchFreeSlot(int startDate, int startTime, int endDate, int endTime, 
+		int daysNeeded, int hrsNeeded, int minsNeeded); // start and end of the period of interest
 	void searchLabel(std::string label);
 
 	// Setters and Getters

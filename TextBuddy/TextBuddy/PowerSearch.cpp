@@ -49,15 +49,74 @@ void PowerSearch::addPeriod(int startDate, int startTime, int endDate, int endTi
 	freePeriods.push_back(freePeriod);
 }
 
-// Returns true if a particular period is longer than the time requested by the user
-// Not implemented yet
-bool PowerSearch::isWithinFreePeriod(Task freePeriod, int daysNeeded, int timeNeeded) {
-	int yrsAvail;
-	int mthsAvail;
-	int daysAvail;
-	int timeAvailable;
+int PowerSearch::daysInMth(int month, int year) {
+	switch(month) {
+	case 1:
+		return 31;
+	case 2:
+		if (year%4 == 0) {
+			return 29;
+		} else {
+			return 28;
+		}
+	case 3:
+		return 31;
+	case 4:
+		return 30;
+	case 5:
+		return 31;
+	case 6:
+		return 30;
+	case 7:
+		return 31;
+	case 8:
+		return 31;
+	case 9:
+		return 30;
+	case 10:
+		return 31;
+	case 11:
+		return 30;
+	case 12:
+		return 31;
+	//default: throw error
+	}
+	return 0;
+}
 
-	return true;
+
+// Counts number of minutes from yr 2000, 1 Jan 0000
+int PowerSearch::numOfMin(int date, int time) {
+	int numOfYrs = date/10000;
+	int numOfMths = (date%10000)/100;
+	int numOfDays = date%100;
+	int numOfHrs = time/100;
+	int numOfMins = time%100;
+	int totalDays;
+
+	totalDays = numOfYrs*365 + numOfDays;
+
+	for (int i = 1; i <= numOfMths; i++) {
+		totalDays += daysInMth(numOfMths, numOfYrs);
+	}
+
+	return (totalDays*24*60 + numOfHrs*60 + numOfMins);
+}
+
+// Returns true if a particular period is longer than the time requested by the user
+// Evaluates based on number of minutes
+bool PowerSearch::isWithinFreePeriod(Task freePeriod, int daysNeeded, int hrsNeeded, int minsNeeded) {
+	int numMinNeeded;			
+	int numMinAvail;			// Number of minutes in the free period	
+	
+	numMinAvail = numOfMin(freePeriod.getEndDate(), freePeriod.getEndTime()) - numOfMin(freePeriod.getStartDate(), freePeriod.getStartTime());
+	numMinNeeded = daysNeeded*24*60 + hrsNeeded*60 + minsNeeded;
+
+	if (numMinAvail >= numMinNeeded) {
+		return true;
+	} else {
+	return false;
+	}
 }
 
 // Searches for a phrase within a particular time period, stores the output in currentView
@@ -76,7 +135,7 @@ void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int 
 	}
 }
 
-void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int endTime) {
+void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task>::iterator iter;
 	Task freeDateTask;
 	int freeDateStart = startDate;
@@ -101,6 +160,22 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 	//account for period between: after the end of all tasks, and still within the period of interest 
 	if ((freeDateStart < endDate) || ((freeDateStart == endDate) && (freeTimeStart < endTime))) {
 		addPeriod(freeDateStart, freeTimeStart, endDate, endTime);
+	}
+}
+
+// Input: First 4 variables refers to the period of interest, last 3 variables refer to the time required for the free slot
+// Output: Modifies currentView into a list of free dates
+void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int endTime,
+								 int daysNeeded, int hrsNeeded, int minsNeeded) {
+	currentView.clear();
+	setFreePeriods(startDate, startTime, endDate, endTime);
+
+	std::vector<Task>::iterator iter;
+
+	for (iter = freePeriods.begin(); iter != freePeriods.end(); ++iter) {
+		if (isWithinFreePeriod(*iter,daysNeeded,hrsNeeded,minsNeeded)) {
+			currentView.push_back(*iter);
+		}
 	}
 }
 

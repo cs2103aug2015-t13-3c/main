@@ -109,7 +109,7 @@ public:
 		Add addSix(testTask);
 		addSix.execute();
 
-		testPwrSearch.searchFreeSlot(151009,2300,151017,900);
+		testPwrSearch.setFreePeriods(151009,2300,151017,900);
 
 		std::vector<Task> copyTask = testPwrSearch.getFreePeriods();
 		std::vector<Task>::iterator iter;
