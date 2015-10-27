@@ -5,7 +5,7 @@
 #define COMMAND_H_
 
 #include "IO.h"
-#include "PowerSearch.h"
+
 
 // These are the valid Command keywords
 // Count: 14
@@ -136,7 +136,6 @@ private:
 	Task newTask;
 	//==== UNDO ===
 	int currViewID;
-
 	bool doAdd();
 public:
 	Add(Task task);
@@ -211,6 +210,8 @@ public:
 	~Search();
 	std::string getSearchPhrase();
 
+	virtual void setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime);
+
 	void execute();
 	void undo();
 	std::string getMessage();
@@ -255,7 +256,6 @@ private:
 	//== EXECUTE ==
 	ViewType view;
 	std::vector<std::string> viewLabels;
-	PowerSearch pwrSearch;
 	//==== UNDO ===
 	std::vector<Task> previousView;
 
@@ -264,6 +264,7 @@ private:
 	bool viewDone();
 	bool viewNotdone();
 	bool viewLabel(std::vector<std::string> label);
+	void viewWeek(int startDate, int EndDate, int StartTime, int EndTime);
 public:
 	View(ViewType newView,std::string labels);
 	~View();

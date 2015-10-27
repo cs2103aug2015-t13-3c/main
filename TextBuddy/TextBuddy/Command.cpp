@@ -88,15 +88,18 @@ void Command::getIterator() {
 	taskStoreIter = taskStore.begin() + taskStorePos;
 }
 
+// Modified on 27/10/15 by Chin Kiat Boon @@author A0096720A
+// If end date is later than start date, start/end time should not matter
 bool Command::isDateLogical(Task task) {
 	if (   (task.getStartDate() >  task.getEndDate())
-		|| (task.getStartDate() == task.getEndDate() && task.getStartTime() > task.getEndTime())
-		|| (task.getStartDate() < task.getEndDate() && task.getStartTime() > task.getEndTime())) {
+		|| (task.getStartDate() == task.getEndDate() && task.getStartTime() > task.getEndTime())) {
 			return false;
 	}
 	return true;
 }
 
+// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
+// Modified on 27/10/15 by Ng Ren Zhi @@author A0130463R
 // Sorts floating tasks to be at the bottom
 void Command::sortFloating(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
@@ -125,6 +128,7 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 	}
 }
 
+// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 // Sorts priority tasks to be at the top
 void Command::sortPriority(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
@@ -148,6 +152,7 @@ void Command::sortPriority(std::vector<Task> &taskVector) {
 	}
 }
 
+// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 // Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
 // Use this before returning to UI for display
 void Command::sortDate(std::vector<Task> &taskVector) {
@@ -156,7 +161,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		assert((i->getStartDate() < i->getEndDate()) || 
-			(i->getStartDate() == i->getEndDate() && i->getStartTime() <= i->getEndTime()));
+			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
 		for (j = i+1; j != taskVector.end(); ++j) {
 			if(j -> getStartTime() < i->getStartTime()) {
 				std::swap(*i, *j);
@@ -177,6 +182,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	sortPriority(taskVector);
 }
 
+// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 void Command::removeDoneTasks() {
 	std::vector<Task>::iterator i = currentView.begin();
 
@@ -188,6 +194,7 @@ void Command::removeDoneTasks() {
 		}
 	}
 }
+
 
 // Set currentView to be the same as taskStore
 bool Command::copyView() {
@@ -242,6 +249,9 @@ std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 std::string Command::getMessage() {
 	return "";
 }
+
+
+
 
 //==================================================
 //                        ADD
@@ -531,6 +541,10 @@ std::string Search::getSearchPhrase() {
 	return searchPhrase;
 }
 
+// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
+// Virtual method for accessing of PowerSearch
+void Search::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {}
+
 // Returns a string of names
 // If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
@@ -721,7 +735,7 @@ void View::execute() {
 	case VIEWTYPE_WEEK: {
 		logger->log(DEBUG,"Viewing week");
 		int currentDate = logger->getDate();
-		pwrSearch.setTasksWithinPeriod(currentDate, 0, currentDate+7, 2359);
+		viewWeek(currentDate, 0, currentDate+7, 2359);
 		break;}
 	case VIEWTYPE_LABELS:
 		viewLabel(viewLabels);
@@ -809,6 +823,33 @@ bool View::viewLabel(std::vector<std::string> label) {
 
 	removeDoneTasks();	// Display done tasks only when viewing "all" and "past" (Aaron)
 	return true;
+}
+
+void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
+	currentView.clear();
+	copyView();
+	sortDate(currentView);
+	removeDoneTasks();
+	std::vector<Task>::iterator iter = currentView.begin();
+
+	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
+		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
+			currentView.push_back(*iter);
+		}
+
+		// If date is the same, further filter using time in the date
+		if (iter->getStartDate() == startDate) {
+			if (iter->getStartTime() >= startTime) {
+				currentView.push_back(*iter);
+			}
+		}
+
+		if (iter->getStartDate() == endDate) {
+			if (iter->getStartTime() <= endTime) {
+				currentView.push_back(*iter);				
+			}
+		}
+	}
 }
 
 //==================================================

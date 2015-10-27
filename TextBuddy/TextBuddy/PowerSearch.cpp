@@ -1,24 +1,29 @@
 // Chin Kiat Boon @@author A0096720A
 
 #include "stdafx.h"
+#include "Command.h"
 #include "PowerSearch.h"
 
-PowerSearch::PowerSearch() {}
+PowerSearch::PowerSearch(): Search("") {}
 
+/*
 PowerSearch::PowerSearch(std::vector<Task> cmdTaskStore, std::vector<Task> cmdCurrentView) {
 	taskStore = cmdTaskStore;
 	currentView = cmdCurrentView;
-}
+}*/
 
 PowerSearch::~PowerSearch() {}
 
 //========== Private Methods ==========
 void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {
-	std::vector<Task>::iterator iter = taskStore.begin();
-	
+	copyView();
+	sortDate(currentView);
+	removeDoneTasks();
+	std::vector<Task>::iterator iter = currentView.begin();
+
 	tasksWithinPeriod.clear();
 
-	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
+	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
 		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
 			tasksWithinPeriod.push_back(*iter);
 		}
@@ -38,15 +43,16 @@ void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate
 	}
 }
 
-void PowerSearch::addFreeDate(int startDate, int startTime, int endDate, int endTime) {
-	Task freeDateTask;
+// Adds a period where there are no undone tasks on hand to freeSlots
+void PowerSearch::addFreePeriod(int startDate, int startTime, int endDate, int endTime) {
+	Task freePeriod;
 
-	freeDateTask.setStartDate(startDate);
-	freeDateTask.setStartTime(startTime);
-	freeDateTask.setEndDate(endDate);
-	freeDateTask.setEndTime(endTime);
+	freePeriod.setStartDate(startDate);
+	freePeriod.setStartTime(startTime);
+	freePeriod.setEndDate(endDate);
+	freePeriod.setEndTime(endTime);
 
-	freeDates.push_back(freeDateTask);
+	freePeriods.push_back(freePeriod);
 }
 
 
@@ -79,7 +85,7 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 	
 	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
 		if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
-			addFreeDate(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
+			addFreePeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
 		}
 		//condition set to prevent freeDateStart from "going back"
 		if ((freeDateStart < iter->getEndDate()) || ((freeDateStart == iter->getEndDate()) && (freeTimeStart < iter->getEndTime()))) {
@@ -90,7 +96,7 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 
 	//account for period between: after the end of all tasks, and still within the period of interest 
 	if ((freeDateStart < endDate) || ((freeDateStart == endDate) && (freeTimeStart < endTime))) {
-		addFreeDate(freeDateStart, freeTimeStart, endDate, endTime);
+		addFreePeriod(freeDateStart, freeTimeStart, endDate, endTime);
 	}
 }
 
@@ -112,4 +118,13 @@ void PowerSearch::searchLabel(std::string label) {
 			}
 		}
 	}
+}
+
+//========== Public Methods ==========
+std::vector<Task> PowerSearch::getTasksWithinPeriod() {
+	return tasksWithinPeriod;
+}
+
+std::vector<Task> PowerSearch::getFreePeriods() {
+	return freePeriods;
 }

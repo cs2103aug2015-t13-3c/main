@@ -487,7 +487,7 @@ std::string Utilities::getDate(int date) {
 }
 
 std::string Utilities::getTime(int time) {
-	assert(time >= 0);
+//	assert(time >= 0);
 	double time2;
 	std::stringstream stream;
 	std::string amOrPm;
