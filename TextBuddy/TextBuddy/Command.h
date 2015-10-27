@@ -102,6 +102,7 @@ protected:
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
 	void findOverlapPeriods();
+	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
 		std::vector<Task>::iterator &taskIter);
