@@ -6,12 +6,6 @@
 
 PowerSearch::PowerSearch(): Search("") {}
 
-/*
-PowerSearch::PowerSearch(std::vector<Task> cmdTaskStore, std::vector<Task> cmdCurrentView) {
-	taskStore = cmdTaskStore;
-	currentView = cmdCurrentView;
-}*/
-
 PowerSearch::~PowerSearch() {}
 
 //========== Private Methods ==========

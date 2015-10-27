@@ -1,7 +1,7 @@
 // Chin Kiat Boon @@author A0096720A
 
 #include "stdafx.h"
-/*
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TextBuddyTests {
@@ -10,7 +10,7 @@ public:
 	TEST_METHOD(Logic_intitiateHistory) {
 		History *history = history->getInstance();
 	}
-	
+
 	// Modified by Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processCommand) {
 		Logic* logic = Logic::getInstance();
@@ -60,7 +60,7 @@ public:
 		Assert::AreEqual(std::string("then"), iter->getName());
 
 		// View
-		logic->processCommand(std::string("View week"));
+		logic->processCommand(std::string("View floating"));
 		copyTask = cmd.getCurrentView();
 		iter = copyTask.begin();
 		Assert::AreEqual(std::string("then"),iter->getName());
@@ -89,7 +89,7 @@ public:
 
 		logic->processCommand(std::string("Modify 1 that"));
 		*/
-	/*
+
 		// Search
 		logic->processCommand(std::string("Search he"));	
 		copyTask = cmd.getCurrentView();
@@ -179,7 +179,7 @@ public:
 		Assert::AreEqual((size_t)3,copyTask.size());
 		Assert::AreEqual(std::string("then"),iter->getName());
 		*/
-	/*	
+	
 		//Undo View
 		logic->processCommand(std::string("Undo"));
 
@@ -241,7 +241,7 @@ public:
 
 		logic->processCommand(std::string("Modify 1 that"));
 		*/
-/*
+
 		// Search
 		logic->processCommand(std::string("Search he"));	
 		copyTask = cmd.getCurrentView();
@@ -419,7 +419,5 @@ public:
 	Assert::AreEqual(std::string("Bye World!|151126|1300|151126|1500"), testLogic.returnInfo(3));
 	}
 	*/
-	/*};
+	};
 }
-
-*/

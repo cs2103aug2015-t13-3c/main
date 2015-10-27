@@ -27,7 +27,7 @@ public:
 		testTask.setStartDate(151015);
 		testTask.setStartTime(2100);
 		testTask.setEndDate(151212);
-		testTask.setEndTime(2000);				// Endtime must equal Starttime, although not true
+		testTask.setEndTime(2000);				
 		Add addThree(testTask);
 		addThree.execute();
 		testTask.setStartDate(151015);
@@ -61,7 +61,7 @@ public:
 		++iter;
 		Assert::AreEqual(iter->getStartDate(), 151016);
 	}
-	/*
+	
 	TEST_METHOD(PowerSearch_searchFreeSlot) {
 		PowerSearch testPwrSearch;
 
@@ -138,6 +138,6 @@ public:
 		Assert::AreEqual(151017, iter->getEndDate());
 		Assert::AreEqual(900, iter->getEndTime());
 	}
-	*/
+	
 	};
 }

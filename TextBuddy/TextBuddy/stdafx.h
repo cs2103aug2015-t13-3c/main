@@ -21,5 +21,4 @@
 #include "TbLogger.h"
 #include "Task.h"
 #include "Command.h"
-#include "PowerSearch.h"
 #include "Utilities.h"
