@@ -16,9 +16,9 @@ public:
 	~PowerSearch(void);
 	
 	// To be private
-	void addFreePeriod(int startDate, int startTime, int endDate, int endTime);
+	void addPeriod(int startDate, int startTime, int endDate, int endTime);
 	void setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime);
-
+	bool isWithinFreePeriod(Task freePeriod, int daysNeeded, int timeNeeded);
 	// To remain public
 	void searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime);
 	void searchFreeSlot(int startDate, int startTime, int endDate, int endTime); // start and end of the period of interest

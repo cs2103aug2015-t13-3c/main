@@ -183,16 +183,24 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 }
 
 // Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
-void Command::removeDoneTasks() {
-	std::vector<Task>::iterator i = currentView.begin();
+void Command::removeDoneTasks(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i = taskVector.begin();
 
-	while (i != currentView.end()) {
+	while (i != taskVector.end()) {
 		if (i->getDoneStatus() == true) {
-			i = currentView.erase(i);
+			i = taskVector.erase(i);
 		} else {
 			++i;
 		}
 	}
+}
+
+// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
+void Command::findOverlapPeriods() {
+	overlapPeriods.clear();
+
+
+	
 }
 
 
@@ -300,7 +308,7 @@ bool Add::doAdd() {
 
 	sortDate(taskStore);
 	sortDate(currentView);
-	removeDoneTasks();
+	removeDoneTasks(currentView);
 	return true;
 }
 
@@ -355,7 +363,7 @@ void Delete::doDelete() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
-	removeDoneTasks();
+	removeDoneTasks(currentView);
 }
 
 // Added on 24/10/15 by Ng Ren Zhi @@author A0130463R
@@ -771,7 +779,7 @@ bool View::viewTaskType(TaskType type) {
 	}
 
 	sortDate(currentView);
-	removeDoneTasks();		// Done tasks only displayed when viewing "all" or "past" (Aaron)
+	removeDoneTasks(currentView);		// Done tasks only displayed when viewing "all" or "past" (Aaron)
 	return true;
 }
 
@@ -821,7 +829,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 		}
 	}
 
-	removeDoneTasks();	// Display done tasks only when viewing "all" and "past" (Aaron)
+	removeDoneTasks(currentView);	// Display done tasks only when viewing "all" and "past" (Aaron)
 	return true;
 }
 
@@ -829,7 +837,7 @@ void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
 	currentView.clear();
 	copyView();
 	sortDate(currentView);
-	removeDoneTasks();
+	removeDoneTasks(currentView);
 	std::vector<Task>::iterator iter = currentView.begin();
 
 	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {

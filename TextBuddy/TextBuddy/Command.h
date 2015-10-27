@@ -77,6 +77,7 @@ private:
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
+	std::vector<Task> overlapPeriods;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -99,7 +100,8 @@ protected:
 	void sortFloating(std::vector<Task> &taskVector);
 	void sortPriority(std::vector<Task> &taskVector);
 	void sortDate(std::vector<Task> &taskVector);
-	void removeDoneTasks(); // Removes done tasks from currentView
+	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
+	void findOverlapPeriods();
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
 		std::vector<Task>::iterator &taskIter);

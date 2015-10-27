@@ -12,7 +12,7 @@ PowerSearch::~PowerSearch() {}
 void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {
 	copyView();
 	sortDate(currentView);
-	removeDoneTasks();
+	removeDoneTasks(currentView);
 	std::vector<Task>::iterator iter = currentView.begin();
 
 	tasksWithinPeriod.clear();
@@ -38,7 +38,7 @@ void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate
 }
 
 // Adds a period where there are no undone tasks on hand to freeSlots
-void PowerSearch::addFreePeriod(int startDate, int startTime, int endDate, int endTime) {
+void PowerSearch::addPeriod(int startDate, int startTime, int endDate, int endTime) {
 	Task freePeriod;
 
 	freePeriod.setStartDate(startDate);
@@ -49,6 +49,16 @@ void PowerSearch::addFreePeriod(int startDate, int startTime, int endDate, int e
 	freePeriods.push_back(freePeriod);
 }
 
+// Returns true if a particular period is longer than the time requested by the user
+// Not implemented yet
+bool PowerSearch::isWithinFreePeriod(Task freePeriod, int daysNeeded, int timeNeeded) {
+	int yrsAvail;
+	int mthsAvail;
+	int daysAvail;
+	int timeAvailable;
+
+	return true;
+}
 
 // Searches for a phrase within a particular time period, stores the output in currentView
 void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime) {
@@ -79,7 +89,7 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 	
 	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
 		if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
-			addFreePeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
+			addPeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
 		}
 		//condition set to prevent freeDateStart from "going back"
 		if ((freeDateStart < iter->getEndDate()) || ((freeDateStart == iter->getEndDate()) && (freeTimeStart < iter->getEndTime()))) {
@@ -90,7 +100,7 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 
 	//account for period between: after the end of all tasks, and still within the period of interest 
 	if ((freeDateStart < endDate) || ((freeDateStart == endDate) && (freeTimeStart < endTime))) {
-		addFreePeriod(freeDateStart, freeTimeStart, endDate, endTime);
+		addPeriod(freeDateStart, freeTimeStart, endDate, endTime);
 	}
 }
 
@@ -122,3 +132,4 @@ std::vector<Task> PowerSearch::getTasksWithinPeriod() {
 std::vector<Task> PowerSearch::getFreePeriods() {
 	return freePeriods;
 }
+
