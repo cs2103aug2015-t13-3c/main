@@ -799,7 +799,32 @@ void View::execute() {
 	case VIEWTYPE_WEEK: {
 		logger->log(DEBUG,"Viewing week");
 		int currentDate = logger->getDate();
-		viewWeek(currentDate, 0, currentDate+7, 2359);
+		int weekDate = currentDate + 7;
+		// In case weekDate overruns to next month
+		if(((weekDate%10000)/100) == 1 || 
+			((weekDate%10000)/100) == 3 || 
+			((weekDate%10000)/100) == 5 || 
+			((weekDate%10000)/100) == 7 || 
+			((weekDate%10000)/100) == 8 || 
+			((weekDate%10000)/100) == 10 || 
+			((weekDate%10000)/100) == 12) {
+				if(weekDate > 31) {
+					weekDate += 100 - 31;
+				}
+		} else if (((weekDate%10000)/100) == 4 || 
+			((weekDate%10000)/100) == 6 || 
+			((weekDate%10000)/100) == 9 || 
+			((weekDate%10000)/100) == 11) {
+				if(weekDate > 30) {
+					weekDate += 100 - 30;
+				}
+		} else if (((weekDate%10000)/100) == 2) {
+				if(weekDate > 28) {
+					weekDate += 100 - 28;
+				}
+		}
+
+		viewWeek(currentDate, 0, weekDate, 2359);
 		break;}
 	case VIEWTYPE_LABELS:
 		viewLabel(viewLabels);
@@ -897,14 +922,16 @@ bool View::viewLabel(std::vector<std::string> label) {
 	return true;
 }
 
+// Modified by Ren Zhi 28/10/15 - Added weekStore
 void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> weekStore;
 	currentView.clear();
-	copyView();
-	sortDate(currentView);
-	removeDoneTasks(currentView);
-	std::vector<Task>::iterator iter = currentView.begin();
+	weekStore = taskStore;
+	sortDate(weekStore);
+	removeDoneTasks(weekStore);
+	std::vector<Task>::iterator iter = weekStore.begin();
 
-	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
+	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
 		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
 			currentView.push_back(*iter);
 		}

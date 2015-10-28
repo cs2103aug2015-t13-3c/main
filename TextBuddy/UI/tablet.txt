@@ -18,6 +18,38 @@
 		}
 		,
 		{
+			"name": "new thing",
+			"type": "EVENT",
+			"uniqueID": 18,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
+		}
+		,
+		{
+			"name": "new thing",
+			"type": "EVENT",
+			"uniqueID": 18,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
+		}
+		,
+		{
 			"name": "foo",
 			"type": "EVENT",
 			"uniqueID": 12,
@@ -26,10 +58,10 @@
 			"isDone": false,
 			"isPriority": false,
 
-			"startDate": 151025,
+			"startDate": 151030,
 			"startTime": 1000,
 
-			"endDate": 151025,
+			"endDate": 151030,
 			"endTime": 1500
 		}
 		,
@@ -74,10 +106,10 @@
 			"isDone": false,
 			"isPriority": false,
 
-			"startDate": 151025,
+			"startDate": 151101,
 			"startTime": 1700,
 
-			"endDate": 151025,
+			"endDate": 151101,
 			"endTime": 1900
 		}
 		,
@@ -110,22 +142,6 @@
 			"startTime": -1,
 
 			"endDate": 151028,
-			"endTime": -1
-		}
-		,
-		{
-			"name": "sweet potato fries",
-			"type": "FLOATING",
-			"uniqueID": 16,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": -1,
-
-			"endDate": 0,
 			"endTime": -1
 		}
 	]
