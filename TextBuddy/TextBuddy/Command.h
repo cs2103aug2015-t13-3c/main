@@ -235,6 +235,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class UnmarkDone: public Command {
@@ -252,6 +254,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class View: public Command {
@@ -275,6 +279,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class ClearAll: public Command {
@@ -288,6 +294,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class DisplayAll: public Command {
@@ -302,6 +310,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class Undo: public Command {
@@ -324,6 +334,7 @@ class Load: public Command {
 private:
 	IO* io;
 	std::string filePath;
+	bool loadSuccess;
 
 public:
 	Load();
@@ -332,12 +343,15 @@ public:
 	std::string getFilePath();
 
 	void execute();
+
+	std::string getMessage();
 };
 
 class Save: public Command {
 private:
 	IO* io;
 	std::string filePath;
+	bool saveSuccess;
 
 public:
 	Save();
@@ -346,6 +360,8 @@ public:
 	std::string getFilePath();
 
 	void execute();
+
+	std::string getMessage();
 };
 
 class Exit: public Command {

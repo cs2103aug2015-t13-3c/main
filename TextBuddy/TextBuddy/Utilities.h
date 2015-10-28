@@ -32,6 +32,7 @@ public:
 	static std::string	taskTypeToString(TaskType type);
 	static std::string	fieldVecToString(std::vector<FieldType> fields);
 	static std::string	vecToString(std::vector<std::string> vecString);
+	static std::string	viewTypeToString(ViewType view);
 
 	//========== Comparisons and Modifiers ==========
 	static bool			containsAny(std::string searchWord, std::string words);

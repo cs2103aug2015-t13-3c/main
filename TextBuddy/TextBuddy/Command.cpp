@@ -201,7 +201,7 @@ void Command::findOverlapPeriods() {
 	overlapPeriods.clear();
 
 	std::vector<Task> taskStoreCopy = taskStore;
-	
+
 	// Tasks that are already done will not be marked as "overlap"
 	removeDoneTasks(taskStoreCopy);
 	sortDate(taskStoreCopy);
@@ -212,7 +212,7 @@ void Command::findOverlapPeriods() {
 
 	std::vector<Task>::iterator i = taskStoreCopy.begin();
 	std::vector<Task>::iterator j = taskStoreCopy.begin()+1;
-	
+
 	while ((i != taskStoreCopy.end()) && (j != taskStoreCopy.end())) {
 		// Overlap occurs
 		if (j->getStartDate() < i->getEndDate()) {
@@ -556,8 +556,8 @@ bool Modify::updateFLOATING() {
 bool Modify::updateTODO() {
 	if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
 		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
-		taskStoreIter->setType(TODO);
-		return true;
+			taskStoreIter->setType(TODO);
+			return true;
 	}
 	return false;
 }
@@ -701,6 +701,10 @@ void Markdone::undo() {
 	findOverlapPeriods();
 }
 
+std::string Markdone::getMessage() {
+	return "\"" + currViewIter->getName() + "\" marked as done";
+}
+
 //============= MARKDONE : PRIVATE METHODS ===========
 
 void Markdone::markDone() {
@@ -743,6 +747,10 @@ void UnmarkDone::undo() {
 	}
 
 	findOverlapPeriods();
+}
+
+std::string UnmarkDone::getMessage() {
+	return "\"" + currViewIter->getName() + "\" marked as not done";
 }
 
 //=========== UNMARKDONE : PRIVATE METHODS ==========
@@ -812,6 +820,14 @@ void View::execute() {
 
 void View::undo() {
 	currentView = previousView;
+}
+
+std::string View::getMessage() {
+	std::string viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
+	if(Utilities::viewTypeToString(view) == VIEW_LABEL) {
+		viewMsg += " " + Utilities::vecToString(viewLabels);
+	}
+	return viewMsg;
 }
 
 //============== VIEW : PRIVATE METHODS ============
@@ -932,8 +948,11 @@ void ClearAll::execute() {
 
 void ClearAll::undo() {
 	currentView = previousView;
-	taskStore = previousView;
-	// TODO: feedback
+	taskStore = previousView;	
+}
+
+std::string ClearAll::getMessage() {
+	return "TextBuddy cleared";
 }
 
 //==================================================
@@ -972,8 +991,11 @@ void DisplayAll::formatDefaultView() {
 }
 
 void DisplayAll::undo() {
-	currentView = previousView;
-	// TODO: feedback
+	currentView = previousView;	
+}
+
+std::string DisplayAll::getMessage() {
+	return "All tasks displayed";
 }
 
 //==================================================
@@ -1013,6 +1035,7 @@ Load::Load() : Command(LOAD) {
 // Load new file path, which is already parsed
 Load::Load(std::string newFilePath) : Command(LOAD) {
 	filePath = newFilePath;
+	loadSuccess = true;
 }
 
 Load::~Load() {}
@@ -1029,7 +1052,16 @@ void Load::execute() {
 		copyView();
 	} catch (std::exception e) {
 		taskStore = temp;
+		loadSuccess = false;
 		throw e;
+	}
+}
+
+std::string Load::getMessage() {
+	if(loadSuccess) {
+		return "\"" + filePath + "\" loaded successfully!";
+	} else {
+		return "\"" + filePath + "\" does not exist";
 	}
 }
 
@@ -1055,8 +1087,15 @@ std::string Save::getFilePath() {
 }
 
 void Save::execute() {
-	io->setFilePath(filePath,taskStore); // Returns false if unable to change file path
-	// TODO: feedback
+	saveSuccess = io->setFilePath(filePath,taskStore); // Returns false if unable to change file path
+}
+
+std::string Save::getMessage() {
+	if(saveSuccess) {
+		return "\"" + filePath + "\" saved successfully!";
+	} else {
+		return "Unable to save \"" + filePath + "\". Invalid path name.";
+	}
 }
 
 //==================================================

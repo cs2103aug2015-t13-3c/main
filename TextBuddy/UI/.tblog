@@ -1310,3 +1310,64 @@ Wed Oct 28 22:34:46 2015 Parsed date: -1
 Wed Oct 28 22:34:46 2015 Parsed day: -1
 Wed Oct 28 22:34:46 2015 Setting task type as: EVENT
 Wed Oct 28 22:34:46 2015 Parsed task of type: EVENT
+Wed Oct 28 23:02:28 2015 Parsing "modify"
+Wed Oct 28 23:02:28 2015 Fields extracted: from to
+Wed Oct 28 23:02:28 2015 Parsing task
+Wed Oct 28 23:02:28 2015 Parsing field keyword: name
+Wed Oct 28 23:02:28 2015 Parsing string: 
+Wed Oct 28 23:02:28 2015 Parsing field keyword: from
+Wed Oct 28 23:02:28 2015 Parsing string: 9 pm
+Wed Oct 28 23:02:28 2015 Parsed date: -1
+Wed Oct 28 23:02:28 2015 Parsed day: -1
+Wed Oct 28 23:02:28 2015 Setting task type as: EVENT
+Wed Oct 28 23:02:28 2015 Parsed day: 151028
+Wed Oct 28 23:02:28 2015 Parsing field keyword: to
+Wed Oct 28 23:02:28 2015 Parsing string: 11 pm
+Wed Oct 28 23:02:28 2015 Parsed date: -1
+Wed Oct 28 23:02:28 2015 Parsed day: -1
+Wed Oct 28 23:02:28 2015 Setting task type as: EVENT
+Wed Oct 28 23:02:28 2015 Parsed task of type: EVENT
+Wed Oct 28 23:02:49 2015 Parsing "exit"
+Wed Oct 28 23:02:49 2015 Logger terminated
+
+Wed Oct 28 23:47:28 2015 Logger initialised
+Wed Oct 28 23:47:28 2015 Log level default: 1
+Wed Oct 28 23:47:28 2015 Parser instantiated
+Wed Oct 28 23:47:28 2015 Log level changed: 0
+Wed Oct 28 23:47:28 2015 Parsing "display"
+Wed Oct 28 23:47:42 2015 Parsing "load"
+Wed Oct 28 23:48:07 2015 Parsing "modify"
+Wed Oct 28 23:48:07 2015 Fields extracted: from
+Wed Oct 28 23:48:07 2015 Parsing task
+Wed Oct 28 23:48:07 2015 Parsing field keyword: name
+Wed Oct 28 23:48:07 2015 Parsing string: 
+Wed Oct 28 23:48:07 2015 Parsing field keyword: on
+Wed Oct 28 23:48:07 2015 Parsing string: 1/1/15
+Wed Oct 28 23:48:07 2015 Parsed date: -1
+Wed Oct 28 23:48:07 2015 Parsed day: -1
+Wed Oct 28 23:48:07 2015 Setting task type as: EVENT
+Wed Oct 28 23:48:07 2015 Parsed task of type: EVENT
+Wed Oct 28 23:48:20 2015 Parsing "delete"
+Wed Oct 28 23:48:23 2015 Parsing "undo"
+Wed Oct 28 23:49:02 2015 Parsing "done"
+Wed Oct 28 23:49:16 2015 Logger initialised
+Wed Oct 28 23:49:16 2015 Log level default: 1
+Wed Oct 28 23:49:17 2015 Parser instantiated
+Wed Oct 28 23:49:17 2015 Log level changed: 0
+Wed Oct 28 23:49:17 2015 Parsing "display"
+Wed Oct 28 23:49:23 2015 Parsing "done"
+Wed Oct 28 23:49:41 2015 Logger initialised
+Wed Oct 28 23:49:41 2015 Log level default: 1
+Wed Oct 28 23:49:41 2015 Parser instantiated
+Wed Oct 28 23:49:41 2015 Log level changed: 0
+Wed Oct 28 23:49:41 2015 Parsing "display"
+Wed Oct 28 23:49:46 2015 Parsing "display"
+Wed Oct 28 23:50:04 2015 Parsing "view"
+Wed Oct 28 23:50:04 2015 Viewing...
+Wed Oct 28 23:50:11 2015 Parsing "view"
+Wed Oct 28 23:50:11 2015 Viewing...
+Wed Oct 28 23:50:36 2015 Parsing "view"
+Wed Oct 28 23:50:36 2015 Viewing...
+Wed Oct 28 23:50:42 2015 Parsing "exit"
+Wed Oct 28 23:50:42 2015 Logger terminated
+

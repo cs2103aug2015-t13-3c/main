@@ -348,6 +348,42 @@ std::string Utilities::vecToString(std::vector<std::string> vecString) {
 	return newString;
 }
 
+std::string	Utilities::viewTypeToString(ViewType view) {
+	std::string viewString;
+
+	switch(view) {
+	case VIEWTYPE_INVALID:
+		viewString = "invalid";
+		break;
+	case VIEWTYPE_ALL:
+		viewString = VIEW_ALL;
+		break;
+	case VIEWTYPE_FLOATING:
+		viewString = VIEW_FLOATING;
+		break;
+	case VIEWTYPE_EVENT:
+		viewString = VIEW_EVENT;
+		break;
+	case VIEWTYPE_TODO:
+		viewString = VIEW_TODO;
+		break;
+	case VIEWTYPE_NOTDONE:
+		viewString = VIEW_NOTDONE;
+		break;
+	case VIEWTYPE_PAST:
+		viewString = VIEW_PAST;
+		break;
+	case VIEWTYPE_WEEK:
+		viewString = VIEW_WEEK;
+		break;
+	case VIEWTYPE_LABELS:
+		viewString = VIEW_WEEK;
+		break;
+	}
+
+	return viewString;
+}
+
 //==================================================
 //             COMPARISONS AND MODIFIERS
 //==================================================

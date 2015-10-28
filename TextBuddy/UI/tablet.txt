@@ -2,6 +2,22 @@
 	"TextBuddy Items":
 	[
 		{
+			"name": "mocha mcflurry",
+			"type": "EVENT",
+			"uniqueID": 15,
+			"label": ["macs"],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
+		}
+		,
+		{
 			"name": "foo",
 			"type": "EVENT",
 			"uniqueID": 12,
@@ -83,9 +99,25 @@
 		,
 		{
 			"name": "mudpie mcflurry",
-			"type": "FLOATING",
+			"type": "TODO",
 			"uniqueID": 14,
 			"label": ["macs"],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151028,
+			"startTime": -1,
+
+			"endDate": 151028,
+			"endTime": -1
+		}
+		,
+		{
+			"name": "sweet potato fries",
+			"type": "FLOATING",
+			"uniqueID": 16,
+			"label": [],
 
 			"isDone": false,
 			"isPriority": false,
