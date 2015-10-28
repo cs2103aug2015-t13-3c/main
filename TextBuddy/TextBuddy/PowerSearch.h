@@ -38,7 +38,8 @@ public:
 	void searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime);
 	void searchFreeSlot(int startDate, int startTime, int endDate, int endTime, 
 		int daysNeeded, int hrsNeeded, int minsNeeded); // Start and end of the period of interest
-	void searchLabel(std::string label);
+	
+	void execute();
 
 };
 

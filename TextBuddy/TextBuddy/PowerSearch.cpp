@@ -200,22 +200,10 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 	}
 }
 
-void PowerSearch::searchLabel(std::string label) {
-	std::vector<std::string> searchVector;
-
-	std::vector<Task>::iterator taskIter;
-	std::vector<std::string>::iterator setIter;
-
-	currentView.clear();
-
-	for (taskIter == taskStore.begin(); taskIter != taskStore.end(); ++taskIter) {
-		searchVector = taskIter->getLabels();
-
-		for (setIter == searchVector.begin(); setIter != searchVector.end(); ++setIter) {
-			if (*setIter == label) {
-				currentView.push_back(*taskIter);
-				break;
-			}
-		}
+void PowerSearch::execute() {
+	if (searchPhrase == "") {
+		searchFreeSlot(startDate,startTime, endDate, endTime, daysNeeded, hrsNeeded, minsNeeded);
+	} else {
+		searchInfo(searchPhrase, startDate, startTime, endDate, endTime);
 	}
 }

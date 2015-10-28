@@ -343,6 +343,7 @@ void Add::undo() {
 	taskToDelete.execute();
 }
 
+// Modified on 29/10/15 by Chin Kiat Boon @@author A0096720A
 std::string Add::getMessage() {
 	if (isOverlap) {
 		return "Task to be added overlaps with existing task!";
@@ -372,6 +373,7 @@ bool Add::doAdd() {
 	return true;
 }
 
+// Added on 29/10/15 by Chin Kiat Boon @@author A0096720A
 void Add::checkOverlap() {
 	std::vector<Task> taskStoreCopy = taskStore;
 	removeDoneTasks(taskStoreCopy);
