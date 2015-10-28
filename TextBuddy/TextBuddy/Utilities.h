@@ -37,10 +37,7 @@ public:
 	//========== Comparisons and Modifiers ==========
 	static bool			containsAny(std::string searchWord, std::string words);
 	static bool			isInt(std::string str);
-	static bool			isDateField(FieldType field);
-	static bool			isFieldKeyword(std::string str);
 	static bool			isSubstring(std::string subString, std::string word);
-	static std::vector<std::string>	removeSlashKeywords(std::vector<std::string> vecString);
 	// Strict weak ordering function for isSubstring()
 	static bool			equalsIgnoreCase_char(char l, char r); 
 	// Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)

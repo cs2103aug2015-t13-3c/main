@@ -157,7 +157,7 @@ private:
 	//==== UNDO ===
 	Task taskToBeDeleted;
 
-	void prepDelete();
+	void setUndoDeleteInfo();
 	void doDelete();
 public:
 	Delete(int taskID);
