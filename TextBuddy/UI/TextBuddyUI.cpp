@@ -18,6 +18,7 @@ int main() {
 }
 
 TextBuddyUI::TextBuddyUI() {
+	helpMode = false;
 	logger = TbLogger::getInstance();
 	InitializeComponent();
 	labels = new std::vector<std::string>;
@@ -51,6 +52,8 @@ TextBuddyUI::TextBuddyUI() {
 	keywords->Add(TO);
 	keywords->Add(ON);
 	keywords->Add(AT);
+	this->help->Image = Image::FromFile(System::AppDomain::CurrentDomain->BaseDirectory + "helpPage.png");
+	this->Icon = gcnew System::Drawing::Icon(System::AppDomain::CurrentDomain->BaseDirectory + "tick.ico");	
 }
 
 TextBuddyUI::~TextBuddyUI() {

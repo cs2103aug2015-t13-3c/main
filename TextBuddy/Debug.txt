@@ -2,51 +2,19 @@
 	"TextBuddy Items":
 	[
 		{
-			"name": "foo",
+			"name": "hello",
 			"type": "EVENT",
-			"uniqueID": 9,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": true,
-
-			"startDate": 151025,
-			"startTime": 0,
-
-			"endDate": 151025,
-			"endTime": 300
-		}
-		,
-		{
-			"name": "bar",
-			"type": "TODO",
-			"uniqueID": 8,
-			"label": ["work"],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151025,
-			"startTime": 0,
-
-			"endDate": 151025,
-			"endTime": 0
-		}
-		,
-		{
-			"name": "foobar",
-			"type": "FLOATING",
-			"uniqueID": 9,
+			"uniqueID": 10,
 			"label": [],
 
 			"isDone": false,
 			"isPriority": false,
 
-			"startDate": 0,
-			"startTime": -1,
+			"startDate": 151028,
+			"startTime": 1000,
 
-			"endDate": 0,
-			"endTime": -1
+			"endDate": 151028,
+			"endTime": 2100
 		}
 	]
 }

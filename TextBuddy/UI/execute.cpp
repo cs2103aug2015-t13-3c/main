@@ -7,6 +7,13 @@ using namespace UserInterface;
 System::Void TextBuddyUI::input_KeyUp_1(System::Object^  sender, 
 									System::Windows::Forms::KeyEventArgs^  e) {
 	cursorPosition = input->SelectionStart;
+	if(helpMode) {
+		helpMode = false;
+		help->Visible = false;
+		help->SendToBack();
+		input->Clear();
+		return;
+	}
 	if(e->KeyCode == Keys::Return) { // If user presses 'Return' key
 		getInput();
 		processAndExecute();
@@ -35,6 +42,12 @@ void TextBuddyUI::getInput() {
 void TextBuddyUI::processAndExecute() {
 	feedback->Clear();
 	std::string message;
+	if(input->Text == "help") {
+		helpMode = true;
+		help->Visible = true;
+		help->BringToFront();
+		return;
+	}
 	try {
 		feedback->ForeColor = Color::Green;
 		message = logic->processCommand(*userInput);

@@ -82,7 +82,13 @@ void TextBuddyUI::viewAutoComplete() {
 }
 
 void TextBuddyUI::putSuggestedText(String^ keyword) {
-	input->Select(cursorPosition-1,1);
+	if(cursorPosition > 4 + keyword->Length) {
+		return;
+	}
+	if(input->Text[6] !=  keyword[1]) {
+		return;
+	}
+	input->Select(5,input->Text->Length - 6);
 	input->SelectedText = keyword;
 	input->Select(cursorPosition,keyword->Length);
 }
