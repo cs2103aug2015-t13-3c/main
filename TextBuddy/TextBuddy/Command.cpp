@@ -219,12 +219,11 @@ void Command::findOverlapPeriods() {
 				addPeriod(overlapPeriods, j->getStartDate(), j->getStartTime(), i->getEndDate(), i->getEndTime());
 				++i;
 			}
-			++j;
-
 		} else if (j->getStartDate() >= i->getEndDate()) {
 			++i;
-			++j;
 		}
+		++j;
+
 	}
 }
 
