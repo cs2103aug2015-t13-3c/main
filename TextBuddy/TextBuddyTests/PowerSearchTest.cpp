@@ -64,7 +64,7 @@ public:
 	
 	TEST_METHOD(PowerSearch_searchFreeSlot) {
 		PowerSearch testPwrSearch;
-
+		
 		//Create method to "fit in" an event that may or may not exceed the range of free period
 		//Or can set parameter x such that free period mentioned must exceed x
 		Task testTask;
@@ -73,6 +73,7 @@ public:
 		testTask.setEndDate(151010);					//is endDate set to be the same as startDate if no range?
 		testTask.setEndTime(1500);						//note: throw exception if endtime < starttime
 		Add addOne(testTask);
+		addOne.clearTaskStore();
 		addOne.execute();
 
 		testTask.setStartDate(151010);

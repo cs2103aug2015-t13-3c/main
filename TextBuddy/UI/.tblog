@@ -1371,3 +1371,134 @@ Wed Oct 28 23:50:36 2015 Viewing...
 Wed Oct 28 23:50:42 2015 Parsing "exit"
 Wed Oct 28 23:50:42 2015 Logger terminated
 
+Wed Oct 28 23:57:11 2015 Logger initialised
+Wed Oct 28 23:57:11 2015 Log level default: 1
+Wed Oct 28 23:57:11 2015 Parser instantiated
+Wed Oct 28 23:57:11 2015 Log level changed: 0
+Wed Oct 28 23:57:11 2015 Parsing "display"
+Wed Oct 28 23:58:01 2015 Parsing "add"
+Wed Oct 28 23:58:01 2015 Parsing task
+Wed Oct 28 23:58:01 2015 Parsing field keyword: name
+Wed Oct 28 23:58:01 2015 Parsing string: Vanilla cone
+Wed Oct 28 23:58:01 2015 Parsing field keyword: :
+Wed Oct 28 23:58:01 2015 Parsing string: macs
+Wed Oct 28 23:58:01 2015 Parsing field keyword: from
+Wed Oct 28 23:58:01 2015 Parsing string: 1/12/15
+Wed Oct 28 23:58:01 2015 Parsed by date: -1
+Wed Oct 28 23:58:01 2015 Parsed by day: -1
+Wed Oct 28 23:58:01 2015 Setting task type as: EVENT
+Wed Oct 28 23:58:01 2015 Parsing field keyword: to
+Wed Oct 28 23:58:01 2015 Parsing string: 2/12/15
+Wed Oct 28 23:58:01 2015 Parsed by date: -1
+Wed Oct 28 23:58:01 2015 Parsed by day: -1
+Wed Oct 28 23:58:01 2015 Parsed task of type: EVENT
+Thu Oct 29 00:23:57 2015 Logger initialised
+Thu Oct 29 00:23:57 2015 Log level default: 1
+Thu Oct 29 00:23:57 2015 Parser instantiated
+Thu Oct 29 00:23:57 2015 Log level changed: 0
+Thu Oct 29 00:23:57 2015 Parsing "display"
+Thu Oct 29 00:24:20 2015 Parsing "modify"
+Thu Oct 29 00:24:20 2015 Fields extracted: from to
+Thu Oct 29 00:24:20 2015 Parsing task
+Thu Oct 29 00:24:20 2015 Parsing field keyword: name
+Thu Oct 29 00:24:20 2015 Parsing string: 
+Thu Oct 29 00:24:20 2015 Parsing field keyword: from
+Thu Oct 29 00:24:20 2015 Parsing string: 1 1 15
+Thu Oct 29 00:24:20 2015 Checking that 1 = 1
+Thu Oct 29 00:24:20 2015 Parsed by date: 150101
+Thu Oct 29 00:24:20 2015 Setting task type as: EVENT
+Thu Oct 29 00:24:20 2015 Parsing field keyword: to
+Thu Oct 29 00:24:20 2015 Parsing string: 1 15
+Thu Oct 29 00:24:20 2015 Parsed by date: -1
+Thu Oct 29 00:24:20 2015 Parsed by day: -1
+Thu Oct 29 00:24:20 2015 Parsed task of type: EVENT
+Thu Oct 29 00:24:36 2015 Logger initialised
+Thu Oct 29 00:24:36 2015 Log level default: 1
+Thu Oct 29 00:24:36 2015 Parser instantiated
+Thu Oct 29 00:24:36 2015 Log level changed: 0
+Thu Oct 29 00:24:37 2015 Parsing "display"
+Thu Oct 29 00:24:47 2015 Parsing "modify"
+Thu Oct 29 00:24:47 2015 Fields extracted: from
+Thu Oct 29 00:24:47 2015 Parsing task
+Thu Oct 29 00:24:47 2015 Parsing field keyword: name
+Thu Oct 29 00:24:47 2015 Parsing string: 
+Thu Oct 29 00:24:47 2015 Parsing field keyword: on
+Thu Oct 29 00:24:47 2015 Parsing string: 1 15
+Thu Oct 29 00:24:47 2015 Parsed by date: -1
+Thu Oct 29 00:24:47 2015 Parsed by day: -1
+Thu Oct 29 00:24:47 2015 Setting task type as: EVENT
+Thu Oct 29 00:24:47 2015 Parsed task of type: EVENT
+Thu Oct 29 00:25:45 2015 Parsing "add"
+Thu Oct 29 00:25:45 2015 Parsing task
+Thu Oct 29 00:25:45 2015 Parsing field keyword: name
+Thu Oct 29 00:25:45 2015 Parsing string: new thing
+Thu Oct 29 00:25:45 2015 Parsing field keyword: on
+Thu Oct 29 00:25:45 2015 Parsing string: 5 12 15
+Thu Oct 29 00:25:45 2015 Checking that 12 = 12
+Thu Oct 29 00:25:45 2015 Parsed by date: 151205
+Thu Oct 29 00:25:45 2015 Setting task type as: EVENT
+Thu Oct 29 00:25:45 2015 Parsed task of type: EVENT
+Thu Oct 29 00:26:08 2015 Parsing "modify"
+Thu Oct 29 00:26:08 2015 Fields extracted: from to
+Thu Oct 29 00:26:08 2015 Parsing task
+Thu Oct 29 00:26:08 2015 Parsing field keyword: name
+Thu Oct 29 00:26:08 2015 Parsing string: 
+Thu Oct 29 00:26:08 2015 Parsing field keyword: from
+Thu Oct 29 00:26:08 2015 Parsing string: 1115
+Thu Oct 29 00:26:08 2015 Parsed by date: -1
+Thu Oct 29 00:26:08 2015 Parsed by day: -1
+Thu Oct 29 00:26:08 2015 Setting task type as: EVENT
+Thu Oct 29 00:26:08 2015 Parsed by day: 151029
+Thu Oct 29 00:26:08 2015 Parsing field keyword: to
+Thu Oct 29 00:26:08 2015 Parsing string: 115
+Thu Oct 29 00:26:08 2015 Parsed by date: -1
+Thu Oct 29 00:26:08 2015 Parsed by day: -1
+Thu Oct 29 00:26:08 2015 Setting task type as: EVENT
+Thu Oct 29 00:26:08 2015 Parsed task of type: EVENT
+Thu Oct 29 00:26:48 2015 Parsing "add"
+Thu Oct 29 00:26:48 2015 Parsing task
+Thu Oct 29 00:26:48 2015 Parsing field keyword: name
+Thu Oct 29 00:26:48 2015 Parsing string: new thing
+Thu Oct 29 00:26:48 2015 Parsing field keyword: on
+Thu Oct 29 00:26:48 2015 Parsing string: 11215
+Thu Oct 29 00:26:48 2015 Parsed by date: -1
+Thu Oct 29 00:26:48 2015 Parsed by day: -1
+Thu Oct 29 00:26:48 2015 Setting task type as: EVENT
+Thu Oct 29 00:26:48 2015 Parsed task of type: EVENT
+Thu Oct 29 00:27:01 2015 Parsing "undo"
+Thu Oct 29 00:27:06 2015 Parsing "redo"
+Thu Oct 29 00:27:09 2015 Parsing "undo"
+Thu Oct 29 00:27:11 2015 Parsing "undo"
+Thu Oct 29 00:41:33 2015 Logger initialised
+Thu Oct 29 00:41:33 2015 Log level default: 1
+Thu Oct 29 00:41:33 2015 Parser instantiated
+Thu Oct 29 00:41:33 2015 Log level changed: 0
+Thu Oct 29 00:41:33 2015 Parsing "display"
+Thu Oct 29 00:41:41 2015 Parsing "display"
+Thu Oct 29 00:41:46 2015 Parsing "view"
+Thu Oct 29 00:41:46 2015 Viewing...
+Thu Oct 29 00:42:01 2015 Parsing "view"
+Thu Oct 29 00:42:01 2015 Viewing...
+Thu Oct 29 00:42:04 2015 Parsing "undo"
+Thu Oct 29 00:42:20 2015 Parsing "exit"
+Thu Oct 29 00:42:20 2015 Logger terminated
+
+Thu Oct 29 00:43:39 2015 Logger initialised
+Thu Oct 29 00:43:39 2015 Log level default: 1
+Thu Oct 29 00:43:39 2015 Parser instantiated
+Thu Oct 29 00:43:39 2015 Log level changed: 0
+Thu Oct 29 00:43:39 2015 Parsing "display"
+Thu Oct 29 00:43:55 2015 Parsing "view"
+Thu Oct 29 00:43:55 2015 Viewing...
+Thu Oct 29 00:43:55 2015 Viewing week
+Thu Oct 29 00:51:31 2015 Logger initialised
+Thu Oct 29 00:51:31 2015 Log level default: 1
+Thu Oct 29 00:51:31 2015 Parser instantiated
+Thu Oct 29 00:51:31 2015 Log level changed: 0
+Thu Oct 29 00:51:31 2015 Parsing "display"
+Thu Oct 29 00:51:43 2015 Parsing "view"
+Thu Oct 29 00:51:43 2015 Viewing...
+Thu Oct 29 00:51:43 2015 Viewing week
+Thu Oct 29 00:51:48 2015 Parsing "exit"
+Thu Oct 29 00:51:48 2015 Logger terminated
+
