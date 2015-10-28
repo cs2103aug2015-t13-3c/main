@@ -1158,3 +1158,155 @@ Sun Oct 25 23:07:24 2015 Log level default: 1
 Sun Oct 25 23:07:24 2015 Parser instantiated
 Sun Oct 25 23:07:24 2015 Log level changed: 0
 >>>>>>> 9cd16c80a46699c61d5f46178b24bfcef11a6826
+Wed Oct 28 21:37:31 2015 Logger initialised
+Wed Oct 28 21:37:31 2015 Log level default: 1
+Wed Oct 28 21:37:31 2015 Parser instantiated
+Wed Oct 28 21:37:31 2015 Log level changed: 0
+Wed Oct 28 21:37:44 2015 Logger initialised
+Wed Oct 28 21:37:44 2015 Log level default: 1
+Wed Oct 28 21:37:44 2015 Parser instantiated
+Wed Oct 28 21:37:44 2015 Log level changed: 0
+Wed Oct 28 21:42:19 2015 Logger initialised
+Wed Oct 28 21:42:19 2015 Log level default: 1
+Wed Oct 28 21:42:19 2015 Parser instantiated
+Wed Oct 28 21:42:19 2015 Log level changed: 0
+Wed Oct 28 21:42:19 2015 Parsing "display"
+Wed Oct 28 21:42:29 2015 Parsing "view"
+Wed Oct 28 21:42:29 2015 Viewing...
+Wed Oct 28 21:42:34 2015 Parsing "undo"
+Wed Oct 28 21:42:51 2015 Parsing "view"
+Wed Oct 28 21:42:51 2015 Viewing...
+Wed Oct 28 21:42:55 2015 Parsing "undo"
+Wed Oct 28 21:43:03 2015 Parsing "view"
+Wed Oct 28 21:43:03 2015 Viewing...
+Wed Oct 28 21:43:10 2015 Parsing "undo"
+Wed Oct 28 21:43:15 2015 Parsing "done"
+Wed Oct 28 21:58:20 2015 Logger initialised
+Wed Oct 28 21:58:20 2015 Log level default: 1
+Wed Oct 28 21:58:20 2015 Parser instantiated
+Wed Oct 28 21:58:20 2015 Log level changed: 0
+Wed Oct 28 21:58:21 2015 Parsing "display"
+Wed Oct 28 21:58:27 2015 Parsing "delete"
+Wed Oct 28 21:58:29 2015 Parsing "undo"
+Wed Oct 28 21:58:45 2015 Parsing "done"
+Wed Oct 28 21:58:47 2015 Parsing "undo"
+Wed Oct 28 22:00:13 2015 Parsing "done"
+Wed Oct 28 22:00:15 2015 Parsing "view"
+Wed Oct 28 22:00:15 2015 Viewing...
+Wed Oct 28 22:00:22 2015 Parsing "view"
+Wed Oct 28 22:00:22 2015 Viewing...
+Wed Oct 28 22:00:25 2015 Parsing "undo"
+Wed Oct 28 22:00:26 2015 Parsing "undo"
+Wed Oct 28 22:00:28 2015 Parsing "undo"
+Wed Oct 28 22:01:59 2015 Parsing "add"
+Wed Oct 28 22:01:59 2015 Parsing task
+Wed Oct 28 22:01:59 2015 Parsing field keyword: name
+Wed Oct 28 22:01:59 2015 Parsing string: mocha mcflurry
+Wed Oct 28 22:01:59 2015 Parsing field keyword: :
+Wed Oct 28 22:01:59 2015 Parsing string: macs
+Wed Oct 28 22:01:59 2015 Parsed task of type: FLOATING
+Wed Oct 28 22:02:14 2015 Parsing "modify"
+Wed Oct 28 22:02:14 2015 Fields extracted: from
+Wed Oct 28 22:02:14 2015 Parsing task
+Wed Oct 28 22:02:14 2015 Parsing field keyword: name
+Wed Oct 28 22:02:14 2015 Parsing string: 
+Wed Oct 28 22:02:14 2015 Parsing field keyword: on
+Wed Oct 28 22:02:14 2015 Parsing string: 1/12/1
+Wed Oct 28 22:02:14 2015 Parsed date: -1
+Wed Oct 28 22:02:14 2015 Parsed day: -1
+Wed Oct 28 22:02:14 2015 Setting task type as: EVENT
+Wed Oct 28 22:02:14 2015 Parsed task of type: EVENT
+Wed Oct 28 22:05:43 2015 Parsing "modify"
+Wed Oct 28 22:05:43 2015 Fields extracted: by
+Wed Oct 28 22:05:43 2015 Parsing task
+Wed Oct 28 22:05:43 2015 Parsing field keyword: name
+Wed Oct 28 22:05:43 2015 Parsing string: 
+Wed Oct 28 22:05:43 2015 Parsing field keyword: by
+Wed Oct 28 22:05:43 2015 Parsing string: 1/12/1
+Wed Oct 28 22:05:43 2015 Parsed date: -1
+Wed Oct 28 22:05:43 2015 Parsed day: -1
+Wed Oct 28 22:05:43 2015 Parsed task of type: TODO
+Wed Oct 28 22:05:48 2015 Parsing "undo"
+Wed Oct 28 22:06:01 2015 Logger initialised
+Wed Oct 28 22:06:01 2015 Log level default: 1
+Wed Oct 28 22:06:01 2015 Parser instantiated
+Wed Oct 28 22:06:01 2015 Log level changed: 0
+Wed Oct 28 22:06:02 2015 Parsing "display"
+Wed Oct 28 22:06:24 2015 Parsing "modify"
+Wed Oct 28 22:06:24 2015 Fields extracted: from to
+Wed Oct 28 22:06:24 2015 Parsing task
+Wed Oct 28 22:06:24 2015 Parsing field keyword: name
+Wed Oct 28 22:06:24 2015 Parsing string: 
+Wed Oct 28 22:06:24 2015 Parsing field keyword: from
+Wed Oct 28 22:06:24 2015 Parsing string: 1/12/1
+Wed Oct 28 22:06:24 2015 Parsed date: -1
+Wed Oct 28 22:06:24 2015 Parsed day: -1
+Wed Oct 28 22:06:24 2015 Setting task type as: EVENT
+Wed Oct 28 22:06:24 2015 Parsing field keyword: to
+Wed Oct 28 22:06:24 2015 Parsing string: 2/12/1
+Wed Oct 28 22:06:24 2015 Parsed date: -1
+Wed Oct 28 22:06:24 2015 Parsed day: -1
+Wed Oct 28 22:06:24 2015 Parsed task of type: EVENT
+Wed Oct 28 22:07:45 2015 Parsing "modify"
+Wed Oct 28 22:07:45 2015 Fields extracted: name
+Wed Oct 28 22:07:45 2015 Parsing task
+Wed Oct 28 22:07:45 2015 Parsing field keyword: name
+Wed Oct 28 22:07:45 2015 Parsing string: mudpie mcflurry
+Wed Oct 28 22:07:45 2015 Parsed task of type: FLOATING
+Wed Oct 28 22:07:51 2015 Parsing "modify"
+Wed Oct 28 22:07:51 2015 Fields extracted: star
+Wed Oct 28 22:07:51 2015 Parsing task
+Wed Oct 28 22:07:51 2015 Parsing field keyword: name
+Wed Oct 28 22:07:51 2015 Parsing string: 
+Wed Oct 28 22:07:51 2015 Parsing field keyword: star
+Wed Oct 28 22:07:51 2015 Parsing string: 
+Wed Oct 28 22:07:51 2015 Parsed task of type: FLOATING
+Wed Oct 28 22:07:58 2015 Parsing "modify"
+Wed Oct 28 22:07:58 2015 Fields extracted: unstar
+Wed Oct 28 22:07:58 2015 Parsing task
+Wed Oct 28 22:07:58 2015 Parsing field keyword: name
+Wed Oct 28 22:07:58 2015 Parsing string: 
+Wed Oct 28 22:07:58 2015 Parsing field keyword: unstar
+Wed Oct 28 22:07:58 2015 Parsed task of type: FLOATING
+Wed Oct 28 22:08:01 2015 Parsing "undo"
+Wed Oct 28 22:10:20 2015 Logger initialised
+Wed Oct 28 22:10:20 2015 Log level default: 1
+Wed Oct 28 22:10:20 2015 Parser instantiated
+Wed Oct 28 22:10:20 2015 Log level changed: 0
+Wed Oct 28 22:10:21 2015 Parsing "display"
+Wed Oct 28 22:33:00 2015 Parsing "exit"
+Wed Oct 28 22:33:00 2015 Logger terminated
+
+Wed Oct 28 22:34:01 2015 Logger initialised
+Wed Oct 28 22:34:01 2015 Log level default: 1
+Wed Oct 28 22:34:01 2015 Parser instantiated
+Wed Oct 28 22:34:01 2015 Log level changed: 0
+Wed Oct 28 22:34:01 2015 Parsing "display"
+Wed Oct 28 22:34:18 2015 Parsing "done"
+Wed Oct 28 22:34:21 2015 Parsing "undo"
+Wed Oct 28 22:34:29 2015 Parsing "modify"
+Wed Oct 28 22:34:29 2015 Fields extracted: star
+Wed Oct 28 22:34:29 2015 Parsing task
+Wed Oct 28 22:34:29 2015 Parsing field keyword: name
+Wed Oct 28 22:34:29 2015 Parsing string: 
+Wed Oct 28 22:34:29 2015 Parsing field keyword: star
+Wed Oct 28 22:34:29 2015 Parsing string: 
+Wed Oct 28 22:34:29 2015 Parsed task of type: FLOATING
+Wed Oct 28 22:34:35 2015 Parsing "modify"
+Wed Oct 28 22:34:35 2015 Fields extracted: unstar
+Wed Oct 28 22:34:35 2015 Parsing task
+Wed Oct 28 22:34:35 2015 Parsing field keyword: name
+Wed Oct 28 22:34:35 2015 Parsing string: 
+Wed Oct 28 22:34:35 2015 Parsing field keyword: unstar
+Wed Oct 28 22:34:35 2015 Parsed task of type: FLOATING
+Wed Oct 28 22:34:46 2015 Parsing "modify"
+Wed Oct 28 22:34:46 2015 Fields extracted: from
+Wed Oct 28 22:34:46 2015 Parsing task
+Wed Oct 28 22:34:46 2015 Parsing field keyword: name
+Wed Oct 28 22:34:46 2015 Parsing string: 
+Wed Oct 28 22:34:46 2015 Parsing field keyword: on
+Wed Oct 28 22:34:46 2015 Parsing string: 1/12/1
+Wed Oct 28 22:34:46 2015 Parsed date: -1
+Wed Oct 28 22:34:46 2015 Parsed day: -1
+Wed Oct 28 22:34:46 2015 Setting task type as: EVENT
+Wed Oct 28 22:34:46 2015 Parsed task of type: EVENT
