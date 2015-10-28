@@ -195,6 +195,18 @@ void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	}
 }
 
+void Command::removeFloatingTasks(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i = taskVector.begin();
+
+	while (i != taskVector.end()) {
+		if (i->getType() == FLOATING) {
+			i = taskVector.erase(i);
+		} else {
+			++i;
+		}
+	}
+}
+
 // Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 // Modified on 28/10/15 by Ng Ren Zhi @@author A0130463 - resolve iterator out-of-bounds
 void Command::findOverlapPeriods() {
@@ -311,6 +323,7 @@ std::string Command::getMessage() {
 Add::Add(Task task) : Command(ADD) {
 	newTask = task;
 	currViewID = 0;
+	isOverlap = false;
 }
 
 Add::~Add() {}
@@ -331,7 +344,11 @@ void Add::undo() {
 }
 
 std::string Add::getMessage() {
-	return("\"" + newTask.getName() + "\"" + " added");
+	if (isOverlap) {
+		return "Task to be added overlaps with existing task!";
+	} else {
+		return("\"" + newTask.getName() + "\"" + " added");
+	}
 }
 
 //============== ADD : PRIVATE METHODS ===============
@@ -343,6 +360,8 @@ bool Add::doAdd() {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
 	}
 
+
+	checkOverlap();
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
 	currViewID = currentView.size();
@@ -350,10 +369,31 @@ bool Add::doAdd() {
 	sortDate(taskStore);
 	sortDate(currentView);
 	removeDoneTasks(currentView);
-	findOverlapPeriods();
 	return true;
 }
 
+void Add::checkOverlap() {
+	std::vector<Task> taskStoreCopy = taskStore;
+	removeDoneTasks(taskStoreCopy);
+	removeFloatingTasks(taskStoreCopy);
+	sortDate(taskStoreCopy);
+
+	std::vector<Task>::iterator iter = taskStoreCopy.begin();
+
+	while (iter != taskStoreCopy.end()) {
+		// Will not overlap if start of task added is later than end of task alr present in list
+		if ((newTask.getStartDate() > (iter->getEndDate()) || 
+			((newTask.getStartDate() == iter->getEndDate()) && (newTask.getStartTime() >= iter->getEndTime())))) {
+			++iter;
+		} else if ((newTask.getEndDate() < (iter->getStartDate()) || 
+			((newTask.getEndDate() == iter->getStartDate()) && (newTask.getEndTime() <= iter->getStartTime())))) {
+			++iter;
+		} else {
+			isOverlap = true;
+			break;
+		}
+	}
+}
 //==================================================
 //                       DELETE
 //==================================================

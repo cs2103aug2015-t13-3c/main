@@ -73,7 +73,7 @@ class Command {
 private:
 	CommandType cmd;
 	std::string userInput;
-
+	
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
@@ -101,6 +101,7 @@ protected:
 	void sortPriority(std::vector<Task> &taskVector);
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
+	void removeFloatingTasks(std::vector<Task> &taskVector);
 	void findOverlapPeriods();
 	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
 
@@ -139,6 +140,8 @@ private:
 	Task newTask;
 	//==== UNDO ===
 	int currViewID;
+	bool isOverlap;
+	void checkOverlap();
 	bool doAdd();
 public:
 	Add(Task task);
