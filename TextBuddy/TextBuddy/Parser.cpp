@@ -379,9 +379,18 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 
 int Parser::parseDate(std::vector<std::string> dateString) {
 	int newDate;
-	if(    ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)
-		|| ((newDate=parseByDay(dateString)) != INVALID_DATE_FORMAT)) {
-			return newDate;
+    if(    ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)   // Try parseByDate first
+        || ((newDate=parseByDay(dateString))  != INVALID_DATE_FORMAT)) { // Try parseByDay if previous is invalid
+            return newDate;
+    } else if(dateString.size()==1) {
+        // Convert DD/MM(/YY) to DD MM( YY)
+        dateString = Utilities::stringToVec(Utilities::replace(Utilities::vecToString(dateString),"/"," "));
+        // Try both parseByDate and parseByDay again
+        if(    ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)
+            || ((newDate=parseByDay(dateString))  != INVALID_DATE_FORMAT)) {
+                return newDate;
+        }
+
 	}
 	return INVALID_DATE_FORMAT;
 }
