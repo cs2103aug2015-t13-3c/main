@@ -39,23 +39,6 @@ public:
 		Assert::AreEqual(expectedString,Utilities::vecToString(inputString));
 	}
 
-	TEST_METHOD(Utilities_isFieldKeyword) {
-		Assert::AreEqual(false,Utilities::isFieldKeyword("add"));
-		Assert::AreEqual(true,Utilities::isFieldKeyword("at"));
-	}
-
-	TEST_METHOD(Utilities_removeSlashKeywords) {
-		std::string expectedString = "/add";
-		std::string userInput = "/add";
-		std::vector<std::string> inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedString,Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
-
-		expectedString = "take money from drawer";
-		userInput = "take money /from drawer";
-		inputString = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedString,Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
-	}
-
 	TEST_METHOD(Utilities_equalsIgnoreCase) {
 		bool isTrue;
 

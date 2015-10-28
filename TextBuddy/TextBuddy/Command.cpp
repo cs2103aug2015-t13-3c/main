@@ -354,8 +354,8 @@ bool Add::doAdd() {
 
 //============ DELETE : PUBLIC METHODS =============
 
-Delete::Delete(int taskID) : Command(DELETE) {
-	deleteID = taskID;	
+Delete::Delete(int currentViewID) : Command(DELETE) {
+	deleteID = currentViewID;	
 }
 
 Delete::~Delete() {}
@@ -365,10 +365,8 @@ int Delete::getDeleteID() {
 }
 
 void Delete::execute() {
-	// userIndex refers to the nth task of currentView presented to user
-	// eg. delete 1 means deleting the first task
-	initialiseIterators(deleteID);
-	prepDelete();
+	initialiseIterators(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
+	setUndoDeleteInfo();
 	doDelete();
 }
 
@@ -394,8 +392,6 @@ std::string Delete::getMessage() {
 
 //============= DELETE : PRIVATE METHODS ===========
 
-// Searches for Task to delete using ID
-// Deleting is done according to the order of elements on currentView
 void Delete::doDelete() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
@@ -404,9 +400,7 @@ void Delete::doDelete() {
 	findOverlapPeriods();
 }
 
-// Added on 24/10/15 by Ng Ren Zhi @@author A0130463R
-// Initialises undo info for delete command
-void Delete::prepDelete() {
+void Delete::setUndoDeleteInfo() {
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -550,8 +544,8 @@ bool Modify::updateFLOATING() {
 bool Modify::updateTODO() {
 	if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
 		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
-		taskStoreIter->setType(TODO);
-		return true;
+			taskStoreIter->setType(TODO);
+			return true;
 	}
 	return false;
 }

@@ -352,15 +352,20 @@ std::string Utilities::vecToString(std::vector<std::string> vecString) {
 //             COMPARISONS AND MODIFIERS
 //==================================================
 
-bool Utilities::containsAny(std::string searchWord, std::string words) {
-	searchWord = stringToLower(searchWord);
-	words = stringToLower(words);
-	std::vector<std::string> vecWords = stringToVec(words);
-	std::vector<std::string>::iterator curr;
+bool Utilities::containsAny(std::string words1, std::string words2) {
+	words1 = stringToLower(words1);
+	words2 = stringToLower(words2);
+	std::vector<std::string> vecWords1 = stringToVec(words1);
+	std::vector<std::string> vecWords2 = stringToVec(words2);
+	std::vector<std::string>::iterator curr1;
+	std::vector<std::string>::iterator curr2;
 
-	for(curr=vecWords.begin(); curr!=vecWords.end(); curr++) {
-		if(searchWord == *curr) {
-			return true;
+	for(curr1=vecWords1.begin(); curr1!=vecWords1.end(); curr1++) {
+		for(curr2=vecWords2.begin(); curr2!=vecWords2.end(); curr2++) {
+			if(*curr1 == *curr2) {
+				TbLogger::getInstance()->log(DEBUG,"Checking that " + *curr1 + " = " + *curr2);
+				return true;
+			}
 		}
 	}
 	return false;
@@ -368,28 +373,6 @@ bool Utilities::containsAny(std::string searchWord, std::string words) {
 
 bool Utilities::isInt(std::string str) {
 	return !(str.empty()) && str.find_first_not_of("0123456789")==std::string::npos;
-}
-
-bool Utilities::isDateField(FieldType field) {
-	if(field==START_DATE || field==END_DATE || field==TODO_DATE) {
-		return true;
-	}
-	return false;
-}
-
-bool Utilities::isFieldKeyword(std::string str) {
-	return stringToFieldType(str)!=INVALID_FIELD;
-}
-
-std::vector<std::string> Utilities::removeSlashKeywords(std::vector<std::string> vecString) {
-	std::vector<std::string>::iterator curr;
-	std::string subString;
-	for(curr=vecString.begin(); curr!=vecString.end(); curr++) {
-		if( ((*curr)[0] == '/' || (*curr)[0] == '\\') && isFieldKeyword(subString = (*curr).substr(1)) ) {
-			*curr = subString;
-		}
-	}
-	return vecString;
 }
 
 // Credits: Adapted from CityConnect.cpp (CS2103 Tutorial 2)
