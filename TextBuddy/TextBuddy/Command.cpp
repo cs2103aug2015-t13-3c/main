@@ -196,17 +196,23 @@ void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 }
 
 // Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
+// Modified on 28/10/15 by Ng Ren Zhi @@author A0130463 - resolve iterator out-of-bounds
 void Command::findOverlapPeriods() {
 	overlapPeriods.clear();
 
 	std::vector<Task> taskStoreCopy = taskStore;
-	std::vector<Task>::iterator i = taskStoreCopy.begin();
-	std::vector<Task>::iterator j = taskStoreCopy.begin()+1;
-
+	
 	// Tasks that are already done will not be marked as "overlap"
 	removeDoneTasks(taskStoreCopy);
 	sortDate(taskStoreCopy);
+	// No overlap to check
+	if(taskStoreCopy.size() <= 1) {
+		return;
+	}
 
+	std::vector<Task>::iterator i = taskStoreCopy.begin();
+	std::vector<Task>::iterator j = taskStoreCopy.begin()+1;
+	
 	while ((i != taskStoreCopy.end()) && (j != taskStoreCopy.end())) {
 		// Overlap occurs
 		if (j->getStartDate() < i->getEndDate()) {

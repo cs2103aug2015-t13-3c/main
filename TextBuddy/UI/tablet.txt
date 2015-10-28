@@ -4,6 +4,22 @@
 		{
 			"name": "foo",
 			"type": "EVENT",
+			"uniqueID": 12,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151025,
+			"startTime": 1000,
+
+			"endDate": 151025,
+			"endTime": 1500
+		}
+		,
+		{
+			"name": "foo",
+			"type": "EVENT",
 			"uniqueID": 9,
 			"label": [],
 
@@ -11,7 +27,7 @@
 			"isPriority": false,
 
 			"startDate": 151025,
-			"startTime": -1,
+			"startTime": 1500,
 
 			"endDate": 151025,
 			"endTime": 1800
@@ -27,7 +43,7 @@
 			"isPriority": false,
 
 			"startDate": 151025,
-			"startTime": -1,
+			"startTime": 1600,
 
 			"endDate": 151025,
 			"endTime": 1900
@@ -43,26 +59,10 @@
 			"isPriority": false,
 
 			"startDate": 151025,
-			"startTime": -1,
+			"startTime": 1700,
 
 			"endDate": 151025,
 			"endTime": 1900
-		}
-		,
-		{
-			"name": "foo",
-			"type": "EVENT",
-			"uniqueID": 12,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151025,
-			"startTime": -1,
-
-			"endDate": 151025,
-			"endTime": 1500
 		}
 		,
 		{
@@ -79,6 +79,22 @@
 
 			"endDate": 151025,
 			"endTime": 2359
+		}
+		,
+		{
+			"name": "mudpie mcflurry",
+			"type": "FLOATING",
+			"uniqueID": 14,
+			"label": ["macs"],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
 		}
 	]
 }
