@@ -386,10 +386,10 @@ void Add::checkOverlap() {
 		// Will not overlap if start of task added is later than end of task alr present in list
 		if ((newTask.getStartDate() > (iter->getEndDate()) || 
 			((newTask.getStartDate() == iter->getEndDate()) && (newTask.getStartTime() >= iter->getEndTime())))) {
-			++iter;
+				++iter;
 		} else if ((newTask.getEndDate() < (iter->getStartDate()) || 
 			((newTask.getEndDate() == iter->getStartDate()) && (newTask.getEndTime() <= iter->getStartTime())))) {
-			++iter;
+				++iter;
 		} else {
 			isOverlap = true;
 			break;
@@ -508,6 +508,9 @@ std::string Modify::getMessage() {
 void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 	bool isTODO = false;
+	if(tempTask.getType() == EVENT) {
+		taskStoreIter->setType(EVENT);
+	}
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
@@ -539,6 +542,9 @@ void Modify::doModify() {
 			taskStoreIter->setEndDate(tempTask.getEndDate());
 			break;
 		case END_TIME:
+			if(taskStoreIter->getEndDate() == DATE_NOT_SET) {
+				taskStoreIter->setEndDate(tempTask.getStartDate());
+			}
 			taskStoreIter->setEndTime(tempTask.getEndTime());
 			break;
 		case TODO_DATE:
@@ -861,9 +867,9 @@ void View::execute() {
 					weekDate += 100 - 30;
 				}
 		} else if (((weekDate%10000)/100) == 2) {
-				if(weekDate > 28) {
-					weekDate += 100 - 28;
-				}
+			if(weekDate > 28) {
+				weekDate += 100 - 28;
+			}
 		}
 
 		viewWeek(currentDate, 0, weekDate, 2359);

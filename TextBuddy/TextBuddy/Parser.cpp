@@ -521,7 +521,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 
 // Processes times in these formats:
 // - HH    AM/PM (default: assume AM)
-// - HH.MM AM/PM (default: assume AM)
+// - HH.MM AM/PM (default: assume AM) // TODO: Does not read minutes yet
 // - HHMM        (24-hour)
 int Parser::parseTime(std::vector<std::string> timeString) {
 	int time;
@@ -588,10 +588,11 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 		return INVALID_TIME_FORMAT;
 	}
 
+	log(DEBUG,"Parsed time: " + std::to_string(time));
 	return time;
 }
 
-void Parser::convertFieldDateToTime(FieldType &inputMode) {
+FieldType Parser::convertFieldDateToTime(FieldType &inputMode) {
 	if(inputMode == START_DATE) {
 		inputMode = START_TIME;
 	} else if(inputMode == END_DATE) {
@@ -599,7 +600,7 @@ void Parser::convertFieldDateToTime(FieldType &inputMode) {
 	} else if(inputMode == TODO_DATE) {
 		inputMode = TODO_TIME;
 	}
-	return;
+	return inputMode;
 }
 
 void Parser::placeInField(Task* newTask, bool &isTODO, FieldType inputMode, std::vector<std::string> inputString) {
@@ -816,11 +817,11 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 			&& curr+1 != vecInput.end()
 			&& Utilities::stringToFieldType(*(curr+1)) != INVALID_FIELD) {
 				fields.push_back(LABELS_CLEAR);
-		} else if(newField == TODO_DATE
+		} else if(isDateField(newField)
 			&& curr+1 != vecInput.end()
 			&& curr+2 != vecInput.end()
 			&& parseDate(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT) {
-				fields.push_back(TODO_TIME);
+				fields.push_back(convertFieldDateToTime(newField));
 		} else if(newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}
