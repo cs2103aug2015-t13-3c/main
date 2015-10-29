@@ -207,44 +207,6 @@ void Command::removeFloatingTasks(std::vector<Task> &taskVector) {
 	}
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
-// Modified on 28/10/15 by Ng Ren Zhi @@author A0130463 - resolve iterator out-of-bounds
-void Command::findOverlapPeriods() {
-	overlapPeriods.clear();
-
-	std::vector<Task> taskStoreCopy = taskStore;
-
-	// Tasks that are already done will not be marked as "overlap"
-	removeDoneTasks(taskStoreCopy);
-	sortDate(taskStoreCopy);
-	// No overlap to check
-	if(taskStoreCopy.size() <= 1) {
-		return;
-	}
-
-	std::vector<Task>::iterator i = taskStoreCopy.begin();
-	std::vector<Task>::iterator j = taskStoreCopy.begin()+1;
-
-	while ((i != taskStoreCopy.end()) && (j != taskStoreCopy.end())) {
-		// Overlap occurs
-		if (j->getStartDate() < i->getEndDate()) {
-			// Scenario where j is completely overlapped
-			if (j->getEndDate() < i->getEndDate()) {
-				addPeriod(overlapPeriods, j->getStartDate(), j->getStartTime(), j->getEndDate(), j->getEndTime());
-			}
-			// Scenario where j is not completely overlapped
-			if (j->getEndDate() > i->getEndDate()) {
-				addPeriod(overlapPeriods, j->getStartDate(), j->getStartTime(), i->getEndDate(), i->getEndTime());
-				++i;
-			}
-		} else if (j->getStartDate() >= i->getEndDate()) {
-			++i;
-		}
-		++j;
-
-	}
-}
-
 // Adds a period where there are no undone tasks on hand to freeSlots
 void Command::addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime) {
 	Task freePeriod;
@@ -431,7 +393,6 @@ void Delete::undo() {
 	} else {
 		currentView.push_back(taskToBeDeleted);
 	}
-	findOverlapPeriods();
 }
 
 std::string Delete::getMessage() {
@@ -445,7 +406,6 @@ void Delete::doDelete() {
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
 	removeDoneTasks(currentView);
-	findOverlapPeriods();
 }
 
 void Delete::setUndoDeleteInfo() {
@@ -495,7 +455,6 @@ void Modify::undo() {
 	undoModify->execute();
 	moveToPrevPos();
 	*/
-	findOverlapPeriods();
 }
 
 std::string Modify::getMessage() {
@@ -571,7 +530,6 @@ void Modify::doModify() {
 	updateView();
 	sortDate(taskStore);
 	initialiseIterators(modifyID);
-	findOverlapPeriods();
 }
 
 //<<<<<Update task type methods added by Ren Zhi 25/10/15
@@ -739,8 +697,6 @@ void Markdone::undo() {
 		taskStoreIter->unmarkDone();
 		currentView.insert(currViewIter,*taskStoreIter);
 	}	
-
-	findOverlapPeriods();
 }
 
 std::string Markdone::getMessage() {
@@ -756,8 +712,6 @@ void Markdone::markDone() {
 	if(successMarkDone) {
 		currentView.erase(currViewIter);
 	}
-
-	findOverlapPeriods();
 }
 
 //==================================================
@@ -787,8 +741,6 @@ void UnmarkDone::undo() {
 		taskStoreIter->markDone();
 		currentView.insert(currViewIter,*taskStoreIter);
 	}
-
-	findOverlapPeriods();
 }
 
 std::string UnmarkDone::getMessage() {
@@ -804,8 +756,6 @@ void UnmarkDone::unmarkDone() {
 	if(successUnmarkDone) {
 		currentView.erase(currViewIter);
 	}
-
-	findOverlapPeriods();
 }
 
 //==================================================
