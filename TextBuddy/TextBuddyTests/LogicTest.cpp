@@ -35,6 +35,7 @@ public:
 		// logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 
 		// Add
+		logic->processCommand(std::string("Search from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add then"));
 		logic->processCommand(std::string("Add this from 13 Oct to 15 Oct"));

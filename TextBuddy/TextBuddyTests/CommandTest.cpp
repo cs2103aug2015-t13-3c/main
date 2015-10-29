@@ -561,7 +561,7 @@ public:
 		Add addTwo(task);
 		addTwo.execute();
 		
-		//KB: to include done tasks
+		// KB: to include done tasks
 		View viewAll(VIEWTYPE_ALL, "");
 		viewAll.execute();
 

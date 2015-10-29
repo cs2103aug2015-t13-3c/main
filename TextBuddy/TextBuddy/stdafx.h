@@ -8,6 +8,11 @@
 // #include <cstdlib>
 // #include <iostream>
 // #include <stdio.h>
+
+// Switch off assert
+#define NDEBUG
+#include <assert.h>
+
 #include <iomanip>
 #include <fstream>
 #include <sstream>

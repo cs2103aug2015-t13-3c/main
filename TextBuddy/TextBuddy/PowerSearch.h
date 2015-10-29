@@ -5,7 +5,7 @@
 
 #include "Command.h"
 
-class PowerSearch: public Search {
+class PowerSearch: public Command {
 private:
 	std::string searchPhrase;
 	int startDate;
