@@ -1215,3 +1215,92 @@ Wed Oct 28 22:54:58 2015 Parsing "clear"
 Wed Oct 28 22:55:19 2015 Parsing "exit"
 Wed Oct 28 22:55:19 2015 Logger terminated
 
+Thu Oct 29 12:47:15 2015 Logger initialised
+Thu Oct 29 12:47:15 2015 Log level default: 1
+Thu Oct 29 12:47:15 2015 Parser instantiated
+Thu Oct 29 12:47:15 2015 Log level changed: 0
+Thu Oct 29 12:47:17 2015 Parsing "display"
+Thu Oct 29 12:49:56 2015 Parsing "display"
+Thu Oct 29 12:49:57 2015 Parsing "search"
+Thu Oct 29 12:49:57 2015 Parsing "search"
+Thu Oct 29 19:47:18 2015 Logger initialised
+Thu Oct 29 19:47:18 2015 Log level default: 1
+Thu Oct 29 19:47:18 2015 Parser instantiated
+Thu Oct 29 19:47:18 2015 Log level changed: 0
+Thu Oct 29 19:47:19 2015 Parsing "display"
+Thu Oct 29 19:59:29 2015 Logger initialised
+Thu Oct 29 19:59:29 2015 Log level default: 1
+Thu Oct 29 19:59:29 2015 Parser instantiated
+Thu Oct 29 19:59:29 2015 Log level changed: 0
+Thu Oct 29 19:59:32 2015 Parsing "display"
+Thu Oct 29 20:03:02 2015 Logger initialised
+Thu Oct 29 20:03:02 2015 Log level default: 1
+Thu Oct 29 20:03:02 2015 Parser instantiated
+Thu Oct 29 20:03:02 2015 Log level changed: 0
+Thu Oct 29 20:03:05 2015 Parsing "display"
+Thu Oct 29 22:39:29 2015 Logger initialised
+Thu Oct 29 22:39:29 2015 Log level default: 1
+Thu Oct 29 22:39:29 2015 Parser instantiated
+Thu Oct 29 22:39:29 2015 Log level changed: 0
+Thu Oct 29 22:39:32 2015 Parsing "display"
+Thu Oct 29 22:41:58 2015 Logger initialised
+Thu Oct 29 22:41:58 2015 Log level default: 1
+Thu Oct 29 22:41:58 2015 Parser instantiated
+Thu Oct 29 22:41:58 2015 Log level changed: 0
+Thu Oct 29 22:42:00 2015 Parsing "display"
+Thu Oct 29 22:43:31 2015 Logger initialised
+Thu Oct 29 22:43:31 2015 Log level default: 1
+Thu Oct 29 22:43:31 2015 Parser instantiated
+Thu Oct 29 22:43:31 2015 Log level changed: 0
+Thu Oct 29 22:43:34 2015 Parsing "display"
+Thu Oct 29 22:48:49 2015 Logger initialised
+Thu Oct 29 22:48:49 2015 Log level default: 1
+Thu Oct 29 22:48:49 2015 Parser instantiated
+Thu Oct 29 22:48:49 2015 Log level changed: 0
+Thu Oct 29 22:48:51 2015 Parsing "display"
+Thu Oct 29 22:50:12 2015 Logger initialised
+Thu Oct 29 22:50:12 2015 Log level default: 1
+Thu Oct 29 22:50:12 2015 Parser instantiated
+Thu Oct 29 22:50:12 2015 Log level changed: 0
+Thu Oct 29 22:50:14 2015 Parsing "display"
+Thu Oct 29 22:52:37 2015 Logger initialised
+Thu Oct 29 22:52:37 2015 Log level default: 1
+Thu Oct 29 22:52:37 2015 Parser instantiated
+Thu Oct 29 22:52:37 2015 Log level changed: 0
+Thu Oct 29 22:52:40 2015 Parsing "display"
+Fri Oct 30 10:10:51 2015 Logger initialised
+Fri Oct 30 10:10:51 2015 Log level default: 1
+Fri Oct 30 10:10:51 2015 Parser instantiated
+Fri Oct 30 10:10:51 2015 Log level changed: 0
+Fri Oct 30 10:25:45 2015 Logger initialised
+Fri Oct 30 10:25:45 2015 Log level default: 1
+Fri Oct 30 10:25:45 2015 Parser instantiated
+Fri Oct 30 10:25:45 2015 Log level changed: 0
+Fri Oct 30 10:25:48 2015 Parsing "display"
+Fri Oct 30 10:27:02 2015 Logger initialised
+Fri Oct 30 10:27:02 2015 Log level default: 1
+Fri Oct 30 10:27:02 2015 Parser instantiated
+Fri Oct 30 10:27:02 2015 Log level changed: 0
+Fri Oct 30 10:27:04 2015 Parsing "display"
+Fri Oct 30 10:27:09 2015 Parsing "add"
+Fri Oct 30 10:27:09 2015 Parsing task
+Fri Oct 30 10:27:09 2015 Parsing field keyword: name
+Fri Oct 30 10:27:09 2015 Parsing string: hello
+Fri Oct 30 10:27:09 2015 Parsed task of type: FLOATING
+Fri Oct 30 10:27:12 2015 Parsing "delete"
+Fri Oct 30 10:28:41 2015 Logger initialised
+Fri Oct 30 10:28:41 2015 Log level default: 1
+Fri Oct 30 10:28:41 2015 Parser instantiated
+Fri Oct 30 10:28:41 2015 Log level changed: 0
+Fri Oct 30 10:28:41 2015 Parsing "display"
+Fri Oct 30 10:28:45 2015 Parsing "delete"
+Fri Oct 30 13:13:11 2015 Logger initialised
+Fri Oct 30 13:13:11 2015 Log level default: 1
+Fri Oct 30 13:13:11 2015 Parser instantiated
+Fri Oct 30 13:13:11 2015 Log level changed: 0
+Fri Oct 30 13:13:13 2015 Parsing "display"
+Fri Oct 30 17:01:53 2015 Logger initialised
+Fri Oct 30 17:01:53 2015 Log level default: 1
+Fri Oct 30 17:01:53 2015 Parser instantiated
+Fri Oct 30 17:01:53 2015 Log level changed: 0
+Fri Oct 30 17:01:58 2015 Parsing "display"

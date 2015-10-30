@@ -401,7 +401,7 @@ void Delete::doDelete() {
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
 	removeDoneTasks(currentView);
-	findOverlapPeriods();
+//	findOverlapPeriods();
 }
 
 // Added on 24/10/15 by Ng Ren Zhi @@author A0130463R

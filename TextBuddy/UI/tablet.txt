@@ -1,5 +1,20 @@
 {
 	"TextBuddy Items":
 	[
+		{
+			"name": "hello",
+			"type": "FLOATING",
+			"uniqueID": 1,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
+		}
 	]
 }

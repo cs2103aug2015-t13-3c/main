@@ -19,13 +19,13 @@ void TextBuddyUI::searchAutoComplete() {
 		} 
 	}
 }
-
+/*
 void TextBuddyUI::commandAutoComplete() {
 	for each(String^ command in keywords) {
 		if(command == STAR || String::IsNullOrEmpty(input->Text) ) {
 			return;
 		}
-		if(command == DEL || command == DONE || command == DISPLAY) {
+		if(command == DEL || command == DONE || command == DISPLAY || command == SAVE || command == SEARCH) {
 			if(input->Text->Length > 1) {
 				if(command->IndexOf(input->Text[0]) == 0 && 
 					command->IndexOf(input->Text[1]) == 1) {
@@ -46,7 +46,7 @@ void TextBuddyUI::commandAutoComplete() {
 
 	}
 }
-
+*/
 void TextBuddyUI::viewAutoComplete() {
 	int position = findKeyword(VIEW);
 	if(keywordIsFound(position) && position == 0) {
@@ -98,4 +98,8 @@ void TextBuddyUI::undoSearch() {
 		*userInput = "display";	
 		processAndExecute();	
 	}
+}
+
+System::Void TextBuddyUI::dropDown_DropDown(System::Object^  sender, System::EventArgs^  e) {
+
 }

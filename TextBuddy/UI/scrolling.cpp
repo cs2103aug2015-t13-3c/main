@@ -6,16 +6,18 @@ using namespace UserInterface;
 
 void TextBuddyUI::scrollDown() {
 	DataGridView^ display = description->DataGridView ;
-	if(display->FirstDisplayedScrollingRowIndex < display->RowCount )
+	if(display->FirstDisplayedScrollingRowIndex + 1 < display->RowCount ) {
 		display->FirstDisplayedScrollingRowIndex = 
 		display->FirstDisplayedScrollingRowIndex + 1;
 	originalRowPosition = display->FirstDisplayedScrollingRowIndex;
+	}
 }
 
 void TextBuddyUI::scrollUp() {
 	DataGridView^ display = description->DataGridView ;
-	if(display->FirstDisplayedScrollingRowIndex > 0 )
+	if(display->FirstDisplayedScrollingRowIndex > 0 ) {
 		display->FirstDisplayedScrollingRowIndex = 
 		display->FirstDisplayedScrollingRowIndex - 1;
 	originalRowPosition = display->FirstDisplayedScrollingRowIndex;
+	}
 }
