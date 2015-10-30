@@ -31,6 +31,7 @@ enum CommandType {
 	DELETE,
 	MODIFY,
 	SEARCH,
+	POWERSEARCH,
 	MARKDONE,
 	UNMARKDONE,
 	UNDO,
@@ -73,11 +74,10 @@ class Command {
 private:
 	CommandType cmd;
 	std::string userInput;
-
+	
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
-	std::vector<Task> overlapPeriods;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -101,7 +101,7 @@ protected:
 	void sortPriority(std::vector<Task> &taskVector);
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
-	void findOverlapPeriods();
+	void removeFloatingTasks(std::vector<Task> &taskVector);
 	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
@@ -139,6 +139,8 @@ private:
 	Task newTask;
 	//==== UNDO ===
 	int currViewID;
+	bool isOverlap;
+	void checkOverlap();
 	bool doAdd();
 public:
 	Add(Task task);
@@ -157,7 +159,7 @@ private:
 	//==== UNDO ===
 	Task taskToBeDeleted;
 
-	void prepDelete();
+	void setUndoDeleteInfo();
 	void doDelete();
 public:
 	Delete(int taskID);
@@ -235,6 +237,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class UnmarkDone: public Command {
@@ -252,6 +256,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class View: public Command {
@@ -275,6 +281,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class ClearAll: public Command {
@@ -288,6 +296,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class DisplayAll: public Command {
@@ -302,6 +312,8 @@ public:
 
 	void execute();
 	void undo();
+
+	std::string getMessage();
 };
 
 class Undo: public Command {
@@ -324,6 +336,7 @@ class Load: public Command {
 private:
 	IO* io;
 	std::string filePath;
+	bool loadSuccess;
 
 public:
 	Load();
@@ -332,12 +345,15 @@ public:
 	std::string getFilePath();
 
 	void execute();
+
+	std::string getMessage();
 };
 
 class Save: public Command {
 private:
 	IO* io;
 	std::string filePath;
+	bool saveSuccess;
 
 public:
 	Save();
@@ -346,6 +362,8 @@ public:
 	std::string getFilePath();
 
 	void execute();
+
+	std::string getMessage();
 };
 
 class Exit: public Command {

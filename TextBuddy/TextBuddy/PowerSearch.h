@@ -5,8 +5,17 @@
 
 #include "Command.h"
 
-class PowerSearch: public Search {
+class PowerSearch: public Command {
 private:
+	std::string searchPhrase;
+	int startDate;
+	int startTime;
+	int endDate;
+	int endTime;
+	int daysNeeded;
+	int hrsNeeded;
+	int minsNeeded;
+
 	std::vector<Task> tasksWithinPeriod;	// tasks in the periods of interest
 	std::vector<Task> freePeriods;			// each task element stores the start and end of the free period
 
@@ -14,10 +23,12 @@ private:
 	int daysInMth(int month, int year);
 	int numOfMin(int date, int time);
 	bool isWithinFreePeriod(Task freePeriod, int daysNeeded, int hrsNeeded, int minsNeeded);
+
 public:
-	PowerSearch(void);
-	~PowerSearch(void);
-	
+	PowerSearch();
+	PowerSearch(std::vector<std::string> searchParameters);
+	~PowerSearch();
+
 	// Setters and Getters
 	void setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime);
 	void setFreePeriods(int startDate, int startTime, int endDate, int endTime);
@@ -26,9 +37,11 @@ public:
 
 	void searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime);
 	void searchFreeSlot(int startDate, int startTime, int endDate, int endTime, 
+
 	int daysNeeded, int hrsNeeded, int minsNeeded); // Start and end of the period of interest
 	void searchLabel(std::string label);
-
+	
+	void execute();
 };
 
 #endif

@@ -195,35 +195,15 @@ void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	}
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
-void Command::findOverlapPeriods() {
-	overlapPeriods.clear();
+void Command::removeFloatingTasks(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i = taskVector.begin();
 
-	std::vector<Task> taskStoreCopy = taskStore;
-	std::vector<Task>::iterator i = taskStoreCopy.begin();
-	std::vector<Task>::iterator j = taskStoreCopy.begin()+1;
-
-	// Tasks that are already done will not be marked as "overlap"
-	removeDoneTasks(taskStoreCopy);
-	sortDate(taskStoreCopy);
-
-	while ((i != taskStoreCopy.end()) && (j != taskStoreCopy.end())) {
-		// Overlap occurs
-		if (j->getStartDate() < i->getEndDate()) {
-			// Scenario where j is completely overlapped
-			if (j->getEndDate() < i->getEndDate()) {
-				addPeriod(overlapPeriods, j->getStartDate(), j->getStartTime(), j->getEndDate(), j->getEndTime());
-			}
-			// Scenario where j is not completely overlapped
-			if (j->getEndDate() > i->getEndDate()) {
-				addPeriod(overlapPeriods, j->getStartDate(), j->getStartTime(), i->getEndDate(), i->getEndTime());
-				++i;
-			}
-		} else if (j->getStartDate() >= i->getEndDate()) {
+	while (i != taskVector.end()) {
+		if (i->getType() == FLOATING) {
+			i = taskVector.erase(i);
+		} else {
 			++i;
 		}
-		++j;
-
 	}
 }
 
@@ -305,6 +285,7 @@ std::string Command::getMessage() {
 Add::Add(Task task) : Command(ADD) {
 	newTask = task;
 	currViewID = 0;
+	isOverlap = false;
 }
 
 Add::~Add() {}
@@ -324,8 +305,13 @@ void Add::undo() {
 	taskToDelete.execute();
 }
 
+// Modified on 29/10/15 by Chin Kiat Boon @@author A0096720A
 std::string Add::getMessage() {
-	return("\"" + newTask.getName() + "\"" + " added");
+	if (isOverlap) {
+		return "Task to be added overlaps with existing task!";
+	} else {
+		return("\"" + newTask.getName() + "\"" + " added");
+	}
 }
 
 //============== ADD : PRIVATE METHODS ===============
@@ -337,6 +323,8 @@ bool Add::doAdd() {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
 	}
 
+
+	checkOverlap();
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
 	currViewID = currentView.size();
@@ -344,18 +332,40 @@ bool Add::doAdd() {
 	sortDate(taskStore);
 	sortDate(currentView);
 	removeDoneTasks(currentView);
-	findOverlapPeriods();
 	return true;
 }
 
+// Added on 29/10/15 by Chin Kiat Boon @@author A0096720A
+void Add::checkOverlap() {
+	std::vector<Task> taskStoreCopy = taskStore;
+	removeDoneTasks(taskStoreCopy);
+	removeFloatingTasks(taskStoreCopy);
+	sortDate(taskStoreCopy);
+
+	std::vector<Task>::iterator iter = taskStoreCopy.begin();
+
+	while (iter != taskStoreCopy.end()) {
+		// Will not overlap if start of task added is later than end of task alr present in list
+		if ((newTask.getStartDate() > (iter->getEndDate()) || 
+			((newTask.getStartDate() == iter->getEndDate()) && (newTask.getStartTime() >= iter->getEndTime())))) {
+				++iter;
+		} else if ((newTask.getEndDate() < (iter->getStartDate()) || 
+			((newTask.getEndDate() == iter->getStartDate()) && (newTask.getEndTime() <= iter->getStartTime())))) {
+				++iter;
+		} else {
+			isOverlap = true;
+			break;
+		}
+	}
+}
 //==================================================
 //                       DELETE
 //==================================================
 
 //============ DELETE : PUBLIC METHODS =============
 
-Delete::Delete(int taskID) : Command(DELETE) {
-	deleteID = taskID;	
+Delete::Delete(int currentViewID) : Command(DELETE) {
+	deleteID = currentViewID;	
 }
 
 Delete::~Delete() {}
@@ -365,10 +375,8 @@ int Delete::getDeleteID() {
 }
 
 void Delete::execute() {
-	// userIndex refers to the nth task of currentView presented to user
-	// eg. delete 1 means deleting the first task
-	initialiseIterators(deleteID);
-	prepDelete();
+	initialiseIterators(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
+	setUndoDeleteInfo();
 	doDelete();
 }
 
@@ -385,7 +393,6 @@ void Delete::undo() {
 	} else {
 		currentView.push_back(taskToBeDeleted);
 	}
-	findOverlapPeriods();
 }
 
 std::string Delete::getMessage() {
@@ -394,19 +401,14 @@ std::string Delete::getMessage() {
 
 //============= DELETE : PRIVATE METHODS ===========
 
-// Searches for Task to delete using ID
-// Deleting is done according to the order of elements on currentView
 void Delete::doDelete() {
 	taskStore.erase(taskStoreIter);
 	currentView.erase(currViewIter);
 	sortDate(taskStore);
 	removeDoneTasks(currentView);
-//	findOverlapPeriods();
 }
 
-// Added on 24/10/15 by Ng Ren Zhi @@author A0130463R
-// Initialises undo info for delete command
-void Delete::prepDelete() {
+void Delete::setUndoDeleteInfo() {
 	taskToBeDeleted = *currViewIter;
 }
 
@@ -453,7 +455,6 @@ void Modify::undo() {
 	undoModify->execute();
 	moveToPrevPos();
 	*/
-	findOverlapPeriods();
 }
 
 std::string Modify::getMessage() {
@@ -466,6 +467,9 @@ std::string Modify::getMessage() {
 void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 	bool isTODO = false;
+	if(tempTask.getType() == EVENT) {
+		taskStoreIter->setType(EVENT);
+	}
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
 		switch (*fieldIter) {
@@ -497,6 +501,9 @@ void Modify::doModify() {
 			taskStoreIter->setEndDate(tempTask.getEndDate());
 			break;
 		case END_TIME:
+			if(taskStoreIter->getEndDate() == DATE_NOT_SET) {
+				taskStoreIter->setEndDate(tempTask.getStartDate());
+			}
 			taskStoreIter->setEndTime(tempTask.getEndTime());
 			break;
 		case TODO_DATE:
@@ -523,7 +530,6 @@ void Modify::doModify() {
 	updateView();
 	sortDate(taskStore);
 	initialiseIterators(modifyID);
-	findOverlapPeriods();
 }
 
 //<<<<<Update task type methods added by Ren Zhi 25/10/15
@@ -550,8 +556,8 @@ bool Modify::updateFLOATING() {
 bool Modify::updateTODO() {
 	if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
 		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
-		taskStoreIter->setType(TODO);
-		return true;
+			taskStoreIter->setType(TODO);
+			return true;
 	}
 	return false;
 }
@@ -691,8 +697,10 @@ void Markdone::undo() {
 		taskStoreIter->unmarkDone();
 		currentView.insert(currViewIter,*taskStoreIter);
 	}	
+}
 
-	findOverlapPeriods();
+std::string Markdone::getMessage() {
+	return "\"" + currViewIter->getName() + "\" marked as done";
 }
 
 //============= MARKDONE : PRIVATE METHODS ===========
@@ -704,8 +712,6 @@ void Markdone::markDone() {
 	if(successMarkDone) {
 		currentView.erase(currViewIter);
 	}
-
-	findOverlapPeriods();
 }
 
 //==================================================
@@ -735,8 +741,10 @@ void UnmarkDone::undo() {
 		taskStoreIter->markDone();
 		currentView.insert(currViewIter,*taskStoreIter);
 	}
+}
 
-	findOverlapPeriods();
+std::string UnmarkDone::getMessage() {
+	return "\"" + currViewIter->getName() + "\" marked as not done";
 }
 
 //=========== UNMARKDONE : PRIVATE METHODS ==========
@@ -748,8 +756,6 @@ void UnmarkDone::unmarkDone() {
 	if(successUnmarkDone) {
 		currentView.erase(currViewIter);
 	}
-
-	findOverlapPeriods();
 }
 
 //==================================================
@@ -791,7 +797,32 @@ void View::execute() {
 	case VIEWTYPE_WEEK: {
 		logger->log(DEBUG,"Viewing week");
 		int currentDate = logger->getDate();
-		viewWeek(currentDate, 0, currentDate+7, 2359);
+		int weekDate = currentDate + 7;
+		// In case weekDate overruns to next month
+		if(((weekDate%10000)/100) == 1 || 
+			((weekDate%10000)/100) == 3 || 
+			((weekDate%10000)/100) == 5 || 
+			((weekDate%10000)/100) == 7 || 
+			((weekDate%10000)/100) == 8 || 
+			((weekDate%10000)/100) == 10 || 
+			((weekDate%10000)/100) == 12) {
+				if(weekDate > 31) {
+					weekDate += 100 - 31;
+				}
+		} else if (((weekDate%10000)/100) == 4 || 
+			((weekDate%10000)/100) == 6 || 
+			((weekDate%10000)/100) == 9 || 
+			((weekDate%10000)/100) == 11) {
+				if(weekDate > 30) {
+					weekDate += 100 - 30;
+				}
+		} else if (((weekDate%10000)/100) == 2) {
+			if(weekDate > 28) {
+				weekDate += 100 - 28;
+			}
+		}
+
+		viewWeek(currentDate, 0, weekDate, 2359);
 		break;}
 	case VIEWTYPE_LABELS:
 		viewLabel(viewLabels);
@@ -806,6 +837,14 @@ void View::execute() {
 
 void View::undo() {
 	currentView = previousView;
+}
+
+std::string View::getMessage() {
+	std::string viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
+	if(Utilities::viewTypeToString(view) == VIEW_LABEL) {
+		viewMsg += " " + Utilities::vecToString(viewLabels);
+	}
+	return viewMsg;
 }
 
 //============== VIEW : PRIVATE METHODS ============
@@ -881,14 +920,16 @@ bool View::viewLabel(std::vector<std::string> label) {
 	return true;
 }
 
+// Modified by Ren Zhi 28/10/15 - Added weekStore
 void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> weekStore;
 	currentView.clear();
-	copyView();
-	sortDate(currentView);
-	removeDoneTasks(currentView);
-	std::vector<Task>::iterator iter = currentView.begin();
+	weekStore = taskStore;
+	sortDate(weekStore);
+	removeDoneTasks(weekStore);
+	std::vector<Task>::iterator iter = weekStore.begin();
 
-	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
+	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
 		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
 			currentView.push_back(*iter);
 		}
@@ -926,8 +967,11 @@ void ClearAll::execute() {
 
 void ClearAll::undo() {
 	currentView = previousView;
-	taskStore = previousView;
-	// TODO: feedback
+	taskStore = previousView;	
+}
+
+std::string ClearAll::getMessage() {
+	return "TextBuddy cleared";
 }
 
 //==================================================
@@ -966,8 +1010,11 @@ void DisplayAll::formatDefaultView() {
 }
 
 void DisplayAll::undo() {
-	currentView = previousView;
-	// TODO: feedback
+	currentView = previousView;	
+}
+
+std::string DisplayAll::getMessage() {
+	return "All tasks displayed";
 }
 
 //==================================================
@@ -1007,6 +1054,7 @@ Load::Load() : Command(LOAD) {
 // Load new file path, which is already parsed
 Load::Load(std::string newFilePath) : Command(LOAD) {
 	filePath = newFilePath;
+	loadSuccess = true;
 }
 
 Load::~Load() {}
@@ -1023,7 +1071,16 @@ void Load::execute() {
 		copyView();
 	} catch (std::exception e) {
 		taskStore = temp;
+		loadSuccess = false;
 		throw e;
+	}
+}
+
+std::string Load::getMessage() {
+	if(loadSuccess) {
+		return "\"" + filePath + "\" loaded successfully!";
+	} else {
+		return "\"" + filePath + "\" does not exist";
 	}
 }
 
@@ -1049,8 +1106,15 @@ std::string Save::getFilePath() {
 }
 
 void Save::execute() {
-	io->setFilePath(filePath,taskStore); // Returns false if unable to change file path
-	// TODO: feedback
+	saveSuccess = io->setFilePath(filePath,taskStore); // Returns false if unable to change file path
+}
+
+std::string Save::getMessage() {
+	if(saveSuccess) {
+		return "\"" + filePath + "\" saved successfully!";
+	} else {
+		return "Unable to save \"" + filePath + "\". Invalid path name.";
+	}
 }
 
 //==================================================

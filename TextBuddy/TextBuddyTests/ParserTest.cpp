@@ -141,6 +141,7 @@ public:
 			case UNDO:			// Undo last command if ADD, DELETE or MODIFY or MARKDONE
 			case REDO:			// Redo last undo, if any
 			case VIEW:			// Process view
+			case CLEAR_ALL:		// Clear all tasks
 			case DISPLAY_ALL:	// Display all tasks
 			case LOAD:			// Load file
 			case SAVE:			// Save to new file path
@@ -221,76 +222,76 @@ public:
 		}
 	}
 
-	// Note: As parseDate() takes in regex like "this Monday",
+	// Note: As parseByDate() takes in regex like "this Monday",
 	//       test cases are only valid for ONE week each time!
-	TEST_METHOD(Parser_parseDate) {
+	TEST_METHOD(Parser_parseByDate) {
 		// Invalid date formats
 		const int INVALID_DATE_FORMAT = -1;
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDate(inputVec));
 
 		userInput = "invalid";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDate(inputVec));
 
 		userInput = "1 invalid";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDate(inputVec));
 
 		userInput = "7 pm";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDate(inputVec));
 
 		// Valid date formats
 		expectedInt = 151231;
 		userInput = "31 dec";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDate(inputVec));
 
 		userInput = "31 dec 15";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDate(inputVec));
 	}
 
-	TEST_METHOD(Parser_parseDay) {
+	TEST_METHOD(Parser_parseByDay) {
 		// Invalid date formats
 		const int INVALID_DATE_FORMAT = -1;
 		expectedInt = INVALID_DATE_FORMAT;
 
 		userInput = "7 pm";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDate(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDate(inputVec));
 
 		// Change to appropriate date for today/tmr before running this test
 		/*
 		expectedInt = 151018;
 		userInput = "today";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 
 		expectedInt = 151019;
 		userInput = "tmr";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 		*/
 
 		expectedInt = 151026;
 		userInput = "mon";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 
 		expectedInt = 151031;
 		userInput = "this sat";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 
 		expectedInt = 151101;
 		userInput = "next sun";
 		inputVec = Utilities::stringToVec(userInput);
-		Assert::AreEqual(expectedInt,p->parseDay(inputVec));
+		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 	}
 
 	TEST_METHOD(Parser_parseTask) {
@@ -420,6 +421,128 @@ public:
 		inputVec = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p->parseTime(inputVec));
 	}
+
+	// - Searchphrase
+	//		e.g. search lab      from mon at     1 pm to tue at 2 pm
+	//		e.g. search lecture  on   wed before 3 pm
+	//		e.g. search tutorial on   thu after  4 pm
+	// - Freeslot  (keyword: for)
+	//		e.g. search                   from   8 am        to 2 pm for 1 h 
+	TEST_METHOD(Parser_parseSearchParameters) {
+		std::vector<std::string> searchParameters;
+		std::vector<std::string>::iterator param;
+		std::vector<std::string> holder(8);
+		std::vector<std::string>::iterator curr = holder.begin();
+		std::vector<std::string>::iterator searchPhrase = curr++;
+		std::vector<std::string>::iterator startDate = curr++;
+		std::vector<std::string>::iterator startTime = curr++;
+		std::vector<std::string>::iterator endDate = curr++;
+		std::vector<std::string>::iterator endTime = curr++;
+		std::vector<std::string>::iterator daysNeeded = curr++;
+		std::vector<std::string>::iterator hrsNeeded = curr++;
+		std::vector<std::string>::iterator minsNeeded = curr;
+		Command *cmd;
+		cmd->clearTaskStore();
+
+		// Searchphrase PowerSearch with startDate, startTime, endDate,endTime
+		// Tested: from, at, to
+		userInput = "lab from mon at 1 pm to tue at 2 pm";
+		searchParameters = p->parseSearchParameters(userInput);
+		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+			*curr = *param;
+		}
+		Assert::AreEqual(std::string("lab"),*searchPhrase);
+		Assert::AreEqual(151026,Utilities::stringToInt(*startDate));
+		Assert::AreEqual(1300,Utilities::stringToInt(*startTime));
+		Assert::AreEqual(151027,Utilities::stringToInt(*endDate));
+		Assert::AreEqual(1400,Utilities::stringToInt(*endTime));
+		Assert::AreEqual(0,Utilities::stringToInt(*daysNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*hrsNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*minsNeeded));
+
+		// Searchphrase PowerSearch with startDate, startTime, endDate,endTime
+		// Tested: after, before
+		userInput = "lecture on wed after 3 pm before 4 pm";
+		searchParameters = p->parseSearchParameters(userInput);
+		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+			*curr = *param;
+		}
+		Assert::AreEqual(std::string("lecture"),*searchPhrase);
+		Assert::AreEqual(151028,Utilities::stringToInt(*startDate));
+		Assert::AreEqual(1500,Utilities::stringToInt(*startTime));
+		Assert::AreEqual(151028,Utilities::stringToInt(*endDate));
+		Assert::AreEqual(1600,Utilities::stringToInt(*endTime));
+		Assert::AreEqual(0,Utilities::stringToInt(*daysNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*hrsNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*minsNeeded));
+
+		// Freeslot Powersearch with daysNeeded and minsNeeded, so hrs corrected to 0
+		// Tested: for, d, m
+		userInput = "for 1 d 1 m";
+		searchParameters = p->parseSearchParameters(userInput);
+		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+			*curr = *param;
+		}
+		Assert::AreEqual(std::string(""),*searchPhrase);
+		Assert::AreEqual(151028,Utilities::stringToInt(*startDate));
+		Assert::AreEqual(0,Utilities::stringToInt(*startTime));
+		Assert::AreEqual(151028,Utilities::stringToInt(*endDate));
+		Assert::AreEqual(2359,Utilities::stringToInt(*endTime));
+		Assert::AreEqual(1,Utilities::stringToInt(*daysNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*hrsNeeded));
+		Assert::AreEqual(1,Utilities::stringToInt(*minsNeeded));
+
+		// Freeslot Powersearch with no parameters
+		// Tested: h defaults to 1 hour
+		userInput = "for";
+		searchParameters = p->parseSearchParameters(userInput);
+		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+			*curr = *param;
+		}
+		Assert::AreEqual(std::string(""),*searchPhrase);
+		Assert::AreEqual(151028,Utilities::stringToInt(*startDate));
+		Assert::AreEqual(0,Utilities::stringToInt(*startTime));
+		Assert::AreEqual(151028,Utilities::stringToInt(*endDate));
+		Assert::AreEqual(2359,Utilities::stringToInt(*endTime));
+		Assert::AreEqual(0,Utilities::stringToInt(*daysNeeded));
+		Assert::AreEqual(1,Utilities::stringToInt(*hrsNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*minsNeeded));
+		
+		// Searchphrase PowerSearch with attempted Freeslot Powersearch
+		// Tested: Searchphrase PowerSearch takes precedence over Freeslot Powersearch
+		userInput = "lecture for 1 d 1 m";
+		searchParameters = p->parseSearchParameters(userInput);
+		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+			*curr = *param;
+		}
+		Assert::AreEqual(std::string("lecture"),*searchPhrase);
+		Assert::AreEqual(151028,Utilities::stringToInt(*startDate));
+		Assert::AreEqual(0,Utilities::stringToInt(*startTime));
+		Assert::AreEqual(151028,Utilities::stringToInt(*endDate));
+		Assert::AreEqual(2359,Utilities::stringToInt(*endTime));
+		Assert::AreEqual(0,Utilities::stringToInt(*daysNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*hrsNeeded));
+		Assert::AreEqual(0,Utilities::stringToInt(*minsNeeded));
+	}
+
+	/*
+	TEST_METHOD(Utilities_isFieldKeyword) {
+	Assert::AreEqual(false,isFieldKeyword("add"));
+	Assert::AreEqual(true,isFieldKeyword("at"));
+	}
+
+	TEST_METHOD(Utilities_removeSlashKeywords) {
+	std::string expectedString = "/add";
+	std::string userInput = "/add";
+	std::vector<std::string> inputString = Utilities::stringToVec(userInput);
+	Assert::AreEqual(expectedString,Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
+
+	expectedString = "take money from drawer";
+	userInput = "take money /from drawer";
+	inputString = Utilities::stringToVec(userInput);
+	Assert::AreEqual(expectedString,Utilities::vecToString(Utilities::removeSlashKeywords(inputString)));
+	}
+	*/
 
 	};
 }
