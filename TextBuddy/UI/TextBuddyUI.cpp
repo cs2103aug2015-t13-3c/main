@@ -60,19 +60,40 @@ TextBuddyUI::TextBuddyUI() {
 
 	//*********** ADD command formats ******************
 	addCommands = gcnew List<String^>();
-	// floating task
 	addCommands->Add("add <TASK>");	
-	// deadline
 	addCommands->Add("add <TODO> by <DATE/TIME>");
 	addCommands->Add("add <TODO> by <DATE> at <TIME>");
-	// event
 	addCommands->Add("add <EVENT> on <DATE>");
 	addCommands->Add("add <EVENT> on <DATE> at <TIME>");
 	addCommands->Add("add <EVENT> from <TIME> to <TIME>");
 	addCommands->Add("add <EVENT> on <DATE> from <TIME> to <TIME>");
 	addCommands->Add("add <EVENT> from <DATE> at <TIME> to <DATE> at <TIME>");
-	
+	// add here...
 
+	//********** VIEW command formats ******************
+	viewCommands = gcnew List<String^>();
+	viewCommands->Add("view today");
+	viewCommands->Add("view week");
+	viewCommands->Add("view todo");
+	viewCommands->Add("view events");
+	viewCommands->Add("view floating");
+	viewCommands->Add("view :<label>");
+	// add here...
+
+	//********** MODIFY command formats *****************
+	modifyCommands = gcnew List<String^>();
+	modifyCommands->Add("modify <ID> <DESCRIPTION>");
+	modifyCommands->Add("modify <ID> star");
+	modifyCommands->Add("modify <ID> unstar");
+	modifyCommands->Add("modify <ID> :<LABEL>");
+	modifyCommands->Add("modify <ID> by <NEW DEADLINE>");
+	// add here...
+
+	//********** SEARCH command formats *****************
+	searchCommands = gcnew List<String^>();
+	searchCommands->Add("search <TASK DESCRIPTION>");
+	// add here...
+	
 	suggestions = gcnew Hashtable();
 	suggestions->Add(QUIT,QUIT);
 	suggestions->Add(DONE,"done <ID>");
@@ -80,8 +101,9 @@ TextBuddyUI::TextBuddyUI() {
 	suggestions->Add(HELP,HELP);
 	suggestions->Add(DEL,"delete <ID>");
 	suggestions->Add(ADD,addCommands);
-	
-
+	suggestions->Add(SEARCH,searchCommands);
+	suggestions->Add(VIEW,viewCommands);
+	suggestions->Add(MODIFY,modifyCommands);
 
 }
 

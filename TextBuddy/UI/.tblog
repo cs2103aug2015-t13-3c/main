@@ -1304,3 +1304,8 @@ Fri Oct 30 17:01:53 2015 Log level default: 1
 Fri Oct 30 17:01:53 2015 Parser instantiated
 Fri Oct 30 17:01:53 2015 Log level changed: 0
 Fri Oct 30 17:01:58 2015 Parsing "display"
+Fri Oct 30 21:54:41 2015 Logger initialised
+Fri Oct 30 21:54:41 2015 Log level default: 1
+Fri Oct 30 21:54:41 2015 Parser instantiated
+Fri Oct 30 21:54:41 2015 Log level changed: 0
+Fri Oct 30 21:54:43 2015 Parsing "display"

@@ -86,7 +86,7 @@ System::Void TextBuddyUI::input_KeyDown(System::Object^  sender,
 		getInput();
 		processAndExecute();
 		input->Clear();
-		return;
+		return; 
 	}
 	if(key == Keys::Down) {
 		if(dropDown->SelectedIndex + 1 < dropDown->Items->Count) { 
@@ -159,7 +159,8 @@ void TextBuddyUI::showSuggestedCommands(String^ keyword) {
 	} else if(suggestions[keyword]->GetType() == keyword->GetType()) {
 		dropDown->Items->Add(suggestions[keyword]);
 	} else {
-		for each(String^ command in addCommands) {
+		List<String^>^ commands = dynamic_cast<List<String^>^>(suggestions[keyword]);
+		for each(String^ command in commands) {
 			dropDown->Items->Add(command);
 		}
 	}
