@@ -595,10 +595,6 @@ std::string Search::getSearchPhrase() {
 	return searchPhrase;
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
-// Virtual method for accessing of PowerSearch
-void Search::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {}
-
 // Returns a string of names
 // If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
@@ -679,6 +675,7 @@ bool Search::amendView(std::string listOfIds) {
 
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
 	doneID = taskID;
+	taskName = "";
 }
 
 Markdone::~Markdone() {}
@@ -700,7 +697,7 @@ void Markdone::undo() {
 }
 
 std::string Markdone::getMessage() {
-	return "\"" + currViewIter->getName() + "\" marked as done";
+	return "\"" + taskName + "\" marked as done";
 }
 
 //============= MARKDONE : PRIVATE METHODS ===========
@@ -710,6 +707,7 @@ void Markdone::markDone() {
 
 	successMarkDone = taskStoreIter->markDone();
 	if(successMarkDone) {
+		taskName = currViewIter->getName();
 		currentView.erase(currViewIter);
 	}
 }
@@ -894,8 +892,6 @@ bool View::viewNotdone() {
 	return true;
 }
 
-// Delete viewLabel if we use search to search for label
-// If view is used to view labels, need to add string object for this method
 bool View::viewLabel(std::vector<std::string> label) {
 	currentView.clear();
 

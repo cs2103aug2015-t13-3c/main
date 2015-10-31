@@ -61,7 +61,8 @@ int PowerSearch::daysInMth(int month, int year) {
 		return 30;
 	case 12:
 		return 31;
-	// Default: throw error
+	default:
+		assert(false);
 	}
 	return 0;
 }
