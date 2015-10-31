@@ -26,7 +26,6 @@ Logic::~Logic() {
 //                      METHODS
 //==================================================
 
-// Added by Ren Zhi 16/10/15
 Logic* Logic::getInstance() {
 	Load initialLoad(IO::getInstance()->getFilePath());
 	try {
@@ -37,7 +36,6 @@ Logic* Logic::getInstance() {
 	return theOne;
 }
 
-// Modified by RenZhi 19/10/15: Implement command pattern
 std::string Logic::processCommand(std::string userCommand) {
 	if(userCommand.empty()) {
 		throw std::runtime_error(ERROR_NO_INPUT);
@@ -141,7 +139,6 @@ history->add(*command);
 
 */
 
-// Modified by Hao Ye 14/10/15
 /*
 bool Logic::markStar(Star toMarkStar){
 int userIndex;

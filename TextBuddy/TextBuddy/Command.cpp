@@ -1,6 +1,7 @@
-// Created and maintained by Aaron Chong Jun Hao @@author A0110376N
-// Modified to Command Pattern by Ng Ren Zhi
+// @@author Command.cpp
+// Created and maintained by Aaron Chong Jun Hao
 // Private methods originally by Chin Kiat Boon
+// Modified to Command Pattern by Ng Ren Zhi
 
 #include "stdafx.h"
 #include "History.h"
@@ -70,7 +71,6 @@ std::vector<Task> Command::currentView;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
 
-// Added on 24/10/15 by Ng Ren Zhi @@author A0130463R
 // Initialises the corresponding iterators with the taskID
 // TaskID is the ID seen on GUI, not the unique task ID
 // Use for in-place insertion / deletion for undo methods
@@ -88,7 +88,6 @@ void Command::getIterator() {
 	taskStoreIter = taskStore.begin() + taskStorePos;
 }
 
-// Modified on 27/10/15 by Chin Kiat Boon @@author A0096720A
 // If end date is later than start date, start/end time should not matter
 bool Command::isDateLogical(Task task) {
 	if (   (task.getStartDate() >  task.getEndDate())
@@ -98,8 +97,6 @@ bool Command::isDateLogical(Task task) {
 	return true;
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
-// Modified on 27/10/15 by Ng Ren Zhi @@author A0130463R
 // Sorts floating tasks to be at the bottom
 void Command::sortFloating(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
@@ -128,7 +125,6 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 	}
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 // Sorts priority tasks to be at the top
 void Command::sortPriority(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
@@ -152,7 +148,6 @@ void Command::sortPriority(std::vector<Task> &taskVector) {
 	}
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 // Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
 // Use this before returning to UI for display
 void Command::sortDate(std::vector<Task> &taskVector) {
@@ -182,7 +177,6 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	sortPriority(taskVector);
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i = taskVector.begin();
 
@@ -207,8 +201,6 @@ void Command::removeFloatingTasks(std::vector<Task> &taskVector) {
 	}
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
-// Modified on 28/10/15 by Ng Ren Zhi @@author A0130463 - resolve iterator out-of-bounds
 void Command::findOverlapPeriods() {
 	overlapPeriods.clear();
 
@@ -269,7 +261,6 @@ void Command::updateView() {
 	return;
 }
 
-// Added on 14/10/15 by Soon Hao Ye @@author A0126677U
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
 							 if(isValidIndex(index)) {	
@@ -343,7 +334,6 @@ void Add::undo() {
 	taskToDelete.execute();
 }
 
-// Modified on 29/10/15 by Chin Kiat Boon @@author A0096720A
 std::string Add::getMessage() {
 	if (isOverlap) {
 		return "Task to be added overlaps with existing task!";
@@ -354,8 +344,6 @@ std::string Add::getMessage() {
 
 //============== ADD : PRIVATE METHODS ===============
 
-// Modified on 24/10/15 by Chin Kiat Boon @@author A0096720A
-// Modified on 25/10/15 by Ng Ren Zhi @@author A0130463
 bool Add::doAdd() {
 	if (isDateLogical(newTask) == false) {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
@@ -373,7 +361,6 @@ bool Add::doAdd() {
 	return true;
 }
 
-// Added on 29/10/15 by Chin Kiat Boon @@author A0096720A
 void Add::checkOverlap() {
 	std::vector<Task> taskStoreCopy = taskStore;
 	removeDoneTasks(taskStoreCopy);
@@ -504,7 +491,6 @@ std::string Modify::getMessage() {
 
 //============= MODIFY : PRIVATE METHODS ===========
 
-// Modified on 24/10/15 by Aaron Chong Jun Hao @@author A0110376N
 void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 	bool isTODO = false;
@@ -574,7 +560,6 @@ void Modify::doModify() {
 	findOverlapPeriods();
 }
 
-//<<<<<Update task type methods added by Ren Zhi 25/10/15
 // If start date == 0 && end date == 0: FLOATING
 // If end date == start date: TODO
 // All others: EVENTS
@@ -637,7 +622,6 @@ std::string Search::getSearchPhrase() {
 	return searchPhrase;
 }
 
-// Added on 27/10/15 by Chin Kiat Boon @@author A0096720A
 // Virtual method for accessing of PowerSearch
 void Search::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {}
 
@@ -763,7 +747,6 @@ void Markdone::markDone() {
 //==================================================
 //                      UNMARKDONE
 //==================================================
-// Added on 19/10/15 by Ng Ren Zhi @@author A0130463R
 
 //=========== UNMARKDONE : PUBLIC METHODS ==========
 
@@ -898,7 +881,6 @@ std::string View::getMessage() {
 }
 
 //============== VIEW : PRIVATE METHODS ============
-// Added on 20/10/15 by Chin Kiat Boon @@author A0096720A
 
 bool View::viewAll() {
 	currentView = taskStore;
@@ -970,7 +952,6 @@ bool View::viewLabel(std::vector<std::string> label) {
 	return true;
 }
 
-// Modified by Ren Zhi 28/10/15 - Added weekStore
 void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task> weekStore;
 	currentView.clear();
@@ -1002,7 +983,6 @@ void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
 //==================================================
 //                    CLEAR_ALL
 //==================================================
-// Added on 20/10/15 by Aaron Chong Jun Hao @@author A0110376N
 
 ClearAll::ClearAll() : Command(CLEAR_ALL) {
 	previousView = currentView;

@@ -11,7 +11,6 @@ public:
 		History *history = history->getInstance();
 	}
 
-	// Modified by Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processCommand) {
 		Logic* logic = Logic::getInstance();
 		logic->resetUpdaterNULL();
@@ -108,7 +107,6 @@ public:
 		delete logic;
 	}
 
-	// Added by Ren Zhi 21/10/15
 	TEST_METHOD(Logic_undo) {
 		Logic* logic = Logic::getInstance();
 		logic->resetUpdaterNULL();
@@ -274,7 +272,7 @@ public:
 		delete logic;
 	}
 
-	// @@author A0096720A-unused (Chin Kiat Boon)
+	// Chin Kiat Boon @@author A0096720A-unused
 	/*
 	TEST_METHOD(Logic_addTaskModifyTask) {
 	Logic logic;
