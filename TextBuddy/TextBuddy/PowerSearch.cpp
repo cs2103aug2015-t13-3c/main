@@ -4,17 +4,15 @@
 #include "Command.h"
 #include "PowerSearch.h"
 
-PowerSearch::PowerSearch(): Search("PowerSearch") {}
-
-PowerSearch::PowerSearch(std::vector<std::string> searchParameters) : Search(searchParameters[0]) {
-	std::string searchPhrase = searchParameters[0];
-	int startDate = Utilities::stringToInt(searchParameters[1]);
-	int startTime = Utilities::stringToInt(searchParameters[2]);
-	int endDate = Utilities::stringToInt(searchParameters[3]);
-	int endTime = Utilities::stringToInt(searchParameters[4]);
-	int daysNeeded = Utilities::stringToInt(searchParameters[5]);
-	int hrsNeeded = Utilities::stringToInt(searchParameters[6]);
-	int minsNeeded = Utilities::stringToInt(searchParameters[7]);
+PowerSearch::PowerSearch(std::vector<std::string> searchParameters) : Command(POWERSEARCH) {
+	searchPhrase = searchParameters[0];
+	startDate = Utilities::stringToInt(searchParameters[1]);
+	startTime = Utilities::stringToInt(searchParameters[2]);
+	endDate = Utilities::stringToInt(searchParameters[3]);
+	endTime = Utilities::stringToInt(searchParameters[4]);
+	daysNeeded = Utilities::stringToInt(searchParameters[5]);
+	hrsNeeded = Utilities::stringToInt(searchParameters[6]);
+	minsNeeded = Utilities::stringToInt(searchParameters[7]);
 }
 
 PowerSearch::~PowerSearch() {}

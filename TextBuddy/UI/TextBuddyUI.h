@@ -11,15 +11,18 @@
 #define DEL "delete "
 #define MODIFY "modify "
 #define SEARCH "search "
-#define DISPLAY "display "
+#define UNDO "undo"
+#define HELP "help"
 #define VIEW "view "
 #define DONE "done "
-#define STAR "star "
+#define SAVE "save "
+#define QUIT "exit"
 #define FROM " from "
 #define BY " by "
 #define TO " to "
 #define ON " on "
 #define AT " at "
+
 
 namespace UserInterface {
 
@@ -54,6 +57,9 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
+	private: System::Windows::Forms::PictureBox^  help;
+	private: System::Windows::Forms::ComboBox^  dropDown;
+
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -75,8 +81,11 @@ namespace UserInterface {
 				 this->updateFloatingTimer = (gcnew System::Windows::Forms::Timer(this->components));
 				 this->currentTime = (gcnew System::Windows::Forms::TextBox());
 				 this->updateCurrentTime = (gcnew System::Windows::Forms::Timer(this->components));
+				 this->help = (gcnew System::Windows::Forms::PictureBox());
+				 this->dropDown = (gcnew System::Windows::Forms::ComboBox());
 				 display = (gcnew System::Windows::Forms::DataGridView());
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->BeginInit();
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->BeginInit();
 				 this->SuspendLayout();
 				 // 
 				 // display
@@ -107,8 +116,9 @@ namespace UserInterface {
 				 display->RowHeadersVisible = false;
 				 display->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::DisableResizing;
 				 display->ScrollBars = System::Windows::Forms::ScrollBars::None;
-				 display->Size = System::Drawing::Size(525, 363);
+				 display->Size = System::Drawing::Size(525, 435);
 				 display->TabIndex = 3;
+				 display->TabStop = false;
 				 // 
 				 // id
 				 // 
@@ -151,18 +161,18 @@ namespace UserInterface {
 				 // 
 				 // input
 				 // 
-				 this->input->AcceptsTab = true;
 				 this->input->Dock = System::Windows::Forms::DockStyle::Bottom;
 				 this->input->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(0)));
-				 this->input->Location = System::Drawing::Point(0, 418);
+				 this->input->Location = System::Drawing::Point(0, 467);
 				 this->input->Multiline = false;
 				 this->input->Name = L"input";
 				 this->input->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::None;
-				 this->input->Size = System::Drawing::Size(525, 22);
-				 this->input->TabIndex = 4;
+				 this->input->Size = System::Drawing::Size(527, 22);
+				 this->input->TabIndex = 0;
 				 this->input->Text = L"";
-				 this->input->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::input_KeyUp_1);
+				 this->input->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::input_KeyDown);
+				 this->input->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::input_KeyUp);
 				 // 
 				 // feedback
 				 // 
@@ -171,11 +181,12 @@ namespace UserInterface {
 				 this->feedback->Font = (gcnew System::Drawing::Font(L"Arial", 10, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(0)));
 				 this->feedback->ForeColor = System::Drawing::Color::Green;
-				 this->feedback->Location = System::Drawing::Point(12, 395);
+				 this->feedback->Location = System::Drawing::Point(0, 445);
 				 this->feedback->Name = L"feedback";
 				 this->feedback->ReadOnly = true;
-				 this->feedback->Size = System::Drawing::Size(501, 16);
+				 this->feedback->Size = System::Drawing::Size(525, 16);
 				 this->feedback->TabIndex = 1;
+				 this->feedback->TabStop = false;
 				 // 
 				 // floatingTaskDisplay
 				 // 
@@ -184,13 +195,14 @@ namespace UserInterface {
 				 this->floatingTaskDisplay->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(0)));
 				 this->floatingTaskDisplay->ForeColor = System::Drawing::Color::Magenta;
-				 this->floatingTaskDisplay->Location = System::Drawing::Point(12, 0);
+				 this->floatingTaskDisplay->Location = System::Drawing::Point(0, 0);
 				 this->floatingTaskDisplay->Multiline = false;
 				 this->floatingTaskDisplay->Name = L"floatingTaskDisplay";
 				 this->floatingTaskDisplay->ReadOnly = true;
 				 this->floatingTaskDisplay->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::None;
-				 this->floatingTaskDisplay->Size = System::Drawing::Size(379, 20);
+				 this->floatingTaskDisplay->Size = System::Drawing::Size(393, 26);
 				 this->floatingTaskDisplay->TabIndex = 5;
+				 this->floatingTaskDisplay->TabStop = false;
 				 this->floatingTaskDisplay->Text = L"";
 				 // 
 				 // updateFloatingTimer
@@ -203,11 +215,14 @@ namespace UserInterface {
 				 // 
 				 this->currentTime->BackColor = System::Drawing::Color::White;
 				 this->currentTime->BorderStyle = System::Windows::Forms::BorderStyle::None;
-				 this->currentTime->Location = System::Drawing::Point(397, 7);
+				 this->currentTime->Location = System::Drawing::Point(387, 0);
+				 this->currentTime->Multiline = true;
 				 this->currentTime->Name = L"currentTime";
 				 this->currentTime->ReadOnly = true;
-				 this->currentTime->Size = System::Drawing::Size(128, 13);
+				 this->currentTime->Size = System::Drawing::Size(140, 26);
 				 this->currentTime->TabIndex = 6;
+				 this->currentTime->TabStop = false;
+				 this->currentTime->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 				 // 
 				 // updateCurrentTime
 				 // 
@@ -215,23 +230,46 @@ namespace UserInterface {
 				 this->updateCurrentTime->Interval = 5000;
 				 this->updateCurrentTime->Tick += gcnew System::EventHandler(this, &TextBuddyUI::updateCurrentTime_Tick);
 				 // 
+				 // help
+				 // 
+				 this->help->Location = System::Drawing::Point(0, 0);
+				 this->help->Name = L"help";
+				 this->help->Size = System::Drawing::Size(525, 461);
+				 this->help->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+				 this->help->TabIndex = 8;
+				 this->help->TabStop = false;
+				 this->help->Visible = false;
+				 // 
+				 // dropDown
+				 // 
+				 this->dropDown->FormattingEnabled = true;
+				 this->dropDown->Location = System::Drawing::Point(0, 467);
+				 this->dropDown->Name = L"dropDown";
+				 this->dropDown->Size = System::Drawing::Size(527, 21);
+				 this->dropDown->TabIndex = 9;
+				 this->dropDown->TabStop = false;
+				 this->dropDown->DropDown += gcnew System::EventHandler(this, &TextBuddyUI::dropDown_DropDown);
+				 // 
 				 // TextBuddyUI
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 				 this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 				 this->BackColor = System::Drawing::Color::White;
 				 this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
-				 this->ClientSize = System::Drawing::Size(525, 440);
-				 this->Controls->Add(this->currentTime);
-				 this->Controls->Add(this->floatingTaskDisplay);
-				 this->Controls->Add(this->input);
+				 this->ClientSize = System::Drawing::Size(527, 489);
 				 this->Controls->Add(this->feedback);
+				 this->Controls->Add(this->floatingTaskDisplay);
+				 this->Controls->Add(this->currentTime);
 				 this->Controls->Add(display);
+				 this->Controls->Add(this->help);
+				 this->Controls->Add(this->input);
+				 this->Controls->Add(this->dropDown);
 				 this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 				 this->MaximizeBox = false;
 				 this->Name = L"TextBuddyUI";
 				 this->Text = L"TextBuddyUI";
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(display))->EndInit();
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->EndInit();
 				 this->ResumeLayout(false);
 				 this->PerformLayout();
 
@@ -244,6 +282,8 @@ namespace UserInterface {
 
 			 //==================== PRIVATE VARIABLES ====================
 	private:
+		bool selectingFields;
+		bool helpMode;
 		std::string* userInput;
 		std::string* userFeedback_cppString;
 		Logic* logic;
@@ -253,6 +293,11 @@ namespace UserInterface {
 		int originalRowPosition;
 		String^ searchPhrase;
 		List<String^>^ keywords;
+		Hashtable^ suggestions;
+		List<String^>^ addCommands;
+		List<String^>^ modifyCommands;
+		List<String^>^ viewCommands;
+		List<String^>^ searchCommands;
 
 		// To be subscribed
 		std::vector<std::string>* labels;
@@ -264,8 +309,9 @@ namespace UserInterface {
 
 		//===================== UI FUNCTIONS=======================================
 	private:	
-		System::Void input_KeyUp_1(System::Object^  sender,
+		System::Void input_KeyDown(System::Object^  sender,
 			System::Windows::Forms::KeyEventArgs^  e);
+		System::Void input_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 		System::Void updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e);
 		System::Void updateCurrentTime_Tick(System::Object^  sender, System::EventArgs^  e);
 
@@ -309,6 +355,7 @@ namespace UserInterface {
 		-UNSTAR
 		=====================================================================*/
 		void highlightSyntax();
+		void undoHighlight();
 
 		/*====================================================================
 		Finds the keyword in the user Input richTextBox
@@ -334,8 +381,15 @@ namespace UserInterface {
 		void viewAutoComplete();
 		void putSuggestedText(String^ keyword);
 		void undoSearch();
+		bool matchKeyword(String^ keyword);
+		void showSuggestedCommands(String^ keyword);
+		void selectFields();
 
 		void scrollDown();
 		void scrollUp();
-	};
+
+		System::Void dropDown_DropDown(System::Object^  sender, System::EventArgs^  e); 
+
+		
+};
 }

@@ -32,10 +32,19 @@ bool TextBuddyUI::keywordIsFound(int position) {
 	return position >= 0;
 }
 
+
+
 void TextBuddyUI::highlightKeywords(int position, String^ keyword) {
 	int length = (keyword->Length) - 1;
 	input->Select(position,length);
 	input->SelectionColor = Color::Blue;
 	input->Select(cursorPosition,0);
 	input->SelectionColor = Color::Black;
+}
+
+void TextBuddyUI::undoHighlight() {
+	if(String::IsNullOrEmpty(input->Text)) {
+		input->Select(input->SelectionStart,1);
+		input->SelectionColor = Color::Black;
+	}
 }

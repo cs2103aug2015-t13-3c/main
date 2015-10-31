@@ -31,6 +31,7 @@ enum CommandType {
 	DELETE,
 	MODIFY,
 	SEARCH,
+	POWERSEARCH,
 	MARKDONE,
 	UNMARKDONE,
 	UNDO,
@@ -77,7 +78,6 @@ private:
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
-	std::vector<Task> overlapPeriods;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -102,7 +102,6 @@ protected:
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
 	void removeFloatingTasks(std::vector<Task> &taskVector);
-	void findOverlapPeriods();
 	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 

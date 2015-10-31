@@ -2,25 +2,9 @@
 	"TextBuddy Items":
 	[
 		{
-			"name": "mocha mcflurry",
-			"type": "EVENT",
-			"uniqueID": 15,
-			"label": ["macs"],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": -1,
-
-			"endDate": 0,
-			"endTime": -1
-		}
-		,
-		{
-			"name": "new thing",
-			"type": "EVENT",
-			"uniqueID": 18,
+			"name": "hello",
+			"type": "FLOATING",
+			"uniqueID": 1,
 			"label": [],
 
 			"isDone": false,
@@ -30,118 +14,6 @@
 			"startTime": -1,
 
 			"endDate": 0,
-			"endTime": -1
-		}
-		,
-		{
-			"name": "new thing",
-			"type": "EVENT",
-			"uniqueID": 18,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 0,
-			"startTime": -1,
-
-			"endDate": 0,
-			"endTime": -1
-		}
-		,
-		{
-			"name": "foo",
-			"type": "EVENT",
-			"uniqueID": 12,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151030,
-			"startTime": 1000,
-
-			"endDate": 151030,
-			"endTime": 1500
-		}
-		,
-		{
-			"name": "foo",
-			"type": "EVENT",
-			"uniqueID": 9,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151025,
-			"startTime": 1500,
-
-			"endDate": 151025,
-			"endTime": 1800
-		}
-		,
-		{
-			"name": "foo",
-			"type": "EVENT",
-			"uniqueID": 10,
-			"label": [],
-
-			"isDone": true,
-			"isPriority": false,
-
-			"startDate": 151025,
-			"startTime": 1600,
-
-			"endDate": 151025,
-			"endTime": 1900
-		}
-		,
-		{
-			"name": "task",
-			"type": "EVENT",
-			"uniqueID": 11,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151101,
-			"startTime": 1700,
-
-			"endDate": 151101,
-			"endTime": 1900
-		}
-		,
-		{
-			"name": "shaker fries no salt pls",
-			"type": "TODO",
-			"uniqueID": 13,
-			"label": ["macs"],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151025,
-			"startTime": 2359,
-
-			"endDate": 151025,
-			"endTime": 2359
-		}
-		,
-		{
-			"name": "mudpie mcflurry",
-			"type": "TODO",
-			"uniqueID": 14,
-			"label": ["macs"],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151028,
-			"startTime": -1,
-
-			"endDate": 151028,
 			"endTime": -1
 		}
 	]

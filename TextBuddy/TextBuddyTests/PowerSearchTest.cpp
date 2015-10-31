@@ -8,8 +8,18 @@ namespace TextBuddyTests {
 	TEST_CLASS(PowerSearchTest) {
 public:
 	TEST_METHOD(PowerSearch_setTasksWithinPeriod) {
-	
-		PowerSearch testPwrSearch;
+		std::vector<std::string> paraVec; 
+		paraVec.push_back("");
+		paraVec.push_back("151010");
+		paraVec.push_back("1015");
+		paraVec.push_back("151212");
+		paraVec.push_back("2330");
+		paraVec.push_back("0");
+		paraVec.push_back("1");
+		paraVec.push_back("0");
+
+		PowerSearch testPwrSearch(paraVec);
+		testPwrSearch.execute();
 		Task testTask;
 		
 		testTask.setStartDate(151010);
@@ -63,8 +73,17 @@ public:
 	}
 	
 	TEST_METHOD(PowerSearch_searchFreeSlot) {
-		PowerSearch testPwrSearch;
-		
+		std::vector<std::string> paraVec; 
+		paraVec.push_back("");
+		paraVec.push_back("151010");
+		paraVec.push_back("1015");
+		paraVec.push_back("151212");
+		paraVec.push_back("2330");
+		paraVec.push_back("0");
+		paraVec.push_back("1");
+		paraVec.push_back("0");
+
+		PowerSearch testPwrSearch(paraVec);
 		//Create method to "fit in" an event that may or may not exceed the range of free period
 		//Or can set parameter x such that free period mentioned must exceed x
 		Task testTask;
