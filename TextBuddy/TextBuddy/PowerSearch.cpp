@@ -113,6 +113,14 @@ void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate
 	tasksWithinPeriod.clear();
 
 	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
+		if (iter->getStartTime() == -1) {
+			iter->setStartTime(0);
+		}
+
+		if (iter->getEndTime() == -1) {
+			iter->setEndTime(0);
+		}
+
 		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
 			tasksWithinPeriod.push_back(*iter);
 		}
@@ -172,8 +180,8 @@ void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int 
 	std::vector<Task>::iterator iter;
 	std::string taskName;
 	
-	currentView.clear();
 	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
+	currentView.clear();
 
 	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
 		taskName = iter->getName();

@@ -37,8 +37,8 @@ public:
 		Task taskOne;
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
-		taskOne.setStartDate(150910);
-		taskOne.setEndDate(150912);
+		taskOne.setStartDate(150909);
+		taskOne.setEndDate(150910);
 		taskOne.setPriority();							// Prioritised task
 		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
 		addOne.clearTaskStore();
@@ -52,7 +52,7 @@ public:
 		Add addTwo(taskTwo);
 		addTwo.execute();
 
-		logic->processCommand(std::string("Search from 9 sep to 13 sep for 1 h"));
+		logic->processCommand(std::string("Search from 8 sep to 11 sep for 1 h"));
 		//end of temporary testing method
 
 
