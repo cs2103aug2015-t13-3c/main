@@ -49,9 +49,9 @@ enum CommandType {
 // Count: 8
 const std::string VIEW_ALL = "all";
 const std::string VIEW_FLOATING = "floating";
-const std::string VIEW_EVENT = "event";
+const std::string VIEW_EVENT = "events";
 const std::string VIEW_TODO = "todo";
-const std::string VIEW_NOTDONE = "notdone";
+const std::string VIEW_TODAY = "today";
 const std::string VIEW_PAST = "past";
 const std::string VIEW_WEEK = "week";
 const std::string VIEW_LABEL = "label";
@@ -63,7 +63,7 @@ enum ViewType {
 	VIEWTYPE_FLOATING,
 	VIEWTYPE_EVENT,
 	VIEWTYPE_TODO,
-	VIEWTYPE_NOTDONE,
+	VIEWTYPE_TODAY,
 	VIEWTYPE_PAST,
 	VIEWTYPE_WEEK,
 	VIEWTYPE_LABELS,
@@ -271,7 +271,7 @@ private:
 	bool viewAll();
 	bool viewTaskType(TaskType type);
 	bool viewDone();
-	bool viewNotdone();
+	bool viewToday();
 	bool viewLabel(std::vector<std::string> label);
 	void viewWeek(int startDate, int EndDate, int StartTime, int EndTime);
 public:

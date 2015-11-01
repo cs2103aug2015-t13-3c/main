@@ -3,7 +3,7 @@
 #include "TextBuddyUI.h"
 
 using namespace UserInterface;
-
+/*
 System::Void TextBuddyUI::updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
 	if(floatingTasks != nullptr) {
 		if(floatingTasks->empty()) {
@@ -17,11 +17,13 @@ System::Void TextBuddyUI::updateFloatingTimer_Tick(System::Object^  sender, Syst
 		++floatingTaskIndex;
 	}
 }
+*/
 
 System::Void TextBuddyUI::updateCurrentTime_Tick(System::Object^  sender, System::EventArgs^  e) {
 	DateTime localDateTime = DateTime::Now;
+	String^ month = gcnew String(Utilities::monthToString((Month)localDateTime.Month).c_str());
 	String^ t = (localDateTime.DayOfWeek).ToString() + " " + 
-		(localDateTime.Day).ToString() + "/" +
-		(localDateTime.Month).ToString() ;
+		(localDateTime.Day).ToString() + "/" + month;
+		
 	currentTime->Text = t ;
 }

@@ -1309,3 +1309,77 @@ Fri Oct 30 21:54:41 2015 Log level default: 1
 Fri Oct 30 21:54:41 2015 Parser instantiated
 Fri Oct 30 21:54:41 2015 Log level changed: 0
 Fri Oct 30 21:54:43 2015 Parsing "display"
+Sun Nov 01 01:28:14 2015 Logger initialised
+Sun Nov 01 01:28:14 2015 Log level default: 1
+Sun Nov 01 01:28:14 2015 Parser instantiated
+Sun Nov 01 01:28:14 2015 Log level changed: 0
+Sun Nov 01 01:29:56 2015 Logger initialised
+Sun Nov 01 01:29:56 2015 Log level default: 1
+Sun Nov 01 01:29:56 2015 Parser instantiated
+Sun Nov 01 01:29:56 2015 Log level changed: 0
+Sun Nov 01 01:31:31 2015 Logger initialised
+Sun Nov 01 01:31:31 2015 Log level default: 1
+Sun Nov 01 01:31:31 2015 Parser instantiated
+Sun Nov 01 01:31:31 2015 Log level changed: 0
+Sun Nov 01 01:34:45 2015 Logger initialised
+Sun Nov 01 01:34:45 2015 Log level default: 1
+Sun Nov 01 01:34:45 2015 Parser instantiated
+Sun Nov 01 01:34:45 2015 Log level changed: 0
+Sun Nov 01 01:34:59 2015 Parsing "display"
+Sun Nov 01 01:42:47 2015 Logger initialised
+Sun Nov 01 01:42:47 2015 Log level default: 1
+Sun Nov 01 01:42:47 2015 Parser instantiated
+Sun Nov 01 01:42:47 2015 Log level changed: 0
+Sun Nov 01 01:42:48 2015 Parsing "display"
+Sun Nov 01 01:42:57 2015 Parsing "view"
+Sun Nov 01 01:43:28 2015 Viewing...
+Sun Nov 01 11:14:05 2015 Logger initialised
+Sun Nov 01 11:14:05 2015 Log level default: 1
+Sun Nov 01 11:14:05 2015 Parser instantiated
+Sun Nov 01 11:14:05 2015 Log level changed: 0
+Sun Nov 01 11:15:52 2015 Logger initialised
+Sun Nov 01 11:15:52 2015 Log level default: 1
+Sun Nov 01 11:15:52 2015 Parser instantiated
+Sun Nov 01 11:15:52 2015 Log level changed: 0
+Sun Nov 01 11:15:53 2015 Parsing "display"
+Sun Nov 01 11:16:08 2015 Parsing "view"
+Sun Nov 01 11:16:19 2015 Logger initialised
+Sun Nov 01 11:16:19 2015 Log level default: 1
+Sun Nov 01 11:16:19 2015 Parser instantiated
+Sun Nov 01 11:16:19 2015 Log level changed: 0
+Sun Nov 01 11:16:20 2015 Parsing "display"
+Sun Nov 01 11:16:32 2015 Parsing "view"
+Sun Nov 01 11:38:31 2015 Logger initialised
+Sun Nov 01 11:38:31 2015 Log level default: 1
+Sun Nov 01 11:38:31 2015 Parser instantiated
+Sun Nov 01 11:38:31 2015 Log level changed: 0
+Sun Nov 01 11:38:32 2015 Parsing "sa"
+Sun Nov 01 11:38:32 2015 Invalid command: 
+Sun Nov 01 11:39:14 2015 Logger initialised
+Sun Nov 01 11:39:14 2015 Log level default: 1
+Sun Nov 01 11:39:14 2015 Parser instantiated
+Sun Nov 01 11:39:14 2015 Log level changed: 0
+Sun Nov 01 11:39:19 2015 Parsing "sa"
+Sun Nov 01 11:39:19 2015 Invalid command: 
+Sun Nov 01 11:40:11 2015 Logger initialised
+Sun Nov 01 11:40:11 2015 Log level default: 1
+Sun Nov 01 11:40:11 2015 Parser instantiated
+Sun Nov 01 11:40:11 2015 Log level changed: 0
+Sun Nov 01 11:40:13 2015 Parsing "view"
+Sun Nov 01 11:40:13 2015 Viewing...
+Sun Nov 01 11:50:00 2015 Logger initialised
+Sun Nov 01 11:50:00 2015 Log level default: 1
+Sun Nov 01 11:50:00 2015 Parser instantiated
+Sun Nov 01 11:50:00 2015 Log level changed: 0
+Sun Nov 01 11:50:04 2015 Parsing "view"
+Sun Nov 01 11:50:04 2015 Viewing...
+Sun Nov 01 11:51:16 2015 Logger initialised
+Sun Nov 01 11:51:16 2015 Log level default: 1
+Sun Nov 01 11:51:16 2015 Parser instantiated
+Sun Nov 01 11:51:16 2015 Log level changed: 0
+Sun Nov 01 11:51:19 2015 Parsing "view"
+Sun Nov 01 11:51:19 2015 Viewing...
+Sun Nov 01 15:49:17 2015 Logger initialised
+Sun Nov 01 15:49:17 2015 Log level default: 1
+Sun Nov 01 15:49:17 2015 Parser instantiated
+Sun Nov 01 15:49:17 2015 Log level changed: 0

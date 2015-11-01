@@ -196,6 +196,27 @@ bool Task::setEndTime(int newEndTime) {
 }
 
 bool Task::isUrgent() {
+	if(type == FLOATING) {
+		return false;
+	}
+	double difference = 0;
+	int day = startDate % 100;
+	int month = (startDate % 10000)/100;
+	int year = startDate/10000;
+    time_t t = time(0); 
+	struct tm now;
+	localtime_s(&now,&t);  
+	struct tm taskDate = {0,0,0,day,month-1,year+100}; 
+    std::time_t a = std::mktime(&taskDate);
+    std::time_t b = std::mktime(&now);
+    difference = std::difftime(a, b) / (60 * 60 * 24);
+	if(difference < 4) {
+		return true;
+	} 
+	return false;
+}
+
+bool Task::isToday() {
 	int currentDay = Utilities::getLocalDay();
 	int currentMonth = Utilities::getLocalMonth();
 	int currentYear = Utilities::getLocalYear();
@@ -209,6 +230,7 @@ bool Task::isUrgent() {
 	} 
 	return false;
 }
+
 
 // For testing
 bool Task::tasksAreEqual(Task task1, Task task2) {
