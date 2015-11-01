@@ -91,7 +91,6 @@
     <ClCompile Include="autoComplete.cpp" />
     <ClCompile Include="execute.cpp" />
     <ClCompile Include="highlight.cpp" />
-    <ClCompile Include="scrolling.cpp" />
     <ClCompile Include="TextBuddyUI.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>

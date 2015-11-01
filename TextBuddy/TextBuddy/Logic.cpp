@@ -105,6 +105,14 @@ void Logic::setFloatingMode() {
 	mode = FLOATINGS;
 }
 
+void Logic::setSearchMode() {
+	mode = SEARCHES;
+}
+
+void Logic::setPastMode() {
+	mode = PAST;
+}
+
 void Logic::resetUpdaterNULL() {
 	updater = nullptr;
 }

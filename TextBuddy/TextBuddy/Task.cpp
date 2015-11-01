@@ -65,14 +65,11 @@ std::string Task::getLabelString() {
 	std::string label;
 	std::set<std::string>::iterator i = labels.begin();
 	while(i != labels.end()) {
-		label = label + *i + "\r\n";
+		label = label + *i + " ";
 		++i;
 	}
-	//remove the last new line characters
 	if(!label.empty()) {
-		for(int j=0 ; j<2 ; ++j) {
-			label.pop_back();
-		}
+		label.pop_back();
 	}
 	return label;
 }

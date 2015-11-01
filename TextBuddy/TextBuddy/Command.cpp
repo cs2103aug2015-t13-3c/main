@@ -604,6 +604,7 @@ void Search::setTasksWithinPeriod(int startDate, int startTime, int endDate, int
 // If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
 	std::string output = doSearch();
+	Logic::setSearchMode();
 	amendView(output);
 }
 
@@ -798,6 +799,7 @@ void View::execute() {
 		break;
 	case VIEWTYPE_PAST:	
 		viewDone();
+		Logic::setPastMode();
 		break;
 	case VIEWTYPE_WEEK: {
 		logger->log(DEBUG,"Viewing week");
@@ -832,6 +834,7 @@ void View::execute() {
 		break; }
 	case VIEWTYPE_LABELS:
 		viewLabel(viewLabels);
+		Logic::setSearchMode();
 		break;
 	case VIEWTYPE_TODAY:
 		viewToday();

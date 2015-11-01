@@ -26,36 +26,49 @@ void TextBuddyUI::updateDisplay() {
 	case FLOATINGS:
 		tabIndex = FLOATINGS;
 		break;
+	case SEARCHES:
+		tabIndex = SEARCHES;
+		break;
+	case PAST:
+		tabIndex = PAST;
+		break;
 	}
 	tabs->SelectTab(tabIndex);
 	TabPage^ currentTab =  tabs->SelectedTab;
 	currentTab->TabStop = false;
+//	std::vector<MetroTile> longTiles;
+//	std::vector<MetroTile> squareTiles;
+	int x = 0;
+	int y = 0;
 	int width = currentTab->Width;
 	int height = currentTab->Height;
+	int squareTileWidth = (width/5)-10;
+	int longTileWidth = (width*2/5)-15;
+	int tileHeight = (height/5)-5;
 	currentTab->Controls->Clear();
 	unsigned int size = tasks->size();
 	for(unsigned int i=0 ; i< size ; ++i) {
 		DisplayedTask task = (*tasks)[i];
 		String^ index = (i+1).ToString() + "\r\n";
-		String^ label = gcnew String(task.label.c_str()) + "\r\n";
+		String^ label = "\r\n";
+		if(task.label != "") {
+			label = "[" + gcnew String(task.label.c_str()) + "]" + label;
+		}
 		String^ title = gcnew String(task.description.c_str()) + "\r\n";
 		String^ d = gcnew String(task.date.c_str()) + "\r\n";
 		String^ t = gcnew String(task.time.c_str()) + "\r\n";		
-		
+
 		MetroTile^ tile = gcnew MetroTile();
-		int tileWidth = (width/4)-10 ;
-		int tileHeight = (height/5)-5 ;
 		tile->ActiveControl = nullptr;
 		tile->TabStop = false;
 		tile->Style = this->Style;
-		tile->Location = System::Drawing::Point((i%4*(tileWidth+5))+12, (i/4*(height/5))+5);
  		tile->Name = tile + i.ToString();
-		tile->Size = System::Drawing::Size(tileWidth,tileHeight);	
-		tile->TextAlign = System::Drawing::ContentAlignment::TopLeft;
-
-		if(task.status == PRIORITY || task.status == URGENT) {
-			index = "\r\n";
+		if(title->Length <= 10) {
+			index = "";
 			tile->TileCount = i+1 ;
+		}
+		tile->TextAlign = System::Drawing::ContentAlignment::TopLeft;
+		if(task.status == PRIORITY || task.status == URGENT) {
 			tile->TileTextFontWeight = MetroFramework::MetroTileTextWeight::Regular;
 			tile->Style = MetroFramework::MetroColorStyle::Purple;
 			if(task.status == URGENT) {
@@ -63,13 +76,32 @@ void TextBuddyUI::updateDisplay() {
 			}
 		} else {
 			tile->TileTextFontWeight = MetroFramework::MetroTileTextWeight::Regular;
-		}
-		
+			if(task.type == FLOATING) {
+				tile->Style = MetroFramework::MetroColorStyle::Lime;
+			}
+		}	
 		String^ tileText = index + title + label + d + t ;
 		tile->Text = tileText;
+		if(task.type == EVENT || title->Length > 20) {
+			tile->Size = System::Drawing::Size(longTileWidth,tileHeight);
+		} else {
+			tile->Size = System::Drawing::Size(squareTileWidth,tileHeight);	
+		}
+		if(tile->Width > 140 && x%5 == 4) {
+			++x;
+			++y;
+		}
+		tile->Location = System::Drawing::Point((x%5*(squareTileWidth+5))+17, (y/5*(height/5))+5);
 		currentTab->Controls->Add(tile);
-		input->Focus();
-	}
+		++x;
+		++y;
+		if(tile->Width > 140) {
+			++x;
+			++y;
+		}
+		
+	}		 
+	input->Focus();
 }
 /*
 System::Void TextBuddyUI::input_KeyUp_1(System::Object^  sender, 
@@ -136,7 +168,7 @@ System::Void TextBuddyUI::input_KeyUp(System::Object^  sender, System::Windows::
 	}
 	if(key != Keys::Up && key != Keys::Down && key != Keys::Return) {
 		commandAutoComplete();
-		highlightSyntax();
+		//highlightSyntax();
 	}
 }
 
@@ -209,79 +241,6 @@ System::Void TextBuddyUI::input_KeyDown(System::Object^  sender,
 	}
 }
 
-void TextBuddyUI::selectFields() {
-	int i=0;
-	int length = input->Text->Length;
-	int start;
-	int end;
-	bool found = false;
-	String^ text = input->Text;
-	while(i < length) {
-		if(text[i] == '<') {
-			start = i;
-		}
-		if(text[i] == '>') {
-			end = i+1;
-			found = true;
-			break;
-		}
-		++i;
-	}
-	if(found) {
-		input->Select(start,end-start);
-	} else {
-		input->Select(length,1);
-	}
-}
-
-void TextBuddyUI::commandAutoComplete() {
-	bool found = false;
-	for each(String^ command in keywords) {
-		if(command == FROM || String::IsNullOrEmpty(input->Text) ) {
-			break;
-		}
-		if(matchKeyword(command)) {
-			showSuggestedCommands(command);
-			found = true;
-			dropDown->DroppedDown = true;
-			break;
-		}
-	}
-	if(!found) {
-		dropDown->DroppedDown = false;
-	}
-}
-
-void TextBuddyUI::showSuggestedCommands(String^ keyword) {
-	dropDown->Items->Clear();
-	if(suggestions[keyword] == nullptr) {
-		return;
-	} else if(suggestions[keyword]->GetType() == keyword->GetType()) {
-		dropDown->Items->Add(suggestions[keyword]);
-	} else {
-		List<String^>^ commands = dynamic_cast<List<String^>^>(suggestions[keyword]);
-		for each(String^ command in commands) {
-			dropDown->Items->Add(command);
-		}
-	}
-}
-
-bool TextBuddyUI::matchKeyword(String^ keyword) {
-	String^ inputText = input->Text;
-	int inputLength = input->Text->Length;
-	int keywordLength = keyword->Length;
-	int i=0;
-	while(i < inputLength && i<keywordLength) {
-		if(inputText[i] == ' ' && i != 0) {
-			return false;
-		}
-		if(inputText[i] != keyword[i]) {
-			return false;
-		}
-		++i;
-	}
-	return true;
-}
 
 //============================================================================
 void TextBuddyUI::getInput() {
@@ -311,36 +270,6 @@ void TextBuddyUI::processAndExecute() {
 	}
 	printFeedBackMessage("  " + message);
 }
-/*
-void TextBuddyUI::updateDisplay() {
-	DataGridView^ display = description->DataGridView ;
-	display->Rows->Clear();
-	unsigned int size = taskDescription->size();
-	for(unsigned int i=0 ; i< size ; ++i) {
-		String^ index = gcnew String((i+1).ToString());
-		String^ label = gcnew String((*labels)[i].c_str());
-		String^ title = gcnew String((*taskDescription)[i].c_str());
-		String^ d = gcnew String((*taskDate)[i].c_str());
-		String^ t = gcnew String((*taskTime)[i].c_str());
-		display->Rows->Add(index,label,title,d,t);
-		switch ((*color)[i]) {
-		case 0:
-			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Gray;
-			break;
-		case 1:
-			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Blue;
-			break;
-		case 2:
-			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;
-			break;
-		case 3:
-			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Black;
-		default:
-			break;
-		}
-		display->FirstDisplayedScrollingRowIndex = 0;
-	}
-}*/
 
 void TextBuddyUI::printFeedBackMessage(std::string message) {
 	feedback->Text = gcnew String(message.c_str());

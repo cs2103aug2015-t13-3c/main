@@ -76,6 +76,7 @@ TextBuddyUI::TextBuddyUI() {
 	viewCommands->Add("view todo");
 	viewCommands->Add("view events");
 	viewCommands->Add("view floating");
+	viewCommands->Add("view past");
 	viewCommands->Add("view :<label>");
 	// add here...
 

@@ -24,9 +24,6 @@
     <ClCompile Include="highlight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scrolling.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="execute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -14,7 +14,9 @@ enum DisplayMode {
 	WEEK,
 	EVENTS,
 	DEADLINES,
-	FLOATINGS
+	FLOATINGS,
+	SEARCHES,
+	PAST
 };
 
 class Logic {
@@ -45,6 +47,8 @@ public:
 	static void setEventsMode();
 	static void setDeadlinesMode();
 	static void setFloatingMode();
+	static void setSearchMode();
+	static void setPastMode();
 	void resetUpdaterNULL();
 };
 
