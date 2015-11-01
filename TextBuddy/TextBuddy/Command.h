@@ -6,12 +6,12 @@
 
 #include "IO.h"
 
-
 // These are the valid Command keywords
 // Count: 14
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
 const std::string COMMAND_MODIFY = "modify";
+const std::string COMMAND_MODIFY_EDIT = "edit"; // Alternative keyword
 const std::string COMMAND_SEARCH = "search";
 const std::string COMMAND_MARKDONE = "done";
 const std::string COMMAND_UNMARKDONE = "notdone";
@@ -74,10 +74,11 @@ class Command {
 private:
 	CommandType cmd;
 	std::string userInput;
-	
+
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
+	static int lastEditID;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -227,7 +228,7 @@ private:
 	std::string taskName;		// Added to solve iterator error for getMessage
 	//==== UNDO ===
 	bool successMarkDone;
-	
+
 	void markDone();
 public:
 	Markdone(int taskID);
@@ -303,7 +304,7 @@ class DisplayAll: public Command {
 private:
 	//==== UNDO ===
 	std::vector<Task> previousView;
-	
+
 	void formatDefaultView();
 public:
 	DisplayAll();

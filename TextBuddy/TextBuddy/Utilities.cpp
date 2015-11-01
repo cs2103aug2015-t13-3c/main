@@ -36,7 +36,7 @@ CommandType Utilities::stringToCmdType(std::string str) {
 		cmd = ADD;
 	} else if(equalsIgnoreCase(str, COMMAND_DELETE)) {
 		cmd = DELETE;
-	} else if(equalsIgnoreCase(str, COMMAND_MODIFY)) {
+	} else if(equalsIgnoreCase(str, COMMAND_MODIFY) || equalsIgnoreCase(str, COMMAND_MODIFY_EDIT)) {
 		cmd = MODIFY;
 	} else if(equalsIgnoreCase(str, COMMAND_SEARCH)) {
 		cmd = SEARCH;
@@ -525,28 +525,28 @@ std::string Utilities::getTime(int time) {
 		}
 		amOrPm = " pm";
 	}	
-	time2 = time/100.0 ;
+	time2 = time/100.0;
 	stream << std::fixed << std::setprecision(2) << time2;
-	return stream.str() + amOrPm ;
+	return stream.str() + amOrPm;
 }
 
 int Utilities::getLocalDay() {
 	time_t t = time(0); 
 	struct tm now;
-	localtime_s(&now,&t);  
+	localtime_s(&now,&t);
 	return now.tm_mday;
 }
 
 int Utilities::getLocalMonth() {
 	time_t t = time(0); 
 	struct tm now;
-	localtime_s(&now,&t);  
+	localtime_s(&now,&t);
 	return now.tm_mon + 1;
 }
 
 int Utilities::getLocalYear() {
 	time_t t = time(0); 
 	struct tm now;
-	localtime_s(&now,&t);  
-	return now.tm_year - 100 ;
+	localtime_s(&now,&t);
+	return now.tm_year - 100;
 }

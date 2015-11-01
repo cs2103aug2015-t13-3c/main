@@ -1,7 +1,6 @@
-// @@author Command.cpp
 // Created and maintained by Aaron Chong Jun Hao
 // Private methods originally by Chin Kiat Boon
-// Modified to Command Pattern by Ng Ren Zhi
+// Modified to Command Pattern by Ng Ren Zhi @@author A0130463R
 
 #include "stdafx.h"
 #include "History.h"
@@ -19,38 +18,29 @@ Command::Command(CommandType newCmd, std::string rawInput) {
 
 Command::~Command() {}
 
-// Check with Hanrui if formatting single-step getters like this will be penalised
-CommandType Command::getCommand() {return cmd;}
-std::string Command::getUserInput() {return userInput;}
-std::vector<Task> Command::getTaskStore() {return taskStore;}
-std::vector<Task> Command::getCurrentView() {return currentView;}
-std::vector<Task>* Command::getCurrentViewPtr() {return &currentView;}
-int Command::getSize() {return taskStore.size();}
-/*
 CommandType Command::getCommand() {
-return cmd;
+	return cmd;
 }
 
 std::string Command::getUserInput() {
-return userInput;
+	return userInput;
 }
 
 std::vector<Task> Command::getTaskStore() {
-return taskStore;
+	return taskStore;
 }
 
 std::vector<Task> Command::getCurrentView() {
-return currentView;
+	return currentView;
 }
 
 std::vector<Task>* Command::getCurrentViewPtr() {
-return &currentView;
+	return &currentView;
 }
 
 int Command::getSize() {
-return taskStore.size();
+	return taskStore.size();
 }
-*/
 
 void Command::clearTaskStore() {
 	IO* io = IO::getInstance();
@@ -62,7 +52,9 @@ void Command::clearTaskStore() {
 
 // Virtual functions
 void Command::execute() {}
-void Command::undo() {throw std::runtime_error("Action cannot be undone");}
+void Command::undo() {
+	throw std::runtime_error("Action cannot be undone");
+}
 
 //================ COMMAND : PROTECTED METHODS ==================
 
@@ -227,6 +219,9 @@ void Command::updateView() {
 
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
+							 if(index == 0) {
+								 index = lastEditID;
+							 }
 							 if(isValidIndex(index)) {	
 								 currIter = matchCurrentViewIndex(index);
 								 index = currIter->getID();
@@ -247,7 +242,7 @@ bool Command::isValidIndex(int index) {
 std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
 	assert(index >0 && index <= (int)currentView.size());
 	std::vector<Task>::iterator iter = currentView.begin();
-	for(int i=1 ; i< index ; ++i) {
+	for(int i=1; i< index; ++i) {
 		++iter;
 	}
 	return iter;
@@ -265,9 +260,6 @@ std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 std::string Command::getMessage() {
 	return "";
 }
-
-
-
 
 //==================================================
 //                        ADD
@@ -289,6 +281,7 @@ Task Add::getNewTask() {
 
 void Add::execute() {
 	doAdd();
+	lastEditID = newTask.getID();
 }
 
 // Add must have executed before undoing,
@@ -296,6 +289,7 @@ void Add::execute() {
 void Add::undo() {
 	Delete taskToDelete(currViewID);
 	taskToDelete.execute();
+	lastEditID = 0;
 }
 
 std::string Add::getMessage() {
@@ -367,7 +361,7 @@ void Delete::execute() {
 	initialiseIterators(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
 	setUndoDeleteInfo();
 	doDelete();
-
+	lastEditID = 0;
 }
 
 // Adds the deleted task back to the exact location it was before
@@ -383,6 +377,8 @@ void Delete::undo() {
 	} else {
 		currentView.push_back(taskToBeDeleted);
 	}
+
+	lastEditID = taskToBeDeleted.getID();
 }
 
 std::string Delete::getMessage() {
@@ -432,6 +428,7 @@ void Modify::execute() {
 	initialiseIterators(modifyID);
 	originalTask = *currViewIter;
 	doModify();
+	lastEditID = originalTask.getID();
 }
 
 void Modify::undo() {
@@ -439,12 +436,7 @@ void Modify::undo() {
 	currentView.erase(currViewIter);
 	taskStore.insert(taskStoreIter,originalTask);
 	currentView.insert(currViewIter,originalTask);
-
-	/*
-	Modify *undoModify = new Modify(modifyID, fieldsToModify, originalTask);
-	undoModify->execute();
-	moveToPrevPos();
-	*/
+	lastEditID = originalTask.getID();
 }
 
 std::string Modify::getMessage() {
@@ -566,6 +558,8 @@ void Modify::moveToPrevPos() {
 	currentView.insert(preCurrViewIter, tempTask);
 }
 
+// Chin Kiat Boon @@author A0096720A
+
 //==================================================
 //                       SEARCH
 //==================================================
@@ -646,7 +640,7 @@ bool Search::amendView(std::string listOfIds) {
 
 		id = stoi(idToken);
 		iter = taskStore.begin();
-		for (iter = taskStore.begin() ; iter != taskStore.end(); ++iter) {
+		for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
 			if(id == iter->getID()) {
 				currentView.push_back(*iter);
 			}
