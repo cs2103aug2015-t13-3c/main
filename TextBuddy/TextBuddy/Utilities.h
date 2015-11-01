@@ -27,6 +27,7 @@ public:
 	static std::vector<std::string> stringToVec(std::string str);
 	//========== Type-to-String Converters ==========
 	static std::string	boolToString(bool boolean);
+	static std::string	intToString(int num);
 	static std::string	dayToString(Day day);
 	static std::string  monthToString(Month month);
 	static std::string	taskToString(Task task);

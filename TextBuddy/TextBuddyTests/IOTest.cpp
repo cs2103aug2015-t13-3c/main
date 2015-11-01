@@ -317,7 +317,6 @@ public:
 
 	};
 
-	// Ng Ren Zhi @@author A0130463R-unused
 	//========== ChangeDirectoryTest ==========
 	/*
 	TEST_CLASS(ChangeDirectoryTest)	{

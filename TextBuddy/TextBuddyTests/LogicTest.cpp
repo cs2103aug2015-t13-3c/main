@@ -11,7 +11,6 @@ public:
 		History *history = history->getInstance();
 	}
 
-	// Modified by Ren Zhi 19/10/15
 	TEST_METHOD(Logic_processCommand) {
 		Logic* logic = Logic::getInstance();
 		logic->resetUpdaterNULL();
@@ -35,11 +34,10 @@ public:
 		// logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 
 		// Add
-		logic->processCommand(std::string("Search from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add then"));
 		logic->processCommand(std::string("Add this from 13 Oct to 15 Oct"));
-
+		
 		std::vector<Task> copyTask;	
 		std::vector<Task>::iterator iter;
 
@@ -109,7 +107,6 @@ public:
 		delete logic;
 	}
 
-	// Added by Ren Zhi 21/10/15
 	TEST_METHOD(Logic_undo) {
 		Logic* logic = Logic::getInstance();
 		logic->resetUpdaterNULL();
@@ -275,7 +272,7 @@ public:
 		delete logic;
 	}
 
-	// @@author A0096720A-unused (Chin Kiat Boon)
+	// Chin Kiat Boon @@author A0096720A-unused
 	/*
 	TEST_METHOD(Logic_addTaskModifyTask) {
 	Logic logic;

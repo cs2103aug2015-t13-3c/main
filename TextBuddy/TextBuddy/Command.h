@@ -215,8 +215,6 @@ public:
 	~Search();
 	std::string getSearchPhrase();
 
-	virtual void setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime);
-
 	void execute();
 	void undo();
 	std::string getMessage();
@@ -226,9 +224,10 @@ class Markdone: public Command {
 private:
 	//== EXECUTE ==
 	int doneID;
+	std::string taskName;		// Added to solve iterator error for getMessage
 	//==== UNDO ===
 	bool successMarkDone;
-
+	
 	void markDone();
 public:
 	Markdone(int taskID);

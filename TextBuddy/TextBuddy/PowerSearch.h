@@ -7,6 +7,7 @@
 
 class PowerSearch: public Command {
 private:
+	std::string msg;
 	std::string searchPhrase;
 	int startDate;
 	int startTime;
@@ -42,6 +43,8 @@ public:
 	void searchLabel(std::string label);
 	
 	void execute();
+
+	std::string getMessage();
 };
 
 #endif

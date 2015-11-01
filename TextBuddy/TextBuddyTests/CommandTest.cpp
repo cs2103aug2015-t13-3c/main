@@ -108,7 +108,6 @@ public:
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 	}
 
-	// Added by Kiat Boon 20/10/15
 	TEST_METHOD(Command_Add_Sort) {
 		Task taskOne;
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
@@ -922,7 +921,6 @@ public:
 	}
 	};
 
-	// Added by Aaron Chong Jun Hao @@author A0110376N
 	TEST_CLASS(Command_Load) {
 public:
 	TEST_METHOD(Command_Load_Execute_empty) {

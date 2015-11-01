@@ -5,6 +5,7 @@
 #include "PowerSearch.h"
 
 PowerSearch::PowerSearch(std::vector<std::string> searchParameters) : Command(POWERSEARCH) {
+	msg = "";
 	searchPhrase = searchParameters[0];
 	startDate = Utilities::stringToInt(searchParameters[1]);
 	startTime = Utilities::stringToInt(searchParameters[2]);
@@ -61,7 +62,8 @@ int PowerSearch::daysInMth(int month, int year) {
 		return 30;
 	case 12:
 		return 31;
-	// Default: throw error
+	default:
+		assert(false);
 	}
 	return 0;
 }
@@ -112,6 +114,14 @@ void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate
 	tasksWithinPeriod.clear();
 
 	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
+		if (iter->getStartTime() == -1) {
+			iter->setStartTime(0);
+		}
+
+		if (iter->getEndTime() == -1) {
+			iter->setEndTime(0);
+		}
+
 		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
 			tasksWithinPeriod.push_back(*iter);
 		}
@@ -170,9 +180,9 @@ std::vector<Task> PowerSearch::getFreePeriods() {
 void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task>::iterator iter;
 	std::string taskName;
-
-	currentView.clear();
+	
 	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
+	currentView.clear();
 
 	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
 		taskName = iter->getName();
@@ -186,13 +196,17 @@ void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int 
 // Output: Modifies currentView into a list of free dates
 void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int endTime,
 								 int daysNeeded, int hrsNeeded, int minsNeeded) {
-	currentView.clear();
-	setFreePeriods(startDate, startTime, endDate, endTime);
-
+	int count = 1;
 	std::vector<Task>::iterator iter;
+									 
+	setFreePeriods(startDate, startTime, endDate, endTime);
+	currentView.clear();
 
 	for (iter = freePeriods.begin(); iter != freePeriods.end(); ++iter) {
 		if (isWithinFreePeriod(*iter,daysNeeded,hrsNeeded,minsNeeded)) {
+			iter->setName("Free period " + Utilities::intToString(count));
+			count++;
+
 			currentView.push_back(*iter);
 		}
 	}
@@ -201,7 +215,13 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 void PowerSearch::execute() {
 	if (searchPhrase == "") {
 		searchFreeSlot(startDate,startTime, endDate, endTime, daysNeeded, hrsNeeded, minsNeeded);
+		msg = "Here is the list of free slots available";
 	} else {
 		searchInfo(searchPhrase, startDate, startTime, endDate, endTime);
+		msg = "Results for \"" + searchPhrase + "\"";
 	}
+}
+
+std::string PowerSearch::getMessage() {
+	return msg;
 }
