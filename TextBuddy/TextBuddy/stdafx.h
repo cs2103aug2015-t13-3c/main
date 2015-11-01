@@ -9,7 +9,7 @@
 // #include <iostream>
 // #include <stdio.h>
 
-// Switch off assert
+// Switch off assert in test explorer (doesn't work in UI.exe)
 #define NDEBUG
 #include <assert.h>
 

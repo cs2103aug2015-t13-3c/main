@@ -313,7 +313,7 @@ bool Add::doAdd() {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
 	}
 
-
+	copyView();
 	checkOverlap();
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
@@ -367,6 +367,7 @@ void Delete::execute() {
 	initialiseIterators(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
 	setUndoDeleteInfo();
 	doDelete();
+
 }
 
 // Adds the deleted task back to the exact location it was before
