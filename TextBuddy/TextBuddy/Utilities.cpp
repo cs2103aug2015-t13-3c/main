@@ -477,7 +477,8 @@ std::string Utilities::getFirstWord(std::string words) {
 
 std::string Utilities::removeFirstWord(std::string words) {
 	std::string commandTypeString = getFirstWord(words);
-	std::string parameters = removeSpaces(replace(words, commandTypeString, ""));
+	int strSize = commandTypeString.size();
+	std::string parameters = removeSpaces(words.substr(strSize));
 	return parameters;
 }
 
