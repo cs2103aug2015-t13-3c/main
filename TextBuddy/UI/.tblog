@@ -1058,3 +1058,74 @@ Sun Nov 01 09:30:52 2015 Parsing "clear"
 Sun Nov 01 09:30:53 2015 Parsing "exit"
 Sun Nov 01 09:30:53 2015 Logger terminated
 
+Sun Nov 01 10:10:35 2015 Logger initialised
+Sun Nov 01 10:10:35 2015 Log level default: 1
+Sun Nov 01 10:10:35 2015 Parser instantiated
+Sun Nov 01 10:10:35 2015 Log level changed: 0
+Sun Nov 01 10:10:36 2015 Parsing "display"
+Sun Nov 01 10:10:38 2015 Parsing "add"
+Sun Nov 01 10:10:38 2015 Parsing task
+Sun Nov 01 10:10:38 2015 Parsing field keyword: name
+Sun Nov 01 10:10:38 2015 Parsing string: task
+Sun Nov 01 10:10:38 2015 Parsed task of type: FLOATING
+Sun Nov 01 10:10:41 2015 Parsing "add"
+Sun Nov 01 10:10:41 2015 Parsing task
+Sun Nov 01 10:10:41 2015 Parsing field keyword: name
+Sun Nov 01 10:10:41 2015 Parsing string: task 2
+Sun Nov 01 10:10:41 2015 Parsed task of type: FLOATING
+Sun Nov 01 10:10:43 2015 Parsing "search"
+Sun Nov 01 10:10:52 2015 Parsing "clear"
+Sun Nov 01 10:10:53 2015 Parsing "exit"
+Sun Nov 01 10:10:53 2015 Logger terminated
+
+Sun Nov 01 10:12:46 2015 Logger initialised
+Sun Nov 01 10:12:46 2015 Log level default: 1
+Sun Nov 01 10:12:46 2015 Parser instantiated
+Sun Nov 01 10:12:46 2015 Log level changed: 0
+Sun Nov 01 10:12:46 2015 Parsing "display"
+Sun Nov 01 10:12:53 2015 Parsing "add"
+Sun Nov 01 10:12:53 2015 Parsing task
+Sun Nov 01 10:12:53 2015 Parsing field keyword: name
+Sun Nov 01 10:12:53 2015 Parsing string: task 1
+Sun Nov 01 10:12:53 2015 Parsed task of type: FLOATING
+Sun Nov 01 10:12:58 2015 Parsing "search"
+Sun Nov 01 10:13:01 2015 Parsing "add"
+Sun Nov 01 10:13:01 2015 Parsing task
+Sun Nov 01 10:13:01 2015 Parsing field keyword: name
+Sun Nov 01 10:13:01 2015 Parsing string: task
+Sun Nov 01 10:13:01 2015 Parsed task of type: FLOATING
+Sun Nov 01 10:13:10 2015 Parsing "add"
+Sun Nov 01 10:13:10 2015 Parsing task
+Sun Nov 01 10:13:10 2015 Parsing field keyword: name
+Sun Nov 01 10:13:10 2015 Parsing string: task4
+Sun Nov 01 10:13:10 2015 Parsing field keyword: from
+Sun Nov 01 10:13:10 2015 Parsing string: 9 oct
+Sun Nov 01 10:13:10 2015 Checking that oct = oct
+Sun Nov 01 10:13:10 2015 Parsed by date: 151009
+Sun Nov 01 10:13:10 2015 Setting task type as: EVENT
+Sun Nov 01 10:13:10 2015 Parsing field keyword: to
+Sun Nov 01 10:13:10 2015 Parsing string: 10 oct
+Sun Nov 01 10:13:10 2015 Checking that oct = oct
+Sun Nov 01 10:13:10 2015 Parsed by date: 151010
+Sun Nov 01 10:13:10 2015 Parsed task of type: EVENT
+Sun Nov 01 10:13:26 2015 Parsing "search"
+Sun Nov 01 10:13:26 2015 Checking that from = from
+Sun Nov 01 10:13:26 2015 Processing PowerSearch phrase: tas
+Sun Nov 01 10:13:26 2015 Checking that from = from
+Sun Nov 01 10:13:26 2015 Parsing PowerSearch inputMode: from
+Sun Nov 01 10:13:26 2015 Processing PowerSearch phrase: 8
+Sun Nov 01 10:13:26 2015 Checking that to = to
+Sun Nov 01 10:13:26 2015 Checking that from = from
+Sun Nov 01 10:13:26 2015 Checking that oct = oct
+Sun Nov 01 10:13:26 2015 Parsed by date: 151008
+Sun Nov 01 10:13:26 2015 Parsed 8 oct to be date: 151008
+Sun Nov 01 10:13:26 2015 Parsing PowerSearch inputMode: to
+Sun Nov 01 10:13:26 2015 Processing PowerSearch phrase: 11
+Sun Nov 01 10:13:26 2015 Checking that to = to
+Sun Nov 01 10:13:26 2015 Checking that oct = oct
+Sun Nov 01 10:13:26 2015 Parsed by date: 151011
+Sun Nov 01 10:13:26 2015 Parsed PowerSearch
+Sun Nov 01 10:13:32 2015 Parsing "clear"
+Sun Nov 01 10:13:32 2015 Parsing "exit"
+Sun Nov 01 10:13:32 2015 Logger terminated
+

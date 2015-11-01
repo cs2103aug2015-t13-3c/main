@@ -5,6 +5,7 @@
 #include "PowerSearch.h"
 
 PowerSearch::PowerSearch(std::vector<std::string> searchParameters) : Command(POWERSEARCH) {
+	msg = "";
 	searchPhrase = searchParameters[0];
 	startDate = Utilities::stringToInt(searchParameters[1]);
 	startTime = Utilities::stringToInt(searchParameters[2]);
@@ -214,11 +215,13 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 void PowerSearch::execute() {
 	if (searchPhrase == "") {
 		searchFreeSlot(startDate,startTime, endDate, endTime, daysNeeded, hrsNeeded, minsNeeded);
+		msg = "Here is the list of free slots available";
 	} else {
 		searchInfo(searchPhrase, startDate, startTime, endDate, endTime);
+		msg = "Results for \"" + searchPhrase + "\"";
 	}
 }
 
 std::string PowerSearch::getMessage() {
-	return "Here is the list of free slots available";
+	return msg;
 }
