@@ -216,6 +216,10 @@ std::string Utilities::boolToString(bool boolean) {
 	}
 }
 
+std::string Utilities::intToString(int num) {
+	return std::to_string(num);
+}
+
 std::string Utilities::dayToString(Day day) {
 	std::string dayString;
 

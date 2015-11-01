@@ -171,7 +171,7 @@ std::vector<Task> PowerSearch::getFreePeriods() {
 void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task>::iterator iter;
 	std::string taskName;
-
+	
 	currentView.clear();
 	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
 
@@ -187,13 +187,17 @@ void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int 
 // Output: Modifies currentView into a list of free dates
 void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int endTime,
 								 int daysNeeded, int hrsNeeded, int minsNeeded) {
-	currentView.clear();
-	setFreePeriods(startDate, startTime, endDate, endTime);
-
+	int count = 1;
 	std::vector<Task>::iterator iter;
+									 
+	setFreePeriods(startDate, startTime, endDate, endTime);
+	currentView.clear();
 
 	for (iter = freePeriods.begin(); iter != freePeriods.end(); ++iter) {
 		if (isWithinFreePeriod(*iter,daysNeeded,hrsNeeded,minsNeeded)) {
+			iter->setName("Free period " + Utilities::intToString(count));
+			count++;
+
 			currentView.push_back(*iter);
 		}
 	}

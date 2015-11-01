@@ -33,6 +33,29 @@ public:
 		priorityTasks = new std::vector<bool>;
 		// logic->subscribe(labels,taskDescription,dateTime,floatingTasks,priorityTasks);
 
+		//start of temporary testing method
+		Task taskOne;
+		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
+		taskOne.setName("Sentence one.");
+		taskOne.setStartDate(150910);
+		taskOne.setEndDate(150912);
+		taskOne.setPriority();							// Prioritised task
+		Add addOne(taskOne);							// Adds taskOne into taskStore (Step 1/2)
+		addOne.clearTaskStore();
+		addOne.execute();								// Adds taskOne into taskStore (Step 2/2)
+
+		Task taskTwo;
+		taskTwo.setName("Sentence two.");
+		taskTwo.setStartDate(151010);
+		taskTwo.setEndDate(151010);
+		taskTwo.setPriority();							// Prioritised task
+		Add addTwo(taskTwo);
+		addTwo.execute();
+
+		logic->processCommand(std::string("Search from 9 sep to 13 sep for 1 h"));
+		//end of temporary testing method
+
+
 		// Add
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add then"));
