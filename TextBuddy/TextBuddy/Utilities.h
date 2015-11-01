@@ -29,6 +29,7 @@ public:
 	static std::string	boolToString(bool boolean);
 	static std::string	intToString(int num);
 	static std::string	dayToString(Day day);
+	static std::string  monthToString(Month month);
 	static std::string	taskToString(Task task);
 	static std::string	taskTypeToString(TaskType type);
 	static std::string	fieldVecToString(std::vector<FieldType> fields);

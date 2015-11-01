@@ -5,7 +5,7 @@
 using namespace UserInterface;
 
 void TextBuddyUI::scrollDown() {
-	DataGridView^ display = description->DataGridView;
+	DataGridView^ display = todayTimeline;
 	if(display->FirstDisplayedScrollingRowIndex + 1 < display->RowCount ) {
 		display->FirstDisplayedScrollingRowIndex = 
 			display->FirstDisplayedScrollingRowIndex + 1;
@@ -14,7 +14,7 @@ void TextBuddyUI::scrollDown() {
 }
 
 void TextBuddyUI::scrollUp() {
-	DataGridView^ display = description->DataGridView;
+	DataGridView^ display = todayTimeline ;
 	if(display->FirstDisplayedScrollingRowIndex > 0 ) {
 		display->FirstDisplayedScrollingRowIndex = 
 			display->FirstDisplayedScrollingRowIndex - 1;

@@ -22,23 +22,20 @@ TextBuddyUI::TextBuddyUI() {
 	helpMode = false;
 	logger = TbLogger::getInstance();
 	InitializeComponent();
-	labels = new std::vector<std::string>;
-	taskDescription = new std::vector<std::string>;
-	taskDate = new std::vector<std::string>;
-	taskTime = new std::vector<std::string>;
-	floatingTasks = new std::vector<std::string>;
-	color = new std::vector<int>;
 	logic = logic->getInstance();
-	logic->subscribe(labels,taskDescription,taskDate,taskTime,floatingTasks,color);
-	input->Text = "display";
+	tasks = new std::vector<DisplayedTask>();
+	logic->subscribe(tasks);
+	input->Text = "view all";
 	getInput();
 	processAndExecute();
 	input->Clear();
-	floatingTaskIndex = 0;
 	originalRowPosition = 0;
+	tabs->Style = this->Style;
 	input->Focus();
 	this->ActiveControl = input;
-	floatingTaskDisplay->SelectionAlignment = HorizontalAlignment::Center;
+	//	floatingTaskDisplay->SelectionAlignment = HorizontalAlignment::Center;
+	inputHistoryCount = 0;
+	inputHistory = gcnew System::Collections::Generic::List<String^>();
 	keywords = gcnew List<String^>();
 	keywords->Add(ADD);
 	keywords->Add(DEL);
@@ -46,6 +43,7 @@ TextBuddyUI::TextBuddyUI() {
 	keywords->Add(SEARCH);
 	keywords->Add(UNDO);
 	keywords->Add(VIEW);
+	keywords->Add(CLEAR);
 	keywords->Add(DONE);
 	keywords->Add(SAVE);
 	keywords->Add(QUIT);
@@ -72,11 +70,13 @@ TextBuddyUI::TextBuddyUI() {
 
 	//********** VIEW command formats ******************
 	viewCommands = gcnew List<String^>();
+	viewCommands->Add("view all");
 	viewCommands->Add("view today");
 	viewCommands->Add("view week");
 	viewCommands->Add("view todo");
 	viewCommands->Add("view events");
 	viewCommands->Add("view floating");
+	viewCommands->Add("view past");
 	viewCommands->Add("view :<label>");
 	// add here...
 
@@ -96,6 +96,8 @@ TextBuddyUI::TextBuddyUI() {
 
 	suggestions = gcnew Hashtable();
 	suggestions->Add(QUIT,QUIT);
+	suggestions->Add(SAVE,SAVE);
+	suggestions->Add(CLEAR,CLEAR);
 	suggestions->Add(DONE,"done <ID>");
 	suggestions->Add(UNDO,UNDO);
 	suggestions->Add(HELP,HELP);

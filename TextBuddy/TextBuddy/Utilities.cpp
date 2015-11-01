@@ -171,8 +171,8 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 		view = VIEWTYPE_EVENT;
 	} else if(equalsIgnoreCase(viewString,VIEW_TODO)) {
 		view = VIEWTYPE_TODO;
-	} else if(equalsIgnoreCase(viewString,VIEW_NOTDONE)) {
-		view = VIEWTYPE_NOTDONE;
+	} else if(equalsIgnoreCase(viewString,VIEW_TODAY)) {
+		view = VIEWTYPE_TODAY;
 	} else if(equalsIgnoreCase(viewString,VIEW_PAST)) {
 		view = VIEWTYPE_PAST;
 	} else if(equalsIgnoreCase(viewString,VIEW_WEEK)) {
@@ -181,20 +181,6 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 		view = VIEWTYPE_LABELS;
 	}
 	return view;
-
-	// Check that all viewtypes are covered (never run because of return statement above)
-	switch(view) {
-	case VIEWTYPE_INVALID:
-	case VIEWTYPE_ALL:
-	case VIEWTYPE_FLOATING:
-	case VIEWTYPE_EVENT:
-	case VIEWTYPE_TODO:
-	case VIEWTYPE_NOTDONE:
-	case VIEWTYPE_PAST:
-	case VIEWTYPE_WEEK:
-	case VIEWTYPE_LABELS:
-		break;
-	}
 }
 
 std::vector<std::string> Utilities::stringToVec(std::string str) {
@@ -250,6 +236,50 @@ std::string Utilities::dayToString(Day day) {
 		break;
 	}
 	return dayString;
+}
+
+std::string Utilities::monthToString(Month month) {
+	std::string monthString;
+
+	switch (month) {
+	case JAN:
+		monthString = "Jan";
+		break;
+	case FEB:
+		monthString = "Feb";
+		break;
+	case MAR:
+		monthString = "Mar";
+		break;
+	case APR:
+		monthString = "Apr";
+		break;
+	case MAY:
+		monthString = "May";
+		break;
+	case JUN:
+		monthString = "June";
+		break;
+	case JUL:
+		monthString = "Jul";
+		break;
+	case AUG:
+		monthString = "Aug";
+		break;
+	case SEP:
+		monthString = "Sep";
+		break;
+	case OCT:
+		monthString = "Oct";
+		break;
+	case NOV:
+		monthString = "Nov";
+		break;
+	case DEC:
+		monthString = "Dec";
+		break;
+	}
+	return monthString;
 }
 
 std::string Utilities::fieldVecToString(std::vector<FieldType> fields) {
@@ -371,8 +401,8 @@ std::string	Utilities::viewTypeToString(ViewType view) {
 	case VIEWTYPE_TODO:
 		viewString = VIEW_TODO;
 		break;
-	case VIEWTYPE_NOTDONE:
-		viewString = VIEW_NOTDONE;
+	case VIEWTYPE_TODAY:
+		viewString = VIEW_TODAY;
 		break;
 	case VIEWTYPE_PAST:
 		viewString = VIEW_PAST;
@@ -502,7 +532,7 @@ std::string Utilities::getDate(int date) {
 	int month = (date % 10000)/100;
 	int year = date/10000;
 
-	std::string d = std::to_string(day) + "/" + std::to_string(month);
+	std::string d = std::to_string(day) + "/" + monthToString((Month)month);
 	if(year != localYear) {
 		d = d + "/" + std::to_string(year);
 	}

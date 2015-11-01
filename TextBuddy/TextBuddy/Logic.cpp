@@ -8,6 +8,8 @@ const std::string Logic::ERROR_INVALID_COMMAND = "Invalid command entered";
 
 Logic* Logic::theOne = new Logic();
 
+DisplayMode Logic::mode=TODAY;
+
 Logic::Logic() {
 	history = History::getInstance();
 	parser = Parser::getInstance();
@@ -66,17 +68,47 @@ std::string Logic::processCommand(std::string userCommand) {
 	return message;
 }
 
-void Logic::subscribe(std::vector<std::string>* labels,
-					  std::vector<std::string>* description,
-					  std::vector<std::string>* taskDate,
-					  std::vector<std::string>* taskTime,
-					  std::vector<std::string>* floatingTasks,
-					  std::vector<int>* color) {
+void Logic::subscribe(std::vector<DisplayedTask>* tasks) {
 
 						  assert(updater == nullptr);
-						  updater = new Update(labels, description, taskDate,
-							  taskTime, floatingTasks, color, currentView);
+						  updater = new Update(tasks,currentView);
 						  updater->update();
+}
+
+DisplayMode Logic::getMode() {
+	return mode;
+}
+
+void Logic::setAllMode() {
+	mode = ALL;
+}
+
+void Logic::setTodayMode() {
+	mode = TODAY;
+}
+
+void Logic::setWeekMode() {
+	mode = WEEK;
+}
+
+void Logic::setEventsMode() {
+	mode = EVENTS;
+}
+
+void Logic::setDeadlinesMode() {
+	mode = DEADLINES;
+}
+
+void Logic::setFloatingMode() {
+	mode = FLOATINGS;
+}
+
+void Logic::setSearchMode() {
+	mode = SEARCHES;
+}
+
+void Logic::setPastMode() {
+	mode = PAST_;
 }
 
 void Logic::resetUpdaterNULL() {

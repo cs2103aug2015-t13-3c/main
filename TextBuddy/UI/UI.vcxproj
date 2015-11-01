@@ -72,6 +72,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Reference Include="MetroFramework">
+      <HintPath>Z:\cs2103\TextBuddy\metrodll\MetroFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Design">
+      <HintPath>Z:\cs2103\TextBuddy\metrodll\MetroFramework.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts">
+      <HintPath>Z:\cs2103\TextBuddy\metrodll\MetroFramework.Fonts.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -82,7 +91,6 @@
     <ClCompile Include="autoComplete.cpp" />
     <ClCompile Include="execute.cpp" />
     <ClCompile Include="highlight.cpp" />
-    <ClCompile Include="scrolling.cpp" />
     <ClCompile Include="TextBuddyUI.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>

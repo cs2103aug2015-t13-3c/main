@@ -132,6 +132,7 @@ public:
 	bool setEndTime(int newEndTime);
 
 	bool isUrgent();
+	bool isToday();
 };
 
 #endif

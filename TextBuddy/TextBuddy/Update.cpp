@@ -3,72 +3,41 @@
 #include "stdafx.h"
 #include "Update.h"
 
-Update::Update(std::vector<std::string>* labels,
-			   std::vector<std::string>* description,
-			   std::vector<std::string>* taskDate,
-			   std::vector<std::string>* taskTime,
-			   std::vector<std::string>* floatingTasks,
-			   std::vector<int>* color,
+Update::Update(std::vector<DisplayedTask>* tasksToDisplay,
 			   std::vector<Task>* currentView ) {
-				   this->labels = labels;
-				   this->description = description;
-				   this->taskDate = taskDate;
-				   this->taskTime = taskTime;
-				   this->floatingTasks = floatingTasks;
-				   this->color = color;
+				  this->tasksToDisplay = tasksToDisplay;
 				   this->currentView = currentView;
 }
 
 Update::~Update() {
-	if(floatingTasks != nullptr) {
-		delete floatingTasks;
-	}
-	if(labels != nullptr) {
-		delete labels;
-	}
-	if(description != nullptr) {
-		delete description;
-	}
-	if(taskDate != nullptr) {
-		delete taskDate;
-	}
-	if(taskTime != nullptr) {
-		delete taskTime;
-	}
-	if(color != nullptr) {
-		delete color;
+	if(tasksToDisplay != nullptr) {
+		delete tasksToDisplay;
 	}
 }
 
 void Update::update() {
-	labels->clear();
-	description->clear();
-	taskDate->clear();
-	taskTime->clear();
-	color->clear();
-	floatingTasks->clear();
+	tasksToDisplay->clear();
 	std::vector<Task>::iterator i = currentView->begin();
 	while(i!=currentView->end()) {
-		labels->push_back(i->getLabelString());
-		description->push_back(i->getName());
-		taskDate->push_back(i->getDate_UI());
-		taskTime->push_back(i->getTime_UI());
-		// 0 : grey
-		// 1 : blue
-		// 2 : red
-		// 3 : black
+		DisplayedTask task;
+		task.label = i->getLabelString();
+		task.description = i->getName();
+		task.date = i->getDate_UI();
+		task.time = i->getTime_UI();
+		task.status = NORMAL;
+		if(i->getPriorityStatus()) {
+			task.status = PRIORITY;
+		}
+		if(i->isUrgent()) {
+			task.status = URGENT;
+		}
 		if(i->getDoneStatus()) {
-			color->push_back(0);
-		} else if(i->getPriorityStatus()) {
-			color->push_back(1);
-		} else if(i->isUrgent() && i->getType() == TODO) {
-			color->push_back(2);
-		} else {
-			color->push_back(3);
+			task.status = PAST;
 		}
-		if(i->getType() == FLOATING) {
-			floatingTasks->push_back(i->getName());
-		}
+		task.type = i->getType();
+		tasksToDisplay->push_back(task);
 		++i;
 	}
 }
+
+

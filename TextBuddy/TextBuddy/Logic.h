@@ -8,6 +8,17 @@
 #include "Parser.h"
 #include "Update.h"
 
+enum DisplayMode {
+	ALL,
+	TODAY,
+	WEEK,
+	EVENTS,
+	DEADLINES,
+	FLOATINGS,
+	SEARCHES,
+	PAST_
+};
+
 class Logic {
 private:
 	static Logic* theOne;
@@ -24,15 +35,20 @@ private:
 
 public:
 	static Logic* getInstance();
+	static DisplayMode mode;
 	~Logic();
 
 	std::string processCommand(std::string userCommand);
-	void subscribe(std::vector<std::string>* labels,
-		std::vector<std::string>* description,
-		std::vector<std::string>* taskDate,
-		std::vector<std::string>* taskTime,
-		std::vector<std::string>* floatingTasks,
-		std::vector<int>* color);
+	void subscribe(std::vector<DisplayedTask>* tasks);
+	DisplayMode getMode();
+	static void setTodayMode();
+	static void setWeekMode();
+	static void setAllMode();
+	static void setEventsMode();
+	static void setDeadlinesMode();
+	static void setFloatingMode();
+	static void setSearchMode();
+	static void setPastMode();
 	void resetUpdaterNULL();
 };
 

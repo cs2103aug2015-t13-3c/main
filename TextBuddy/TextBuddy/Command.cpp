@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "History.h"
+#include "Logic.h"
 
 //==================================================
 //                      COMMAND
@@ -581,6 +582,7 @@ std::string Search::getSearchPhrase() {
 // If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
 	std::string output = doSearch();
+	Logic::setSearchMode();
 	amendView(output);
 }
 
@@ -760,18 +762,23 @@ void View::execute() {
 	switch (view) {
 	case VIEWTYPE_ALL:
 		viewAll();
+		Logic::setAllMode();
 		break;
 	case VIEWTYPE_FLOATING:
 		viewTaskType(FLOATING);
+		Logic::setFloatingMode();
 		break;
 	case VIEWTYPE_EVENT:
 		viewTaskType(EVENT);
+		Logic::setEventsMode();
 		break;
 	case VIEWTYPE_TODO:	
 		viewTaskType(TODO);
+		Logic::setDeadlinesMode();
 		break;
 	case VIEWTYPE_PAST:	
 		viewDone();
+		Logic::setPastMode();
 		break;
 	case VIEWTYPE_WEEK: {
 		logger->log(DEBUG,"Viewing week");
@@ -802,12 +809,15 @@ void View::execute() {
 		}
 
 		viewWeek(currentDate, 0, weekDate, 2359);
-		break;}
+		Logic::setWeekMode();
+		break; }
 	case VIEWTYPE_LABELS:
 		viewLabel(viewLabels);
+		Logic::setSearchMode();
 		break;
-	case VIEWTYPE_NOTDONE:
-		viewNotdone();
+	case VIEWTYPE_TODAY:
+		viewToday();
+		Logic::setTodayMode();
 		break;
 	case VIEWTYPE_INVALID:
 		break;
@@ -830,6 +840,7 @@ std::string View::getMessage() {
 
 bool View::viewAll() {
 	currentView = taskStore;
+	removeDoneTasks(currentView);
 	return true;
 }
 
@@ -860,12 +871,12 @@ bool View::viewDone() {
 	return true;
 }
 
-bool View::viewNotdone() {
+bool View::viewToday() {
 	currentView.clear();
 
 	std::vector<Task>::iterator iter;
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
-		if (iter->getDoneStatus() == false) {
+		if (iter->isToday()) {
 			currentView.push_back(*iter);
 		}
 	}
