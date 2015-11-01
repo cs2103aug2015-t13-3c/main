@@ -21,7 +21,7 @@ public:
 		PowerSearch testPwrSearch(paraVec);
 		testPwrSearch.execute();
 		Task testTask;
-		
+
 		testTask.setStartDate(151010);
 		testTask.setStartTime(0);
 		testTask.setEndDate(151212);
@@ -58,7 +58,7 @@ public:
 		testTask.setEndTime(800);
 		Add addSix(testTask);
 		addSix.execute();
-		
+
 		testPwrSearch.setTasksWithinPeriod(151015,2200,151016,1500);
 
 		std::vector<Task> copyTask = testPwrSearch.getTasksWithinPeriod();
@@ -71,7 +71,7 @@ public:
 		++iter;
 		Assert::AreEqual(iter->getStartDate(), 151016);
 	}
-	
+
 	TEST_METHOD(PowerSearch_searchFreeSlot) {
 		std::vector<std::string> paraVec; 
 		paraVec.push_back("");
@@ -84,13 +84,13 @@ public:
 		paraVec.push_back("0");
 
 		PowerSearch testPwrSearch(paraVec);
-		//Create method to "fit in" an event that may or may not exceed the range of free period
-		//Or can set parameter x such that free period mentioned must exceed x
+		// Create method to "fit in" an event that may or may not exceed the range of free period
+		// Or can set parameter x such that free period mentioned must exceed x
 		Task testTask;
 		testTask.setStartDate(151010);
 		testTask.setStartTime(0);
-		testTask.setEndDate(151010);					//is endDate set to be the same as startDate if no range?
-		testTask.setEndTime(1500);						//note: throw exception if endtime < starttime
+		testTask.setEndDate(151010);					// Is endDate set to be the same as startDate if no range?
+		testTask.setEndTime(1500);						// Note: throw exception if endTime < startTime
 		Add addOne(testTask);
 		addOne.clearTaskStore();
 		addOne.execute();
@@ -108,7 +108,7 @@ public:
 		testTask.setEndTime(2000);
 		Add addThree(testTask);
 		addThree.execute();
-		
+
 		testTask.setStartDate(151015);
 		testTask.setStartTime(2300);
 		testTask.setEndDate(151015);
@@ -158,6 +158,6 @@ public:
 		Assert::AreEqual(151017, iter->getEndDate());
 		Assert::AreEqual(900, iter->getEndTime());
 	}
-	
+
 	};
 }

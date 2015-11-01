@@ -23,7 +23,6 @@
 #define ON " on "
 #define AT " at "
 
-
 namespace UserInterface {
 
 	using namespace System;
@@ -59,7 +58,6 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
 	private: System::Windows::Forms::PictureBox^  help;
 	private: System::Windows::Forms::ComboBox^  dropDown;
-
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -99,7 +97,8 @@ namespace UserInterface {
 				 display->BorderStyle = System::Windows::Forms::BorderStyle::None;
 				 display->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 				 display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-				 display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(5) {this->id, this->Label, this->description, 
+				 display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(5) {
+					 this->id, this->Label, this->description, 
 					 this->date, this->time});
 				 dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
 				 dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
@@ -390,6 +389,5 @@ namespace UserInterface {
 
 		System::Void dropDown_DropDown(System::Object^  sender, System::EventArgs^  e); 
 
-		
-};
+	};
 }

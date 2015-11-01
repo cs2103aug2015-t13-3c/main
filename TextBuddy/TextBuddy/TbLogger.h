@@ -54,7 +54,7 @@ public:
 	char* getLocalTime();
 	static TbLogger* getInstance();
 	~TbLogger();
-	
+
 	void setLogLevel(Level level);
 	void log(Level level, std::string message);
 	int getDate();

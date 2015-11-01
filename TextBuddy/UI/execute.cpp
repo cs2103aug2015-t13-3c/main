@@ -4,58 +4,58 @@
 
 using namespace UserInterface;
 /*
-System::Void TextBuddyUI::input_KeyUp_1(System::Object^  sender, 
-									System::Windows::Forms::KeyEventArgs^  e) {
-	this->dropDown->DroppedDown = true;
-	cursorPosition = input->SelectionStart;
-	if(e->KeyCode == Keys::Home) {
-		//do nothing 
-		return;
-	}
-	if(helpMode) {
-		helpMode = false;
-		help->Visible = false;
-		help->SendToBack();
-		input->Clear();
-		return;
-	}
-	if(e->KeyCode == Keys::Return) { // If user presses 'Return' key
-		if(dropDown->DroppedDown) {
-			String^ command = dropDown->SelectedItem->ToString();
-			input->Text = command;
-			dropDown->DroppedDown = false;
-			return;
-		}
-		getInput();
-		processAndExecute();
-		input->Clear();
-	} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right && e->KeyCode != Keys::Back){
-		highlightSyntax();
-		autoComplete();
-	}
-	if(e->KeyCode == Keys::Back) {
-		undoSearch();
-		undoHighlight();
-	}
-	if(e->KeyCode == Keys::Down) {
-		//scrollDown();
-		this->dropDown->SelectedIndex ++ ;
-	}
-	if(e->KeyCode == Keys::Up) {
-		//scrollUp();
-		if(this->dropDown->SelectedIndex > 0 ) {
-			this->dropDown->SelectedIndex -- ;
-		}
-	}
+System::Void TextBuddyUI::input_KeyUp_1(System::Object^ sender, 
+System::Windows::Forms::KeyEventArgs^ e) {
+this->dropDown->DroppedDown = true;
+cursorPosition = input->SelectionStart;
+if(e->KeyCode == Keys::Home) {
+// Do nothing 
+return;
+}
+if(helpMode) {
+helpMode = false;
+help->Visible = false;
+help->SendToBack();
+input->Clear();
+return;
+}
+if(e->KeyCode == Keys::Return) { // If user presses 'Return' key
+if(dropDown->DroppedDown) {
+String^ command = dropDown->SelectedItem->ToString();
+input->Text = command;
+dropDown->DroppedDown = false;
+return;
+}
+getInput();
+processAndExecute();
+input->Clear();
+} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right && e->KeyCode != Keys::Back){
+highlightSyntax();
+autoComplete();
+}
+if(e->KeyCode == Keys::Back) {
+undoSearch();
+undoHighlight();
+}
+if(e->KeyCode == Keys::Down) {
+// scrollDown();
+this->dropDown->SelectedIndex++;
+}
+if(e->KeyCode == Keys::Up) {
+// scrollUp();
+if(this->dropDown->SelectedIndex > 0 ) {
+this->dropDown->SelectedIndex--;
+}
+}
 }
 */
 //====================== DEVELOPING ===========================================
-System::Void TextBuddyUI::input_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+System::Void TextBuddyUI::input_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
 	Keys key = e->KeyCode;
 	if(key == Keys::Tab) {
 		if(dropDown->DroppedDown) {
-			if(dropDown->SelectedIndex + 1 < dropDown->Items->Count) { 
-				dropDown->SelectedIndex ++ ;
+			if(dropDown->SelectedIndex + 1 < dropDown->Items->Count) {
+				dropDown->SelectedIndex++;
 			}
 		} else {
 			selectFields();
@@ -67,46 +67,46 @@ System::Void TextBuddyUI::input_KeyUp(System::Object^  sender, System::Windows::
 	}
 }
 
-System::Void TextBuddyUI::input_KeyDown(System::Object^  sender, 
-									System::Windows::Forms::KeyEventArgs^  e) {
-	Keys key = e->KeyCode;
-	if(key == Keys::Return) { // If user presses 'Return' key
-		if(dropDown->DroppedDown) {
-			if(dropDown->SelectedIndex > -1) {
-				String^ command = dropDown->SelectedItem->ToString();
-				input->Clear();
-				input->Text = command;
-				dropDown->DroppedDown = false;
-				selectFields();
-				return;
-			} else {
-				dropDown->DroppedDown = false;
-			}
-		}
-		getInput();
-		processAndExecute();
-		input->Clear();
-		return; 
-	}
-	if(key == Keys::Down) {
-		if(dropDown->SelectedIndex + 1 < dropDown->Items->Count) { 
-			dropDown->SelectedIndex ++ ;
-		}
-		return;
-	}
-	if(key == Keys::Up) {
-		if(dropDown->SelectedIndex > 0 ) {
-			dropDown->SelectedIndex -- ;
-		} else {
-			dropDown->DroppedDown = false;
-		}
-		return;
-	}
-	if(key == Keys::Back) {
-		if(String::IsNullOrEmpty(input->Text)) {
+System::Void TextBuddyUI::input_KeyDown(System::Object^ sender, 
+										System::Windows::Forms::KeyEventArgs^ e) {
+											Keys key = e->KeyCode;
+											if(key == Keys::Return) { // If user presses 'Return' key
+												if(dropDown->DroppedDown) {
+													if(dropDown->SelectedIndex > -1) {
+														String^ command = dropDown->SelectedItem->ToString();
+														input->Clear();
+														input->Text = command;
+														dropDown->DroppedDown = false;
+														selectFields();
+														return;
+													} else {
+														dropDown->DroppedDown = false;
+													}
+												}
+												getInput();
+												processAndExecute();
+												input->Clear();
+												return; 
+											}
+											if(key == Keys::Down) {
+												if(dropDown->SelectedIndex + 1 < dropDown->Items->Count) {
+													dropDown->SelectedIndex++;
+												}
+												return;
+											}
+											if(key == Keys::Up) {
+												if(dropDown->SelectedIndex > 0 ) {
+													dropDown->SelectedIndex--;
+												} else {
+													dropDown->DroppedDown = false;
+												}
+												return;
+											}
+											if(key == Keys::Back) {
+												if(String::IsNullOrEmpty(input->Text)) {
 
-		}
-	}
+												}
+											}
 }
 
 void TextBuddyUI::selectFields() {
@@ -212,10 +212,10 @@ void TextBuddyUI::processAndExecute() {
 }
 
 void TextBuddyUI::updateDisplay() {
-	DataGridView^ display = description->DataGridView ;
+	DataGridView^ display = description->DataGridView;
 	display->Rows->Clear();
 	unsigned int size = taskDescription->size();
-	for(unsigned int i=0 ; i< size ; ++i) {
+	for(unsigned int i=0; i< size; ++i) {
 		String^ index = gcnew String((i+1).ToString());
 		String^ label = gcnew String((*labels)[i].c_str());
 		String^ title = gcnew String((*taskDescription)[i].c_str());

@@ -70,7 +70,7 @@ std::string searchInfo(Search toSearch);
 /*
 // Assume max storage of 1000 tasks for now
 #define SIZE 1000
-class Logic{
+class Logic {
 private:
 bool isActive;
 IO* io;
@@ -78,7 +78,8 @@ IO* io;
 // Start and end dates to allow for "blocking" of slots for now
 // If it is a normal "duedate", no endDate and endTime will be given
 // For floating tasks, all the dates and times could be given impossible values, eg 999999 for date and 9999 for time 
-/*class struct textInfo{				// Change to class
+/*
+class struct textInfo {					// Change to class
 std::string text;						// Basic contents of task
 int startDate;							// YYMMDD format (if year not parsed then can add 150000)
 int startTime;							// 24hr/HHMM format (or HMM if [12mn < time < 12nn])

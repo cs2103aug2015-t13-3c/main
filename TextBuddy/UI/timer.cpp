@@ -4,7 +4,7 @@
 
 using namespace UserInterface;
 
-System::Void TextBuddyUI::updateFloatingTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
+System::Void TextBuddyUI::updateFloatingTimer_Tick(System::Object^ sender, System::EventArgs^ e) {
 	if(floatingTasks != nullptr) {
 		if(floatingTasks->empty()) {
 			floatingTaskDisplay->Text = "";
@@ -18,10 +18,10 @@ System::Void TextBuddyUI::updateFloatingTimer_Tick(System::Object^  sender, Syst
 	}
 }
 
-System::Void TextBuddyUI::updateCurrentTime_Tick(System::Object^  sender, System::EventArgs^  e) {
+System::Void TextBuddyUI::updateCurrentTime_Tick(System::Object^ sender, System::EventArgs^ e) {
 	DateTime localDateTime = DateTime::Now;
 	String^ t = (localDateTime.DayOfWeek).ToString() + " " + 
 		(localDateTime.Day).ToString() + "/" +
-		(localDateTime.Month).ToString() ;
-	currentTime->Text = t ;
+		(localDateTime.Month).ToString();
+	currentTime->Text = t;
 }

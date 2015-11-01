@@ -14,37 +14,37 @@ void TextBuddyUI::searchAutoComplete() {
 	int position = findKeyword(SEARCH);
 	if(keywordIsFound(position) && position == 0) {
 		getInput();
-		if(input->Text != SEARCH) { 
+		if(input->Text != SEARCH) {
 			processAndExecute();
 		} 
 	}
 }
 /*
 void TextBuddyUI::commandAutoComplete() {
-	for each(String^ command in keywords) {
-		if(command == STAR || String::IsNullOrEmpty(input->Text) ) {
-			return;
-		}
-		if(command == DEL || command == DONE || command == DISPLAY || command == SAVE || command == SEARCH) {
-			if(input->Text->Length > 1) {
-				if(command->IndexOf(input->Text[0]) == 0 && 
-					command->IndexOf(input->Text[1]) == 1) {
-						if(cursorPosition < command->Length) {
-							input->Text = command;
-							int length = (command->Length) - 2 ;
-							input->Select(cursorPosition,length);
-						}
-				}
-			}
-		} else if(command->IndexOf(input->Text[0]) == 0) {
-			if(cursorPosition < command->Length) {
-				input->Text = command;
-				int length = (command->Length) - 2 ;
-				input->Select(cursorPosition,length);
-			}
-		}
+for each(String^ command in keywords) {
+if(command == STAR || String::IsNullOrEmpty(input->Text) ) {
+return;
+}
+if(command == DEL || command == DONE || command == DISPLAY || command == SAVE || command == SEARCH) {
+if(input->Text->Length > 1) {
+if(command->IndexOf(input->Text[0]) == 0 && 
+command->IndexOf(input->Text[1]) == 1) {
+if(cursorPosition < command->Length) {
+input->Text = command;
+int length = (command->Length) - 2;
+input->Select(cursorPosition,length);
+}
+}
+}
+} else if(command->IndexOf(input->Text[0]) == 0) {
+if(cursorPosition < command->Length) {
+input->Text = command;
+int length = (command->Length) - 2;
+input->Select(cursorPosition,length);
+}
+}
 
-	}
+}
 }
 */
 void TextBuddyUI::viewAutoComplete() {
@@ -55,7 +55,7 @@ void TextBuddyUI::viewAutoComplete() {
 			if(c == 'a') {
 				String^ keyword = "all";
 				putSuggestedText(keyword);
-			} else if(c == 'e') { 
+			} else if(c == 'e') {
 				String^ keyword = "event";
 				putSuggestedText(keyword);
 			} else if(c == 'f') {
@@ -74,8 +74,8 @@ void TextBuddyUI::viewAutoComplete() {
 				String^ keyword = "week";
 				putSuggestedText(keyword);
 			} else {
-				// testing
-				//putSuggestedText("bla");
+				// Testing
+				// putSuggestedText("bla");
 			}
 		}
 	}
@@ -85,7 +85,7 @@ void TextBuddyUI::putSuggestedText(String^ keyword) {
 	if(cursorPosition > 4 + keyword->Length) {
 		return;
 	}
-	if(input->Text[6] !=  keyword[1]) {
+	if(input->Text[6] != keyword[1]) {
 		return;
 	}
 	input->Select(5,input->Text->Length - 6);
@@ -100,6 +100,6 @@ void TextBuddyUI::undoSearch() {
 	}
 }
 
-System::Void TextBuddyUI::dropDown_DropDown(System::Object^  sender, System::EventArgs^  e) {
+System::Void TextBuddyUI::dropDown_DropDown(System::Object^ sender, System::EventArgs^ e) {
 
 }

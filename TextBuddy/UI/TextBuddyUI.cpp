@@ -93,7 +93,7 @@ TextBuddyUI::TextBuddyUI() {
 	searchCommands = gcnew List<String^>();
 	searchCommands->Add("search <TASK DESCRIPTION>");
 	// add here...
-	
+
 	suggestions = gcnew Hashtable();
 	suggestions->Add(QUIT,QUIT);
 	suggestions->Add(DONE,"done <ID>");

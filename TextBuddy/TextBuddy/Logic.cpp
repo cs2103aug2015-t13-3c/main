@@ -3,8 +3,8 @@
 #include "stdafx.h"
 #include "Logic.h"
 
-const std::string Logic::ERROR_NO_INPUT = "No Input";
-const std::string Logic::ERROR_INVALID_COMMAND = "Invalid Command Entered";
+const std::string Logic::ERROR_NO_INPUT = "No input";
+const std::string Logic::ERROR_INVALID_COMMAND = "Invalid command entered";
 
 Logic* Logic::theOne = new Logic();
 
@@ -375,7 +375,6 @@ infoArray[index].endTime = endTimeInput;
 
 return;
 }
-
 
 // Searches for the first available slot from input date and time onwards
 std::string Logic::freeSlotSearch(int date, int time) {

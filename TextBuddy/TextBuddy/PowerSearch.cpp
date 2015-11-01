@@ -68,7 +68,6 @@ int PowerSearch::daysInMth(int month, int year) {
 	return 0;
 }
 
-
 // Counts number of minutes from yr 2000, 1 Jan 0000
 int PowerSearch::numOfMin(int date, int time) {
 	int numOfYrs = date/10000;
@@ -92,7 +91,7 @@ int PowerSearch::numOfMin(int date, int time) {
 bool PowerSearch::isWithinFreePeriod(Task freePeriod, int daysNeeded, int hrsNeeded, int minsNeeded) {
 	int numMinNeeded;			
 	int numMinAvail;			// Number of minutes in the free period	
-	
+
 	numMinAvail = numOfMin(freePeriod.getEndDate(), freePeriod.getEndTime()) - numOfMin(freePeriod.getStartDate(), freePeriod.getStartTime());
 	numMinNeeded = daysNeeded*24*60 + hrsNeeded*60 + minsNeeded;
 
@@ -180,7 +179,7 @@ std::vector<Task> PowerSearch::getFreePeriods() {
 void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task>::iterator iter;
 	std::string taskName;
-	
+
 	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
 	currentView.clear();
 
@@ -196,20 +195,20 @@ void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int 
 // Output: Modifies currentView into a list of free dates
 void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int endTime,
 								 int daysNeeded, int hrsNeeded, int minsNeeded) {
-	int count = 1;
-	std::vector<Task>::iterator iter;
-									 
-	setFreePeriods(startDate, startTime, endDate, endTime);
-	currentView.clear();
+									 int count = 1;
+									 std::vector<Task>::iterator iter;
 
-	for (iter = freePeriods.begin(); iter != freePeriods.end(); ++iter) {
-		if (isWithinFreePeriod(*iter,daysNeeded,hrsNeeded,minsNeeded)) {
-			iter->setName("Free period " + Utilities::intToString(count));
-			count++;
+									 setFreePeriods(startDate, startTime, endDate, endTime);
+									 currentView.clear();
 
-			currentView.push_back(*iter);
-		}
-	}
+									 for (iter = freePeriods.begin(); iter != freePeriods.end(); ++iter) {
+										 if (isWithinFreePeriod(*iter,daysNeeded,hrsNeeded,minsNeeded)) {
+											 iter->setName("Free period " + Utilities::intToString(count));
+											 count++;
+
+											 currentView.push_back(*iter);
+										 }
+									 }
 }
 
 void PowerSearch::execute() {

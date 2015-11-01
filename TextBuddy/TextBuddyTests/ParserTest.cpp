@@ -46,7 +46,7 @@ public:
 		userInput = "/test.txt";
 		Assert::AreEqual(expectedString,p->parseFileName(userInput));
 
-		// ===== Single backslash =====
+		//===== Single backslash =====
 		// Note: Seen as double here because '\' is a reserved character
 		expectedString = "C:\\\\Users\\\\%USERNAME%\\\\Downloads\\\\TEXT.txt";
 		userInput = "C:\\Users\\%USERNAME%\\Downloads\\TEXT.txt";
@@ -507,7 +507,7 @@ public:
 		Assert::AreEqual(0,Utilities::stringToInt(*daysNeeded));
 		Assert::AreEqual(1,Utilities::stringToInt(*hrsNeeded));
 		Assert::AreEqual(0,Utilities::stringToInt(*minsNeeded));
-		
+
 		// Searchphrase PowerSearch with attempted Freeslot Powersearch
 		// Tested: Searchphrase PowerSearch takes precedence over Freeslot Powersearch
 		userInput = "lecture for 1 d 1 m";

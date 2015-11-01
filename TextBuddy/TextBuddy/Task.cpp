@@ -22,7 +22,6 @@ Task::Task() {
 
 Task::~Task() {}
 
-
 //========== Static ==========
 
 int Task::getRunningCount() {
@@ -37,19 +36,47 @@ int Task::incrementRunningCount() {
 	return ++runningCount;
 }
 
-
 //========== Getters ==========
 
-std::string Task::getName() {return name;}
-TaskType Task::getType() {return type;}
-int Task::getID() {return uniqueID;}
-bool Task::getDoneStatus() {return isDone;}
-bool Task::getPriorityStatus() {return isPriority;}
-int Task::getStartDate() {return startDate;}
-int Task::getStartTime() {return startTime;}
-int Task::getEndDate() {return endDate;}
-int Task::getEndTime() {return endTime;}
-std::vector<std::string> Task::getLabelsToDelete() {return labelsToDelete;}
+std::string Task::getName() {
+	return name;
+}
+
+TaskType Task::getType() {
+	return type;
+}
+
+int Task::getID() {
+	return uniqueID;
+}
+
+bool Task::getDoneStatus() {
+	return isDone;
+}
+
+bool Task::getPriorityStatus() {
+	return isPriority;
+}
+
+int Task::getStartDate() {
+	return startDate;
+}
+
+int Task::getStartTime() {
+	return startTime;
+}
+
+int Task::getEndDate() {
+	return endDate;
+}
+
+int Task::getEndTime() {
+	return endTime;
+}
+
+std::vector<std::string> Task::getLabelsToDelete() {
+	return labelsToDelete;
+}
 
 std::vector<std::string> Task::getLabels() {
 	std::vector<std::string> labelVector;
@@ -68,9 +95,9 @@ std::string Task::getLabelString() {
 		label = label + *i + "\r\n";
 		++i;
 	}
-	//remove the last new line characters
+	// Remove the last newline characters
 	if(!label.empty()) {
-		for(int j=0 ; j<2 ; ++j) {
+		for(int j=0; j<2; ++j) {
 			label.pop_back();
 		}
 	}
@@ -94,11 +121,10 @@ std::string Task::getTime_UI() {
 	}
 	std::string time = Utilities::getTime(endTime);
 	if(startTime != endTime) {
-		time = Utilities::getTime(startTime)  + " - " + time;
+		time = Utilities::getTime(startTime) + " - " + time;
 	}
 	return time;
 }
-
 
 //========== Setters ==========
 // Return true if successful
@@ -203,7 +229,7 @@ bool Task::isUrgent() {
 	int day = startDate % 100;
 	int month = (startDate % 10000)/100;
 	int year = startDate/10000;
-	
+
 	if(day == currentDay && month == currentMonth && year == currentYear) {
 		return true;
 	} 

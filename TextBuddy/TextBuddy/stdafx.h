@@ -17,7 +17,6 @@
 #include <fstream>
 #include <sstream>
 
-
 #include <algorithm>
 #include <string>
 #include <set>

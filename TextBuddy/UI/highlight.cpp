@@ -32,8 +32,6 @@ bool TextBuddyUI::keywordIsFound(int position) {
 	return position >= 0;
 }
 
-
-
 void TextBuddyUI::highlightKeywords(int position, String^ keyword) {
 	int length = (keyword->Length) - 1;
 	input->Select(position,length);

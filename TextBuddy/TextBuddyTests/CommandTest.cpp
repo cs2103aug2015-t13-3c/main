@@ -90,7 +90,6 @@ public:
 
 		addTwo.undo();
 
-
 		copyTask = addTwo.getTaskStore();
 		iter = copyTask.begin();
 		Assert::AreEqual(2,addTwo.getSize());
@@ -283,7 +282,7 @@ public:
 		fields.push_back(NAME);
 		Task modifiedTask;
 		modifiedTask.setName("New Sentence Three");
-fields.push_back(END_DATE);
+		fields.push_back(END_DATE);
 		fields.push_back(START_DATE);
 		modifiedTask.setStartDate(150101);	
 		modifiedTask.setEndDate(150201);
@@ -559,7 +558,7 @@ public:
 		task.markDone();
 		Add addTwo(task);
 		addTwo.execute();
-		
+
 		// KB: to include done tasks
 		View viewAll(VIEWTYPE_ALL, "");
 		viewAll.execute();
