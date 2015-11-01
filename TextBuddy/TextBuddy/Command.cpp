@@ -12,6 +12,8 @@
 
 //========== COMMAND : PUBLIC METHODS ==============
 
+int Command::lastEditID = 0;
+
 Command::Command(CommandType newCmd, std::string rawInput) {
 	cmd = newCmd;
 	userInput = rawInput;
@@ -53,6 +55,7 @@ void Command::clearTaskStore() {
 
 // Virtual functions
 void Command::execute() {}
+
 void Command::undo() {
 	throw std::runtime_error("Action cannot be undone");
 }
