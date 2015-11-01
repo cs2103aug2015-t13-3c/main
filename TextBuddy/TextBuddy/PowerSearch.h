@@ -42,6 +42,8 @@ public:
 	void searchLabel(std::string label);
 	
 	void execute();
+
+	std::string getMessage();
 };
 
 #endif

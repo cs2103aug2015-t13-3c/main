@@ -218,3 +218,7 @@ void PowerSearch::execute() {
 		searchInfo(searchPhrase, startDate, startTime, endDate, endTime);
 	}
 }
+
+std::string PowerSearch::getMessage() {
+	return "Here is the list of free slots available";
+}

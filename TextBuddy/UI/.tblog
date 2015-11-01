@@ -459,3 +459,122 @@ Sun Nov 01 08:47:34 2015 Parsing "clear"
 Sun Nov 01 08:47:35 2015 Parsing "exit"
 Sun Nov 01 08:47:35 2015 Logger terminated
 
+Sun Nov 01 08:55:09 2015 Logger initialised
+Sun Nov 01 08:55:09 2015 Log level default: 1
+Sun Nov 01 08:55:09 2015 Parser instantiated
+Sun Nov 01 08:55:09 2015 Log level changed: 0
+Sun Nov 01 08:55:10 2015 Parsing "display"
+Sun Nov 01 08:55:13 2015 Parsing "add"
+Sun Nov 01 08:55:13 2015 Parsing task
+Sun Nov 01 08:55:13 2015 Parsing field keyword: name
+Sun Nov 01 08:55:13 2015 Parsing string: task
+Sun Nov 01 08:55:13 2015 Parsed task of type: FLOATING
+Sun Nov 01 08:55:15 2015 Parsing "add"
+Sun Nov 01 08:55:15 2015 Parsing task
+Sun Nov 01 08:55:15 2015 Parsing field keyword: name
+Sun Nov 01 08:55:15 2015 Parsing string: task 2
+Sun Nov 01 08:55:15 2015 Parsed task of type: FLOATING
+Sun Nov 01 08:55:26 2015 Parsing "search"
+Sun Nov 01 08:55:26 2015 Checking that from = from
+Sun Nov 01 08:55:26 2015 Checking that from = from
+Sun Nov 01 08:55:26 2015 Checking that for = for
+Sun Nov 01 08:55:26 2015 Processing PowerSearch phrase: from
+Sun Nov 01 08:55:26 2015 Checking that from = from
+Sun Nov 01 08:55:26 2015 Parsing PowerSearch inputMode: from
+Sun Nov 01 08:55:26 2015 Processing PowerSearch phrase: 8
+Sun Nov 01 08:55:26 2015 Checking that to = to
+Sun Nov 01 08:55:26 2015 Checking that from = from
+Sun Nov 01 08:55:26 2015 Checking that sep = sep
+Sun Nov 01 08:55:26 2015 Parsed by date: 150908
+Sun Nov 01 08:55:26 2015 Parsed 8 sep to be date: 150908
+Sun Nov 01 08:55:26 2015 Parsing PowerSearch inputMode: to
+Sun Nov 01 08:55:26 2015 Processing PowerSearch phrase: 9
+Sun Nov 01 08:55:26 2015 Checking that for = for
+Sun Nov 01 08:55:26 2015 Checking that to = to
+Sun Nov 01 08:55:26 2015 Checking that sep = sep
+Sun Nov 01 08:55:26 2015 Parsed by date: 150909
+Sun Nov 01 08:55:26 2015 Parsing PowerSearch inputMode: for
+Sun Nov 01 08:55:26 2015 Processing PowerSearch phrase: for
+Sun Nov 01 08:55:26 2015 Checking that for = for
+Sun Nov 01 08:55:26 2015 Parsed PowerSearch
+Sun Nov 01 08:55:38 2015 Parsing "delete"
+Sun Nov 01 08:56:03 2015 Logger initialised
+Sun Nov 01 08:56:03 2015 Log level default: 1
+Sun Nov 01 08:56:03 2015 Parser instantiated
+Sun Nov 01 08:56:03 2015 Log level changed: 0
+Sun Nov 01 08:56:03 2015 Parsing "display"
+Sun Nov 01 08:56:21 2015 Parsing "search"
+Sun Nov 01 08:56:21 2015 Checking that from = from
+Sun Nov 01 08:56:21 2015 Processing PowerSearch phrase: free
+Sun Nov 01 08:56:21 2015 Checking that from = from
+Sun Nov 01 08:56:21 2015 Parsing PowerSearch inputMode: from
+Sun Nov 01 08:56:21 2015 Processing PowerSearch phrase: 7
+Sun Nov 01 08:56:21 2015 Checking that to = to
+Sun Nov 01 08:56:21 2015 Checking that from = from
+Sun Nov 01 08:56:21 2015 Checking that sep = sep
+Sun Nov 01 08:56:21 2015 Parsed by date: 150907
+Sun Nov 01 08:56:21 2015 Parsed 7 sep to be date: 150907
+Sun Nov 01 08:56:21 2015 Parsing PowerSearch inputMode: to
+Sun Nov 01 08:56:21 2015 Processing PowerSearch phrase: 8
+Sun Nov 01 08:56:21 2015 Checking that to = to
+Sun Nov 01 08:56:21 2015 Checking that sep = sep
+Sun Nov 01 08:56:21 2015 Parsed by date: 150908
+Sun Nov 01 08:56:21 2015 Parsed PowerSearch
+Sun Nov 01 08:56:26 2015 Parsing "view"
+Sun Nov 01 08:56:26 2015 Viewing...
+Sun Nov 01 08:56:35 2015 Parsing "search"
+Sun Nov 01 08:56:35 2015 Checking that from = from
+Sun Nov 01 08:56:35 2015 Checking that from = from
+Sun Nov 01 08:56:35 2015 Checking that for = for
+Sun Nov 01 08:56:35 2015 Processing PowerSearch phrase: from
+Sun Nov 01 08:56:35 2015 Checking that from = from
+Sun Nov 01 08:56:35 2015 Parsing PowerSearch inputMode: from
+Sun Nov 01 08:56:35 2015 Processing PowerSearch phrase: 7
+Sun Nov 01 08:56:35 2015 Checking that to = to
+Sun Nov 01 08:56:35 2015 Checking that from = from
+Sun Nov 01 08:56:35 2015 Checking that sep = sep
+Sun Nov 01 08:56:35 2015 Parsed by date: 150907
+Sun Nov 01 08:56:35 2015 Parsed 7 sep to be date: 150907
+Sun Nov 01 08:56:35 2015 Parsing PowerSearch inputMode: to
+Sun Nov 01 08:56:35 2015 Processing PowerSearch phrase: 8
+Sun Nov 01 08:56:35 2015 Checking that for = for
+Sun Nov 01 08:56:35 2015 Checking that to = to
+Sun Nov 01 08:56:35 2015 Checking that sep = sep
+Sun Nov 01 08:56:35 2015 Parsed by date: 150908
+Sun Nov 01 08:56:35 2015 Parsing PowerSearch inputMode: for
+Sun Nov 01 08:56:35 2015 Processing PowerSearch phrase: for
+Sun Nov 01 08:56:35 2015 Checking that for = for
+Sun Nov 01 08:56:35 2015 Parsed PowerSearch
+Sun Nov 01 08:56:39 2015 Parsing "view"
+Sun Nov 01 08:56:39 2015 Viewing...
+Sun Nov 01 08:56:42 2015 Parsing "delete"
+Sun Nov 01 08:56:50 2015 Parsing "search"
+Sun Nov 01 08:56:50 2015 Checking that from = from
+Sun Nov 01 08:56:50 2015 Checking that from = from
+Sun Nov 01 08:56:57 2015 Parsing "search"
+Sun Nov 01 08:56:57 2015 Checking that from = from
+Sun Nov 01 08:56:57 2015 Checking that from = from
+Sun Nov 01 08:56:57 2015 Checking that for = for
+Sun Nov 01 08:56:57 2015 Processing PowerSearch phrase: from
+Sun Nov 01 08:56:57 2015 Checking that from = from
+Sun Nov 01 08:56:57 2015 Parsing PowerSearch inputMode: from
+Sun Nov 01 08:56:57 2015 Processing PowerSearch phrase: 7
+Sun Nov 01 08:56:57 2015 Checking that to = to
+Sun Nov 01 08:56:57 2015 Checking that from = from
+Sun Nov 01 08:56:57 2015 Checking that sep = sep
+Sun Nov 01 08:56:57 2015 Parsed by date: 150907
+Sun Nov 01 08:56:57 2015 Parsed 7 sep to be date: 150907
+Sun Nov 01 08:56:57 2015 Parsing PowerSearch inputMode: to
+Sun Nov 01 08:56:57 2015 Processing PowerSearch phrase: 8
+Sun Nov 01 08:56:57 2015 Checking that for = for
+Sun Nov 01 08:56:57 2015 Checking that to = to
+Sun Nov 01 08:56:57 2015 Checking that sep = sep
+Sun Nov 01 08:56:57 2015 Parsed by date: 150908
+Sun Nov 01 08:56:57 2015 Parsing PowerSearch inputMode: for
+Sun Nov 01 08:56:57 2015 Processing PowerSearch phrase: for
+Sun Nov 01 08:56:57 2015 Checking that for = for
+Sun Nov 01 08:56:57 2015 Parsed PowerSearch
+Sun Nov 01 08:57:24 2015 Parsing "clear"
+Sun Nov 01 08:57:31 2015 Parsing "exit"
+Sun Nov 01 08:57:31 2015 Logger terminated
+
