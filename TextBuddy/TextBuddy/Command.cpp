@@ -846,6 +846,7 @@ std::string View::getMessage() {
 
 bool View::viewAll() {
 	currentView = taskStore;
+	removeDoneTasks(currentView);
 	return true;
 }
 

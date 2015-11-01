@@ -1,8 +1,9 @@
 // Soon Hao Ye @@author A0126677U
 enum TaskStatus {
+	NORMAL,
 	PRIORITY,
 	URGENT,
-	NORMAL
+	PAST
 };
 
 struct DisplayedTask {

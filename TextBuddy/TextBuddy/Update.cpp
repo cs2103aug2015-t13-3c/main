@@ -31,6 +31,9 @@ void Update::update() {
 		if(i->isUrgent()) {
 			task.status = URGENT;
 		}
+		if(i->getDoneStatus()) {
+			task.status = PAST;
+		}
 		task.type = i->getType();
 		tasksToDisplay->push_back(task);
 		++i;

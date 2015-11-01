@@ -108,7 +108,7 @@ void Logic::setSearchMode() {
 }
 
 void Logic::setPastMode() {
-	mode = PAST;
+	mode = PAST_;
 }
 
 void Logic::resetUpdaterNULL() {

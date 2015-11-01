@@ -29,8 +29,8 @@ void TextBuddyUI::updateDisplay() {
 	case SEARCHES:
 		tabIndex = SEARCHES;
 		break;
-	case PAST:
-		tabIndex = PAST;
+	case PAST_:
+		tabIndex = PAST_;
 		break;
 	}
 	tabs->SelectTab(tabIndex);
@@ -68,14 +68,15 @@ void TextBuddyUI::updateDisplay() {
 			tile->TileCount = i+1 ;
 		}
 		tile->TextAlign = System::Drawing::ContentAlignment::TopLeft;
-		if(task.status == PRIORITY || task.status == URGENT) {
-			tile->TileTextFontWeight = MetroFramework::MetroTileTextWeight::Regular;
+		tile->TileTextFontWeight = MetroFramework::MetroTileTextWeight::Regular;
+		if(task.status == PRIORITY) {
 			tile->Style = MetroFramework::MetroColorStyle::Purple;
-			if(task.status == URGENT) {
-				tile->Style = MetroFramework::MetroColorStyle::Red;
-			}
-		} else {
-			tile->TileTextFontWeight = MetroFramework::MetroTileTextWeight::Regular;
+		} else if(task.status == URGENT) {
+			tile->Style = MetroFramework::MetroColorStyle::Red;
+		} else if(task.status == PAST) {
+			tile->Style = MetroFramework::MetroColorStyle::Silver;
+		}
+		else {
 			if(task.type == FLOATING) {
 				tile->Style = MetroFramework::MetroColorStyle::Lime;
 			}

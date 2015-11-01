@@ -16,7 +16,7 @@ enum DisplayMode {
 	DEADLINES,
 	FLOATINGS,
 	SEARCHES,
-	PAST
+	PAST_
 };
 
 class Logic {
