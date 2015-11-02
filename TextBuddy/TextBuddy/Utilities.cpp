@@ -10,12 +10,19 @@ Utilities::~Utilities() {}
 //                     CONVERTERS
 //==================================================
 
+//========== Int-to-Type Converters ==========
+std::set<int> Utilities::intToSet(int num) {
+	std::set<int> set;
+	set.insert(num);
+	return set;
+}
+
+//========== String-to-Type Converters ==========
+
 std::string Utilities::stringToLower(std::string str) {
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 	return str;
 }
-
-//========== String-to-Type Converters ==========
 
 int Utilities::stringToInt(std::string str) {
 	char c;

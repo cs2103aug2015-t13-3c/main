@@ -29,10 +29,11 @@ private:
 	bool isDateField(FieldType field);
 	bool isTodoField(FieldType field);
 
-	void placeInField(Task* newTask, bool &isTODO,
+	void placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool isReservation,
 		FieldType inputMode, std::vector<std::string> inputString);	
 
 	FieldType convertFieldDateToTime(FieldType &inputMode);
+	void convertFieldToReserve(FieldType &inputMode);
 	std::vector<FieldType>		extractFields(std::string restOfInput);
 	std::vector<std::string>	removeSlashKeywords(std::vector<std::string> vecString);
 

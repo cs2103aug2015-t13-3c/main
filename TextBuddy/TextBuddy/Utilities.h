@@ -15,6 +15,8 @@ private:
 	~Utilities();
 
 public:
+	//========== Int-to-Type Converters ==========
+	static std::set<int>	intToSet(int num);
 	//========== String-to-Type Converters ==========
 	static std::string	stringToLower(std::string str);
 	static int			stringToInt(std::string str);

@@ -113,6 +113,20 @@ Command* Parser::parse(std::string userInput) {
 		cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
 		break;}
 
+	case PICK: {
+		bool isPick = false;
+		if(restOfInput == "") {
+				log(WARN,"No blocked task to pick: " + restOfInput);
+				throw std::runtime_error("No blocked task to pick!");
+		}
+		int pickID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+		std::string pickString = Utilities::removeFirstWord(restOfInput);
+		if(!pickString.empty() && Utilities::containsAny(pickString,"r re reserve")) {
+			isPick = true;
+		}
+		cmd = new Pick(pickID,isPick);
+		break;}
+
 	case SEARCH: {
 		if(restOfInput=="") {
 			log(WARN,"No search phrase: " + restOfInput);
@@ -210,6 +224,8 @@ Task* Parser::parseTask(std::string restOfCommand) {
 	std::vector<std::string> inputString;
 	Task* newTask = new Task;
 	bool isTODO = false;
+	bool isTODOreserve = false;
+	bool isReservation = false;
 
 	while(curr != userInput.end() || inputMode == PRIORITY_SET) {
 		inputString.clear();
@@ -219,7 +235,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			curr++;
 		}
 
-		placeInField(newTask,isTODO,inputMode,inputString);
+		placeInField(newTask,isTODO,isTODOreserve,isReservation,inputMode,inputString);
 
 		if(curr != userInput.end()) {
 			log(DEBUG,"Parsing field keyword: " + *curr);
@@ -603,7 +619,24 @@ FieldType Parser::convertFieldDateToTime(FieldType &inputMode) {
 	return inputMode;
 }
 
-void Parser::placeInField(Task* newTask, bool &isTODO, FieldType inputMode, std::vector<std::string> inputString) {
+void Parser::convertFieldToReserve(FieldType &inputMode) {
+	if(inputMode == START_DATE) {
+		inputMode = RESERVE_START_DATE;
+	} else if(inputMode == START_TIME) {
+		inputMode = RESERVE_START_TIME;
+	} else if(inputMode == END_DATE) {
+		inputMode = RESERVE_END_DATE;
+	} else if(inputMode == END_TIME) {
+		inputMode = RESERVE_END_TIME;
+	} else if(inputMode == TODO_DATE) {
+		inputMode = RESERVE_TODO_DATE;
+	} else if(inputMode == TODO_TIME) {
+		inputMode = RESERVE_TODO_TIME;
+	}
+	return;
+}
+
+void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool isReservation, FieldType inputMode, std::vector<std::string> inputString) {
 	int newDate = DATE_NOT_SET;
 	int newTime = TIME_NOT_SET;
 
@@ -619,6 +652,10 @@ void Parser::placeInField(Task* newTask, bool &isTODO, FieldType inputMode, std:
 			isTODO = true;
 		} else if(isTODO && inputMode==START_TIME) {
 			inputMode = TODO_TIME;
+		}
+
+		if(isReservation) {
+			convertFieldToReserve(inputMode);
 		}
 	}
 
@@ -693,6 +730,56 @@ void Parser::placeInField(Task* newTask, bool &isTODO, FieldType inputMode, std:
 			}
 		}
 		break;
+		//===== Reservation: Follow above and modify accordingly =====
+	case RESERVE_START_DATE:
+		newTask->setReserveType(EVENT);
+		newTask->addReserveStartDate(newDate);
+		break;
+	case RESERVE_TODO_DATE:
+	case RESERVE_END_DATE:
+		if(newTask->getReserveType() == FLOATING) {
+			isTODOreserve = true;
+		} else if(isTODOreserve
+			|| (newTask->getReserveType()==EVENT && newTask->getReserveStartDate()==DATE_NOT_SET)) {
+				newTask->addReserveStartDate(newDate);
+		}
+		newTask->addReserveEndDate(newDate);
+		break;
+	case RESERVE_START_TIME:
+		newTask->setReserveType(EVENT);
+		if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if(newTask->getStartTime() == TIME_NOT_SET) {
+				newTask->addReserveStartTime(newTime);
+			}
+		} else {
+			break;
+		}
+	case RESERVE_TODO_TIME:
+	case RESERVE_END_TIME:
+		if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if(newTask->getReserveStartDate() == DATE_NOT_SET) {
+				if(newTask->getReserveEndDate() == DATE_NOT_SET) {
+					newTask->addReserveStartDate(parseByDay(Utilities::stringToVec("today")));
+				} else {
+					newTask->addReserveStartDate(newTask->getReserveEndDate());
+				}
+			}
+			if(newTask->getReserveEndDate() == DATE_NOT_SET) {
+				newTask->addReserveEndDate(newTask->getReserveStartDate());
+			}
+
+			newTask->addReserveEndTime(newTime);
+			if(newTask->getReserveStartTime()!=TIME_NOT_SET && newTask->getReserveStartTime()!=newTask->getReserveEndTime()) {
+				newTask->setReserveType(EVENT);
+			} else if(newTask->getReserveType()==EVENT && newTask->getReserveStartTime()==TIME_NOT_SET) {
+				newTask->addReserveStartTime(newTime);
+			} else if(newTask->getReserveType()==FLOATING) {
+				isTODOreserve = true;
+			}
+		}
+		break;
+	case RESERVE:
+		//===== Reservation: Follow end =====
 	case INVALID_FIELD:
 		break;
 	}
