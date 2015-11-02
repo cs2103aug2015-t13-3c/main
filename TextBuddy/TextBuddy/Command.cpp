@@ -219,6 +219,14 @@ void Command::updateView() {
 	return;
 }
 
+// Switch back to default view: display all
+void Command::defaultView() {
+	sortDate(taskStore);
+	copyView();
+	removeDoneTasks(currentView);
+	return;
+}
+
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
 							 if(index == 0) {
@@ -284,6 +292,7 @@ Task Add::getNewTask() {
 void Add::execute() {
 	doAdd();
 	Task::lastEditID = newTask.getID();
+	defaultView();
 }
 
 // Add must have executed before undoing,
@@ -315,9 +324,6 @@ bool Add::doAdd() {
 	currentView.push_back(newTask);
 	currViewID = currentView.size();
 
-	sortDate(taskStore);
-	sortDate(currentView);
-	removeDoneTasks(currentView);
 	return true;
 }
 
@@ -364,23 +370,31 @@ void Delete::execute() {
 	setUndoDeleteInfo();
 	doDelete();
 	Task::lastEditID = 0;
+	defaultView();
 }
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
+	/*
+	// For in-place undoing, if view is not set back to default
 	if((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
 		taskStore.push_back(taskToBeDeleted);
 	}
 
+	
 	if((unsigned int)currViewPos < currentView.size()) {
 		currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
 	} else {
 		currentView.push_back(taskToBeDeleted);
 	}
+	*/
 
+	taskStore.push_back(taskToBeDeleted);
 	Task::lastEditID = taskToBeDeleted.getID();
+
+	defaultView();
 }
 
 std::string Delete::getMessage() {
@@ -391,9 +405,6 @@ std::string Delete::getMessage() {
 
 void Delete::doDelete() {
 	taskStore.erase(taskStoreIter);
-	currentView.erase(currViewIter);
-	sortDate(taskStore);
-	removeDoneTasks(currentView);
 }
 
 void Delete::setUndoDeleteInfo() {
@@ -433,6 +444,7 @@ void Modify::execute() {
 	originalTask = *currViewIter;
 	doModify();
 	Task::lastEditID = originalTask.getID();
+	defaultView();
 }
 
 void Modify::undo() {
@@ -441,6 +453,7 @@ void Modify::undo() {
 	taskStore.insert(taskStoreIter,originalTask);
 	currentView.insert(currViewIter,originalTask);
 	Task::lastEditID = originalTask.getID();
+	defaultView();
 }
 
 std::string Modify::getMessage() {
@@ -546,8 +559,6 @@ void Modify::doModify() {
 	}
 
 	updateTaskTypes();
-	updateView();
-	sortDate(taskStore);
 	initialiseIterators(modifyID);
 }
 
@@ -619,12 +630,15 @@ void Pick::execute() {
 	doPick();
 	Task::lastEditID = originalTask.getID();
 	TbLogger::getInstance()->log(DEBUG,"Pick executed");
+	defaultView();
+	initialiseIterators(modifyID);
 }
 
 void Pick::undo() {
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
+	defaultView();
 }
 
 std::string Pick::getMessage() {
@@ -642,9 +656,6 @@ void Pick::doPick() {
 	taskStoreIter->clearReserve();
 
 	updateTaskTypes();
-	updateView();
-	sortDate(taskStore);
-	initialiseIterators(modifyID);
 	return;
 }
 
@@ -759,14 +770,16 @@ int Markdone::getDoneID() {
 
 void Markdone::execute() {
 	markDone();
+	defaultView();
 }
 
 void Markdone::undo() {
 	if(successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
-		currentView.insert(currViewIter,*taskStoreIter);
+		//currentView.insert(currViewIter,*taskStoreIter);
 	}	
+	defaultView();
 }
 
 std::string Markdone::getMessage() {
@@ -781,7 +794,7 @@ void Markdone::markDone() {
 	successMarkDone = taskStoreIter->markDone();
 	if(successMarkDone) {
 		taskName = currViewIter->getName();
-		currentView.erase(currViewIter);
+		//currentView.erase(currViewIter);
 	}
 }
 
@@ -803,14 +816,16 @@ int UnmarkDone::getUndoneID() {
 
 void UnmarkDone::execute() {
 	unmarkDone();
+	defaultView();
 }
 
 void UnmarkDone::undo() {
 	if(successUnmarkDone) {
 		getIterator();
 		taskStoreIter->markDone();
-		currentView.insert(currViewIter,*taskStoreIter);
+		//currentView.insert(currViewIter,*taskStoreIter);
 	}
+	defaultView();
 }
 
 std::string UnmarkDone::getMessage() {
@@ -823,9 +838,9 @@ void UnmarkDone::unmarkDone() {
 	initialiseIterators(undoneID);
 
 	successUnmarkDone = taskStoreIter->unmarkDone();
-	if(successUnmarkDone) {
-		currentView.erase(currViewIter);
-	}
+	//if(successUnmarkDone) {
+	//	currentView.erase(currViewIter);
+	//}
 }
 
 //==================================================

@@ -92,6 +92,7 @@ protected:
 
 	bool copyView();
 	void updateView();
+	void defaultView();
 
 	void initialiseIterators(int taskID);
 	void getIterator();
