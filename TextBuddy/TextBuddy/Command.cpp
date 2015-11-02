@@ -443,7 +443,7 @@ void Modify::execute() {
 	originalTask = *currViewIter;
 	doModify();
 	Task::lastEditID = originalTask.getID();
-	defaultView();
+	//defaultView();
 }
 
 void Modify::undo() {
@@ -452,7 +452,6 @@ void Modify::undo() {
 	taskStore.insert(taskStoreIter,originalTask);
 	currentView.insert(currViewIter,originalTask);
 	Task::lastEditID = originalTask.getID();
-	defaultView();
 }
 
 std::string Modify::getMessage() {
@@ -558,6 +557,8 @@ void Modify::doModify() {
 	}
 
 	updateTaskTypes();
+	updateView();
+	sortDate(taskStore);
 	initialiseIterators(modifyID);
 }
 
