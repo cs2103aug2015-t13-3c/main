@@ -141,16 +141,20 @@ void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate
 }
 
 void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> taskVector = taskStore;
 	std::vector<Task>::iterator iter;
 	Task freeDateTask;
 	int freeDateStart = startDate;
 	int freeTimeStart = startTime;
 
-	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
-	iter = tasksWithinPeriod.begin();
+	removeDoneTasks(taskVector);
+	removeFloatingTasks(taskVector);
+	sortDate(taskVector);
+
+	iter = taskVector.begin();
 
 	// Need to take into account the period before start of first task
-	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
+	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
 		if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
 			addPeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
 		}
