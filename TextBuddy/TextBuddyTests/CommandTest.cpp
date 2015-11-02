@@ -571,18 +571,20 @@ public:
 		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
+		Assert::AreEqual((size_t)0,copyTask.size());
 		copyTask = addTwo.getTaskStore();
 		iter = copyTask.begin();
 		Assert::AreEqual(true,iter->getDoneStatus());
+
+		View viewPast(VIEWTYPE_PAST, "");
+		viewPast.execute();
 
 		Markdone markdoneTwo(1);
 		markdoneTwo.execute();
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
-		Assert::AreEqual(true,iter->getDoneStatus());
+		Assert::AreEqual((size_t)0,copyTask.size());		
 	}
 
 	TEST_METHOD(Command_MarkDone_undo) {
@@ -608,31 +610,36 @@ public:
 		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
+		Assert::AreEqual((size_t)0,copyTask.size());
 		copyTask = addTwo.getTaskStore();
 		iter = copyTask.begin();
 		Assert::AreEqual(true,iter->getDoneStatus());
+
+		View viewPast(VIEWTYPE_PAST, "");
+		viewPast.execute();
 
 		Markdone markdoneTwo(1);
 		markdoneTwo.execute();
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
-		Assert::AreEqual(true,iter->getDoneStatus());
+		Assert::AreEqual((size_t)0,copyTask.size()); // Goes back to deafult view
 
 		markdoneTwo.undo();
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
+		Assert::AreEqual((size_t)0,copyTask.size());
+		copyTask = addTwo.getTaskStore();
+		iter = copyTask.begin();
+		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
 
 		markdoneOne.undo();
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)2,copyTask.size());
+		Assert::AreEqual((size_t)1,copyTask.size());
 		Assert::AreEqual(false,iter->getDoneStatus());
 	}
 	};
@@ -662,16 +669,17 @@ public:
 		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)2,copyTask.size());
+		Assert::AreEqual((size_t)1,copyTask.size());
 
-		UnmarkDone unmarkdoneTwo(2);
+		View viewPast(VIEWTYPE_PAST, "");
+		viewPast.execute();
+
+		UnmarkDone unmarkdoneTwo(1);
 		unmarkdoneTwo.execute();
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
-		copyTask = addTwo.getTaskStore();
-		iter = copyTask.begin();
+		Assert::AreEqual((size_t)2,copyTask.size());
 		++iter;
 		Assert::AreEqual(false,iter->getDoneStatus());
 	}
@@ -699,14 +707,17 @@ public:
 		copyTask = addTwo.getCurrentView();
 		std::vector<Task>::iterator iter;
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)2,copyTask.size());
+		Assert::AreEqual((size_t)1,copyTask.size());
 
-		UnmarkDone unmarkdoneTwo(2);
+		View viewPast(VIEWTYPE_PAST, "");
+		viewPast.execute();
+
+		UnmarkDone unmarkdoneTwo(1);
 		unmarkdoneTwo.execute();
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)1,copyTask.size());
+		Assert::AreEqual((size_t)2,copyTask.size());
 		copyTask = addTwo.getTaskStore();
 		iter = copyTask.begin();
 		++iter;
@@ -716,7 +727,9 @@ public:
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)2,copyTask.size());
+		Assert::AreEqual((size_t)1,copyTask.size());
+		copyTask = addTwo.getTaskStore();
+		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
 
@@ -724,7 +737,7 @@ public:
 
 		copyTask = addTwo.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual((size_t)2,copyTask.size());
+		Assert::AreEqual((size_t)1,copyTask.size());
 	}
 	};
 
@@ -781,6 +794,12 @@ public:
 	}
 
 	TEST_METHOD(Command_View_All) {
+		// Three: 150809
+		// One: 150910
+		// Four: 150910	
+		// Two: 151010
+		// View all only views done tasks
+
 		Task taskOne;
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
@@ -820,13 +839,14 @@ public:
 
 		copyTask = viewAll.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual(std::string("Sentence three."), iter->getName());
-		++iter;
+		//Assert::AreEqual(std::string("Sentence three."), iter->getName());
+		//++iter;
 		Assert::AreEqual(std::string("Sentence one."), iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence four."), iter->getName());
 		++iter;
-		Assert::AreEqual(std::string("Sentence two."), iter->getName());	
+		Assert::AreEqual(std::string("Sentence two."), iter->getName());
+		//Assert::AreEqual(150809, iter->getStartDate());	
 	}
 
 	TEST_METHOD(Command_View_Done) {

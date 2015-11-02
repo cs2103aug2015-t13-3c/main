@@ -159,10 +159,10 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	}
 
 	// Sorts date after time to ensure date is accurately sorted
-	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-		for (j = i+1; j != taskVector.end(); ++j) {
-			if(j -> getStartDate() < i -> getStartDate()) {
-				std::swap(*i, *j);
+	for (i = taskVector.end(); i != taskVector.begin(); --i) {
+		for (j = taskVector.begin()+1; j != i; ++j) {
+			if((j-1) -> getStartDate() > j -> getStartDate()) {
+				std::swap(*j, *(j-1));
 			}
 		}
 	}
@@ -375,15 +375,15 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-	/*
-	// For in-place undoing, if view is not set back to default
+	
 	if((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
 		taskStore.push_back(taskToBeDeleted);
 	}
 
-	
+	/*
+	// For in-place undoing, if view is not set back to default
 	if((unsigned int)currViewPos < currentView.size()) {
 		currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
 	} else {
@@ -391,7 +391,6 @@ void Delete::undo() {
 	}
 	*/
 
-	taskStore.push_back(taskToBeDeleted);
 	Task::lastEditID = taskToBeDeleted.getID();
 
 	defaultView();
