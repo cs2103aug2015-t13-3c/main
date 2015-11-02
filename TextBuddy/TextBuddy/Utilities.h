@@ -52,7 +52,8 @@ public:
 	static std::string	removeFirstWord(std::string words);
 	static std::string	removeSpaces(const std::string& s, const std::string& delimiters = " \f\n\r\t\v" );
 	static std::string	replace(std::string str, std::string from, std::string to);
-
+	static std::string addSlashForInvertedComma(std::string words);
+	static std::string removeFirstAndLastInvertedCommas(std::string words);
 	//========== String-for-Display Formatters ==========
 	// Soon Hao Ye @@author A0126677U
 	static std::string getDate(int date);

@@ -532,6 +532,33 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 	return (tolower(l) == tolower(r));
 }
 
+std::string Utilities::addSlashForInvertedComma(std::string words) {
+	for(int i = 0; i < words.size(); i++) {
+		if(words[i] == '\"') {
+			words.insert(i,"\\\\\\");
+			i++;
+			i++;
+			i++;
+		}
+	}
+	return words;
+}
+
+std::string Utilities::removeFirstAndLastInvertedCommas(std::string words) {
+	// Erase first inverted comma
+	std::string::iterator iter = words.begin();
+	if(*iter == '\"') {
+		words.erase(iter);
+	}
+
+	// Erase last inverted comma
+	iter = words.end()-1;
+	if(*iter == '\"') {
+		words.erase(iter);
+	}
+	return words;
+}
+
 // Soon Hao Ye @@author A0126677U
 //==================================================
 //           STRING-FOR-DISPLAY FORMATTERS

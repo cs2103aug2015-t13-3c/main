@@ -289,9 +289,14 @@ std::string IO::insertCloseParanthese() {
 
 std::string IO::writeNameAttribute(Task task) {
 	std::string nameString;
+	std::string extractedName;
 
 	nameString = "\t\t\t\"name\": ";
-	nameString += retrieveName(task);
+	//extractedName = ;
+	// Handle inverted commas in case task name contains inverted commas
+	//extractedName = Utilities::removeFirstAndLastInvertedCommas(extractedName);
+	//extractedName = Utilities::addSlashForInvertedComma(extractedName);
+	nameString += retrieveName(task);//extractedName;
 
 	return nameString;
 }
@@ -381,7 +386,7 @@ std::string IO::writeEndTimeAttribute(Task task) {
 
 std::string IO::retrieveName(Task task) {
 	std::string string;
-	string = "\"" + task.getName() + "\",\n";
+	string = "\"" + Utilities::addSlashForInvertedComma(task.getName()) + "\",\n";
 	return string;
 }
 
