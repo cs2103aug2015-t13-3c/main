@@ -11,7 +11,8 @@
 const std::string COMMAND_ADD = "add";
 const std::string COMMAND_DELETE = "delete";
 const std::string COMMAND_MODIFY = "modify";
-const std::string COMMAND_MODIFY_EDIT = "edit"; // Alternative keyword
+const std::string COMMAND_MODIFY_EDIT = "edit";		// Alternative keyword
+const std::string COMMAND_PICK_RESERVE = "pick";
 const std::string COMMAND_SEARCH = "search";
 const std::string COMMAND_MARKDONE = "done";
 const std::string COMMAND_UNMARKDONE = "notdone";
@@ -30,6 +31,7 @@ enum CommandType {
 	ADD,
 	DELETE,
 	MODIFY,
+	PICK,
 	SEARCH,
 	POWERSEARCH,
 	MARKDONE,
@@ -78,7 +80,6 @@ private:
 protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
-	static int lastEditID;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -185,20 +186,39 @@ private:
 	void doModify();
 	void moveToPrevPos();
 
-	void updateTaskTypes();
 	bool updateFLOATING();
 	bool updateTODO();
 	bool updateEVENT();
-
 public:
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
+	Modify(CommandType pick);
 	~Modify();
 	int getModifyID();
 	std::vector<FieldType> getFieldsToModify();
 	Task getTempTask();
+	void updateTaskTypes();
 
 	void execute();
 	void undo();
+	std::string getMessage();
+};
+
+class Pick: public Modify {
+private:
+	//== EXECUTE ==
+	int modifyID; // ID on GUI, not taskID
+	bool pickReserve;
+	//==== UNDO ===
+	Task originalTask;
+	int prevCurrPos;
+
+	void doPick();
+
+public:
+	Pick(int taskID, bool isPick);
+	~Pick();
+
+	void execute();
 	std::string getMessage();
 };
 

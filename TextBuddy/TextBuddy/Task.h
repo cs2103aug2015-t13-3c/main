@@ -19,6 +19,7 @@ const std::string FIELD_DATE_TO = "to";
 const std::string FIELD_DATE_BY = "by";
 const std::string FIELD_DATE_ON = "on";
 const std::string FIELD_TIME_AT = "at";
+const std::string FIELD_RESERVE_SWITCH = "reserve";
 
 // These are the Field enums
 // Count: 10 + 2 TODO + INVALID_FIELD
@@ -35,6 +36,13 @@ enum FieldType {
 	END_TIME,
 	TODO_DATE,
 	TODO_TIME,
+	RESERVE,
+	RESERVE_START_DATE,
+	RESERVE_START_TIME,
+	RESERVE_END_DATE,
+	RESERVE_END_TIME,
+	RESERVE_TODO_DATE,
+	RESERVE_TODO_TIME,
 	INVALID_FIELD,
 };
 
@@ -62,7 +70,7 @@ enum TaskType {
 class Task {
 private:
 	static int runningCount;
-	static Task tempTask;
+	// static Task tempTask;
 
 	std::string name;
 	TaskType type;
@@ -76,11 +84,18 @@ private:
 
 	int startDate; // YYMMDD, supports 2015-2099
 	int startTime; // HHMM, 24-hour format
-
 	int endDate;
 	int endTime;
 
+	TaskType reserveType;
+	std::set<int> reserveStartDate;	// Currently only holds 1 reservation
+	std::set<int> reserveStartTime;	// Currently only holds 1 reservation
+	std::set<int> reserveEndDate;	// Currently only holds 1 reservation
+	std::set<int> reserveEndTime;	// Currently only holds 1 reservation
+
 public:
+	static int lastEditID;
+
 	static int getRunningCount();
 	static int incrementRunningCount();					// For new tasks
 	static void setRunningCount(int lastCount);			// For startup
@@ -102,9 +117,14 @@ public:
 
 	int getStartDate();
 	int getStartTime();
-
 	int getEndDate();
 	int getEndTime();
+
+	TaskType getReserveType();
+	int getReserveStartDate();
+	int getReserveStartTime();
+	int getReserveEndDate();
+	int getReserveEndTime();
 
 	std::string getDate_UI();
 	std::string getTime_UI();
@@ -127,9 +147,19 @@ public:
 
 	bool setStartDate(int newStartDate);
 	bool setStartTime(int newStartTime);
-
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
+
+	bool setReserveType(TaskType newType);
+	void addReserveStartDate(int newReservation);
+	void addReserveStartTime(int newReservation);
+	void addReserveEndDate(int newReservation);
+	void addReserveEndTime(int newReservation);
+
+	void clearReserveStartDate();
+	void clearReserveStartTime();
+	void clearReserveEndDate();
+	void clearReserveEndTime();
 
 	bool isUrgent();
 	bool isToday();

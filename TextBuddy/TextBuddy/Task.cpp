@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 int Task::runningCount = 0;
+int Task::lastEditID = 0;
 
 Task::Task() {
 	name = "";
@@ -15,9 +16,13 @@ Task::Task() {
 
 	startDate = DATE_NOT_SET;	// YYMMDD, supports 2015-2099
 	startTime = TIME_NOT_SET;	// HHMM, 24-hour format
-
 	endDate = DATE_NOT_SET;
 	endTime = TIME_NOT_SET;
+
+	reserveStartDate = std::set<int>();
+	reserveStartTime = std::set<int>();
+	reserveEndDate = std::set<int>();
+	reserveEndTime = std::set<int>();
 }
 
 Task::~Task() {}
@@ -50,6 +55,10 @@ int Task::getID() {
 	return uniqueID;
 }
 
+std::vector<std::string> Task::getLabelsToDelete() {
+	return labelsToDelete;
+}
+
 bool Task::getDoneStatus() {
 	return isDone;
 }
@@ -74,8 +83,73 @@ int Task::getEndTime() {
 	return endTime;
 }
 
-std::vector<std::string> Task::getLabelsToDelete() {
-	return labelsToDelete;
+TaskType Task::getReserveType() {
+	return reserveType;
+}
+
+int Task::getReserveStartDate() {
+	return *(reserveStartDate.begin());
+}
+
+int Task::getReserveStartTime() {
+	return *(reserveStartTime.begin());
+}
+
+int Task::getReserveEndDate() {
+	return *(reserveEndDate.begin());
+}
+
+int Task::getReserveEndTime() {
+	return *(reserveEndTime.begin());
+}
+
+bool Task::setReserveType(TaskType newType) {
+	reserveType = newType;
+	return true;
+}
+
+void Task::addReserveStartDate(int newReservation) {
+	reserveEndDate.clear();
+	reserveStartDate.insert(newReservation);
+	return;
+}
+
+void Task::addReserveStartTime(int newReservation) {
+	reserveEndDate.clear();
+	reserveStartTime.insert(newReservation);
+	return;
+}
+
+void Task::addReserveEndDate(int newReservation) {
+	reserveEndDate.clear();
+	reserveEndDate.insert(newReservation);
+	return;
+}
+
+void Task::addReserveEndTime(int newReservation) {
+	reserveEndDate.clear();
+	reserveEndTime.insert(newReservation);
+	return;
+}
+
+void Task::clearReserveStartDate() {
+	reserveStartDate.clear();
+	return;
+}
+
+void Task::clearReserveStartTime() {
+	reserveStartTime.clear();
+	return;
+}
+
+void Task::clearReserveEndDate() {
+	reserveEndDate.clear();
+	return;
+}
+
+void Task::clearReserveEndTime() {
+	reserveEndTime.clear();
+	return;
 }
 
 std::vector<std::string> Task::getLabels() {
@@ -222,17 +296,17 @@ bool Task::isUrgent() {
 	if(type == FLOATING) {
 		return false;
 	}
-	double difference = 0;
+	double difference;
 	int day = startDate % 100;
 	int month = (startDate % 10000)/100;
 	int year = startDate/10000;
-    time_t t = time(0); 
+	time_t t = time(0); 
 	struct tm now;
 	localtime_s(&now,&t);  
 	struct tm taskDate = {0,0,0,day,month-1,year+100}; 
-    std::time_t a = std::mktime(&taskDate);
-    std::time_t b = std::mktime(&now);
-    difference = std::difftime(a, b) / (60 * 60 * 24);
+	std::time_t a = std::mktime(&taskDate);
+	std::time_t b = std::mktime(&now);
+	difference = std::difftime(a, b) / (60 * 60 * 24);
 	if(difference < 4) {
 		return true;
 	} 

@@ -12,8 +12,6 @@
 
 //========== COMMAND : PUBLIC METHODS ==============
 
-int Command::lastEditID = 0;
-
 Command::Command(CommandType newCmd, std::string rawInput) {
 	cmd = newCmd;
 	userInput = rawInput;
@@ -224,7 +222,7 @@ void Command::updateView() {
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
 							 if(index == 0) {
-								 index = lastEditID;
+								 index = Task::lastEditID;
 							 }
 							 if(isValidIndex(index)) {	
 								 currIter = matchCurrentViewIndex(index);
@@ -285,7 +283,7 @@ Task Add::getNewTask() {
 
 void Add::execute() {
 	doAdd();
-	lastEditID = newTask.getID();
+	Task::lastEditID = newTask.getID();
 }
 
 // Add must have executed before undoing,
@@ -293,7 +291,7 @@ void Add::execute() {
 void Add::undo() {
 	Delete taskToDelete(currViewID);
 	taskToDelete.execute();
-	lastEditID = 0;
+	Task::lastEditID = 0;
 }
 
 std::string Add::getMessage() {
@@ -365,7 +363,7 @@ void Delete::execute() {
 	initialiseIterators(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
 	setUndoDeleteInfo();
 	doDelete();
-	lastEditID = 0;
+	Task::lastEditID = 0;
 }
 
 // Adds the deleted task back to the exact location it was before
@@ -382,7 +380,7 @@ void Delete::undo() {
 		currentView.push_back(taskToBeDeleted);
 	}
 
-	lastEditID = taskToBeDeleted.getID();
+	Task::lastEditID = taskToBeDeleted.getID();
 }
 
 std::string Delete::getMessage() {
@@ -414,6 +412,8 @@ Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(M
 	tempTask = task;
 }
 
+Modify::Modify(CommandType pick) : Command(pick) {}
+
 Modify::~Modify() {}
 
 int Modify::getModifyID() {
@@ -432,7 +432,7 @@ void Modify::execute() {
 	initialiseIterators(modifyID);
 	originalTask = *currViewIter;
 	doModify();
-	lastEditID = originalTask.getID();
+	Task::lastEditID = originalTask.getID();
 }
 
 void Modify::undo() {
@@ -440,7 +440,7 @@ void Modify::undo() {
 	currentView.erase(currViewIter);
 	taskStore.insert(taskStoreIter,originalTask);
 	currentView.insert(currViewIter,originalTask);
-	lastEditID = originalTask.getID();
+	Task::lastEditID = originalTask.getID();
 }
 
 std::string Modify::getMessage() {
@@ -452,8 +452,12 @@ std::string Modify::getMessage() {
 void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 	bool isTODO = false;
+	bool isTODOreserve = false;
 	if(tempTask.getType() == EVENT) {
 		taskStoreIter->setType(EVENT);
+	}
+	if(tempTask.getReserveType() == EVENT) {
+		taskStoreIter->setReserveType(EVENT);
 	}
 
 	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
@@ -501,14 +505,44 @@ void Modify::doModify() {
 			taskStoreIter->setEndTime(tempTask.getEndTime());
 			// taskStoreIter->setStartTime(tempTask.getStartTime());
 			break;
+		case RESERVE_START_DATE:
+			taskStoreIter->addReserveStartDate(tempTask.getReserveStartDate());
+			break;
+		case RESERVE_START_TIME:
+			taskStoreIter->addReserveStartTime(tempTask.getReserveStartTime());
+			break;
+		case RESERVE_END_DATE:
+			taskStoreIter->addReserveEndDate(tempTask.getReserveEndDate());
+			break;
+		case RESERVE_END_TIME:
+			taskStoreIter->addReserveEndTime(tempTask.getReserveEndTime());
+			break;
+		case RESERVE_TODO_DATE:
+			isTODOreserve = true;
+			taskStoreIter->addReserveEndDate(tempTask.getEndDate());
+			// taskStoreIter->addReserveStartDate(tempTask.getStartDate());
+			break;
+		case RESERVE_TODO_TIME:
+			isTODOreserve = true;
+			taskStoreIter->addReserveEndTime(tempTask.getEndTime());
+			// taskStoreIter->addReserveStartTime(tempTask.getStartTime());
+			break;
+		case RESERVE:
+			break;
 		case INVALID_FIELD:
 			throw std::runtime_error("Error in fetching field name"); 
 		}
 	}
 
 	if(isTODO) {
+		taskStoreIter->setType(TODO);
 		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
 		taskStoreIter->setStartTime(taskStoreIter->getEndTime());
+	}
+	if(isTODOreserve) {
+		taskStoreIter->setReserveType(TODO);
+		taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
+		taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
 	}
 
 	updateTaskTypes();
@@ -560,6 +594,52 @@ void Modify::moveToPrevPos() {
 
 	preCurrViewIter = currentView.begin() + prevCurrPos;
 	currentView.insert(preCurrViewIter, tempTask);
+}
+
+// Aaron Chong @@author A0110376N
+
+//==================================================
+//                       PICK
+//==================================================
+
+//============= PICK : PUBLIC METHODS ============
+
+Pick::Pick(int taskID, bool isPick) : Modify(PICK) {
+	modifyID = taskID;
+	pickReserve = isPick;
+}
+
+Pick::~Pick() {}
+
+void Pick::execute() {
+	initialiseIterators(modifyID);
+	originalTask = *currViewIter;
+	doPick();
+	Task::lastEditID = originalTask.getID();
+}
+
+std::string Pick::getMessage() {
+	return "successfully picked!";
+}
+
+//============= PICK : PRIVATE METHODS ===========
+
+void Pick::doPick() {
+	if(pickReserve) {
+		taskStoreIter->setStartDate(taskStoreIter->getReserveStartDate());
+		taskStoreIter->setStartTime(taskStoreIter->getReserveStartTime());
+		taskStoreIter->setEndDate(taskStoreIter->getReserveEndDate());
+		taskStoreIter->setEndTime(taskStoreIter->getReserveEndTime());
+	}
+	taskStoreIter->clearReserveStartDate();
+	taskStoreIter->clearReserveStartTime();
+	taskStoreIter->clearReserveEndDate();
+	taskStoreIter->clearReserveEndTime();
+
+	updateTaskTypes();
+	updateView();
+	sortDate(taskStore);
+	initialiseIterators(modifyID);
 }
 
 // Chin Kiat Boon @@author A0096720A
