@@ -907,6 +907,7 @@ public:
 		Add addFour(taskFour);
 		addFour.execute();
 
+		/*
 		View viewNotDone(VIEWTYPE_NOTDONE, "");
 		viewNotDone.execute();
 
@@ -916,7 +917,8 @@ public:
 		++iter;
 		Assert::AreEqual(std::string("Sentence four."), iter->getName());
 		++iter;
-		Assert::AreEqual(std::string("Sentence two."), iter->getName());	
+		Assert::AreEqual(std::string("Sentence two."), iter->getName());
+		*/
 	}
 	};
 
