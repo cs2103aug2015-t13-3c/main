@@ -88,66 +88,119 @@ TaskType Task::getReserveType() {
 }
 
 int Task::getReserveStartDate() {
-	return *(reserveStartDate.begin());
+	if(reserveStartDate.size() == 0) {
+		TbLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveStartDate: " + std::to_string(DATE_NOT_SET));
+		return DATE_NOT_SET;
+	}
+	int date = *(reserveStartDate.begin());
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartDate: " + std::to_string(date));
+	return date;
 }
 
 int Task::getReserveStartTime() {
-	return *(reserveStartTime.begin());
+	if(reserveStartTime.size() == 0) {
+		return TIME_NOT_SET;
+	}
+	int time = *(reserveStartTime.begin());
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartTime: " + std::to_string(time));
+	return time;
 }
 
 int Task::getReserveEndDate() {
-	return *(reserveEndDate.begin());
+	if(reserveEndDate.size() == 0) {
+		TbLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveEndDate: " + std::to_string(DATE_NOT_SET));
+		return DATE_NOT_SET;
+	}
+	int date = *(reserveEndDate.begin());
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndDate: " + std::to_string(date));
+	return date;
 }
 
 int Task::getReserveEndTime() {
-	return *(reserveEndTime.begin());
+	if(reserveEndTime.size() == 0) {
+		return TIME_NOT_SET;
+	}
+	int time = *(reserveEndTime.begin());
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndTime: " + std::to_string(time));
+	return time;
 }
 
-bool Task::setReserveType(TaskType newType) {
+bool Task::getReserveStatus() {
+	if(    reserveStartDate.size() != 0
+		&& reserveStartTime.size() != 0
+		&& reserveEndDate.size()   != 0
+		&& reserveEndTime.size()   != 0) {
+			return true;
+	}
+	return false;
+}
+
+void Task::setReserveType(TaskType newType) {
 	reserveType = newType;
-	return true;
+	return;
 }
 
 void Task::addReserveStartDate(int newReservation) {
-	reserveEndDate.clear();
+	reserveStartDate.clear();
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartDate: " + std::to_string(newReservation));
 	reserveStartDate.insert(newReservation);
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Successfully set reserveStartDate");
 	return;
 }
 
 void Task::addReserveStartTime(int newReservation) {
-	reserveEndDate.clear();
+	reserveStartTime.clear();
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartTime: " + std::to_string(newReservation));
 	reserveStartTime.insert(newReservation);
 	return;
 }
 
 void Task::addReserveEndDate(int newReservation) {
 	reserveEndDate.clear();
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndDate: " + std::to_string(newReservation));
 	reserveEndDate.insert(newReservation);
 	return;
 }
 
 void Task::addReserveEndTime(int newReservation) {
-	reserveEndDate.clear();
+	reserveEndTime.clear();
+	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndTime: " + std::to_string(newReservation));
 	reserveEndTime.insert(newReservation);
 	return;
 }
 
-void Task::clearReserveStartDate() {
-	reserveStartDate.clear();
+void Task::pickReserve() {
+	startDate = getReserveStartDate();
+	startTime = getReserveStartTime();
+	endDate = getReserveEndDate();
+	endTime = getReserveEndTime();
 	return;
+}
+/*
+void Task::clearReserveStartDate() {
+reserveStartDate.clear();
+return;
 }
 
 void Task::clearReserveStartTime() {
-	reserveStartTime.clear();
-	return;
+reserveStartTime.clear();
+return;
 }
 
 void Task::clearReserveEndDate() {
-	reserveEndDate.clear();
-	return;
+reserveStartDate.clear();
+return;
 }
 
 void Task::clearReserveEndTime() {
+reserveEndTime.clear();
+return;
+}
+*/
+void Task::clearReserve() {
+	reserveStartDate.clear();
+	reserveStartDate.clear();
+	reserveStartDate.clear();
 	reserveEndTime.clear();
 	return;
 }

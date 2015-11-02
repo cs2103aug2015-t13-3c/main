@@ -45,6 +45,8 @@ CommandType Utilities::stringToCmdType(std::string str) {
 		cmd = DELETE;
 	} else if(equalsIgnoreCase(str, COMMAND_MODIFY) || equalsIgnoreCase(str, COMMAND_MODIFY_EDIT)) {
 		cmd = MODIFY;
+	} else if(equalsIgnoreCase(str, COMMAND_PICK_RESERVE)) {
+		cmd = PICK;
 	} else if(equalsIgnoreCase(str, COMMAND_SEARCH)) {
 		cmd = SEARCH;
 	} else if(equalsIgnoreCase(str, COMMAND_MARKDONE)) {
@@ -146,6 +148,8 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 		field = TODO_DATE;
 	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
 		field = START_TIME;
+	} else if(equalsIgnoreCase(fieldString,FIELD_RESERVE_SWITCH)) {
+		field = RESERVE;
 	} else {
 		field = INVALID_FIELD;
 	}
@@ -440,7 +444,7 @@ bool Utilities::containsAny(std::string words1, std::string words2) {
 	for(curr1=vecWords1.begin(); curr1!=vecWords1.end(); curr1++) {
 		for(curr2=vecWords2.begin(); curr2!=vecWords2.end(); curr2++) {
 			if(*curr1 == *curr2) {
-				TbLogger::getInstance()->log(DEBUG,"Checking that " + *curr1 + " = " + *curr2);
+				TbLogger::getInstance()->log(DEBUG_INTERNAL,"Checking that " + *curr1 + " = " + *curr2);
 				return true;
 			}
 		}

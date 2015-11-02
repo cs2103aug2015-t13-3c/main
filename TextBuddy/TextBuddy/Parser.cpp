@@ -10,7 +10,8 @@ Parser* Parser::theOne = nullptr;
 Parser::Parser() {
 	logger = TbLogger::getInstance();
 	logger->log(SYS,"Parser instantiated");
-	logger->setLogLevel(DEBUG);
+	logger->setLogLevel(DEBUG_INTERNAL);
+	// logger->setLogLevel(DEBUG);
 }
 
 Parser::~Parser() {
@@ -26,7 +27,7 @@ void Parser::log(Level level, std::string message) {
 }
 
 void Parser::logSetTaskType(TaskType type) {
-	log(DEBUG,"Setting task type as: " + Utilities::taskTypeToString(type));
+	log(DEBUG_INTERNAL,"Setting task type as: " + Utilities::taskTypeToString(type));
 	return;
 }
 
@@ -116,8 +117,8 @@ Command* Parser::parse(std::string userInput) {
 	case PICK: {
 		bool isPick = false;
 		if(restOfInput == "") {
-				log(WARN,"No blocked task to pick: " + restOfInput);
-				throw std::runtime_error("No blocked task to pick!");
+			log(WARN,"No blocked task to pick: " + restOfInput);
+			throw std::runtime_error("No blocked task to pick!");
 		}
 		int pickID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
 		std::string pickString = Utilities::removeFirstWord(restOfInput);
@@ -127,6 +128,7 @@ Command* Parser::parse(std::string userInput) {
 		cmd = new Pick(pickID,isPick);
 		break;}
 
+	case POWERSEARCH:
 	case SEARCH: {
 		if(restOfInput=="") {
 			log(WARN,"No search phrase: " + restOfInput);
@@ -216,7 +218,7 @@ Command* Parser::parse(std::string userInput) {
 
 Task* Parser::parseTask(std::string restOfCommand) {
 	log(INFO,"Parsing task");
-	log(DEBUG,"Parsing field keyword: name");
+	log(DEBUG_INTERNAL,"Parsing field keyword: name");
 	FieldType inputMode = NAME;
 
 	std::vector<std::string> userInput = Utilities::stringToVec(restOfCommand);
@@ -238,7 +240,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		placeInField(newTask,isTODO,isTODOreserve,isReservation,inputMode,inputString);
 
 		if(curr != userInput.end()) {
-			log(DEBUG,"Parsing field keyword: " + *curr);
+			log(DEBUG_INTERNAL,"Parsing field keyword: " + *curr);
 			inputMode = Utilities::stringToFieldType(*curr);
 			curr++;
 		} else {
@@ -255,6 +257,11 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		newTask->setType(TODO);
 		newTask->setStartDate(newTask->getEndDate());
 		newTask->setStartTime(newTask->getEndTime());
+	}
+	if(isTODOreserve) {
+		newTask->setReserveType(TODO);
+		newTask->addReserveStartDate(newTask->getReserveEndDate());
+		newTask->addReserveStartTime(newTask->getReserveEndTime());
 	}
 
 	log(INFO,"Parsed task of type: " + Utilities::taskTypeToString(newTask->getType()));
@@ -284,7 +291,7 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 	while(curr != userInput.end()) {
 		inputString.clear();
 
-		log(DEBUG,"Processing PowerSearch phrase: " + *curr);
+		log(DEBUG_INTERNAL,"Processing PowerSearch phrase: " + *curr);
 
 		while(curr!=userInput.end() && !isPowerSearchKeywords(*curr)) {
 			inputString.push_back(*curr);
@@ -300,10 +307,10 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 		} else if(Utilities::containsAny(inputMode,"from after")) {
 			if((newDate=parseDate(inputString)) != INVALID_DATE_FORMAT) {
 				startDate = newDate;
-				log(DEBUG,"Parsed " + Utilities::vecToString(inputString) + " to be date: " + std::to_string(newDate));
+				log(DEBUG_INTERNAL,"Parsed " + Utilities::vecToString(inputString) + " to be date: " + std::to_string(newDate));
 			} else if((newTime=parseTime(inputString)) != INVALID_TIME_FORMAT) {
 				startTime = newTime;
-				log(DEBUG,"Parsed " + Utilities::vecToString(inputString) + " to be time: " + std::to_string(newTime));
+				log(DEBUG_INTERNAL,"Parsed " + Utilities::vecToString(inputString) + " to be time: " + std::to_string(newTime));
 			}
 
 		} else if(Utilities::containsAny(inputMode,"to before")) {
@@ -354,7 +361,7 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 		}
 
 		if(curr != userInput.end()) {
-			log(DEBUG,"Parsing PowerSearch inputMode: " + *curr);
+			log(DEBUG_INTERNAL,"Parsing PowerSearch inputMode: " + *curr);
 			inputMode = *curr;
 			if(!Utilities::equalsIgnoreCase(inputMode,"for")) {
 				curr++;
@@ -463,7 +470,7 @@ int Parser::parseByDate(std::vector<std::string> dateString) {
 			newDate = yearInput*10000 + (int)monthInput*100 + dateInput;
 	}
 
-	log(DEBUG,"Parsed by date: " + std::to_string(newDate));
+	log(DEBUG_INTERNAL,"Parsed by date: " + std::to_string(newDate));
 	return newDate;
 }
 
@@ -531,7 +538,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 		}
 	}
 
-	log(DEBUG,"Parsed by day: " + std::to_string(newDate));
+	log(DEBUG_INTERNAL,"Parsed by day: " + std::to_string(newDate));
 	return newDate;
 }
 
@@ -604,7 +611,7 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 		return INVALID_TIME_FORMAT;
 	}
 
-	log(DEBUG,"Parsed time: " + std::to_string(time));
+	log(DEBUG_INTERNAL,"Parsed time: " + std::to_string(time));
 	return time;
 }
 
@@ -636,11 +643,16 @@ void Parser::convertFieldToReserve(FieldType &inputMode) {
 	return;
 }
 
-void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool isReservation, FieldType inputMode, std::vector<std::string> inputString) {
+void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool &isReservation, FieldType inputMode, std::vector<std::string> inputString) {
+	if(inputMode == RESERVE) {
+		isReservation = true;
+		return;
+	}
+
 	int newDate = DATE_NOT_SET;
 	int newTime = TIME_NOT_SET;
 
-	log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
+	log(DEBUG_INTERNAL,"Parsing string: " + Utilities::vecToString(inputString));
 
 	if(isDateField(inputMode)) {
 		newDate = parseDate(inputString);
@@ -648,13 +660,19 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 			convertFieldDateToTime(inputMode);
 		}
 
-		if(newTask->getType()==FLOATING && isTodoField(inputMode)) {
-			isTODO = true;
-		} else if(isTODO && inputMode==START_TIME) {
-			inputMode = TODO_TIME;
-		}
-
-		if(isReservation) {
+		if(!isReservation) {
+			if(newTask->getType()==FLOATING && isTodoField(inputMode)) {
+				isTODO = true;
+			} else if(isTODO && inputMode==START_TIME) {
+				inputMode = TODO_TIME;
+			}
+		} else if(isReservation) {
+			log(DEBUG,"Parsing reservation: " + Utilities::vecToString(inputString));
+			if(newTask->getReserveType()==FLOATING && isTodoField(inputMode)) {
+				isTODOreserve = true;
+			} else if(isTODOreserve && inputMode==START_TIME) {
+				inputMode = TODO_TIME;
+			}
 			convertFieldToReserve(inputMode);
 		}
 	}
@@ -732,11 +750,13 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 		break;
 		//===== Reservation: Follow above and modify accordingly =====
 	case RESERVE_START_DATE:
+		log(DEBUG_INTERNAL,"Placing in reserveStartDate");
 		newTask->setReserveType(EVENT);
 		newTask->addReserveStartDate(newDate);
 		break;
 	case RESERVE_TODO_DATE:
 	case RESERVE_END_DATE:
+		log(DEBUG_INTERNAL,"Placing in reserveEndDate");
 		if(newTask->getReserveType() == FLOATING) {
 			isTODOreserve = true;
 		} else if(isTODOreserve
@@ -746,9 +766,10 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 		newTask->addReserveEndDate(newDate);
 		break;
 	case RESERVE_START_TIME:
+		log(DEBUG_INTERNAL,"Placing in reserveStartTime");
 		newTask->setReserveType(EVENT);
 		if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-			if(newTask->getStartTime() == TIME_NOT_SET) {
+			if(newTask->getReserveStartTime() == TIME_NOT_SET) {
 				newTask->addReserveStartTime(newTime);
 			}
 		} else {
@@ -756,6 +777,7 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 		}
 	case RESERVE_TODO_TIME:
 	case RESERVE_END_TIME:
+		log(DEBUG_INTERNAL,"Placing in reserveEndTime");
 		if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
 			if(newTask->getReserveStartDate() == DATE_NOT_SET) {
 				if(newTask->getReserveEndDate() == DATE_NOT_SET) {
@@ -767,7 +789,6 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 			if(newTask->getReserveEndDate() == DATE_NOT_SET) {
 				newTask->addReserveEndDate(newTask->getReserveStartDate());
 			}
-
 			newTask->addReserveEndTime(newTime);
 			if(newTask->getReserveStartTime()!=TIME_NOT_SET && newTask->getReserveStartTime()!=newTask->getReserveEndTime()) {
 				newTask->setReserveType(EVENT);

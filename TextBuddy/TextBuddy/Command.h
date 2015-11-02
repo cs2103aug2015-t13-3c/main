@@ -184,7 +184,7 @@ private:
 	int prevCurrPos;
 
 	void doModify();
-	void moveToPrevPos();
+	// void moveToPrevPos();
 
 	bool updateFLOATING();
 	bool updateTODO();
@@ -219,6 +219,7 @@ public:
 	~Pick();
 
 	void execute();
+	void undo();
 	std::string getMessage();
 };
 

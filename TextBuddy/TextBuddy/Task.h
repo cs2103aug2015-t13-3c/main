@@ -125,6 +125,7 @@ public:
 	int getReserveStartTime();
 	int getReserveEndDate();
 	int getReserveEndTime();
+	bool getReserveStatus();
 
 	std::string getDate_UI();
 	std::string getTime_UI();
@@ -150,16 +151,19 @@ public:
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
 
-	bool setReserveType(TaskType newType);
+	void setReserveType(TaskType newType);
 	void addReserveStartDate(int newReservation);
 	void addReserveStartTime(int newReservation);
 	void addReserveEndDate(int newReservation);
 	void addReserveEndTime(int newReservation);
-
+	void pickReserve();
+	/*
 	void clearReserveStartDate();
 	void clearReserveStartTime();
 	void clearReserveEndDate();
 	void clearReserveEndTime();
+	*/
+	void clearReserve();
 
 	bool isUrgent();
 	bool isToday();

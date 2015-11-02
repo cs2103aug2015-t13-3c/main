@@ -587,6 +587,7 @@ bool Modify::updateEVENT() {
 
 // Moves modified back to previous position before executing
 // In case sequence was swapped during sorting
+/*
 void Modify::moveToPrevPos() {
 	std::vector<Task>::iterator preCurrViewIter;
 	Task tempTask = *currViewIter;
@@ -595,6 +596,7 @@ void Modify::moveToPrevPos() {
 	preCurrViewIter = currentView.begin() + prevCurrPos;
 	currentView.insert(preCurrViewIter, tempTask);
 }
+*/
 
 // Aaron Chong @@author A0110376N
 
@@ -616,6 +618,13 @@ void Pick::execute() {
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
+	TbLogger::getInstance()->log(DEBUG,"Pick executed");
+}
+
+void Pick::undo() {
+	*taskStoreIter = originalTask;
+	*currViewIter = originalTask;
+	Task::lastEditID = originalTask.getID();
 }
 
 std::string Pick::getMessage() {
@@ -626,20 +635,17 @@ std::string Pick::getMessage() {
 
 void Pick::doPick() {
 	if(pickReserve) {
-		taskStoreIter->setStartDate(taskStoreIter->getReserveStartDate());
-		taskStoreIter->setStartTime(taskStoreIter->getReserveStartTime());
-		taskStoreIter->setEndDate(taskStoreIter->getReserveEndDate());
-		taskStoreIter->setEndTime(taskStoreIter->getReserveEndTime());
+		if(taskStoreIter->getReserveStatus() == true) {
+			taskStoreIter->pickReserve();
+		}
 	}
-	taskStoreIter->clearReserveStartDate();
-	taskStoreIter->clearReserveStartTime();
-	taskStoreIter->clearReserveEndDate();
-	taskStoreIter->clearReserveEndTime();
+	taskStoreIter->clearReserve();
 
 	updateTaskTypes();
 	updateView();
 	sortDate(taskStore);
 	initialiseIterators(modifyID);
+	return;
 }
 
 // Chin Kiat Boon @@author A0096720A
