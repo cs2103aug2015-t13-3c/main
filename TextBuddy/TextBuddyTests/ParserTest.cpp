@@ -441,8 +441,7 @@ public:
 		std::vector<std::string>::iterator daysNeeded = curr++;
 		std::vector<std::string>::iterator hrsNeeded = curr++;
 		std::vector<std::string>::iterator minsNeeded = curr;
-		Command *cmd;
-		cmd->clearTaskStore();
+		Command::clearTaskStore();
 
 		// Searchphrase PowerSearch with startDate, startTime, endDate,endTime
 		// Tested: from, at, to
