@@ -4,79 +4,7 @@
 
 using namespace UserInterface;
 
-void TextBuddyUI::selectFields() {
-	int i=0;
-	int length = input->Text->Length;
-	int start;
-	int end;
-	bool found = false;
-	String^ text = input->Text;
-	while(i < length) {
-		if(text[i] == '<') {
-			start = i;
-		}
-		if(text[i] == '>') {
-			end = i+1;
-			found = true;
-			break;
-		}
-		++i;
-	}
-	if(found) {
-		input->Select(start,end-start);
-	} else {
-		input->Select(length,1);
-	}
-}
 
-void TextBuddyUI::commandAutoComplete() {
-	bool found = false;
-	for each(String^ command in keywords) {
-		if(command == FROM || String::IsNullOrEmpty(input->Text) ) {
-			break;
-		}
-		if(matchKeyword(command)) {
-			showSuggestedCommands(command);
-			found = true;
-			dropDown->DroppedDown = true;
-			break;
-		}
-	}
-	if(!found) {
-		dropDown->DroppedDown = false;
-	}
-}
-
-void TextBuddyUI::showSuggestedCommands(String^ keyword) {
-	dropDown->Items->Clear();
-	if(suggestions[keyword] == nullptr) {
-		return;
-	} else if(suggestions[keyword]->GetType() == keyword->GetType()) {
-		dropDown->Items->Add(suggestions[keyword]);
-	} else {
-		List<String^>^ commands = dynamic_cast<List<String^>^>(suggestions[keyword]);
-		for each(String^ command in commands) {
-			dropDown->Items->Add(command);
-		}
-	}
-}
-
-bool TextBuddyUI::matchKeyword(String^ keyword) {
-	String^ inputText = input->Text;
-	int inputLength = input->Text->Length;
-	int keywordLength = keyword->Length;
-	int i=0;
-	while(i < inputLength && i<keywordLength) {
-		if(inputText[i] == ' ' && i != 0) {
-			return false;
-		}
-		if(inputText[i] != keyword[i]) {
-			return false;
-		}
-		++i;
-	}
-	return true;
-}
 
 //============================================================================
 

@@ -53,7 +53,6 @@ namespace UserInterface {
 	private: System::Windows::Forms::Timer^  updateCurrentTime;
 	private: System::Windows::Forms::PictureBox^  help;
 	private: System::Windows::Forms::ComboBox^  dropDown;
-
 	private: MetroFramework::Controls::MetroTabControl^  tabs;
 	private: MetroFramework::Controls::MetroTabPage^  all;
 	private: MetroFramework::Controls::MetroTabPage^  today;
@@ -63,6 +62,21 @@ namespace UserInterface {
 	private: MetroFramework::Controls::MetroTabPage^  floating;
 	private: MetroFramework::Controls::MetroTabPage^  search;
 	private: MetroFramework::Controls::MetroTabPage^  past;
+	private: System::Windows::Forms::DataGridView^  display;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  id;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  label;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Date;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
+
+
+
+
+
+
+
+
+
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -71,6 +85,8 @@ namespace UserInterface {
 			 /// Required method for Designer support - do not modify	
 			 void InitializeComponent(void) {
 				 this->components = (gcnew System::ComponentModel::Container());
+				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 				 this->input = (gcnew System::Windows::Forms::RichTextBox());
 				 this->feedback = (gcnew System::Windows::Forms::TextBox());
 				 this->currentTime = (gcnew System::Windows::Forms::TextBox());
@@ -79,6 +95,12 @@ namespace UserInterface {
 				 this->dropDown = (gcnew System::Windows::Forms::ComboBox());
 				 this->tabs = (gcnew MetroFramework::Controls::MetroTabControl());
 				 this->all = (gcnew MetroFramework::Controls::MetroTabPage());
+				 this->display = (gcnew System::Windows::Forms::DataGridView());
+				 this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->label = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->description = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->Date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+				 this->time = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 				 this->today = (gcnew MetroFramework::Controls::MetroTabPage());
 				 this->week = (gcnew MetroFramework::Controls::MetroTabPage());
 				 this->events = (gcnew MetroFramework::Controls::MetroTabPage());
@@ -88,6 +110,8 @@ namespace UserInterface {
 				 this->past = (gcnew MetroFramework::Controls::MetroTabPage());
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->BeginInit();
 				 this->tabs->SuspendLayout();
+				 this->all->SuspendLayout();
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->display))->BeginInit();
 				 this->SuspendLayout();
 				 // 
 				 // input
@@ -184,6 +208,7 @@ namespace UserInterface {
 				 // 
 				 // all
 				 // 
+				 this->all->Controls->Add(this->display);
 				 this->all->HorizontalScrollbarBarColor = true;
 				 this->all->HorizontalScrollbarHighlightOnWheel = false;
 				 this->all->HorizontalScrollbarSize = 10;
@@ -195,6 +220,97 @@ namespace UserInterface {
 				 this->all->VerticalScrollbarBarColor = true;
 				 this->all->VerticalScrollbarHighlightOnWheel = false;
 				 this->all->VerticalScrollbarSize = 10;
+				 // 
+				 // display
+				 // 
+				 this->display->AllowUserToAddRows = false;
+				 this->display->AllowUserToDeleteRows = false;
+				 this->display->AllowUserToResizeColumns = false;
+				 this->display->AllowUserToResizeRows = false;
+				 this->display->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
+				 this->display->BackgroundColor = System::Drawing::Color::White;
+				 this->display->BorderStyle = System::Windows::Forms::BorderStyle::None;
+				 this->display->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
+				 this->display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+				 this->display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(5) {this->id, this->label, 
+					 this->description, this->Date, this->time});
+				 dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+				 dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
+				 dataGridViewCellStyle1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
+					 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+				 dataGridViewCellStyle1->ForeColor = System::Drawing::SystemColors::ControlText;
+				 dataGridViewCellStyle1->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+				 dataGridViewCellStyle1->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+				 dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+				 this->display->DefaultCellStyle = dataGridViewCellStyle1;
+				 this->display->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
+				 this->display->Location = System::Drawing::Point(-1, 3);
+				 this->display->Name = L"display";
+				 this->display->ReadOnly = true;
+				 this->display->RowHeadersVisible = false;
+				 this->display->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::DisableResizing;
+				 dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+				 dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Window;
+				 dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+					 static_cast<System::Byte>(0)));
+				 dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::ControlText;
+				 dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+				 dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+				 dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+				 this->display->RowsDefaultCellStyle = dataGridViewCellStyle2;
+				 this->display->ScrollBars = System::Windows::Forms::ScrollBars::None;
+				 this->display->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::CellSelect;
+				 this->display->ShowCellErrors = false;
+				 this->display->ShowCellToolTips = false;
+				 this->display->ShowEditingIcon = false;
+				 this->display->ShowRowErrors = false;
+				 this->display->Size = System::Drawing::Size(746, 521);
+				 this->display->TabIndex = 11;
+				 this->display->TabStop = false;
+				 // 
+				 // id
+				 // 
+				 this->id->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
+				 this->id->HeaderText = L"Id";
+				 this->id->Name = L"id";
+				 this->id->ReadOnly = true;
+				 this->id->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+				 this->id->Width = 35;
+				 // 
+				 // label
+				 // 
+				 this->label->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
+				 this->label->HeaderText = L"Label";
+				 this->label->Name = L"label";
+				 this->label->ReadOnly = true;
+				 this->label->Resizable = System::Windows::Forms::DataGridViewTriState::True;
+				 // 
+				 // description
+				 // 
+				 this->description->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
+				 this->description->HeaderText = L"Description";
+				 this->description->Name = L"description";
+				 this->description->ReadOnly = true;
+				 this->description->Resizable = System::Windows::Forms::DataGridViewTriState::True;
+				 this->description->Width = 350;
+				 // 
+				 // Date
+				 // 
+				 this->Date->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
+				 this->Date->HeaderText = L"date";
+				 this->Date->Name = L"Date";
+				 this->Date->ReadOnly = true;
+				 this->Date->Resizable = System::Windows::Forms::DataGridViewTriState::True;
+				 this->Date->Width = 125;
+				 // 
+				 // time
+				 // 
+				 this->time->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
+				 this->time->HeaderText = L"Time";
+				 this->time->Name = L"time";
+				 this->time->ReadOnly = true;
+				 this->time->Resizable = System::Windows::Forms::DataGridViewTriState::True;
+				 this->time->Width = 130;
 				 // 
 				 // today
 				 // 
@@ -315,6 +431,8 @@ namespace UserInterface {
 				 this->Text = L"UI";
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->EndInit();
 				 this->tabs->ResumeLayout(false);
+				 this->all->ResumeLayout(false);
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->display))->EndInit();
 				 this->ResumeLayout(false);
 				 this->PerformLayout();
 
@@ -328,6 +446,7 @@ namespace UserInterface {
 			 //==================== PRIVATE VARIABLES ====================
 	private:
 		DisplayMode mode;
+		bool tileView;
 		bool selectingFields;
 		bool helpMode;
 		std::string* userInput;
@@ -379,51 +498,27 @@ namespace UserInterface {
 		-Label
 		-Date/Time
 		=====================================================================*/
-		void updateDisplay();
+		
 		void printFeedBackMessage(std::string message);
 
-		/*=====================================================================
-		reads the characters as the user types in the richTextBox
-		change colour to blue if they match keywords
-		KEYWORDS TO HIGHLIGHT
-		-ADD			-FROM
-		-MODIFY			-BY
-		-SEARCH			-TO
-		-DISPLAY		-ON
-		-DONE			-AT
-		-TAG			**MORE TO COME**
-		-STAR
-		-UNSTAR
-		=====================================================================*/
-		void highlightSyntax();
-		void undoHighlight();
-
-		/*====================================================================
-		Finds the keyword in the user Input richTextBox
-		Returns the position of the first occurrence of keyword
-		-1 is returned if keyword is not found
-		=====================================================================*/
-		int findKeyword(String^ keyword);
-		bool keywordIsFound(int position);
-
-		/*=====================================================================
-		Performs the change of text in the input richTextBox
-		keywords are changed to BLUE
-		=====================================================================*/
-		void highlightKeywords(int position, String^ keyword);
-
-		/*=====================================================================
-		When the user types in "search" as the first word in input box,
-		automatically performs search and updates display as user types
-		=====================================================================*/
-		void autoComplete();
-		void searchAutoComplete();
 		void commandAutoComplete();
-		void viewAutoComplete();
-		void putSuggestedText(String^ keyword);
-		void undoSearch();
 		bool matchKeyword(String^ keyword);
 		void showSuggestedCommands(String^ keyword);
 		void selectFields();
+
+		void updateDisplay();
+		void updateTable(TabPage^ currentTab);
+		int getTabIndex();
+		void addTilesToTab(TabPage^ currentTab);
+		String^ wrapWord(std::string content);
+
+		void incrementDropCount();
+		void decrementDropCount();
+		bool acceptAutosuggest();
+
+		void closeHelpMode();
+		void addCommandHistory();
+		void toPreviousCommand();
+		void toNextCommand();
 };
 }

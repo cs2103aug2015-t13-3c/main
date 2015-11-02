@@ -4,8 +4,41 @@
 
 using namespace UserInterface;
 
-void TextBuddyUI::updateDisplay() {
+String^ TextBuddyUI::wrapWord(std::string content) {
+	unsigned int width;
+	if(tileView) {
+
+	} else {
+		width = 45;
+	}
+	if(content.size() > width) {
+		unsigned int i=width-1;
+		while(content[i] != ' ' && i != 0) {
+			--i;
+		}
+		if(i == 0) {
+			i = width-1;
+		}
+		content.insert(i,"\r\n");
+	}
+	return gcnew String(content.c_str());
+}
+
+// Renders the help image invisible and bring the component to the back of form 
+
+void TextBuddyUI::closeHelpMode() {
+	helpMode = false;
+	help->Visible = false;
+	help->SendToBack();
+	input->Clear();
+	feedback->Clear();
+}
+
+// Gets the tabIndex from logic that UI should display to the user
+
+int TextBuddyUI::getTabIndex() {
 	mode = logic->getMode();
+	assert(mode >= 0 && mode < 8);
 	int tabIndex = 0;
 	switch (mode) {
 	case ALL:
@@ -32,12 +65,51 @@ void TextBuddyUI::updateDisplay() {
 	case PAST_:
 		tabIndex = PAST_;
 		break;
+	case FREESLOTS:
+		tabIndex = SEARCHES;
+		break;
 	}
+	return tabIndex;
+}
+
+void TextBuddyUI::updateTable(TabPage^ currentTab) {
+	display->Rows->Clear();
+	unsigned int size = tasks->size();
+	for(unsigned int i=0 ; i< size ; ++i) {
+		DisplayedTask task = (*tasks)[i];
+		String^ index = (i+1).ToString();
+		String^ label = gcnew String(task.label.c_str());
+		String^ title = wrapWord(task.description);
+		String^ d = gcnew String(task.date.c_str());
+		String^ t = gcnew String(task.time.c_str());	
+		display->Rows->Add(index,label,title,d,t);
+		if(task.status == PRIORITY) {
+			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Blue;
+		} else if(task.status == URGENT) {
+			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;
+		} else if(task.status == PAST) {
+			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Gray;
+		}
+	}
+	currentTab->Controls->Add(display);
+}
+
+void TextBuddyUI::updateDisplay() {
+	int tabIndex = getTabIndex();
 	tabs->SelectTab(tabIndex);
 	TabPage^ currentTab =  tabs->SelectedTab;
-	currentTab->TabStop = false;
-	//	std::vector<MetroTile> longTiles;
-	//	std::vector<MetroTile> squareTiles;
+	currentTab->Controls->Clear();
+	if(mode == FREESLOTS) {
+		//displayFreeSlots(currentTab);
+	} else if(tileView) {
+		addTilesToTab(currentTab);
+	} else {
+		updateTable(currentTab);
+	}
+	input->Focus();
+}
+
+void TextBuddyUI::addTilesToTab(TabPage^ currentTab) {
 	int x = 0;
 	int y = 0;
 	int width = currentTab->Width;
@@ -45,7 +117,6 @@ void TextBuddyUI::updateDisplay() {
 	int squareTileWidth = (width/5)-10;
 	int longTileWidth = (width*2/5)-15;
 	int tileHeight = (height/5)-5;
-	currentTab->Controls->Clear();
 	unsigned int size = tasks->size();
 	for(unsigned int i=0 ; i< size ; ++i) {
 		DisplayedTask task = (*tasks)[i];
@@ -101,149 +172,9 @@ void TextBuddyUI::updateDisplay() {
 			++y;
 		}
 
-	}		 
-	input->Focus();
-}
-/*
-System::Void TextBuddyUI::input_KeyUp_1(System::Object^ sender, 
-System::Windows::Forms::KeyEventArgs^ e) {
-this->dropDown->DroppedDown = true;
-cursorPosition = input->SelectionStart;
-if(e->KeyCode == Keys::Home) {
-// Do nothing 
-return;
-}
-if(helpMode) {
-helpMode = false;
-help->Visible = false;
-help->SendToBack();
-input->Clear();
-return;
-}
-if(e->KeyCode == Keys::Return) { // If user presses 'Return' key
-if(dropDown->DroppedDown) {
-String^ command = dropDown->SelectedItem->ToString();
-input->Text = command;
-dropDown->DroppedDown = false;
-return;
-}
-getInput();
-processAndExecute();
-input->Clear();
-} else if(e->KeyCode != Keys::Left && e->KeyCode != Keys::Right && e->KeyCode != Keys::Back){
-highlightSyntax();
-autoComplete();
-}
-if(e->KeyCode == Keys::Back) {
-undoSearch();
-undoHighlight();
-}
-if(e->KeyCode == Keys::Down) {
-// scrollDown();
-this->dropDown->SelectedIndex++;
-}
-if(e->KeyCode == Keys::Up) {
-// scrollUp();
-if(this->dropDown->SelectedIndex > 0 ) {
-this->dropDown->SelectedIndex--;
-}
-}
-}
-*/
-//====================== DEVELOPING ===========================================
-System::Void TextBuddyUI::input_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-	Keys key = e->KeyCode;
-	if(e->KeyCode == Keys::Home) {
-		//do nothing 
-		return;
-	}
-	if(key == Keys::Tab) {
-		if(dropDown->DroppedDown) {
-			if(dropDown->SelectedIndex + 1 < dropDown->Items->Count) {
-				dropDown->SelectedIndex++;
-			}
-		} else {
-			selectFields();
-		}
-		return;
-	}
-	if(key != Keys::Up && key != Keys::Down && key != Keys::Return) {
-		commandAutoComplete();
-		//highlightSyntax();
-	}
+	}	
 }
 
-System::Void TextBuddyUI::input_KeyDown(System::Object^  sender, 
-										System::Windows::Forms::KeyEventArgs^  e) {
-											assert(inputHistoryCount >= 0);
-											Keys key = e->KeyCode;
-											if(helpMode) {
-												helpMode = false;
-												help->Visible = false;
-												help->SendToBack();
-												input->Clear();
-												feedback->Clear();
-												return;
-											}
-											if(key == Keys::Return) { // If user presses 'Return' key
-												if(dropDown->DroppedDown) {
-													if(dropDown->SelectedIndex > -1) {
-														String^ command = dropDown->SelectedItem->ToString();
-														input->Clear();
-														input->Text = command;
-														dropDown->DroppedDown = false;
-														selectFields();
-														return;
-													} else {
-														dropDown->DroppedDown = false;
-													}
-												}
-												getInput();
-												processAndExecute();
-												inputHistory->Insert(0,input->Text);
-												inputHistoryCount = 0;
-												input->Clear();
-												return; 
-											}
-											if(key == Keys::Down) {
-												if(dropDown->DroppedDown) {
-													if(dropDown->SelectedIndex + 1 < dropDown->Items->Count) { 
-														dropDown->SelectedIndex ++ ;
-													}
-												} else {
-													if(inputHistoryCount <= inputHistory->Count) {
-														if(inputHistoryCount != 0) {
-															--inputHistoryCount;
-															input->Text = inputHistory[inputHistoryCount];
-														} else {
-															input->Text = "";
-														}
-
-													}
-												}
-												return;
-											}
-											if(key == Keys::Up) {
-												if(dropDown->DroppedDown) {
-													if(dropDown->SelectedIndex > 0 ) {
-														dropDown->SelectedIndex -- ;
-													} else {
-														dropDown->DroppedDown = false;
-													}
-												} else {
-													if(inputHistoryCount < inputHistory->Count) {
-														input->Text = inputHistory[inputHistoryCount];
-														if(inputHistoryCount != inputHistory->Count -1) {
-															++inputHistoryCount;
-														}
-													}
-												}
-												return;
-											}
-}
-
-
-//============================================================================
 void TextBuddyUI::getInput() {
 	msclr::interop::marshal_context context;
 	userInput = new std::string(context.marshal_as<std::string>(input->Text));

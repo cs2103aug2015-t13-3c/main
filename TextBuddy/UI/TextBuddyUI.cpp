@@ -20,6 +20,7 @@ int main() {
 TextBuddyUI::TextBuddyUI() {
 	selectingFields = false;
 	helpMode = false;
+	tileView = false;
 	logger = TbLogger::getInstance();
 	InitializeComponent();
 	logic = logic->getInstance();

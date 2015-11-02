@@ -3,6 +3,7 @@
 #include "TextBuddyUI.h"
 
 using namespace UserInterface;
+/*
 
 void TextBuddyUI::highlightSyntax() {		
 	input->SelectionColor = Color::Black;
@@ -47,3 +48,4 @@ void TextBuddyUI::undoHighlight() {
 		input->SelectionColor = Color::Black;
 	}
 }
+*/

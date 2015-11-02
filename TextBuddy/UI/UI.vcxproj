@@ -88,9 +88,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="autoComplete.cpp" />
+    <ClCompile Include="CommandHistory.cpp" />
+    <ClCompile Include="DropDown.cpp" />
     <ClCompile Include="execute.cpp" />
     <ClCompile Include="highlight.cpp" />
+    <ClCompile Include="KeyPress.cpp" />
     <ClCompile Include="TextBuddyUI.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>

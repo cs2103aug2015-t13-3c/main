@@ -16,7 +16,8 @@ enum DisplayMode {
 	DEADLINES,
 	FLOATINGS,
 	SEARCHES,
-	PAST_
+	PAST_,
+	FREESLOTS
 };
 
 class Logic {
@@ -32,10 +33,10 @@ private:
 
 	const static std::string Logic::ERROR_NO_INPUT;
 	const static std::string ERROR_INVALID_COMMAND;
+	static DisplayMode mode;
 
 public:
 	static Logic* getInstance();
-	static DisplayMode mode;
 	~Logic();
 
 	std::string processCommand(std::string userCommand);
