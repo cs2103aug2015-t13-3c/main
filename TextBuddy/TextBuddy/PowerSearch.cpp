@@ -105,36 +105,41 @@ bool PowerSearch::isWithinFreePeriod(Task freePeriod, int daysNeeded, int hrsNee
 //========== Public Methods ==========
 
 void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {
-	copyView();
-	sortDate(currentView);
-	removeDoneTasks(currentView);
-	std::vector<Task>::iterator iter = currentView.begin();
+	std::vector<Task> taskVector = taskStore;
+	std::vector<Task>::iterator iter;
 
 	tasksWithinPeriod.clear();
 
-	for (iter = currentView.begin(); iter != currentView.end(); ++iter) {
-		if (iter->getStartTime() == -1) {
-			iter->setStartTime(0);
-		}
+	if (endDate == -1) {
+		tasksWithinPeriod = taskVector;
+	} else {
+		removeDoneTasks(taskVector);
+		sortDate(taskVector);
 
-		if (iter->getEndTime() == -1) {
-			iter->setEndTime(0);
-		}
-
-		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
-			tasksWithinPeriod.push_back(*iter);
-		}
-
-		// If date is the same, further filter using time in the date
-		if (iter->getStartDate() == startDate) {
-			if (iter->getStartTime() >= startTime) {
+		for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
+			if (iter->getStartTime() == -1) {
+				iter->setStartTime(0);
+			}
+	
+			if (iter->getEndTime() == -1) {
+				iter->setEndTime(0);
+			}
+	
+			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
 				tasksWithinPeriod.push_back(*iter);
 			}
-		}
 
-		if (iter->getStartDate() == endDate) {
-			if (iter->getStartTime() <= endTime) {
-				tasksWithinPeriod.push_back(*iter);				
+			// If date is the same, further filter using time in the date
+			if (iter->getStartDate() == startDate) {
+				if (iter->getStartTime() >= startTime) {
+					tasksWithinPeriod.push_back(*iter);
+				}
+			}
+
+			if (iter->getStartDate() == endDate) {
+				if (iter->getStartTime() <= endTime) {
+					tasksWithinPeriod.push_back(*iter);				
+				}
 			}
 		}
 	}
@@ -195,6 +200,24 @@ void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int 
 	}
 }
 
+// Takes in input of regex format and allows UI to display matching searches
+// Supports "*", "+", "?"
+// If no time boundary, all time-related parameters to be set to -1
+void PowerSearch::regexSearch(std::string regPhr, int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> taskVector;
+	std::vector<Task>::iterator iter;
+
+	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
+	currentView.clear();
+
+	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
+		if (std::regex_match(iter->getName(), std::regex(regPhr))) {
+			currentView.push_back(*iter);
+		}
+	}
+}
+
+
 // Input: First 4 variables refers to the period of interest, last 3 variables refer to the time required for the free slot
 // Output: Modifies currentView into a list of free dates
 void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int endTime,
@@ -219,6 +242,10 @@ void PowerSearch::execute() {
 	if (searchPhrase == "") {
 		searchFreeSlot(startDate,startTime, endDate, endTime, daysNeeded, hrsNeeded, minsNeeded);
 		msg = "Here is the list of free slots available";
+	} else if (Utilities::containsAny(searchPhrase, "*") || Utilities::containsAny(searchPhrase, "+") ||
+		Utilities::containsAny(searchPhrase, "?")) { 
+			regexSearch(searchPhrase, startDate, startTime, endDate, endTime);
+			msg = "Results for \""+ searchPhrase + "\"";
 	} else {
 		searchInfo(searchPhrase, startDate, startTime, endDate, endTime);
 		msg = "Results for \"" + searchPhrase + "\"";

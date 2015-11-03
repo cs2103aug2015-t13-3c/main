@@ -18,6 +18,7 @@
 #include <sstream>
 
 #include <algorithm>
+#include <regex>
 #include <string>
 #include <set>
 #include <vector>

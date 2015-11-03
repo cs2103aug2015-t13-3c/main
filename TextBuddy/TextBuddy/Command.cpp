@@ -703,9 +703,13 @@ std::string Search::doSearch() {
 	std::string returnString;
 	int id;
 
+	std::vector<Task> taskVector;
 	std::vector<Task>::iterator iter;
 
-	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
+	taskVector = taskStore;
+	sortDate(taskVector);
+
+	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
 		taskName = iter->getName();
 		if(Utilities::isSubstring(searchPhrase,taskName)) {
 			id = iter->getID();
