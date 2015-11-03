@@ -954,6 +954,105 @@ public:
 		}
 	}
 	};
+
+	TEST_CLASS(Command_Pick) {
+public:
+	Command* cmd;
+	Parser* parser;
+	History* history;
+	Task task;
+	std::string userInput;
+
+	TEST_METHOD_INITIALIZE(ClearTaskStoreAndGetParser) {
+		cmd->clearTaskStore();
+		parser = Parser::getInstance();
+		history = History::getInstance();
+	}
+
+	TEST_METHOD(Command_Pick_reserve_empty) {
+		userInput = "add Recursion Lecture on 1 dec by 2 pm";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getTaskStore().back();
+		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
+		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151201, task.getStartDate());
+		Assert::AreEqual(1400, task.getStartTime());
+		Assert::AreEqual(151201, task.getEndDate());
+		Assert::AreEqual(1400, task.getEndTime());
+
+		userInput = "pick 1 reserve";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getTaskStore().back();
+		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
+		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151201, task.getStartDate());
+		Assert::AreEqual(1400, task.getStartTime());
+		Assert::AreEqual(151201, task.getEndDate());
+		Assert::AreEqual(1400, task.getEndTime());
+	}
+
+	TEST_METHOD(Command_Pick_reserve_TODOtoEVENT) {
+		userInput = "add Recursion Lecture on 1 dec by 2 pm reserve on 3 dec from 4 pm to 5 pm";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getTaskStore().back();
+		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
+		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151201, task.getStartDate());
+		Assert::AreEqual(1400, task.getStartTime());
+		Assert::AreEqual(151201, task.getEndDate());
+		Assert::AreEqual(1400, task.getEndTime());
+
+		history->add(cmd);
+		Assert::AreEqual(1,history->getUndoSize());
+
+		userInput = "pick 1 reserve"; // 'r' and 're' are alternatives to 'reserve'
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getTaskStore().back();
+		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
+		Assert::AreEqual(std::string("EVENT"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151203, task.getStartDate());
+		Assert::AreEqual(1600, task.getStartTime());
+		Assert::AreEqual(151203, task.getEndDate());
+		Assert::AreEqual(1700, task.getEndTime());
+
+		history->add(cmd);
+		Assert::AreEqual(2,history->getUndoSize());
+	}
+
+	TEST_METHOD(Command_Pick_reserve_Undo) {
+		Command_Pick_reserve_TODOtoEVENT();
+
+		userInput = "undo";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getTaskStore().back();
+		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
+		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
+		// Assert::AreEqual(std::string(""),task.getLabelString());
+		// Assert::AreEqual(false,task.getDoneStatus());
+		// Assert::AreEqual(false,task.getPriorityStatus());
+		Assert::AreEqual(151201, task.getStartDate());
+		Assert::AreEqual(1400, task.getStartTime());
+		Assert::AreEqual(151201, task.getEndDate());
+		Assert::AreEqual(1400, task.getEndTime());
+	}
+	};
 }
 
 void addThreeSentences(std::vector<Task> copyTask) {

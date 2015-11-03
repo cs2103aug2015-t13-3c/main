@@ -661,7 +661,7 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 		}
 
 		if(!isReservation) {
-			if(newTask->getType()==FLOATING && isTodoField(inputMode)) {
+			if(/*newTask->getType()==FLOATING &&*/ isTodoField(inputMode)) {
 				isTODO = true;
 			} else if(isTODO && inputMode==START_TIME) {
 				inputMode = TODO_TIME;
@@ -700,6 +700,9 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 		logSetTaskType(EVENT);
 		newTask->setType(EVENT);
 		newTask->setStartDate(newDate);
+		if(newTask->getEndDate() == DATE_NOT_SET) {
+			newTask->setEndDate(newDate);
+		}
 		break;
 	case TODO_DATE:
 	case END_DATE:
