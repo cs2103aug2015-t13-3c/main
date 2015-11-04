@@ -1574,3 +1574,843 @@ Tue Nov 03 08:57:37 2015 Parsing "clear"
 Tue Nov 03 08:57:38 2015 Parsing "exit"
 Tue Nov 03 08:57:38 2015 Logger terminated
 
+Wed Nov 04 06:45:11 2015 Logger initialised
+Wed Nov 04 06:45:11 2015 Log level default: 2
+Wed Nov 04 06:45:11 2015 Parser instantiated
+Wed Nov 04 06:45:11 2015 Log level changed: 0
+Wed Nov 04 06:45:11 2015 Parsing "view"
+Wed Nov 04 06:45:11 2015 Viewing...
+Wed Nov 04 06:45:24 2015 Parsing "add"
+Wed Nov 04 06:45:24 2015 Parsing task
+Wed Nov 04 06:45:24 2015 Parsing field keyword: name
+Wed Nov 04 06:45:24 2015 Parsing string: task
+Wed Nov 04 06:45:24 2015 Parsing field keyword: from
+Wed Nov 04 06:45:24 2015 Parsing string: 9 Oct
+Wed Nov 04 06:45:24 2015 Checking that oct = oct
+Wed Nov 04 06:45:24 2015 Parsed by date: 151009
+Wed Nov 04 06:45:24 2015 Setting task type as: EVENT
+Wed Nov 04 06:45:24 2015 Parsing field keyword: to
+Wed Nov 04 06:45:24 2015 Parsing string: 10 Oct
+Wed Nov 04 06:45:24 2015 Checking that oct = oct
+Wed Nov 04 06:45:24 2015 Parsed by date: 151010
+Wed Nov 04 06:45:24 2015 Parsed task of type: EVENT
+Wed Nov 04 06:45:50 2015 Parsing "search"
+Wed Nov 04 06:45:50 2015 Checking that from = from
+Wed Nov 04 06:45:50 2015 Checking that from = from
+Wed Nov 04 06:45:50 2015 Checking that for = for
+Wed Nov 04 06:45:50 2015 Processing PowerSearch phrase: from
+Wed Nov 04 06:45:50 2015 Checking that from = from
+Wed Nov 04 06:45:50 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 06:45:50 2015 Processing PowerSearch phrase: 8
+Wed Nov 04 06:45:50 2015 Checking that to = to
+Wed Nov 04 06:45:50 2015 Checking that from = from
+Wed Nov 04 06:45:50 2015 Checking that oct = oct
+Wed Nov 04 06:45:50 2015 Parsed by date: 151008
+Wed Nov 04 06:45:50 2015 Parsed 8 Oct to be date: 151008
+Wed Nov 04 06:45:50 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 06:45:50 2015 Processing PowerSearch phrase: 11
+Wed Nov 04 06:45:50 2015 Checking that for = for
+Wed Nov 04 06:45:50 2015 Checking that to = to
+Wed Nov 04 06:45:50 2015 Checking that oct = oct
+Wed Nov 04 06:45:50 2015 Parsed by date: 151011
+Wed Nov 04 06:45:50 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 06:45:50 2015 Processing PowerSearch phrase: for
+Wed Nov 04 06:45:50 2015 Checking that for = for
+Wed Nov 04 06:45:50 2015 Parsed PowerSearch
+Wed Nov 04 06:46:50 2015 Parsing "clear"
+Wed Nov 04 06:46:51 2015 Parsing "exit"
+Wed Nov 04 06:46:51 2015 Logger terminated
+
+Wed Nov 04 06:50:02 2015 Logger initialised
+Wed Nov 04 06:50:02 2015 Log level default: 2
+Wed Nov 04 06:50:02 2015 Parser instantiated
+Wed Nov 04 06:50:02 2015 Log level changed: 0
+Wed Nov 04 06:50:02 2015 Parsing "view"
+Wed Nov 04 06:50:02 2015 Viewing...
+Wed Nov 04 06:50:17 2015 Parsing "add"
+Wed Nov 04 06:50:17 2015 Parsing task
+Wed Nov 04 06:50:17 2015 Parsing field keyword: name
+Wed Nov 04 06:50:17 2015 Parsing string: task
+Wed Nov 04 06:50:17 2015 Parsing field keyword: from
+Wed Nov 04 06:50:17 2015 Parsing string: 10 Oct
+Wed Nov 04 06:50:17 2015 Checking that oct = oct
+Wed Nov 04 06:50:17 2015 Parsed by date: 151010
+Wed Nov 04 06:50:17 2015 Setting task type as: EVENT
+Wed Nov 04 06:50:17 2015 Parsing field keyword: to
+Wed Nov 04 06:50:17 2015 Parsing string: 11 Oct
+Wed Nov 04 06:50:17 2015 Checking that oct = oct
+Wed Nov 04 06:50:17 2015 Parsed by date: 151011
+Wed Nov 04 06:50:17 2015 Parsed task of type: EVENT
+Wed Nov 04 06:50:48 2015 Parsing "search"
+Wed Nov 04 06:50:48 2015 Checking that from = from
+Wed Nov 04 06:50:48 2015 Checking that from = from
+Wed Nov 04 06:50:48 2015 Checking that for = for
+Wed Nov 04 06:50:48 2015 Processing PowerSearch phrase: from
+Wed Nov 04 06:50:48 2015 Checking that from = from
+Wed Nov 04 06:50:48 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 06:50:48 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 06:50:48 2015 Checking that at = at
+Wed Nov 04 06:50:48 2015 Checking that from = from
+Wed Nov 04 06:50:48 2015 Checking that oct = oct
+Wed Nov 04 06:50:48 2015 Parsed by date: 151009
+Wed Nov 04 06:50:48 2015 Parsed 9 Oct to be date: 151009
+Wed Nov 04 06:50:48 2015 Parsing PowerSearch inputMode: at
+Wed Nov 04 06:50:48 2015 Processing PowerSearch phrase: 8
+Wed Nov 04 06:50:48 2015 Checking that to = to
+Wed Nov 04 06:50:48 2015 Checking that pm = pm
+Wed Nov 04 06:50:48 2015 Parsed time: 2000
+Wed Nov 04 06:50:48 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 06:50:48 2015 Processing PowerSearch phrase: 11
+Wed Nov 04 06:50:48 2015 Checking that at = at
+Wed Nov 04 06:50:48 2015 Checking that to = to
+Wed Nov 04 06:50:48 2015 Checking that oct = oct
+Wed Nov 04 06:50:48 2015 Parsed by date: 151011
+Wed Nov 04 06:50:48 2015 Parsing PowerSearch inputMode: at
+Wed Nov 04 06:50:48 2015 Processing PowerSearch phrase: 8
+Wed Nov 04 06:50:48 2015 Checking that for = for
+Wed Nov 04 06:50:48 2015 Checking that pm = pm
+Wed Nov 04 06:50:48 2015 Parsed time: 2000
+Wed Nov 04 06:50:48 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 06:50:48 2015 Processing PowerSearch phrase: for
+Wed Nov 04 06:50:48 2015 Checking that for = for
+Wed Nov 04 06:50:48 2015 Parsed PowerSearch
+Wed Nov 04 06:50:56 2015 Parsing "clear"
+Wed Nov 04 06:50:57 2015 Parsing "exit"
+Wed Nov 04 06:50:57 2015 Logger terminated
+
+Wed Nov 04 06:57:58 2015 Logger initialised
+Wed Nov 04 06:57:58 2015 Log level default: 2
+Wed Nov 04 06:57:58 2015 Parser instantiated
+Wed Nov 04 06:57:58 2015 Log level changed: 0
+Wed Nov 04 06:57:58 2015 Parsing "view"
+Wed Nov 04 06:57:58 2015 Viewing...
+Wed Nov 04 06:58:07 2015 Parsing "add"
+Wed Nov 04 06:58:07 2015 Parsing task
+Wed Nov 04 06:58:07 2015 Parsing field keyword: name
+Wed Nov 04 06:58:07 2015 Parsing string: task
+Wed Nov 04 06:58:07 2015 Parsing field keyword: from
+Wed Nov 04 06:58:07 2015 Parsing string: 10 Oct
+Wed Nov 04 06:58:07 2015 Checking that oct = oct
+Wed Nov 04 06:58:07 2015 Parsed by date: 151010
+Wed Nov 04 06:58:07 2015 Setting task type as: EVENT
+Wed Nov 04 06:58:07 2015 Parsing field keyword: to
+Wed Nov 04 06:58:07 2015 Parsing string: 11 Oct
+Wed Nov 04 06:58:07 2015 Checking that oct = oct
+Wed Nov 04 06:58:07 2015 Parsed by date: 151011
+Wed Nov 04 06:58:07 2015 Parsed task of type: EVENT
+Wed Nov 04 06:58:17 2015 Parsing "search"
+Wed Nov 04 06:58:17 2015 Checking that from = from
+Wed Nov 04 06:58:17 2015 Checking that from = from
+Wed Nov 04 06:58:17 2015 Checking that for = for
+Wed Nov 04 06:58:17 2015 Processing PowerSearch phrase: from
+Wed Nov 04 06:58:17 2015 Checking that from = from
+Wed Nov 04 06:58:17 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 06:58:17 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 06:58:17 2015 Checking that to = to
+Wed Nov 04 06:58:17 2015 Checking that from = from
+Wed Nov 04 06:58:17 2015 Checking that oct = oct
+Wed Nov 04 06:58:17 2015 Parsed by date: 151009
+Wed Nov 04 06:58:17 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 06:58:17 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 06:58:17 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 06:58:17 2015 Checking that for = for
+Wed Nov 04 06:58:17 2015 Checking that to = to
+Wed Nov 04 06:58:17 2015 Checking that oct = oct
+Wed Nov 04 06:58:17 2015 Parsed by date: 151012
+Wed Nov 04 06:58:17 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 06:58:17 2015 Processing PowerSearch phrase: for
+Wed Nov 04 06:58:17 2015 Checking that for = for
+Wed Nov 04 06:58:17 2015 Parsed PowerSearch
+Wed Nov 04 06:58:52 2015 Parsing "view"
+Wed Nov 04 06:58:52 2015 Viewing...
+Wed Nov 04 06:58:56 2015 Parsing "exit"
+Wed Nov 04 06:58:56 2015 Logger terminated
+
+Wed Nov 04 06:59:12 2015 Logger initialised
+Wed Nov 04 06:59:12 2015 Log level default: 2
+Wed Nov 04 06:59:12 2015 Parser instantiated
+Wed Nov 04 06:59:12 2015 Log level changed: 0
+Wed Nov 04 06:59:12 2015 Parsing "view"
+Wed Nov 04 06:59:12 2015 Viewing...
+Wed Nov 04 06:59:25 2015 Parsing "search"
+Wed Nov 04 06:59:25 2015 Checking that to = to
+Wed Nov 04 06:59:25 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 06:59:25 2015 Checking that to = to
+Wed Nov 04 06:59:25 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 06:59:25 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 06:59:25 2015 Checking that for = for
+Wed Nov 04 06:59:25 2015 Checking that to = to
+Wed Nov 04 06:59:25 2015 Checking that oct = oct
+Wed Nov 04 06:59:25 2015 Parsed by date: 151012
+Wed Nov 04 06:59:25 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 06:59:25 2015 Processing PowerSearch phrase: for
+Wed Nov 04 06:59:25 2015 Checking that for = for
+Wed Nov 04 06:59:25 2015 Parsed by day: 151104
+Wed Nov 04 06:59:25 2015 Parsed PowerSearch
+Wed Nov 04 06:59:31 2015 Parsing "display"
+Wed Nov 04 06:59:36 2015 Parsing "search"
+Wed Nov 04 06:59:36 2015 Checking that to = to
+Wed Nov 04 06:59:36 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 06:59:36 2015 Checking that to = to
+Wed Nov 04 06:59:36 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 06:59:36 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 06:59:36 2015 Checking that for = for
+Wed Nov 04 06:59:36 2015 Checking that to = to
+Wed Nov 04 06:59:36 2015 Checking that oct = oct
+Wed Nov 04 06:59:36 2015 Parsed by date: 151012
+Wed Nov 04 06:59:36 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 06:59:36 2015 Processing PowerSearch phrase: for
+Wed Nov 04 06:59:36 2015 Checking that for = for
+Wed Nov 04 06:59:36 2015 Parsed by day: 151104
+Wed Nov 04 06:59:36 2015 Parsed PowerSearch
+Wed Nov 04 06:59:40 2015 Parsing "display"
+Wed Nov 04 06:59:48 2015 Parsing "search"
+Wed Nov 04 06:59:48 2015 Checking that from = from
+Wed Nov 04 06:59:48 2015 Checking that from = from
+Wed Nov 04 06:59:48 2015 Checking that for = for
+Wed Nov 04 06:59:48 2015 Processing PowerSearch phrase: from
+Wed Nov 04 06:59:48 2015 Checking that from = from
+Wed Nov 04 06:59:48 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 06:59:48 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 06:59:48 2015 Checking that to = to
+Wed Nov 04 06:59:48 2015 Checking that from = from
+Wed Nov 04 06:59:48 2015 Checking that oct = oct
+Wed Nov 04 06:59:48 2015 Parsed by date: 151009
+Wed Nov 04 06:59:48 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 06:59:48 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 06:59:48 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 06:59:48 2015 Checking that for = for
+Wed Nov 04 06:59:48 2015 Checking that to = to
+Wed Nov 04 06:59:48 2015 Checking that oct = oct
+Wed Nov 04 06:59:48 2015 Parsed by date: 151012
+Wed Nov 04 06:59:48 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 06:59:48 2015 Processing PowerSearch phrase: for
+Wed Nov 04 06:59:48 2015 Checking that for = for
+Wed Nov 04 06:59:48 2015 Parsed PowerSearch
+Wed Nov 04 07:00:03 2015 Parsing "display"
+Wed Nov 04 07:00:06 2015 Parsing "clear"
+Wed Nov 04 07:00:06 2015 Parsing "exit"
+Wed Nov 04 07:00:06 2015 Logger terminated
+
+Wed Nov 04 07:09:28 2015 Logger initialised
+Wed Nov 04 07:09:28 2015 Log level default: 2
+Wed Nov 04 07:09:28 2015 Parser instantiated
+Wed Nov 04 07:09:28 2015 Log level changed: 0
+Wed Nov 04 07:09:29 2015 Parsing "view"
+Wed Nov 04 07:09:29 2015 Viewing...
+Wed Nov 04 07:09:41 2015 Parsing "add"
+Wed Nov 04 07:09:41 2015 Parsing task
+Wed Nov 04 07:09:41 2015 Parsing field keyword: name
+Wed Nov 04 07:09:41 2015 Parsing string: task
+Wed Nov 04 07:09:41 2015 Parsing field keyword: from
+Wed Nov 04 07:09:41 2015 Parsing string: 10 Oct
+Wed Nov 04 07:09:41 2015 Checking that oct = oct
+Wed Nov 04 07:09:41 2015 Parsed by date: 151010
+Wed Nov 04 07:09:41 2015 Setting task type as: EVENT
+Wed Nov 04 07:09:41 2015 Parsing field keyword: to
+Wed Nov 04 07:09:41 2015 Parsing string: 11 Oct
+Wed Nov 04 07:09:41 2015 Checking that oct = oct
+Wed Nov 04 07:09:41 2015 Parsed by date: 151011
+Wed Nov 04 07:09:41 2015 Parsed task of type: EVENT
+Wed Nov 04 07:10:48 2015 Parsing "search"
+Wed Nov 04 07:10:48 2015 Checking that from = from
+Wed Nov 04 07:10:48 2015 Checking that from = from
+Wed Nov 04 07:10:48 2015 Checking that for = for
+Wed Nov 04 07:10:48 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:10:48 2015 Checking that from = from
+Wed Nov 04 07:10:48 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:10:48 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:10:48 2015 Checking that to = to
+Wed Nov 04 07:10:48 2015 Checking that from = from
+Wed Nov 04 07:10:48 2015 Checking that oct = oct
+Wed Nov 04 07:10:48 2015 Parsed by date: 151009
+Wed Nov 04 07:10:48 2015 Parsed 9 Oct to be date: 151009
+Wed Nov 04 07:10:48 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:10:48 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:10:48 2015 Checking that for = for
+Wed Nov 04 07:10:48 2015 Checking that to = to
+Wed Nov 04 07:10:48 2015 Checking that oct = oct
+Wed Nov 04 07:10:48 2015 Parsed by date: 151012
+Wed Nov 04 07:10:48 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:10:48 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:10:48 2015 Checking that for = for
+Wed Nov 04 07:10:48 2015 Parsed PowerSearch
+Wed Nov 04 07:11:06 2015 Parsing "clear"
+Wed Nov 04 07:11:07 2015 Parsing "exit"
+Wed Nov 04 07:11:07 2015 Logger terminated
+
+Wed Nov 04 07:11:23 2015 Logger initialised
+Wed Nov 04 07:11:23 2015 Log level default: 2
+Wed Nov 04 07:11:23 2015 Parser instantiated
+Wed Nov 04 07:11:23 2015 Log level changed: 0
+Wed Nov 04 07:11:24 2015 Parsing "view"
+Wed Nov 04 07:11:24 2015 Viewing...
+Wed Nov 04 07:11:35 2015 Parsing "add"
+Wed Nov 04 07:11:35 2015 Parsing task
+Wed Nov 04 07:11:35 2015 Parsing field keyword: name
+Wed Nov 04 07:11:35 2015 Parsing string: task
+Wed Nov 04 07:11:35 2015 Parsing field keyword: from
+Wed Nov 04 07:11:35 2015 Parsing string: 10 oct
+Wed Nov 04 07:11:35 2015 Checking that oct = oct
+Wed Nov 04 07:11:35 2015 Parsed by date: 151010
+Wed Nov 04 07:11:35 2015 Setting task type as: EVENT
+Wed Nov 04 07:11:35 2015 Parsing field keyword: to
+Wed Nov 04 07:11:35 2015 Parsing string: 11 oct
+Wed Nov 04 07:11:35 2015 Checking that oct = oct
+Wed Nov 04 07:11:35 2015 Parsed by date: 151011
+Wed Nov 04 07:11:35 2015 Parsed task of type: EVENT
+Wed Nov 04 07:11:40 2015 Parsing "search"
+Wed Nov 04 07:11:40 2015 Checking that from = from
+Wed Nov 04 07:11:40 2015 Checking that from = from
+Wed Nov 04 07:11:40 2015 Checking that for = for
+Wed Nov 04 07:11:40 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:11:40 2015 Checking that from = from
+Wed Nov 04 07:11:40 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:11:40 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:11:40 2015 Checking that to = to
+Wed Nov 04 07:11:40 2015 Checking that from = from
+Wed Nov 04 07:11:40 2015 Checking that oct = oct
+Wed Nov 04 07:11:40 2015 Parsed by date: 151009
+Wed Nov 04 07:11:40 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:11:40 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:11:40 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:11:40 2015 Checking that for = for
+Wed Nov 04 07:11:40 2015 Checking that to = to
+Wed Nov 04 07:11:40 2015 Checking that oct = oct
+Wed Nov 04 07:11:40 2015 Parsed by date: 151012
+Wed Nov 04 07:11:40 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:11:40 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:11:40 2015 Checking that for = for
+Wed Nov 04 07:11:40 2015 Parsed PowerSearch
+Wed Nov 04 07:11:50 2015 Parsing "clear"
+Wed Nov 04 07:11:51 2015 Parsing "exit"
+Wed Nov 04 07:11:51 2015 Logger terminated
+
+Wed Nov 04 07:15:21 2015 Logger initialised
+Wed Nov 04 07:15:21 2015 Log level default: 2
+Wed Nov 04 07:15:21 2015 Parser instantiated
+Wed Nov 04 07:15:21 2015 Log level changed: 0
+Wed Nov 04 07:15:21 2015 Parsing "view"
+Wed Nov 04 07:15:21 2015 Viewing...
+Wed Nov 04 07:15:37 2015 Parsing "add"
+Wed Nov 04 07:15:37 2015 Parsing task
+Wed Nov 04 07:15:37 2015 Parsing field keyword: name
+Wed Nov 04 07:15:37 2015 Parsing string: task
+Wed Nov 04 07:15:37 2015 Parsing field keyword: from
+Wed Nov 04 07:15:37 2015 Parsing string: 10 oct
+Wed Nov 04 07:15:37 2015 Checking that oct = oct
+Wed Nov 04 07:15:37 2015 Parsed by date: 151010
+Wed Nov 04 07:15:37 2015 Setting task type as: EVENT
+Wed Nov 04 07:15:37 2015 Parsing field keyword: to
+Wed Nov 04 07:15:37 2015 Parsing string: 11 oct
+Wed Nov 04 07:15:37 2015 Checking that oct = oct
+Wed Nov 04 07:15:37 2015 Parsed by date: 151011
+Wed Nov 04 07:15:37 2015 Parsed task of type: EVENT
+Wed Nov 04 07:15:43 2015 Parsing "search"
+Wed Nov 04 07:15:43 2015 Checking that from = from
+Wed Nov 04 07:15:43 2015 Checking that from = from
+Wed Nov 04 07:15:43 2015 Checking that for = for
+Wed Nov 04 07:15:43 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:15:43 2015 Checking that from = from
+Wed Nov 04 07:15:43 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:15:43 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:15:43 2015 Checking that to = to
+Wed Nov 04 07:15:43 2015 Checking that from = from
+Wed Nov 04 07:15:43 2015 Checking that oct = oct
+Wed Nov 04 07:15:43 2015 Parsed by date: 151009
+Wed Nov 04 07:15:43 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:15:43 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:15:43 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:15:43 2015 Checking that for = for
+Wed Nov 04 07:15:43 2015 Checking that to = to
+Wed Nov 04 07:15:43 2015 Checking that oct = oct
+Wed Nov 04 07:15:43 2015 Parsed by date: 151012
+Wed Nov 04 07:15:43 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:15:43 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:15:43 2015 Checking that for = for
+Wed Nov 04 07:15:43 2015 Parsed PowerSearch
+Wed Nov 04 07:15:46 2015 Parsing "exit"
+Wed Nov 04 07:15:46 2015 Logger terminated
+
+Wed Nov 04 07:16:57 2015 Logger initialised
+Wed Nov 04 07:16:57 2015 Log level default: 2
+Wed Nov 04 07:16:57 2015 Parser instantiated
+Wed Nov 04 07:16:57 2015 Log level changed: 0
+Wed Nov 04 07:16:58 2015 Parsing "view"
+Wed Nov 04 07:16:58 2015 Viewing...
+Wed Nov 04 07:17:09 2015 Parsing "search"
+Wed Nov 04 07:17:09 2015 Checking that from = from
+Wed Nov 04 07:17:09 2015 Checking that from = from
+Wed Nov 04 07:17:09 2015 Checking that for = for
+Wed Nov 04 07:17:09 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:17:09 2015 Checking that from = from
+Wed Nov 04 07:17:09 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:17:09 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:17:09 2015 Checking that to = to
+Wed Nov 04 07:17:09 2015 Checking that from = from
+Wed Nov 04 07:17:09 2015 Checking that oct = oct
+Wed Nov 04 07:17:09 2015 Parsed by date: 151009
+Wed Nov 04 07:17:09 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:17:09 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:17:09 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:17:09 2015 Checking that for = for
+Wed Nov 04 07:17:09 2015 Checking that to = to
+Wed Nov 04 07:17:09 2015 Checking that oct = oct
+Wed Nov 04 07:17:09 2015 Parsed by date: 151012
+Wed Nov 04 07:17:09 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:17:09 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:17:09 2015 Checking that for = for
+Wed Nov 04 07:17:09 2015 Parsed PowerSearch
+Wed Nov 04 07:17:11 2015 Parsing "exit"
+Wed Nov 04 07:17:11 2015 Logger terminated
+
+Wed Nov 04 07:19:53 2015 Logger initialised
+Wed Nov 04 07:19:53 2015 Log level default: 2
+Wed Nov 04 07:19:53 2015 Parser instantiated
+Wed Nov 04 07:19:53 2015 Log level changed: 0
+Wed Nov 04 07:19:54 2015 Parsing "view"
+Wed Nov 04 07:19:54 2015 Viewing...
+Wed Nov 04 07:20:06 2015 Parsing "search"
+Wed Nov 04 07:20:06 2015 Checking that from = from
+Wed Nov 04 07:20:06 2015 Checking that from = from
+Wed Nov 04 07:20:06 2015 Checking that for = for
+Wed Nov 04 07:20:06 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:20:06 2015 Checking that from = from
+Wed Nov 04 07:20:06 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:20:06 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:20:06 2015 Checking that to = to
+Wed Nov 04 07:20:06 2015 Checking that from = from
+Wed Nov 04 07:20:06 2015 Checking that oct = oct
+Wed Nov 04 07:20:06 2015 Parsed by date: 151009
+Wed Nov 04 07:20:06 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:20:06 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:20:06 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:20:06 2015 Checking that for = for
+Wed Nov 04 07:20:06 2015 Checking that to = to
+Wed Nov 04 07:20:06 2015 Checking that oct = oct
+Wed Nov 04 07:20:06 2015 Parsed by date: 151012
+Wed Nov 04 07:20:06 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:20:06 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:20:06 2015 Checking that for = for
+Wed Nov 04 07:20:06 2015 Parsed PowerSearch
+Wed Nov 04 07:20:18 2015 Parsing "display"
+Wed Nov 04 07:21:22 2015 Parsing "search"
+Wed Nov 04 07:21:22 2015 Checking that from = from
+Wed Nov 04 07:21:22 2015 Checking that from = from
+Wed Nov 04 07:21:27 2015 Parsing "exit"
+Wed Nov 04 07:21:27 2015 Logger terminated
+
+Wed Nov 04 07:24:41 2015 Logger initialised
+Wed Nov 04 07:24:41 2015 Log level default: 2
+Wed Nov 04 07:24:41 2015 Parser instantiated
+Wed Nov 04 07:24:41 2015 Log level changed: 0
+Wed Nov 04 07:24:42 2015 Parsing "view"
+Wed Nov 04 07:24:42 2015 Viewing...
+Wed Nov 04 07:24:53 2015 Parsing "search"
+Wed Nov 04 07:24:53 2015 Checking that from = from
+Wed Nov 04 07:24:53 2015 Checking that from = from
+Wed Nov 04 07:24:53 2015 Checking that for = for
+Wed Nov 04 07:24:53 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:24:53 2015 Checking that from = from
+Wed Nov 04 07:24:53 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:24:53 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:24:53 2015 Checking that to = to
+Wed Nov 04 07:24:53 2015 Checking that from = from
+Wed Nov 04 07:24:53 2015 Checking that oct = oct
+Wed Nov 04 07:24:53 2015 Parsed by date: 151009
+Wed Nov 04 07:24:53 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:24:53 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:24:53 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:24:53 2015 Checking that for = for
+Wed Nov 04 07:24:53 2015 Checking that to = to
+Wed Nov 04 07:24:53 2015 Checking that oct = oct
+Wed Nov 04 07:24:53 2015 Parsed by date: 151012
+Wed Nov 04 07:24:53 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:24:53 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:24:53 2015 Checking that for = for
+Wed Nov 04 07:24:53 2015 Parsed PowerSearch
+Wed Nov 04 07:25:19 2015 Parsing "display"
+Wed Nov 04 07:25:36 2015 Parsing "search"
+Wed Nov 04 07:25:36 2015 Checking that from = from
+Wed Nov 04 07:25:36 2015 Checking that from = from
+Wed Nov 04 07:25:41 2015 Parsing "display"
+Wed Nov 04 07:25:51 2015 Parsing "search"
+Wed Nov 04 07:25:51 2015 Checking that from = from
+Wed Nov 04 07:25:51 2015 Checking that from = from
+Wed Nov 04 07:25:51 2015 Checking that for = for
+Wed Nov 04 07:25:51 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:25:51 2015 Checking that from = from
+Wed Nov 04 07:25:51 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:25:51 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:25:51 2015 Checking that at = at
+Wed Nov 04 07:25:51 2015 Checking that from = from
+Wed Nov 04 07:25:51 2015 Checking that oct = oct
+Wed Nov 04 07:25:51 2015 Parsed by date: 151009
+Wed Nov 04 07:25:51 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:25:51 2015 Parsing PowerSearch inputMode: at
+Wed Nov 04 07:25:51 2015 Processing PowerSearch phrase: 5
+Wed Nov 04 07:25:51 2015 Checking that to = to
+Wed Nov 04 07:25:51 2015 Checking that pm = pm
+Wed Nov 04 07:25:51 2015 Parsed time: 1700
+Wed Nov 04 07:25:51 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:25:51 2015 Processing PowerSearch phrase: 10
+Wed Nov 04 07:25:51 2015 Checking that at = at
+Wed Nov 04 07:25:51 2015 Checking that to = to
+Wed Nov 04 07:25:51 2015 Checking that oct = oct
+Wed Nov 04 07:25:51 2015 Parsed by date: 151010
+Wed Nov 04 07:25:51 2015 Parsing PowerSearch inputMode: at
+Wed Nov 04 07:25:51 2015 Processing PowerSearch phrase: 2
+Wed Nov 04 07:25:51 2015 Checking that for = for
+Wed Nov 04 07:25:51 2015 Checking that pm = pm
+Wed Nov 04 07:25:51 2015 Parsed time: 1400
+Wed Nov 04 07:25:51 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:25:51 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:25:51 2015 Checking that for = for
+Wed Nov 04 07:25:51 2015 Parsed PowerSearch
+Wed Nov 04 07:25:58 2015 Parsing "clear"
+Wed Nov 04 07:25:59 2015 Parsing "exit"
+Wed Nov 04 07:25:59 2015 Logger terminated
+
+Wed Nov 04 07:27:53 2015 Logger initialised
+Wed Nov 04 07:27:53 2015 Log level default: 2
+Wed Nov 04 07:27:53 2015 Parser instantiated
+Wed Nov 04 07:27:53 2015 Log level changed: 0
+Wed Nov 04 07:27:53 2015 Parsing "view"
+Wed Nov 04 07:27:53 2015 Viewing...
+Wed Nov 04 07:28:02 2015 Parsing "search"
+Wed Nov 04 07:28:02 2015 Checking that from = from
+Wed Nov 04 07:28:02 2015 Checking that from = from
+Wed Nov 04 07:28:09 2015 Parsing "add"
+Wed Nov 04 07:28:09 2015 Parsing task
+Wed Nov 04 07:28:09 2015 Parsing field keyword: name
+Wed Nov 04 07:28:09 2015 Parsing string: task
+Wed Nov 04 07:28:09 2015 Parsing field keyword: from
+Wed Nov 04 07:28:09 2015 Parsing string: 10 oct
+Wed Nov 04 07:28:09 2015 Checking that oct = oct
+Wed Nov 04 07:28:09 2015 Parsed by date: 151010
+Wed Nov 04 07:28:09 2015 Setting task type as: EVENT
+Wed Nov 04 07:28:09 2015 Parsing field keyword: to
+Wed Nov 04 07:28:09 2015 Parsing string: 11 oct
+Wed Nov 04 07:28:09 2015 Checking that oct = oct
+Wed Nov 04 07:28:09 2015 Parsed by date: 151011
+Wed Nov 04 07:28:09 2015 Parsed task of type: EVENT
+Wed Nov 04 07:28:17 2015 Parsing "search"
+Wed Nov 04 07:28:17 2015 Checking that from = from
+Wed Nov 04 07:28:17 2015 Checking that from = from
+Wed Nov 04 07:28:17 2015 Checking that for = for
+Wed Nov 04 07:28:17 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:28:17 2015 Checking that from = from
+Wed Nov 04 07:28:17 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:28:17 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:28:17 2015 Checking that to = to
+Wed Nov 04 07:28:17 2015 Checking that from = from
+Wed Nov 04 07:28:17 2015 Checking that oct = oct
+Wed Nov 04 07:28:17 2015 Parsed by date: 151009
+Wed Nov 04 07:28:17 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:28:17 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:28:17 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:28:17 2015 Checking that for = for
+Wed Nov 04 07:28:17 2015 Checking that to = to
+Wed Nov 04 07:28:17 2015 Checking that oct = oct
+Wed Nov 04 07:28:17 2015 Parsed by date: 151012
+Wed Nov 04 07:28:17 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:28:17 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:28:17 2015 Checking that for = for
+Wed Nov 04 07:28:17 2015 Parsed PowerSearch
+Wed Nov 04 07:28:23 2015 Parsing "clear"
+Wed Nov 04 07:28:24 2015 Parsing "exit"
+Wed Nov 04 07:28:24 2015 Logger terminated
+
+Wed Nov 04 07:32:24 2015 Logger initialised
+Wed Nov 04 07:32:24 2015 Log level default: 2
+Wed Nov 04 07:32:24 2015 Parser instantiated
+Wed Nov 04 07:32:24 2015 Log level changed: 0
+Wed Nov 04 07:32:24 2015 Parsing "view"
+Wed Nov 04 07:32:24 2015 Viewing...
+Wed Nov 04 07:32:29 2015 Parsing "display"
+Wed Nov 04 07:32:35 2015 Parsing "add"
+Wed Nov 04 07:32:35 2015 Parsing task
+Wed Nov 04 07:32:35 2015 Parsing field keyword: name
+Wed Nov 04 07:32:35 2015 Parsing string: task
+Wed Nov 04 07:32:35 2015 Parsing field keyword: from
+Wed Nov 04 07:32:35 2015 Parsing string: 10 Oct
+Wed Nov 04 07:32:35 2015 Checking that oct = oct
+Wed Nov 04 07:32:35 2015 Parsed by date: 151010
+Wed Nov 04 07:32:35 2015 Setting task type as: EVENT
+Wed Nov 04 07:32:35 2015 Parsing field keyword: to
+Wed Nov 04 07:32:35 2015 Parsing string: 11 Oct
+Wed Nov 04 07:32:35 2015 Checking that oct = oct
+Wed Nov 04 07:32:35 2015 Parsed by date: 151011
+Wed Nov 04 07:32:35 2015 Parsed task of type: EVENT
+Wed Nov 04 07:32:42 2015 Parsing "search"
+Wed Nov 04 07:32:42 2015 Checking that from = from
+Wed Nov 04 07:32:42 2015 Checking that from = from
+Wed Nov 04 07:32:46 2015 Parsing "display"
+Wed Nov 04 07:32:52 2015 Parsing "search"
+Wed Nov 04 07:32:52 2015 Checking that from = from
+Wed Nov 04 07:32:52 2015 Checking that from = from
+Wed Nov 04 07:32:52 2015 Checking that for = for
+Wed Nov 04 07:32:52 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:32:52 2015 Checking that from = from
+Wed Nov 04 07:32:52 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:32:52 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:32:52 2015 Checking that to = to
+Wed Nov 04 07:32:52 2015 Checking that from = from
+Wed Nov 04 07:32:52 2015 Checking that oct = oct
+Wed Nov 04 07:32:52 2015 Parsed by date: 151009
+Wed Nov 04 07:32:52 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:32:52 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:32:52 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:32:52 2015 Checking that for = for
+Wed Nov 04 07:32:52 2015 Checking that to = to
+Wed Nov 04 07:32:52 2015 Checking that oct = oct
+Wed Nov 04 07:32:52 2015 Parsed by date: 151012
+Wed Nov 04 07:32:52 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:32:52 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:32:52 2015 Checking that for = for
+Wed Nov 04 07:32:52 2015 Parsed PowerSearch
+Wed Nov 04 07:33:00 2015 Parsing "display"
+Wed Nov 04 07:33:23 2015 Parsing "search"
+Wed Nov 04 07:33:23 2015 Checking that from = from
+Wed Nov 04 07:33:23 2015 Checking that from = from
+Wed Nov 04 07:33:23 2015 Checking that for = for
+Wed Nov 04 07:33:23 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:33:23 2015 Checking that from = from
+Wed Nov 04 07:33:23 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:33:23 2015 Processing PowerSearch phrase: 10
+Wed Nov 04 07:33:23 2015 Checking that at = at
+Wed Nov 04 07:33:23 2015 Checking that from = from
+Wed Nov 04 07:33:23 2015 Checking that oct = oct
+Wed Nov 04 07:33:23 2015 Parsed by date: 151010
+Wed Nov 04 07:33:23 2015 Parsed 10 oct to be date: 151010
+Wed Nov 04 07:33:23 2015 Parsing PowerSearch inputMode: at
+Wed Nov 04 07:33:23 2015 Processing PowerSearch phrase: 2
+Wed Nov 04 07:33:23 2015 Checking that to = to
+Wed Nov 04 07:33:23 2015 Checking that pm = pm
+Wed Nov 04 07:33:23 2015 Parsed time: 1400
+Wed Nov 04 07:33:23 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:33:23 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:33:23 2015 Checking that at = at
+Wed Nov 04 07:33:23 2015 Checking that to = to
+Wed Nov 04 07:33:23 2015 Checking that oct = oct
+Wed Nov 04 07:33:23 2015 Parsed by date: 151012
+Wed Nov 04 07:33:23 2015 Parsing PowerSearch inputMode: at
+Wed Nov 04 07:33:23 2015 Processing PowerSearch phrase: 3
+Wed Nov 04 07:33:23 2015 Checking that for = for
+Wed Nov 04 07:33:23 2015 Checking that pm = pm
+Wed Nov 04 07:33:23 2015 Parsed time: 1500
+Wed Nov 04 07:33:23 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:33:23 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:33:23 2015 Checking that for = for
+Wed Nov 04 07:33:23 2015 Parsed PowerSearch
+Wed Nov 04 07:33:30 2015 Parsing "clear"
+Wed Nov 04 07:33:31 2015 Parsing "exit"
+Wed Nov 04 07:33:31 2015 Logger terminated
+
+Wed Nov 04 07:35:14 2015 Logger initialised
+Wed Nov 04 07:35:14 2015 Log level default: 2
+Wed Nov 04 07:35:14 2015 Parser instantiated
+Wed Nov 04 07:35:14 2015 Log level changed: 0
+Wed Nov 04 07:35:15 2015 Parsing "view"
+Wed Nov 04 07:35:15 2015 Viewing...
+Wed Nov 04 07:35:24 2015 Parsing "add"
+Wed Nov 04 07:35:24 2015 Parsing task
+Wed Nov 04 07:35:24 2015 Parsing field keyword: name
+Wed Nov 04 07:35:24 2015 Parsing string: task
+Wed Nov 04 07:35:24 2015 Parsing field keyword: from
+Wed Nov 04 07:35:24 2015 Parsing string: 9 oct
+Wed Nov 04 07:35:24 2015 Checking that oct = oct
+Wed Nov 04 07:35:24 2015 Parsed by date: 151009
+Wed Nov 04 07:35:24 2015 Setting task type as: EVENT
+Wed Nov 04 07:35:24 2015 Parsing field keyword: to
+Wed Nov 04 07:35:24 2015 Parsing string: 10 oct
+Wed Nov 04 07:35:24 2015 Checking that oct = oct
+Wed Nov 04 07:35:24 2015 Parsed by date: 151010
+Wed Nov 04 07:35:24 2015 Parsed task of type: EVENT
+Wed Nov 04 07:35:32 2015 Parsing "search"
+Wed Nov 04 07:35:32 2015 Checking that from = from
+Wed Nov 04 07:35:32 2015 Checking that from = from
+Wed Nov 04 07:35:32 2015 Checking that for = for
+Wed Nov 04 07:35:32 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:35:32 2015 Checking that from = from
+Wed Nov 04 07:35:32 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:35:32 2015 Processing PowerSearch phrase: 8
+Wed Nov 04 07:35:32 2015 Checking that to = to
+Wed Nov 04 07:35:32 2015 Checking that from = from
+Wed Nov 04 07:35:32 2015 Checking that oct = oct
+Wed Nov 04 07:35:32 2015 Parsed by date: 151008
+Wed Nov 04 07:35:32 2015 Parsed 8 oct to be date: 151008
+Wed Nov 04 07:35:32 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:35:32 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:35:32 2015 Checking that for = for
+Wed Nov 04 07:35:32 2015 Checking that to = to
+Wed Nov 04 07:35:32 2015 Checking that oct = oct
+Wed Nov 04 07:35:32 2015 Parsed by date: 151012
+Wed Nov 04 07:35:32 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:35:32 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:35:32 2015 Checking that for = for
+Wed Nov 04 07:35:32 2015 Parsed PowerSearch
+Wed Nov 04 07:35:36 2015 Parsing "clear"
+Wed Nov 04 07:35:36 2015 Parsing "exit"
+Wed Nov 04 07:35:36 2015 Logger terminated
+
+Wed Nov 04 07:46:09 2015 Logger initialised
+Wed Nov 04 07:46:09 2015 Log level default: 2
+Wed Nov 04 07:46:09 2015 Parser instantiated
+Wed Nov 04 07:46:09 2015 Log level changed: 0
+Wed Nov 04 07:46:09 2015 Parsing "view"
+Wed Nov 04 07:46:09 2015 Viewing...
+Wed Nov 04 07:46:18 2015 Parsing "add"
+Wed Nov 04 07:46:18 2015 Parsing task
+Wed Nov 04 07:46:18 2015 Parsing field keyword: name
+Wed Nov 04 07:46:18 2015 Parsing string: task
+Wed Nov 04 07:46:18 2015 Parsing field keyword: from
+Wed Nov 04 07:46:18 2015 Parsing string: 10 oct
+Wed Nov 04 07:46:18 2015 Checking that oct = oct
+Wed Nov 04 07:46:18 2015 Parsed by date: 151010
+Wed Nov 04 07:46:18 2015 Setting task type as: EVENT
+Wed Nov 04 07:46:18 2015 Parsing field keyword: to
+Wed Nov 04 07:46:18 2015 Parsing string: 11 oct
+Wed Nov 04 07:46:18 2015 Checking that oct = oct
+Wed Nov 04 07:46:18 2015 Parsed by date: 151011
+Wed Nov 04 07:46:18 2015 Parsed task of type: EVENT
+Wed Nov 04 07:46:26 2015 Parsing "search"
+Wed Nov 04 07:46:26 2015 Checking that from = from
+Wed Nov 04 07:46:26 2015 Checking that from = from
+Wed Nov 04 07:46:26 2015 Checking that for = for
+Wed Nov 04 07:46:26 2015 Processing PowerSearch phrase: from
+Wed Nov 04 07:46:26 2015 Checking that from = from
+Wed Nov 04 07:46:26 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 07:46:26 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 07:46:26 2015 Checking that to = to
+Wed Nov 04 07:46:26 2015 Checking that from = from
+Wed Nov 04 07:46:26 2015 Checking that oct = oct
+Wed Nov 04 07:46:26 2015 Parsed by date: 151009
+Wed Nov 04 07:46:26 2015 Parsed 9 oct to be date: 151009
+Wed Nov 04 07:46:26 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 07:46:26 2015 Processing PowerSearch phrase: 12
+Wed Nov 04 07:46:26 2015 Checking that for = for
+Wed Nov 04 07:46:26 2015 Checking that to = to
+Wed Nov 04 07:46:26 2015 Checking that oct = oct
+Wed Nov 04 07:46:26 2015 Parsed by date: 151012
+Wed Nov 04 07:46:26 2015 Parsing PowerSearch inputMode: for
+Wed Nov 04 07:46:26 2015 Processing PowerSearch phrase: for
+Wed Nov 04 07:46:26 2015 Checking that for = for
+Wed Nov 04 07:46:26 2015 Parsed PowerSearch
+Wed Nov 04 07:46:30 2015 Parsing "cler"
+Wed Nov 04 07:46:30 2015 Invalid command: 
+Wed Nov 04 07:46:31 2015 Parsing "clear"
+Wed Nov 04 07:46:32 2015 Parsing "exit"
+Wed Nov 04 07:46:32 2015 Logger terminated
+
+Wed Nov 04 08:10:30 2015 Logger initialised
+Wed Nov 04 08:10:30 2015 Log level default: 2
+Wed Nov 04 08:10:30 2015 Parser instantiated
+Wed Nov 04 08:10:30 2015 Log level changed: 0
+Wed Nov 04 08:10:30 2015 Parsing "view"
+Wed Nov 04 08:10:30 2015 Viewing...
+Wed Nov 04 08:10:39 2015 Parsing "add"
+Wed Nov 04 08:10:39 2015 Parsing task
+Wed Nov 04 08:10:39 2015 Parsing field keyword: name
+Wed Nov 04 08:10:39 2015 Parsing string: task
+Wed Nov 04 08:10:39 2015 Parsing field keyword: from
+Wed Nov 04 08:10:39 2015 Parsing string: 2 oct
+Wed Nov 04 08:10:39 2015 Checking that oct = oct
+Wed Nov 04 08:10:39 2015 Parsed by date: 151002
+Wed Nov 04 08:10:39 2015 Setting task type as: EVENT
+Wed Nov 04 08:10:39 2015 Parsing field keyword: to
+Wed Nov 04 08:10:39 2015 Parsing string: 4 oct
+Wed Nov 04 08:10:39 2015 Checking that oct = oct
+Wed Nov 04 08:10:39 2015 Parsed by date: 151004
+Wed Nov 04 08:10:39 2015 Parsed task of type: EVENT
+Wed Nov 04 08:10:42 2015 Parsing "search"
+Wed Nov 04 08:10:45 2015 Parsing "view"
+Wed Nov 04 08:10:45 2015 Viewing...
+Wed Nov 04 08:10:50 2015 Parsing "delete"
+Wed Nov 04 08:10:51 2015 Parsing "clear"
+Wed Nov 04 08:10:53 2015 Parsing "exit"
+Wed Nov 04 08:10:53 2015 Logger terminated
+
+Wed Nov 04 08:13:19 2015 Logger initialised
+Wed Nov 04 08:13:19 2015 Log level default: 2
+Wed Nov 04 08:13:19 2015 Parser instantiated
+Wed Nov 04 08:13:19 2015 Log level changed: 0
+Wed Nov 04 08:13:20 2015 Parsing "view"
+Wed Nov 04 08:13:20 2015 Viewing...
+Wed Nov 04 08:13:43 2015 Parsing "add"
+Wed Nov 04 08:13:43 2015 Parsing task
+Wed Nov 04 08:13:43 2015 Parsing field keyword: name
+Wed Nov 04 08:13:43 2015 Parsing string: taskk
+Wed Nov 04 08:13:43 2015 Parsing field keyword: from
+Wed Nov 04 08:13:43 2015 Parsing string: 10 oct
+Wed Nov 04 08:13:43 2015 Checking that oct = oct
+Wed Nov 04 08:13:43 2015 Parsed by date: 151010
+Wed Nov 04 08:13:43 2015 Setting task type as: EVENT
+Wed Nov 04 08:13:43 2015 Parsing field keyword: to
+Wed Nov 04 08:13:43 2015 Parsing string: 12 oct
+Wed Nov 04 08:13:43 2015 Checking that oct = oct
+Wed Nov 04 08:13:43 2015 Parsed by date: 151012
+Wed Nov 04 08:13:43 2015 Parsed task of type: EVENT
+Wed Nov 04 08:14:03 2015 Parsing "add"
+Wed Nov 04 08:14:03 2015 Parsing task
+Wed Nov 04 08:14:03 2015 Parsing field keyword: name
+Wed Nov 04 08:14:03 2015 Parsing string: taskked
+Wed Nov 04 08:14:03 2015 Parsed task of type: FLOATING
+Wed Nov 04 08:14:11 2015 Parsing "add"
+Wed Nov 04 08:14:11 2015 Parsing task
+Wed Nov 04 08:14:11 2015 Parsing field keyword: name
+Wed Nov 04 08:14:11 2015 Parsing string: taskt
+Wed Nov 04 08:14:11 2015 Parsed task of type: FLOATING
+Wed Nov 04 08:14:30 2015 Parsing "search"
+Wed Nov 04 08:14:30 2015 Checking that from = from
+Wed Nov 04 08:14:30 2015 Processing PowerSearch phrase: task(.*)
+Wed Nov 04 08:14:30 2015 Checking that from = from
+Wed Nov 04 08:14:30 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 08:14:30 2015 Processing PowerSearch phrase: 1
+Wed Nov 04 08:14:30 2015 Checking that to = to
+Wed Nov 04 08:14:30 2015 Checking that from = from
+Wed Nov 04 08:14:30 2015 Checking that oct = oct
+Wed Nov 04 08:14:30 2015 Parsed by date: 151001
+Wed Nov 04 08:14:30 2015 Parsed 1 Oct to be date: 151001
+Wed Nov 04 08:14:30 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 08:14:30 2015 Processing PowerSearch phrase: 10
+Wed Nov 04 08:14:30 2015 Checking that to = to
+Wed Nov 04 08:14:30 2015 Checking that oct = oct
+Wed Nov 04 08:14:30 2015 Parsed by date: 151010
+Wed Nov 04 08:14:30 2015 Parsed PowerSearch
+Wed Nov 04 08:14:39 2015 Parsing "display"
+Wed Nov 04 08:15:09 2015 Parsing "add"
+Wed Nov 04 08:15:09 2015 Parsing task
+Wed Nov 04 08:15:09 2015 Parsing field keyword: name
+Wed Nov 04 08:15:09 2015 Parsing string: taskked
+Wed Nov 04 08:15:09 2015 Parsing field keyword: from
+Wed Nov 04 08:15:09 2015 Parsing string: 10 Oct
+Wed Nov 04 08:15:09 2015 Checking that oct = oct
+Wed Nov 04 08:15:09 2015 Parsed by date: 151010
+Wed Nov 04 08:15:09 2015 Setting task type as: EVENT
+Wed Nov 04 08:15:09 2015 Parsing field keyword: to
+Wed Nov 04 08:15:09 2015 Parsing string: 12 Oct
+Wed Nov 04 08:15:09 2015 Checking that oct = oct
+Wed Nov 04 08:15:09 2015 Parsed by date: 151012
+Wed Nov 04 08:15:09 2015 Parsed task of type: EVENT
+Wed Nov 04 08:15:27 2015 Parsing "search"
+Wed Nov 04 08:15:27 2015 Checking that from = from
+Wed Nov 04 08:15:27 2015 Processing PowerSearch phrase: tas(.*)
+Wed Nov 04 08:15:27 2015 Checking that from = from
+Wed Nov 04 08:15:27 2015 Parsing PowerSearch inputMode: from
+Wed Nov 04 08:15:27 2015 Processing PowerSearch phrase: 9
+Wed Nov 04 08:15:27 2015 Checking that to = to
+Wed Nov 04 08:15:27 2015 Checking that from = from
+Wed Nov 04 08:15:27 2015 Checking that oct = oct
+Wed Nov 04 08:15:27 2015 Parsed by date: 151009
+Wed Nov 04 08:15:27 2015 Parsed 9 Oct to be date: 151009
+Wed Nov 04 08:15:27 2015 Parsing PowerSearch inputMode: to
+Wed Nov 04 08:15:27 2015 Processing PowerSearch phrase: 13
+Wed Nov 04 08:15:27 2015 Checking that to = to
+Wed Nov 04 08:15:27 2015 Checking that oct = oct
+Wed Nov 04 08:15:27 2015 Parsed by date: 151013
+Wed Nov 04 08:15:27 2015 Parsed PowerSearch
+Wed Nov 04 08:15:32 2015 Parsing "clear"
+Wed Nov 04 08:15:33 2015 Parsing "exit"
+Wed Nov 04 08:15:33 2015 Logger terminated
+
