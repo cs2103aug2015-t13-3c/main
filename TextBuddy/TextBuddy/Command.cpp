@@ -484,6 +484,9 @@ void Modify::doModify() {
 	std::vector<FieldType>::iterator fieldIter;
 	bool isTODO = false;
 	bool isTODOreserve = false;
+	bool isStartTimeSet = false;
+	bool isEndTimeSet = false;
+
 	if(tempTask.getType() == EVENT) {
 		taskStoreIter->setType(EVENT);
 	}
@@ -516,6 +519,11 @@ void Modify::doModify() {
 			break;
 		case START_TIME:
 			taskStoreIter->setStartTime(tempTask.getStartTime());
+			if ((fieldIter+1 != fieldsToModify.end()) && (fieldIter+2 != fieldsToModify.end())
+				&& ((*(fieldIter+2)) == START_TIME)) {							// Accounts for events that modifies endTime
+					(*(fieldIter+2)) = END_TIME;
+			}
+			isStartTimeSet = true;
 			break;
 		case END_DATE:
 			taskStoreIter->setEndDate(tempTask.getEndDate());
@@ -525,6 +533,7 @@ void Modify::doModify() {
 				taskStoreIter->setEndDate(tempTask.getStartDate());
 			}
 			taskStoreIter->setEndTime(tempTask.getEndTime());
+			isEndTimeSet = true;
 			break;
 		case TODO_DATE:
 			isTODO = true;
@@ -568,7 +577,11 @@ void Modify::doModify() {
 	if(isTODO) {
 		taskStoreIter->setType(TODO);
 		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
-		taskStoreIter->setStartTime(taskStoreIter->getEndTime());
+		if (isStartTimeSet) {
+			taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
+		} else {
+			taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
+		}
 	}
 	if(isTODOreserve) {
 		taskStoreIter->setReserveType(TODO);
