@@ -548,7 +548,7 @@ void Modify::doModify() {
 	if(isTODO) {
 		taskStoreIter->setType(TODO);
 		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
-		taskStoreIter->setStartTime(taskStoreIter->getEndTime());
+		taskStoreIter->setEndTime(taskStoreIter->getStartTime());
 	}
 	if(isTODOreserve) {
 		taskStoreIter->setReserveType(TODO);
