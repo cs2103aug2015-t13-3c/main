@@ -14,10 +14,10 @@ const std::string IO::configPath = ".tbconfig";
 IO* IO::theOne = new IO();
 
 IO::IO() {
-	TbLogger::getInstance()->log(SYS,"IO instantiated");
+	// TbLogger::getInstance()->log(SYS,"IO instantiated");
 	std::ifstream tbconfig(configPath);
 	tbconfig >> filePath;
-	setCustomCommands(tbconfig);
+	// setCustomCommands(tbconfig);
 	tbconfig.close();
 }
 
