@@ -75,12 +75,12 @@ public:
 	TEST_METHOD(PowerSearch_searchFreeSlot) {
 		std::vector<std::string> paraVec; 
 		paraVec.push_back("");
-		paraVec.push_back("151010");
-		paraVec.push_back("1015");
-		paraVec.push_back("151212");
-		paraVec.push_back("2330");
 		paraVec.push_back("0");
-		paraVec.push_back("1");
+		paraVec.push_back("0");
+		paraVec.push_back("0");
+		paraVec.push_back("0");
+		paraVec.push_back("0");
+		paraVec.push_back("0");
 		paraVec.push_back("0");
 
 		PowerSearch testPwrSearch(paraVec);
@@ -89,8 +89,9 @@ public:
 		Task testTask;
 		testTask.setStartDate(151010);
 		testTask.setStartTime(0);
-		testTask.setEndDate(151010);					// Is endDate set to be the same as startDate if no range?
-		testTask.setEndTime(1500);						// Note: throw exception if endTime < startTime
+		testTask.setEndDate(151011);					
+		testTask.setEndTime(0);						
+		testTask.setType(EVENT);
 		Add addOne(testTask);
 		addOne.clearTaskStore();
 		addOne.execute();
@@ -99,6 +100,7 @@ public:
 		testTask.setStartTime(0);
 		testTask.setEndDate(151010);
 		testTask.setEndTime(1600);
+		testTask.setType(EVENT);
 		Add addTwo(testTask);
 		addTwo.execute();
 
@@ -106,6 +108,7 @@ public:
 		testTask.setStartTime(2100);
 		testTask.setEndDate(151016);
 		testTask.setEndTime(2000);
+		testTask.setType(EVENT);
 		Add addThree(testTask);
 		addThree.execute();
 
@@ -113,12 +116,15 @@ public:
 		testTask.setStartTime(2300);
 		testTask.setEndDate(151015);
 		testTask.setEndTime(2350);
+		testTask.setType(EVENT);
 		Add addFour(testTask);
 		addFour.execute();
+
 		testTask.setStartDate(151016);
 		testTask.setStartTime(1500);
 		testTask.setEndDate(151016);
 		testTask.setEndTime(1500);
+		testTask.setType(TODO);
 		Add addFive(testTask);
 		addFive.execute();
 
@@ -126,10 +132,11 @@ public:
 		testTask.setStartTime(800);
 		testTask.setEndDate(151017);
 		testTask.setEndTime(800);
+		testTask.setType(TODO);
 		Add addSix(testTask);
 		addSix.execute();
 
-		testPwrSearch.setFreePeriods(151009,2300,151017,900);
+		testPwrSearch.setFreePeriods(151009,2300,151019,900);
 
 		std::vector<Task> copyTask = testPwrSearch.getFreePeriods();
 		std::vector<Task>::iterator iter;
@@ -138,11 +145,11 @@ public:
 		Assert::AreEqual(151009, iter->getStartDate());
 		Assert::AreEqual(2300, iter->getStartTime());
 		Assert::AreEqual(151010, iter->getEndDate());
-		Assert::AreEqual(0, iter->getEndTime());
+		Assert::AreEqual(2359, iter->getEndTime());
 
 		++iter;
-		Assert::AreEqual(151010, iter->getStartDate());
-		Assert::AreEqual(1600, iter->getStartTime());
+		Assert::AreEqual(151011, iter->getStartDate());
+		Assert::AreEqual(0, iter->getStartTime());
 		Assert::AreEqual(151015, iter->getEndDate());
 		Assert::AreEqual(2100, iter->getEndTime());
 
@@ -155,7 +162,7 @@ public:
 		++iter;
 		Assert::AreEqual(151017, iter->getStartDate());
 		Assert::AreEqual(800, iter->getStartTime());
-		Assert::AreEqual(151017, iter->getEndDate());
+		Assert::AreEqual(151019, iter->getEndDate());
 		Assert::AreEqual(900, iter->getEndTime());
 	}
 

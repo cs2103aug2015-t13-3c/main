@@ -20,6 +20,7 @@ private:
 	std::vector<Task> tasksWithinPeriod;	// tasks in the periods of interest
 	std::vector<Task> freePeriods;			// each task element stores the start and end of the free period
 
+	void convertTime(std::vector<Task> &taskVector);
 	void addPeriod(int startDate, int startTime, int endDate, int endTime);
 	int daysInMth(int month, int year);
 	int numOfMin(int date, int time);
