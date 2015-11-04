@@ -14,8 +14,11 @@ const std::string IO::configPath = ".tbconfig";
 IO* IO::theOne = new IO();
 
 IO::IO() {
+	TbLogger::getInstance()->log(SYS,"IO instantiated");
 	std::ifstream tbconfig(configPath);
 	tbconfig >> filePath;
+	setCustomCommands(tbconfig);
+	tbconfig.close();
 }
 
 IO::~IO() {}
@@ -124,7 +127,9 @@ return PathIsDirectory(newFullPathName);
 void IO::setLastSavedLocation(std::string fileName) {
 	remove(configPath.c_str());
 	std::ofstream lastSaved(configPath);
-	lastSaved << fileName;
+	lastSaved << fileName << std::endl;
+
+	saveCustomCommands(lastSaved);
 	lastSaved.close();
 }
 
@@ -494,7 +499,134 @@ void IO::initialiseRunningCount(std::vector<Task> taskVector) {
 	Task lastTask = taskVector.back();
 	int lastCount = lastTask.getID();
 	lastTask.setRunningCount(lastCount);
+	return;
+}
 
+// Aaron Chong Jun Hao @@author A0110376N
+
+bool IO::setCommandKeyword(std::string &identifier, std::string keyword) {
+	TbLogger::getInstance()->log(SYS,"Setting custom command...");
+
+	// Count: 14
+	if(keyword == "s" // Protected keyword used by UI for switching between 'tile' and 'list' views
+		|| (&identifier != &Tb::COMMAND_ADD				&& keyword == Tb::COMMAND_ADD)
+		|| (&identifier != &Tb::COMMAND_DELETE			&& keyword == Tb::COMMAND_DELETE)
+		|| (&identifier != &Tb::COMMAND_MODIFY			&& keyword == Tb::COMMAND_MODIFY)
+		|| (&identifier != &Tb::COMMAND_MODIFY_EDIT		&& keyword == Tb::COMMAND_MODIFY_EDIT)
+		|| (&identifier != &Tb::COMMAND_PICK_RESERVE	&& keyword == Tb::COMMAND_PICK_RESERVE)
+		|| (&identifier != &Tb::COMMAND_SEARCH			&& keyword == Tb::COMMAND_SEARCH)
+		|| (&identifier != &Tb::COMMAND_MARKDONE		&& keyword == Tb::COMMAND_MARKDONE)
+		|| (&identifier != &Tb::COMMAND_UNMARKDONE		&& keyword == Tb::COMMAND_UNMARKDONE)
+		|| (&identifier != &Tb::COMMAND_UNDO			&& keyword == Tb::COMMAND_UNDO)
+		|| (&identifier != &Tb::COMMAND_REDO			&& keyword == Tb::COMMAND_REDO)
+		|| (&identifier != &Tb::COMMAND_VIEW			&& keyword == Tb::COMMAND_VIEW)
+		|| (&identifier != &Tb::COMMAND_CLEAR_ALL		&& keyword == Tb::COMMAND_CLEAR_ALL)
+		|| (&identifier != &Tb::COMMAND_LOAD			&& keyword == Tb::COMMAND_LOAD)
+		|| (&identifier != &Tb::COMMAND_SAVE			&& keyword == Tb::COMMAND_SAVE)
+		|| (&identifier != &Tb::COMMAND_EXIT			&& keyword == Tb::COMMAND_EXIT) ) {
+			return false;
+	}
+	identifier = keyword;
+	return true;
+}
+
+void IO::setCustomCommands(std::ifstream& tbconfig) {
+	std::string s;
+	std::vector<std::string> commandPair;
+	std::string identifier;
+	std::string keyword;
+
+	std::getline(tbconfig, s); // Skip newline character
+	std::getline(tbconfig, s); // Skip blank line
+	std::getline(tbconfig, s);
+	if(s == "Custom Commands") {
+		while(std::getline(tbconfig, s)) {
+			if(!s.empty()) {
+				commandPair = Utilities::stringToVec(s);
+				if(commandPair.size() == 2) {
+					identifier = commandPair[0];
+					keyword = commandPair[1];
+
+					TbLogger::getInstance()->log(SYS,"Looking up command: " + Tb::COMMAND_ADD);
+					if(identifier == "add") {
+						setCommandKeyword(Tb::COMMAND_ADD,keyword);
+					} else if(identifier == "delete") {
+						setCommandKeyword(Tb::COMMAND_DELETE,keyword);
+					} else if(identifier == "modify") {
+						setCommandKeyword(Tb::COMMAND_MODIFY,keyword);
+					} else if(identifier == "edit") {
+						setCommandKeyword(Tb::COMMAND_MODIFY_EDIT,keyword);
+					} else if(identifier == "pick") {
+						setCommandKeyword(Tb::COMMAND_PICK_RESERVE,keyword);
+					} else if(identifier == "search") {
+						setCommandKeyword(Tb::COMMAND_SEARCH,keyword);
+					} else if(identifier == "done") {
+						setCommandKeyword(Tb::COMMAND_MARKDONE,keyword);
+					} else if(identifier == "notdone") {
+						setCommandKeyword(Tb::COMMAND_UNMARKDONE,keyword);
+					} else if(identifier == "undo") {
+						setCommandKeyword(Tb::COMMAND_UNDO,keyword);
+					} else if(identifier == "redo") {
+						setCommandKeyword(Tb::COMMAND_REDO,keyword);
+					} else if(identifier == "view") {
+						setCommandKeyword(Tb::COMMAND_VIEW,keyword);
+					} else if(identifier == "clear") {
+						setCommandKeyword(Tb::COMMAND_CLEAR_ALL,keyword);
+					} else if(identifier == "display") {
+						setCommandKeyword(Tb::COMMAND_DISPLAY_ALL,keyword);
+					} else if(identifier == "load") {
+						setCommandKeyword(Tb::COMMAND_LOAD,keyword);
+					} else if(identifier == "save") {
+						setCommandKeyword(Tb::COMMAND_SAVE,keyword);
+					} else if(identifier == "exit") {
+						setCommandKeyword(Tb::COMMAND_EXIT,keyword);
+					}
+				}
+			}
+		}
+	}
+	TbLogger::getInstance()->log(SYS,"Looking up command: " + Tb::COMMAND_ADD);
+	return;
+}
+
+void IO::saveCustomCommands(std::ofstream& tbconfig) {
+	tbconfig << std::endl;
+	tbconfig << "Custom Commands" << std::endl;
+
+	// Count: 16
+	if("add" != Tb::COMMAND_ADD) {
+		tbconfig << "add" << " " << Tb::COMMAND_ADD << std::endl;
+	} else if("delete" != Tb::COMMAND_DELETE) {
+		tbconfig << "delete" << " " << Tb::COMMAND_DELETE << std::endl;
+	} else if("modify" != Tb::COMMAND_MODIFY) {
+		tbconfig << "modify" << " " << Tb::COMMAND_MODIFY << std::endl;
+	} else if("edit" != Tb::COMMAND_MODIFY_EDIT) {
+		tbconfig << "edit" << " " << Tb::COMMAND_MODIFY_EDIT << std::endl;
+	} else if("pick" != Tb::COMMAND_PICK_RESERVE) {
+		tbconfig << "pick" << " " << Tb::COMMAND_PICK_RESERVE << std::endl;
+	} else if("search" != Tb::COMMAND_SEARCH) {
+		tbconfig << "search" << " " << Tb::COMMAND_SEARCH << std::endl;
+	} else if("done" != Tb::COMMAND_MARKDONE) {
+		tbconfig << "done" << " " << Tb::COMMAND_MARKDONE << std::endl;
+	} else if("notdone" != Tb::COMMAND_UNMARKDONE) {
+		tbconfig << "notdone" << " " << Tb::COMMAND_UNMARKDONE << std::endl;
+	} else if("undo" != Tb::COMMAND_UNDO) {
+		tbconfig << "undo" << " " << Tb::COMMAND_UNDO << std::endl;
+	} else if("redo" != Tb::COMMAND_REDO) {
+		tbconfig << "redo" << " " << Tb::COMMAND_REDO << std::endl;
+	} else if("view" != Tb::COMMAND_VIEW) {
+		tbconfig << "view" << " " << Tb::COMMAND_VIEW << std::endl;
+	} else if("clear" != Tb::COMMAND_CLEAR_ALL) {
+		tbconfig << "clear" << " " << Tb::COMMAND_CLEAR_ALL << std::endl;
+	} else if("display" != Tb::COMMAND_DISPLAY_ALL) {
+		tbconfig << "display" << " " << Tb::COMMAND_DISPLAY_ALL << std::endl;
+	} else if("load" != Tb::COMMAND_LOAD) {
+		tbconfig << "load" << " " << Tb::COMMAND_LOAD << std::endl;
+	} else if("save" != Tb::COMMAND_SAVE) {
+		tbconfig << "save" << " " << Tb::COMMAND_SAVE << std::endl;
+	} else if("exit" != Tb::COMMAND_EXIT) {
+		tbconfig << "exit" << " " << Tb::COMMAND_EXIT << std::endl;
+	}
 	return;
 }
 

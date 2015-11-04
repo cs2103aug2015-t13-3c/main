@@ -6,24 +6,30 @@
 
 #include "IO.h"
 
-// These are the valid Command keywords
-// Count: 14
-const std::string COMMAND_ADD = "add";
-const std::string COMMAND_DELETE = "delete";
-const std::string COMMAND_MODIFY = "modify";
-const std::string COMMAND_MODIFY_EDIT = "edit";		// Alternative keyword
-const std::string COMMAND_PICK_RESERVE = "pick";
-const std::string COMMAND_SEARCH = "search";
-const std::string COMMAND_MARKDONE = "done";
-const std::string COMMAND_UNMARKDONE = "notdone";
-const std::string COMMAND_UNDO = "undo";
-const std::string COMMAND_REDO = "redo";
-const std::string COMMAND_VIEW = "view";
-const std::string COMMAND_CLEAR_ALL = "clear";
-const std::string COMMAND_DISPLAY_ALL = "display";
-const std::string COMMAND_LOAD = "load";
-const std::string COMMAND_SAVE = "save";
-const std::string COMMAND_EXIT = "exit";
+class Tb {
+public:
+	static bool firstLoad;
+	static std::string MESSAGE_WELCOME;
+
+	// These are the valid Command keywords
+	// Count: 14
+	static std::string COMMAND_ADD;
+	static std::string COMMAND_DELETE;
+	static std::string COMMAND_MODIFY;
+	static std::string COMMAND_MODIFY_EDIT;		// Alternative keyword
+	static std::string COMMAND_PICK_RESERVE;
+	static std::string COMMAND_SEARCH;
+	static std::string COMMAND_MARKDONE;
+	static std::string COMMAND_UNMARKDONE;
+	static std::string COMMAND_UNDO;
+	static std::string COMMAND_REDO;
+	static std::string COMMAND_VIEW;
+	static std::string COMMAND_CLEAR_ALL;
+	static std::string COMMAND_DISPLAY_ALL;
+	static std::string COMMAND_LOAD;
+	static std::string COMMAND_SAVE;
+	static std::string COMMAND_EXIT;
+};
 
 // These are the Command enums
 // Count: 14 + INVALID

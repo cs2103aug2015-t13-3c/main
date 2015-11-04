@@ -38,34 +38,39 @@ int Utilities::stringToInt(std::string str) {
 
 CommandType Utilities::stringToCmdType(std::string str) {
 	CommandType cmd;
+	std::ostringstream address;
+	address << (void*)&Tb::COMMAND_ADD;
+	std::string name = address.str();
+	TbLogger::getInstance()->log(SYS,"Tb::COMMAND_ADD address in Utilities: " + name);
+	TbLogger::getInstance()->log(SYS,"Test custom command: " + Tb::COMMAND_ADD);
 
-	if(equalsIgnoreCase(str, COMMAND_ADD))	{
+	if(equalsIgnoreCase(str, Tb::COMMAND_ADD))	{
 		cmd = ADD;
-	} else if(equalsIgnoreCase(str, COMMAND_DELETE)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_DELETE)) {
 		cmd = DELETE;
-	} else if(equalsIgnoreCase(str, COMMAND_MODIFY) || equalsIgnoreCase(str, COMMAND_MODIFY_EDIT)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_MODIFY) || equalsIgnoreCase(str, Tb::COMMAND_MODIFY_EDIT)) {
 		cmd = MODIFY;
-	} else if(equalsIgnoreCase(str, COMMAND_PICK_RESERVE)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_PICK_RESERVE)) {
 		cmd = PICK;
-	} else if(equalsIgnoreCase(str, COMMAND_SEARCH)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_SEARCH)) {
 		cmd = SEARCH;
-	} else if(equalsIgnoreCase(str, COMMAND_MARKDONE)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_MARKDONE)) {
 		cmd = MARKDONE;
-	} else if(equalsIgnoreCase(str, COMMAND_UNDO)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_UNDO)) {
 		cmd = UNDO;
-	} else if(equalsIgnoreCase(str, COMMAND_REDO)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_REDO)) {
 		cmd = REDO;
-	} else if(equalsIgnoreCase(str, COMMAND_VIEW)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_VIEW)) {
 		cmd = VIEW;
-	} else if(equalsIgnoreCase(str, COMMAND_CLEAR_ALL)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_CLEAR_ALL)) {
 		cmd = CLEAR_ALL;
-	} else if(equalsIgnoreCase(str, COMMAND_DISPLAY_ALL)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_DISPLAY_ALL)) {
 		cmd = DISPLAY_ALL;
-	} else if(equalsIgnoreCase(str, COMMAND_LOAD)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_LOAD)) {
 		cmd = LOAD;
-	} else if(equalsIgnoreCase(str, COMMAND_SAVE)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_SAVE)) {
 		cmd = SAVE;
-	} else if(equalsIgnoreCase(str, COMMAND_EXIT)) {
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_EXIT)) {
 		cmd = EXIT;
 	} else {
 		cmd = INVALID;
@@ -288,6 +293,8 @@ std::string Utilities::monthToString(Month month) {
 		break;
 	case DEC:
 		monthString = "Dec";
+		break;
+	case INVALID_MONTH:
 		break;
 	}
 	return monthString;
@@ -533,7 +540,7 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 }
 
 std::string Utilities::addSlashForInvertedComma(std::string words) {
-	for(int i = 0; i < words.size(); i++) {
+	for(unsigned int i = 0; i < words.size(); i++) {
 		if(words[i] == '\"') {
 			words.insert(i,"\\\\\\");
 			i++;

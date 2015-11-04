@@ -6,6 +6,26 @@
 #include "History.h"
 #include "Logic.h"
 
+bool		Tb::firstLoad = true;
+std::string Tb::MESSAGE_WELCOME = "Welcome to TextBuddy!";
+
+std::string Tb::COMMAND_ADD = "add";
+std::string Tb::COMMAND_DELETE = "delete";
+std::string Tb::COMMAND_MODIFY = "modify";
+std::string Tb::COMMAND_MODIFY_EDIT = "edit";		// Alternative keyword
+std::string Tb::COMMAND_PICK_RESERVE = "pick";
+std::string Tb::COMMAND_SEARCH = "search";
+std::string Tb::COMMAND_MARKDONE = "done";
+std::string Tb::COMMAND_UNMARKDONE = "notdone";
+std::string Tb::COMMAND_UNDO = "undo";
+std::string Tb::COMMAND_REDO = "redo";
+std::string Tb::COMMAND_VIEW = "view";
+std::string Tb::COMMAND_CLEAR_ALL = "clear";
+std::string Tb::COMMAND_DISPLAY_ALL = "display";
+std::string Tb::COMMAND_LOAD = "load";
+std::string Tb::COMMAND_SAVE = "save";
+std::string Tb::COMMAND_EXIT = "exit";
+
 //==================================================
 //                      COMMAND
 //==================================================
@@ -375,7 +395,7 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-	
+
 	if((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
@@ -385,9 +405,9 @@ void Delete::undo() {
 	/*
 	// For in-place undoing, if view is not set back to default
 	if((unsigned int)currViewPos < currentView.size()) {
-		currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
+	currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
 	} else {
-		currentView.push_back(taskToBeDeleted);
+	currentView.push_back(taskToBeDeleted);
 	}
 	*/
 
@@ -600,12 +620,12 @@ bool Modify::updateEVENT() {
 // In case sequence was swapped during sorting
 /*
 void Modify::moveToPrevPos() {
-	std::vector<Task>::iterator preCurrViewIter;
-	Task tempTask = *currViewIter;
-	currentView.erase(currViewIter);
+std::vector<Task>::iterator preCurrViewIter;
+Task tempTask = *currViewIter;
+currentView.erase(currViewIter);
 
-	preCurrViewIter = currentView.begin() + prevCurrPos;
-	currentView.insert(preCurrViewIter, tempTask);
+preCurrViewIter = currentView.begin() + prevCurrPos;
+currentView.insert(preCurrViewIter, tempTask);
 }
 */
 
@@ -937,9 +957,16 @@ void View::undo() {
 }
 
 std::string View::getMessage() {
-	std::string viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
-	if(Utilities::viewTypeToString(view) == VIEW_LABEL) {
-		viewMsg += " " + Utilities::vecToString(viewLabels);
+	std::string viewMsg;
+
+	if(Tb::firstLoad == true) {
+		Tb::firstLoad = false;
+		viewMsg = Tb::MESSAGE_WELCOME;
+	} else {
+		viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
+		if(Utilities::viewTypeToString(view) == VIEW_LABEL) {
+			viewMsg += " " + Utilities::vecToString(viewLabels);
+		}
 	}
 	return viewMsg;
 }
