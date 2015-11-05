@@ -2414,3 +2414,164 @@ Wed Nov 04 08:15:32 2015 Parsing "clear"
 Wed Nov 04 08:15:33 2015 Parsing "exit"
 Wed Nov 04 08:15:33 2015 Logger terminated
 
+Thu Nov 05 13:52:14 2015 Logger initialised
+Thu Nov 05 13:52:14 2015 Log level default: 2
+Thu Nov 05 13:52:14 2015 Parser instantiated
+Thu Nov 05 13:52:14 2015 Log level changed: 0
+Thu Nov 05 13:52:14 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:14 2015 Test custom command: add
+Thu Nov 05 13:52:14 2015 Parsing "view"
+Thu Nov 05 13:52:14 2015 Viewing...
+Thu Nov 05 13:52:18 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:18 2015 Test custom command: add
+Thu Nov 05 13:52:18 2015 Parsing "add"
+Thu Nov 05 13:52:18 2015 Parsing task
+Thu Nov 05 13:52:18 2015 Parsing field keyword: name
+Thu Nov 05 13:52:18 2015 Parsing string: task
+Thu Nov 05 13:52:18 2015 Parsed task of type: FLOATING
+Thu Nov 05 13:52:28 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:28 2015 Test custom command: add
+Thu Nov 05 13:52:28 2015 Parsing "modify"
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151105
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151106
+Thu Nov 05 13:52:28 2015 Parsed by date: -1
+Thu Nov 05 13:52:28 2015 Parsed by day: -1
+Thu Nov 05 13:52:28 2015 Fields extracted: from at to FIELD_END_TIME
+Thu Nov 05 13:52:28 2015 Parsing task
+Thu Nov 05 13:52:28 2015 Parsing field keyword: name
+Thu Nov 05 13:52:28 2015 Parsing string: 
+Thu Nov 05 13:52:28 2015 Parsing field keyword: from
+Thu Nov 05 13:52:28 2015 Parsing string: 5 nov
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151105
+Thu Nov 05 13:52:28 2015 Setting task type as: EVENT
+Thu Nov 05 13:52:28 2015 Parsing field keyword: at
+Thu Nov 05 13:52:28 2015 Parsing string: 6 pm
+Thu Nov 05 13:52:28 2015 Setting task type as: EVENT
+Thu Nov 05 13:52:28 2015 Checking that pm = pm
+Thu Nov 05 13:52:28 2015 Parsed time: 1800
+Thu Nov 05 13:52:28 2015 Checking that pm = pm
+Thu Nov 05 13:52:28 2015 Parsed time: 1800
+Thu Nov 05 13:52:28 2015 Parsing field keyword: to
+Thu Nov 05 13:52:28 2015 Parsing string: 6 nov
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151106
+Thu Nov 05 13:52:28 2015 Parsing field keyword: to
+Thu Nov 05 13:52:28 2015 Parsing string: 8 pm
+Thu Nov 05 13:52:28 2015 Parsed by date: -1
+Thu Nov 05 13:52:28 2015 Parsed by day: -1
+Thu Nov 05 13:52:28 2015 Checking that pm = pm
+Thu Nov 05 13:52:28 2015 Parsed time: 2000
+Thu Nov 05 13:52:28 2015 Setting task type as: EVENT
+Thu Nov 05 13:52:28 2015 Parsed task of type: EVENT
+Thu Nov 05 13:52:34 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:34 2015 Test custom command: add
+Thu Nov 05 13:52:34 2015 Parsing "modify"
+Thu Nov 05 13:52:34 2015 Checking that nov = nov
+Thu Nov 05 13:52:34 2015 Parsed by date: 151106
+Thu Nov 05 13:52:34 2015 Fields extracted: by
+Thu Nov 05 13:52:34 2015 Parsing task
+Thu Nov 05 13:52:34 2015 Parsing field keyword: name
+Thu Nov 05 13:52:34 2015 Parsing string: 
+Thu Nov 05 13:52:34 2015 Parsing field keyword: by
+Thu Nov 05 13:52:34 2015 Parsing string: 6 nov
+Thu Nov 05 13:52:34 2015 Checking that nov = nov
+Thu Nov 05 13:52:34 2015 Parsed by date: 151106
+Thu Nov 05 13:52:34 2015 Setting task type as: TODO
+Thu Nov 05 13:52:34 2015 Parsed task of type: TODO
+Thu Nov 05 13:52:51 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:51 2015 Test custom command: add
+Thu Nov 05 13:52:51 2015 Parsing "modify"
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Fields extracted: by FIELD_END_TIME
+Thu Nov 05 13:52:51 2015 Parsing task
+Thu Nov 05 13:52:51 2015 Parsing field keyword: name
+Thu Nov 05 13:52:51 2015 Parsing string: 
+Thu Nov 05 13:52:51 2015 Parsing field keyword: by
+Thu Nov 05 13:52:51 2015 Parsing string: 10 am
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Checking that am = am
+Thu Nov 05 13:52:51 2015 Parsed time: 1000
+Thu Nov 05 13:52:51 2015 Parsed by day: 151105
+Thu Nov 05 13:52:51 2015 Setting task type as: TODO
+Thu Nov 05 13:52:51 2015 Parsing field keyword: to
+Thu Nov 05 13:52:51 2015 Parsing string: 10 pm
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Checking that pm = pm
+Thu Nov 05 13:52:51 2015 Parsed time: 2200
+Thu Nov 05 13:52:51 2015 Setting task type as: TODO
+Thu Nov 05 13:52:51 2015 Parsed task of type: TODO
+Thu Nov 05 13:53:02 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:02 2015 Test custom command: add
+Thu Nov 05 13:53:02 2015 Parsing "modify"
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Fields extracted: at FIELD_END_TIME
+Thu Nov 05 13:53:02 2015 Parsing task
+Thu Nov 05 13:53:02 2015 Parsing field keyword: name
+Thu Nov 05 13:53:02 2015 Parsing string: 
+Thu Nov 05 13:53:02 2015 Parsing field keyword: from
+Thu Nov 05 13:53:02 2015 Parsing string: 10 am
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Setting task type as: EVENT
+Thu Nov 05 13:53:02 2015 Checking that am = am
+Thu Nov 05 13:53:02 2015 Parsed time: 1000
+Thu Nov 05 13:53:02 2015 Checking that am = am
+Thu Nov 05 13:53:02 2015 Parsed time: 1000
+Thu Nov 05 13:53:02 2015 Parsed by day: 151105
+Thu Nov 05 13:53:02 2015 Parsing field keyword: to
+Thu Nov 05 13:53:02 2015 Parsing string: 10 pm
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Checking that pm = pm
+Thu Nov 05 13:53:02 2015 Parsed time: 2200
+Thu Nov 05 13:53:02 2015 Setting task type as: EVENT
+Thu Nov 05 13:53:02 2015 Parsed task of type: EVENT
+Thu Nov 05 13:53:12 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:12 2015 Test custom command: add
+Thu Nov 05 13:53:12 2015 Parsing "modify"
+Thu Nov 05 13:53:12 2015 Parsed by date: -1
+Thu Nov 05 13:53:12 2015 Parsed by day: -1
+Thu Nov 05 13:53:12 2015 Fields extracted: by
+Thu Nov 05 13:53:12 2015 Parsing task
+Thu Nov 05 13:53:12 2015 Parsing field keyword: name
+Thu Nov 05 13:53:12 2015 Parsing string: 
+Thu Nov 05 13:53:12 2015 Parsing field keyword: by
+Thu Nov 05 13:53:12 2015 Parsing string: 10 pm
+Thu Nov 05 13:53:12 2015 Parsed by date: -1
+Thu Nov 05 13:53:12 2015 Parsed by day: -1
+Thu Nov 05 13:53:12 2015 Checking that pm = pm
+Thu Nov 05 13:53:12 2015 Parsed time: 2200
+Thu Nov 05 13:53:12 2015 Parsed by day: 151105
+Thu Nov 05 13:53:12 2015 Setting task type as: TODO
+Thu Nov 05 13:53:12 2015 Parsed task of type: TODO
+Thu Nov 05 13:53:42 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:42 2015 Test custom command: add
+Thu Nov 05 13:53:42 2015 Parsing "modify"
+Thu Nov 05 13:53:42 2015 Checking that nov = nov
+Thu Nov 05 13:53:42 2015 Parsed by date: 151107
+Thu Nov 05 13:53:42 2015 Fields extracted: by
+Thu Nov 05 13:53:42 2015 Parsing task
+Thu Nov 05 13:53:42 2015 Parsing field keyword: name
+Thu Nov 05 13:53:42 2015 Parsing string: 
+Thu Nov 05 13:53:42 2015 Parsing field keyword: by
+Thu Nov 05 13:53:42 2015 Parsing string: 7 nov
+Thu Nov 05 13:53:42 2015 Checking that nov = nov
+Thu Nov 05 13:53:42 2015 Parsed by date: 151107
+Thu Nov 05 13:53:42 2015 Setting task type as: TODO
+Thu Nov 05 13:53:42 2015 Parsed task of type: TODO
+Thu Nov 05 13:53:46 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:46 2015 Test custom command: add
+Thu Nov 05 13:53:46 2015 Parsing "exit"
+Thu Nov 05 13:53:46 2015 Logger terminated
+

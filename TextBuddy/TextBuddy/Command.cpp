@@ -538,6 +538,7 @@ void Modify::doModify() {
 		case TODO_DATE:
 			isTODO = true;
 			taskStoreIter->setEndDate(tempTask.getEndDate());
+			taskStoreIter->setEndTime(tempTask.getEndTime());
 			// taskStoreIter->setStartDate(tempTask.getStartDate());
 			break;
 		case TODO_TIME:
