@@ -743,11 +743,23 @@ std::string Search::doSearch() {
 	taskVector = taskStore;
 	sortDate(taskVector);
 
+	bool isMatch = true;
+	std::vector<std::string> tokens = Utilities::stringToVec(searchPhrase);
+	std::vector<std::string>::iterator curr;
+
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
 		taskName = iter->getName();
-		if(Utilities::isSubstring(searchPhrase,taskName)) {
+		for(curr=tokens.begin(); curr!=tokens.end(); curr++) {
+			if(!Utilities::isSubstring(*curr,taskName)) {
+				isMatch = false;
+			}
+		}
+
+		if(isMatch) {
 			id = iter->getID();
 			indexString << id << ",";
+		} else {
+			isMatch = true;
 		}
 	}
 	returnString = indexString.str();
@@ -755,7 +767,6 @@ std::string Search::doSearch() {
 	if(!returnString.empty()) {
 		returnString.pop_back();
 	}
-
 	return returnString;
 }
 
