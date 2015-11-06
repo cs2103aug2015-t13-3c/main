@@ -203,11 +203,11 @@ void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	}
 }
 
-void Command::removeFloatingTasks(std::vector<Task> &taskVector) {
+void Command::removeTaskType(std::vector<Task> &taskVector, TaskType type) {
 	std::vector<Task>::iterator i = taskVector.begin();
 
 	while (i != taskVector.end()) {
-		if (i->getType() == FLOATING) {
+		if (i->getType() == type) {
 			i = taskVector.erase(i);
 		} else {
 			++i;
@@ -350,7 +350,7 @@ bool Add::doAdd() {
 void Add::checkOverlap() {
 	std::vector<Task> taskStoreCopy = taskStore;
 	removeDoneTasks(taskStoreCopy);
-	removeFloatingTasks(taskStoreCopy);
+	removeTaskType(taskStoreCopy, FLOATING);
 	sortDate(taskStoreCopy);
 
 	std::vector<Task>::iterator iter = taskStoreCopy.begin();

@@ -1,20 +1,5 @@
 {
 	"TextBuddy Items":
 	[
-		{
-			"name": "task",
-			"type": "TODO",
-			"uniqueID": 1,
-			"label": [],
-
-			"isDone": false,
-			"isPriority": false,
-
-			"startDate": 151107,
-			"startTime": -1,
-
-			"endDate": 151107,
-			"endTime": -1
-		}
 	]
 }
