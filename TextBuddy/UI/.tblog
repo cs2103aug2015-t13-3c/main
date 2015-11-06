@@ -2773,3 +2773,38 @@ Sat Nov 07 01:59:28 2015 Test custom command: add
 Sat Nov 07 01:59:28 2015 Parsing "exit"
 Sat Nov 07 01:59:28 2015 Logger terminated
 
+Sat Nov 07 05:36:28 2015 Logger initialised
+Sat Nov 07 05:36:28 2015 Log level default: 2
+Sat Nov 07 05:36:28 2015 Parser instantiated
+Sat Nov 07 05:36:28 2015 Log level changed: 0
+Sat Nov 07 05:36:28 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:28 2015 Test custom command: add
+Sat Nov 07 05:36:28 2015 Parsing "view"
+Sat Nov 07 05:36:28 2015 Viewing...
+Sat Nov 07 05:36:34 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:34 2015 Test custom command: add
+Sat Nov 07 05:36:34 2015 Parsing "add"
+Sat Nov 07 05:36:34 2015 Parsing task
+Sat Nov 07 05:36:34 2015 Parsing field keyword: name
+Sat Nov 07 05:36:34 2015 Parsing string: subject
+Sat Nov 07 05:36:34 2015 Parsed task of type: FLOATING
+Sat Nov 07 05:36:39 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:39 2015 Test custom command: add
+Sat Nov 07 05:36:39 2015 Parsing "search"
+Sat Nov 07 05:36:44 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:44 2015 Test custom command: add
+Sat Nov 07 05:36:44 2015 Parsing "search"
+Sat Nov 07 05:36:48 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:48 2015 Test custom command: add
+Sat Nov 07 05:36:48 2015 Parsing "search"
+Sat Nov 07 05:36:53 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:53 2015 Test custom command: add
+Sat Nov 07 05:36:53 2015 Parsing "search"
+Sat Nov 07 05:37:02 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:37:02 2015 Test custom command: add
+Sat Nov 07 05:37:02 2015 Parsing "search"
+Sat Nov 07 05:37:05 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:37:05 2015 Test custom command: add
+Sat Nov 07 05:37:05 2015 Parsing "exit"
+Sat Nov 07 05:37:05 2015 Logger terminated
+

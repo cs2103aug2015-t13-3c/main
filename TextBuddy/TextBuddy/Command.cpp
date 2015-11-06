@@ -781,21 +781,29 @@ std::string Search::doSearch() {
 // If no time boundary, all time-related parameters to be set to -1
 // If time boundary present, floating tasks will not be added into the search
 std::string Search::doRegexSearch() {
+	std::ostringstream indexString;
+	std::string returnString;
+	int id;
+
 	std::vector<Task> taskVector;
 	std::vector<Task>::iterator iter;
-	std::string returnString = "";
-
+	
 	taskVector = taskStore;
 	sortDate(taskVector);
-	currentView.clear();
 
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
 		if (std::regex_match(iter->getName(), std::regex(searchPhrase))) {
-			currentView.push_back(*iter);
+			id = iter->getID();
+			indexString << id << ",";
 		}
 	}
 
-	return returnString; // Empty for now
+	returnString = indexString.str();
+
+	if (!returnString.empty()) {
+		returnString.pop_back();
+	}
+	return returnString;
 }
 
 // Processes a list separated by commas
