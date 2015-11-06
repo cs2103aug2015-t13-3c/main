@@ -715,7 +715,13 @@ std::string Search::getSearchPhrase() {
 // Returns a string of names
 // If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
-	std::string output = doSearch();
+	std::string output;
+	if (Utilities::isSubstring("*", searchPhrase) || Utilities::isSubstring("+", searchPhrase) ||
+		Utilities::isSubstring("?", searchPhrase)) { 
+			output = doRegexSearch();
+	} else {
+		output = doSearch();
+	}
 	Logic::setSearchMode();
 	amendView(output);
 }
@@ -768,6 +774,28 @@ std::string Search::doSearch() {
 		returnString.pop_back();
 	}
 	return returnString;
+}
+
+// Takes in input of regex format and allows UI to display matching searches
+// Supports "*", "+", "?"
+// If no time boundary, all time-related parameters to be set to -1
+// If time boundary present, floating tasks will not be added into the search
+std::string Search::doRegexSearch() {
+	std::vector<Task> taskVector;
+	std::vector<Task>::iterator iter;
+	std::string returnString = "";
+
+	taskVector = taskStore;
+	sortDate(taskVector);
+	currentView.clear();
+
+	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
+		if (std::regex_match(iter->getName(), std::regex(searchPhrase))) {
+			currentView.push_back(*iter);
+		}
+	}
+
+	return returnString; // Empty for now
 }
 
 // Processes a list separated by commas

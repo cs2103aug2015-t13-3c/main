@@ -238,6 +238,7 @@ private:
 	std::vector<Task> currentViewBeforeSearch;
 
 	std::string doSearch();
+	std::string doRegexSearch();
 	bool amendView(std::string listOfIds);
 public:
 	Search(std::string phraseString);
