@@ -49,6 +49,11 @@ TextBuddyUI::TextBuddyUI() {
 	keywords->Add(SAVE);
 	keywords->Add(QUIT);
 	keywords->Add(HELP);
+	keywords->Add(DISPLAY);
+	keywords->Add(EDIT);
+	keywords->Add(LOAD);
+	keywords->Add(PICK);
+	keywords->Add(REDO);
 	keywords->Add(FROM);
 	keywords->Add(BY);
 	keywords->Add(TO);
@@ -82,18 +87,18 @@ TextBuddyUI::TextBuddyUI() {
 	viewCommands->Add("view <LABEL>");
 	viewCommands->Add("view after <DATE>");
 	viewCommands->Add("view before <DATE>");
-	viewCommands->Add("view from <DATE> to <DATE>");
 	viewCommands->Add("view from <DATE> at <TIME> to <DATE> at <TIME>");
-	viewCommands->Add("view from <TIME> to <TIME>");
 	// add here...
 
 	//********** MODIFY command formats *****************
 	modifyCommands = gcnew List<String^>();
 	modifyCommands->Add("modify <ID> <DESCRIPTION>");
+	modifyCommands->Add("modify <ID> : <LABEL>");
+	modifyCommands->Add("modify <ID> from <DATE> at <TIME> to <DATE> at <TIME>");
+	modifyCommands->Add("modify <ID> by <NEW DEADLINE>");
+	modifyCommands->Add("modify <ID> float");
 	modifyCommands->Add("modify <ID> star");
 	modifyCommands->Add("modify <ID> unstar");
-	modifyCommands->Add("modify <ID> : <LABEL>");
-	modifyCommands->Add("modify <ID> by <NEW DEADLINE>");
 	// add here...
 
 	//********** SEARCH command formats *****************
@@ -101,9 +106,7 @@ TextBuddyUI::TextBuddyUI() {
 	searchCommands->Add("search <TASK DESCRIPTION>");
 	searchCommands->Add("search <TASK DESCRIPTION> after <DATE>");
 	searchCommands->Add("search <TASK DESCRIPTION> before <DATE>");
-	searchCommands->Add("search <TASK DESCRIPTION> from <DATE> to <DATE>");
 	searchCommands->Add("search <TASK DESCRIPTION> from <DATE> at <TIME> to <DATE> at <TIME>");
-	searchCommands->Add("search <TASK DESCRIPTION> from <TIME> to <TIME>");
 	searchCommands->Add("search after <DATE> for <NUM> d <NUM> h <NUM> m");
 	searchCommands->Add("search before <DATE> for <NUM> d <NUM> h <NUM> m");
 	searchCommands->Add("search from <DATE> to <DATE> for <NUM> d <NUM> h <NUM> m");
@@ -117,26 +120,24 @@ TextBuddyUI::TextBuddyUI() {
 
 	suggestions = gcnew Hashtable();
 	suggestions->Add(HELP,HELP);
-	suggestions->Add(CLEAR,CLEAR);
-	suggestions->Add("display","display");
 	suggestions->Add(QUIT,QUIT);
-
+	suggestions->Add(CLEAR,CLEAR);
+	suggestions->Add(DISPLAY,DISPLAY);
 	suggestions->Add(UNDO,UNDO);
-	suggestions->Add("redo","redo");
+	suggestions->Add(REDO,REDO);
 
 	suggestions->Add(DEL,"delete <ID>");
 	suggestions->Add(DONE,"done <ID>");
-	suggestions->Add("notdone ","notdone <ID>");
-
-	suggestions->Add("load ","load <FILEPATH>");
+	// suggestions->Add("notdone ","notdone <ID>");
+	suggestions->Add(LOAD,"load <FILEPATH>");
 	suggestions->Add(SAVE,"save <FILEPATH>");
 
 	suggestions->Add(ADD,addCommands);
+	suggestions->Add(MODIFY,modifyCommands);
+	suggestions->Add(EDIT,modifyCommands);
+	suggestions->Add(PICK,pickCommands);
 	suggestions->Add(SEARCH,searchCommands);
 	suggestions->Add(VIEW,viewCommands);
-	suggestions->Add(MODIFY,modifyCommands);
-	suggestions->Add("edit ",modifyCommands);
-	suggestions->Add("pick",pickCommands);
 }
 
 TextBuddyUI::~TextBuddyUI() {

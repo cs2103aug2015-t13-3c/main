@@ -54,6 +54,8 @@ CommandType Utilities::stringToCmdType(std::string str) {
 		cmd = SEARCH;
 	} else if(equalsIgnoreCase(str, Tb::COMMAND_MARKDONE)) {
 		cmd = MARKDONE;
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_UNMARKDONE)) {
+		cmd = UNMARKDONE;
 	} else if(equalsIgnoreCase(str, Tb::COMMAND_UNDO)) {
 		cmd = UNDO;
 	} else if(equalsIgnoreCase(str, Tb::COMMAND_REDO)) {

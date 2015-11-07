@@ -445,6 +445,7 @@ Modify::Modify(int taskID, bool isModifyFloating) : Command(MODIFY) {
 
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
+	isSetFloating = false;
 	fieldsToModify = fields;
 	tempTask = task;
 }
@@ -473,11 +474,11 @@ void Modify::execute() {
 		taskStoreIter->resetDatesAndTimes();
 	} else {
 		doModify();
-		updateTaskTypes();
-		updateViewIter();
-		sortDate(taskStore);
-		initialiseIterators(modifyID);
 	}
+	updateTaskTypes();
+	updateViewIter();
+	sortDate(taskStore);
+	initialiseIterators(modifyID);
 	Task::lastEditID = originalTask.getID();
 	// defaultView();
 }
@@ -536,8 +537,8 @@ void Modify::doModify() {
 		case START_TIME:
 			taskStoreIter->setStartTime(tempTask.getStartTime());
 			if ((fieldIter+1 != fieldsToModify.end()) && (fieldIter+2 != fieldsToModify.end())
-				&& ((*(fieldIter+2)) == START_TIME)) {							// Accounts for events that modifies endTime
-					(*(fieldIter+2)) = END_TIME;
+				&& (*(fieldIter+2) == START_TIME)) {	// Accounts for events that modifies endTime
+					*(fieldIter+2) = END_TIME;
 			}
 			isStartTimeSet = true;
 			break;
@@ -604,11 +605,6 @@ void Modify::doModify() {
 		taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
 		taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
 	}
-
-	updateTaskTypes();
-	updateViewIter();
-	sortDate(taskStore);
-	initialiseIterators(modifyID);
 }
 
 // If start date == 0 && end date == 0: FLOATING
@@ -877,7 +873,7 @@ void Markdone::undo() {
 	if(successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
-		//currentView.insert(currViewIter,*taskStoreIter);
+		// currentView.insert(currViewIter,*taskStoreIter);
 	}	
 	defaultView();
 }
@@ -923,12 +919,14 @@ void UnmarkDone::undo() {
 	if(successUnmarkDone) {
 		getIterator();
 		taskStoreIter->markDone();
-		//currentView.insert(currViewIter,*taskStoreIter);
+		// currentView.insert(currViewIter,*taskStoreIter);
 	}
 	defaultView();
 }
 
 std::string UnmarkDone::getMessage() {
+	getIterator();
+	currViewIter->getName();
 	return "\"" + currViewIter->getName() + "\" marked as not done";
 }
 
@@ -938,9 +936,10 @@ void UnmarkDone::unmarkDone() {
 	initialiseIterators(undoneID);
 
 	successUnmarkDone = taskStoreIter->unmarkDone();
-	// if(successUnmarkDone) {
-	//	currentView.erase(currViewIter);
-	// }
+	if(successUnmarkDone) {
+		Logic::setTodayMode();
+		// currentView.erase(currViewIter);
+	}
 }
 
 //==================================================
