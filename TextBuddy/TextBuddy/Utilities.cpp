@@ -352,7 +352,6 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fields) {
 			break;
 		}
 
-		TbLogger::getInstance(); // Somehow removing this crashes the program (Aaron)
 		if(++curr != fields.end()) {
 			newString += " ";
 		}

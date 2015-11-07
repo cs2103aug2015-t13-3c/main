@@ -9,6 +9,10 @@ void addThreeSentences(std::vector<Task> copyTask);
 namespace TextBuddyTests {
 	TEST_CLASS(Command_Add) {
 public:
+	TEST_METHOD_INITIALIZE(InitialiseLogger) {
+		TbLogger::getInstance();
+	}
+
 	// Originally written by Kiat Boon
 	TEST_METHOD(Command_Add_execute) {
 		Task taskOne;

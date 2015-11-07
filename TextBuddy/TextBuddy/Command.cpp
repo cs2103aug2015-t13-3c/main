@@ -33,6 +33,7 @@ std::string Tb::COMMAND_EXIT = "exit";
 //========== COMMAND : PUBLIC METHODS ==============
 
 Command::Command(CommandType newCmd, std::string rawInput) {
+	logger = TbLogger::getInstance();
 	cmd = newCmd;
 	userInput = rawInput;
 }
@@ -80,7 +81,6 @@ void Command::undo() {
 
 //================ COMMAND : PROTECTED METHODS ==================
 
-TbLogger* Command::logger = TbLogger::getInstance();
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
 
@@ -1329,6 +1329,6 @@ Exit::~Exit() {}
 void Exit::execute() {
 	IO* io = IO::getInstance();
 	io->saveFile(io->getFilePath(),taskStore); // In case user or system deletes file or .tbconfig
-	delete TbLogger::getInstance();
+	delete logger;
 	exit(0);
 }

@@ -85,12 +85,13 @@ private:
 	std::string userInput;
 
 protected:
-	static TbLogger* logger;
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
 
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
+
+	TbLogger* logger;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;

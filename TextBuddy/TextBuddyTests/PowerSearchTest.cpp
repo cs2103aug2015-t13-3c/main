@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "PowerSearch.h"
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TextBuddyTests {
