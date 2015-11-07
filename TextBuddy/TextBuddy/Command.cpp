@@ -203,11 +203,11 @@ void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	}
 }
 
-void Command::removeFloatingTasks(std::vector<Task> &taskVector) {
+void Command::removeTaskType(std::vector<Task> &taskVector, TaskType type) {
 	std::vector<Task>::iterator i = taskVector.begin();
 
 	while (i != taskVector.end()) {
-		if (i->getType() == FLOATING) {
+		if (i->getType() == type) {
 			i = taskVector.erase(i);
 		} else {
 			++i;
@@ -350,7 +350,7 @@ bool Add::doAdd() {
 void Add::checkOverlap() {
 	std::vector<Task> taskStoreCopy = taskStore;
 	removeDoneTasks(taskStoreCopy);
-	removeFloatingTasks(taskStoreCopy);
+	removeTaskType(taskStoreCopy, FLOATING);
 	sortDate(taskStoreCopy);
 
 	std::vector<Task>::iterator iter = taskStoreCopy.begin();
@@ -538,6 +538,7 @@ void Modify::doModify() {
 		case TODO_DATE:
 			isTODO = true;
 			taskStoreIter->setEndDate(tempTask.getEndDate());
+			taskStoreIter->setEndTime(tempTask.getEndTime());
 			// taskStoreIter->setStartDate(tempTask.getStartDate());
 			break;
 		case TODO_TIME:
@@ -715,7 +716,13 @@ std::string Search::getSearchPhrase() {
 // Returns a string of names
 // If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
-	std::string output = doSearch();
+	std::string output;
+	if (Utilities::isSubstring("*", searchPhrase) || Utilities::isSubstring("+", searchPhrase) ||
+		Utilities::isSubstring("?", searchPhrase)) { 
+			output = doRegexSearch();
+	} else {
+		output = doSearch();
+	}
 	Logic::setSearchMode();
 	amendView(output);
 }
@@ -765,6 +772,36 @@ std::string Search::doSearch() {
 	returnString = indexString.str();
 
 	if(!returnString.empty()) {
+		returnString.pop_back();
+	}
+	return returnString;
+}
+
+// Takes in input of regex format and allows UI to display matching searches
+// Supports "*", "+", "?"
+// If no time boundary, all time-related parameters to be set to -1
+// If time boundary present, floating tasks will not be added into the search
+std::string Search::doRegexSearch() {
+	std::ostringstream indexString;
+	std::string returnString;
+	int id;
+
+	std::vector<Task> taskVector;
+	std::vector<Task>::iterator iter;
+	
+	taskVector = taskStore;
+	sortDate(taskVector);
+
+	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
+		if (std::regex_match(iter->getName(), std::regex(searchPhrase))) {
+			id = iter->getID();
+			indexString << id << ",";
+		}
+	}
+
+	returnString = indexString.str();
+
+	if (!returnString.empty()) {
 		returnString.pop_back();
 	}
 	return returnString;

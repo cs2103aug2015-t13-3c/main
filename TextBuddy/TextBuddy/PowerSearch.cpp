@@ -164,7 +164,8 @@ void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int 
 	int freeTimeStart = startTime;
 
 	removeDoneTasks(taskVector);
-	removeFloatingTasks(taskVector);
+	removeTaskType(taskVector, FLOATING);
+	removeTaskType(taskVector, TODO);
 	sortDate(taskVector);
 	convertTime(taskVector);
 
@@ -172,21 +173,16 @@ void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int 
 
 	// Need to take into account the period before start of first task
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
-		/*if (iter->getStartTime() == TIME_NOT_SET) {
-		iter->setStartTime(0);	
-		}
-
-		if (iter->getEndTime() == TIME_NOT_SET) {
-		iter->setEndTime(0);
-		}*/
-
-		if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
-			addPeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
-		}
-		// Condition set to prevent freeDateStart from "going back"
-		if ((freeDateStart < iter->getEndDate()) || ((freeDateStart == iter->getEndDate()) && (freeTimeStart < iter->getEndTime()))) {
-			freeDateStart = iter->getEndDate();			
-			freeTimeStart = iter->getEndTime();
+		// Do not consider 'events' input that do not actually contain a period eg. from 5 nov at 11 pm to 5 nov at 11 pm 
+		if (!((iter->getStartDate() == iter->getEndDate()) && (iter->getStartTime() == iter->getEndTime()))) {
+			if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
+				addPeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
+			}
+			// Condition set to prevent freeDateStart from "going back"
+			if ((freeDateStart < iter->getEndDate()) || ((freeDateStart == iter->getEndDate()) && (freeTimeStart < iter->getEndTime()))) {
+				freeDateStart = iter->getEndDate();			
+				freeTimeStart = iter->getEndTime();
+			}
 		}
 	}
 

@@ -2414,3 +2414,397 @@ Wed Nov 04 08:15:32 2015 Parsing "clear"
 Wed Nov 04 08:15:33 2015 Parsing "exit"
 Wed Nov 04 08:15:33 2015 Logger terminated
 
+Thu Nov 05 13:52:14 2015 Logger initialised
+Thu Nov 05 13:52:14 2015 Log level default: 2
+Thu Nov 05 13:52:14 2015 Parser instantiated
+Thu Nov 05 13:52:14 2015 Log level changed: 0
+Thu Nov 05 13:52:14 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:14 2015 Test custom command: add
+Thu Nov 05 13:52:14 2015 Parsing "view"
+Thu Nov 05 13:52:14 2015 Viewing...
+Thu Nov 05 13:52:18 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:18 2015 Test custom command: add
+Thu Nov 05 13:52:18 2015 Parsing "add"
+Thu Nov 05 13:52:18 2015 Parsing task
+Thu Nov 05 13:52:18 2015 Parsing field keyword: name
+Thu Nov 05 13:52:18 2015 Parsing string: task
+Thu Nov 05 13:52:18 2015 Parsed task of type: FLOATING
+Thu Nov 05 13:52:28 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:28 2015 Test custom command: add
+Thu Nov 05 13:52:28 2015 Parsing "modify"
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151105
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151106
+Thu Nov 05 13:52:28 2015 Parsed by date: -1
+Thu Nov 05 13:52:28 2015 Parsed by day: -1
+Thu Nov 05 13:52:28 2015 Fields extracted: from at to FIELD_END_TIME
+Thu Nov 05 13:52:28 2015 Parsing task
+Thu Nov 05 13:52:28 2015 Parsing field keyword: name
+Thu Nov 05 13:52:28 2015 Parsing string: 
+Thu Nov 05 13:52:28 2015 Parsing field keyword: from
+Thu Nov 05 13:52:28 2015 Parsing string: 5 nov
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151105
+Thu Nov 05 13:52:28 2015 Setting task type as: EVENT
+Thu Nov 05 13:52:28 2015 Parsing field keyword: at
+Thu Nov 05 13:52:28 2015 Parsing string: 6 pm
+Thu Nov 05 13:52:28 2015 Setting task type as: EVENT
+Thu Nov 05 13:52:28 2015 Checking that pm = pm
+Thu Nov 05 13:52:28 2015 Parsed time: 1800
+Thu Nov 05 13:52:28 2015 Checking that pm = pm
+Thu Nov 05 13:52:28 2015 Parsed time: 1800
+Thu Nov 05 13:52:28 2015 Parsing field keyword: to
+Thu Nov 05 13:52:28 2015 Parsing string: 6 nov
+Thu Nov 05 13:52:28 2015 Checking that nov = nov
+Thu Nov 05 13:52:28 2015 Parsed by date: 151106
+Thu Nov 05 13:52:28 2015 Parsing field keyword: to
+Thu Nov 05 13:52:28 2015 Parsing string: 8 pm
+Thu Nov 05 13:52:28 2015 Parsed by date: -1
+Thu Nov 05 13:52:28 2015 Parsed by day: -1
+Thu Nov 05 13:52:28 2015 Checking that pm = pm
+Thu Nov 05 13:52:28 2015 Parsed time: 2000
+Thu Nov 05 13:52:28 2015 Setting task type as: EVENT
+Thu Nov 05 13:52:28 2015 Parsed task of type: EVENT
+Thu Nov 05 13:52:34 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:34 2015 Test custom command: add
+Thu Nov 05 13:52:34 2015 Parsing "modify"
+Thu Nov 05 13:52:34 2015 Checking that nov = nov
+Thu Nov 05 13:52:34 2015 Parsed by date: 151106
+Thu Nov 05 13:52:34 2015 Fields extracted: by
+Thu Nov 05 13:52:34 2015 Parsing task
+Thu Nov 05 13:52:34 2015 Parsing field keyword: name
+Thu Nov 05 13:52:34 2015 Parsing string: 
+Thu Nov 05 13:52:34 2015 Parsing field keyword: by
+Thu Nov 05 13:52:34 2015 Parsing string: 6 nov
+Thu Nov 05 13:52:34 2015 Checking that nov = nov
+Thu Nov 05 13:52:34 2015 Parsed by date: 151106
+Thu Nov 05 13:52:34 2015 Setting task type as: TODO
+Thu Nov 05 13:52:34 2015 Parsed task of type: TODO
+Thu Nov 05 13:52:51 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:52:51 2015 Test custom command: add
+Thu Nov 05 13:52:51 2015 Parsing "modify"
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Fields extracted: by FIELD_END_TIME
+Thu Nov 05 13:52:51 2015 Parsing task
+Thu Nov 05 13:52:51 2015 Parsing field keyword: name
+Thu Nov 05 13:52:51 2015 Parsing string: 
+Thu Nov 05 13:52:51 2015 Parsing field keyword: by
+Thu Nov 05 13:52:51 2015 Parsing string: 10 am
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Checking that am = am
+Thu Nov 05 13:52:51 2015 Parsed time: 1000
+Thu Nov 05 13:52:51 2015 Parsed by day: 151105
+Thu Nov 05 13:52:51 2015 Setting task type as: TODO
+Thu Nov 05 13:52:51 2015 Parsing field keyword: to
+Thu Nov 05 13:52:51 2015 Parsing string: 10 pm
+Thu Nov 05 13:52:51 2015 Parsed by date: -1
+Thu Nov 05 13:52:51 2015 Parsed by day: -1
+Thu Nov 05 13:52:51 2015 Checking that pm = pm
+Thu Nov 05 13:52:51 2015 Parsed time: 2200
+Thu Nov 05 13:52:51 2015 Setting task type as: TODO
+Thu Nov 05 13:52:51 2015 Parsed task of type: TODO
+Thu Nov 05 13:53:02 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:02 2015 Test custom command: add
+Thu Nov 05 13:53:02 2015 Parsing "modify"
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Fields extracted: at FIELD_END_TIME
+Thu Nov 05 13:53:02 2015 Parsing task
+Thu Nov 05 13:53:02 2015 Parsing field keyword: name
+Thu Nov 05 13:53:02 2015 Parsing string: 
+Thu Nov 05 13:53:02 2015 Parsing field keyword: from
+Thu Nov 05 13:53:02 2015 Parsing string: 10 am
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Setting task type as: EVENT
+Thu Nov 05 13:53:02 2015 Checking that am = am
+Thu Nov 05 13:53:02 2015 Parsed time: 1000
+Thu Nov 05 13:53:02 2015 Checking that am = am
+Thu Nov 05 13:53:02 2015 Parsed time: 1000
+Thu Nov 05 13:53:02 2015 Parsed by day: 151105
+Thu Nov 05 13:53:02 2015 Parsing field keyword: to
+Thu Nov 05 13:53:02 2015 Parsing string: 10 pm
+Thu Nov 05 13:53:02 2015 Parsed by date: -1
+Thu Nov 05 13:53:02 2015 Parsed by day: -1
+Thu Nov 05 13:53:02 2015 Checking that pm = pm
+Thu Nov 05 13:53:02 2015 Parsed time: 2200
+Thu Nov 05 13:53:02 2015 Setting task type as: EVENT
+Thu Nov 05 13:53:02 2015 Parsed task of type: EVENT
+Thu Nov 05 13:53:12 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:12 2015 Test custom command: add
+Thu Nov 05 13:53:12 2015 Parsing "modify"
+Thu Nov 05 13:53:12 2015 Parsed by date: -1
+Thu Nov 05 13:53:12 2015 Parsed by day: -1
+Thu Nov 05 13:53:12 2015 Fields extracted: by
+Thu Nov 05 13:53:12 2015 Parsing task
+Thu Nov 05 13:53:12 2015 Parsing field keyword: name
+Thu Nov 05 13:53:12 2015 Parsing string: 
+Thu Nov 05 13:53:12 2015 Parsing field keyword: by
+Thu Nov 05 13:53:12 2015 Parsing string: 10 pm
+Thu Nov 05 13:53:12 2015 Parsed by date: -1
+Thu Nov 05 13:53:12 2015 Parsed by day: -1
+Thu Nov 05 13:53:12 2015 Checking that pm = pm
+Thu Nov 05 13:53:12 2015 Parsed time: 2200
+Thu Nov 05 13:53:12 2015 Parsed by day: 151105
+Thu Nov 05 13:53:12 2015 Setting task type as: TODO
+Thu Nov 05 13:53:12 2015 Parsed task of type: TODO
+Thu Nov 05 13:53:42 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:42 2015 Test custom command: add
+Thu Nov 05 13:53:42 2015 Parsing "modify"
+Thu Nov 05 13:53:42 2015 Checking that nov = nov
+Thu Nov 05 13:53:42 2015 Parsed by date: 151107
+Thu Nov 05 13:53:42 2015 Fields extracted: by
+Thu Nov 05 13:53:42 2015 Parsing task
+Thu Nov 05 13:53:42 2015 Parsing field keyword: name
+Thu Nov 05 13:53:42 2015 Parsing string: 
+Thu Nov 05 13:53:42 2015 Parsing field keyword: by
+Thu Nov 05 13:53:42 2015 Parsing string: 7 nov
+Thu Nov 05 13:53:42 2015 Checking that nov = nov
+Thu Nov 05 13:53:42 2015 Parsed by date: 151107
+Thu Nov 05 13:53:42 2015 Setting task type as: TODO
+Thu Nov 05 13:53:42 2015 Parsed task of type: TODO
+Thu Nov 05 13:53:46 2015 Tb::COMMAND_ADD address in Utilities: 00DAFDD0
+Thu Nov 05 13:53:46 2015 Test custom command: add
+Thu Nov 05 13:53:46 2015 Parsing "exit"
+Thu Nov 05 13:53:46 2015 Logger terminated
+
+Sat Nov 07 01:52:11 2015 Logger initialised
+Sat Nov 07 01:52:11 2015 Log level default: 2
+Sat Nov 07 01:52:11 2015 Parser instantiated
+Sat Nov 07 01:52:11 2015 Log level changed: 0
+Sat Nov 07 01:52:11 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:52:11 2015 Test custom command: add
+Sat Nov 07 01:52:11 2015 Parsing "view"
+Sat Nov 07 01:52:11 2015 Viewing...
+Sat Nov 07 01:52:40 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:52:40 2015 Test custom command: add
+Sat Nov 07 01:52:40 2015 Parsing "search"
+Sat Nov 07 01:52:40 2015 Checking that from = from
+Sat Nov 07 01:52:40 2015 Checking that from = from
+Sat Nov 07 01:52:40 2015 Checking that for = for
+Sat Nov 07 01:52:40 2015 Processing PowerSearch phrase: from
+Sat Nov 07 01:52:40 2015 Checking that from = from
+Sat Nov 07 01:52:40 2015 Parsing PowerSearch inputMode: from
+Sat Nov 07 01:52:40 2015 Processing PowerSearch phrase: 6
+Sat Nov 07 01:52:40 2015 Checking that to = to
+Sat Nov 07 01:52:40 2015 Checking that from = from
+Sat Nov 07 01:52:40 2015 Checking that nov = nov
+Sat Nov 07 01:52:40 2015 Parsed by date: 151106
+Sat Nov 07 01:52:40 2015 Parsed 6 nov to be date: 151106
+Sat Nov 07 01:52:40 2015 Parsing PowerSearch inputMode: to
+Sat Nov 07 01:52:40 2015 Processing PowerSearch phrase: 8
+Sat Nov 07 01:52:40 2015 Checking that for = for
+Sat Nov 07 01:52:40 2015 Checking that to = to
+Sat Nov 07 01:52:40 2015 Checking that nov = nov
+Sat Nov 07 01:52:40 2015 Parsed by date: 151108
+Sat Nov 07 01:52:40 2015 Parsing PowerSearch inputMode: for
+Sat Nov 07 01:52:40 2015 Processing PowerSearch phrase: for
+Sat Nov 07 01:52:40 2015 Checking that for = for
+Sat Nov 07 01:52:40 2015 Parsed PowerSearch
+Sat Nov 07 01:52:47 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:52:47 2015 Test custom command: add
+Sat Nov 07 01:52:47 2015 Parsing "view"
+Sat Nov 07 01:52:47 2015 Viewing...
+Sat Nov 07 01:57:06 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:57:06 2015 Test custom command: add
+Sat Nov 07 01:57:06 2015 Parsing "add"
+Sat Nov 07 01:57:06 2015 Parsing task
+Sat Nov 07 01:57:06 2015 Parsing field keyword: name
+Sat Nov 07 01:57:06 2015 Parsing string: task
+Sat Nov 07 01:57:06 2015 Parsing field keyword: by
+Sat Nov 07 01:57:06 2015 Parsing string: 32 Dec
+Sat Nov 07 01:57:06 2015 Checking that dec = dec
+Sat Nov 07 01:57:06 2015 Parsed by date: -1
+Sat Nov 07 01:57:06 2015 Parsed by day: -1
+Sat Nov 07 01:57:06 2015 Parsed task of type: TODO
+Sat Nov 07 01:57:15 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:57:15 2015 Test custom command: add
+Sat Nov 07 01:57:15 2015 Parsing "add"
+Sat Nov 07 01:57:15 2015 Parsing task
+Sat Nov 07 01:57:15 2015 Parsing field keyword: name
+Sat Nov 07 01:57:15 2015 Parsing string: task
+Sat Nov 07 01:57:15 2015 Parsing field keyword: by
+Sat Nov 07 01:57:15 2015 Parsing string: 31 Dec
+Sat Nov 07 01:57:15 2015 Checking that dec = dec
+Sat Nov 07 01:57:15 2015 Parsed by date: 151231
+Sat Nov 07 01:57:15 2015 Setting task type as: TODO
+Sat Nov 07 01:57:15 2015 Parsed task of type: TODO
+Sat Nov 07 01:57:20 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:57:20 2015 Test custom command: add
+Sat Nov 07 01:57:20 2015 Parsing "add"
+Sat Nov 07 01:57:20 2015 Parsing task
+Sat Nov 07 01:57:20 2015 Parsing field keyword: name
+Sat Nov 07 01:57:20 2015 Parsing string: task
+Sat Nov 07 01:57:20 2015 Parsing field keyword: by
+Sat Nov 07 01:57:20 2015 Parsing string: 32 Dec
+Sat Nov 07 01:57:20 2015 Checking that dec = dec
+Sat Nov 07 01:57:20 2015 Parsed by date: -1
+Sat Nov 07 01:57:20 2015 Parsed by day: -1
+Sat Nov 07 01:57:20 2015 Parsed task of type: TODO
+Sat Nov 07 01:57:35 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:57:35 2015 Test custom command: add
+Sat Nov 07 01:57:35 2015 Parsing "search"
+Sat Nov 07 01:57:35 2015 Checking that from = from
+Sat Nov 07 01:57:35 2015 Checking that from = from
+Sat Nov 07 01:57:35 2015 Checking that for = for
+Sat Nov 07 01:57:35 2015 Processing PowerSearch phrase: from
+Sat Nov 07 01:57:35 2015 Checking that from = from
+Sat Nov 07 01:57:35 2015 Parsing PowerSearch inputMode: from
+Sat Nov 07 01:57:35 2015 Processing PowerSearch phrase: 29
+Sat Nov 07 01:57:35 2015 Checking that to = to
+Sat Nov 07 01:57:35 2015 Checking that from = from
+Sat Nov 07 01:57:35 2015 Checking that dec = dec
+Sat Nov 07 01:57:35 2015 Parsed by date: 151229
+Sat Nov 07 01:57:35 2015 Parsed 29 Dec to be date: 151229
+Sat Nov 07 01:57:35 2015 Parsing PowerSearch inputMode: to
+Sat Nov 07 01:57:35 2015 Processing PowerSearch phrase: 1
+Sat Nov 07 01:57:35 2015 Checking that for = for
+Sat Nov 07 01:57:35 2015 Checking that to = to
+Sat Nov 07 01:57:35 2015 Checking that jan = jan
+Sat Nov 07 01:57:35 2015 Parsed by date: 150101
+Sat Nov 07 01:57:35 2015 Parsing PowerSearch inputMode: for
+Sat Nov 07 01:57:35 2015 Processing PowerSearch phrase: for
+Sat Nov 07 01:57:35 2015 Checking that for = for
+Sat Nov 07 01:57:35 2015 Parsed PowerSearch
+Sat Nov 07 01:57:40 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:57:40 2015 Test custom command: add
+Sat Nov 07 01:57:40 2015 Parsing "view"
+Sat Nov 07 01:57:40 2015 Viewing...
+Sat Nov 07 01:58:47 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:58:47 2015 Test custom command: add
+Sat Nov 07 01:58:47 2015 Parsing "search"
+Sat Nov 07 01:58:47 2015 Checking that from = from
+Sat Nov 07 01:58:47 2015 Checking that from = from
+Sat Nov 07 01:58:47 2015 Checking that for = for
+Sat Nov 07 01:58:47 2015 Processing PowerSearch phrase: from
+Sat Nov 07 01:58:47 2015 Checking that from = from
+Sat Nov 07 01:58:47 2015 Parsing PowerSearch inputMode: from
+Sat Nov 07 01:58:47 2015 Processing PowerSearch phrase: dec
+Sat Nov 07 01:58:47 2015 Checking that to = to
+Sat Nov 07 01:58:47 2015 Checking that from = from
+Sat Nov 07 01:58:47 2015 Parsed by date: -1
+Sat Nov 07 01:58:47 2015 Parsed by day: -1
+Sat Nov 07 01:58:47 2015 Parsing PowerSearch inputMode: to
+Sat Nov 07 01:58:47 2015 Processing PowerSearch phrase: jan
+Sat Nov 07 01:58:47 2015 Checking that for = for
+Sat Nov 07 01:58:47 2015 Checking that to = to
+Sat Nov 07 01:58:47 2015 Parsed by date: -1
+Sat Nov 07 01:58:47 2015 Parsed by day: -1
+Sat Nov 07 01:58:47 2015 Parsing PowerSearch inputMode: for
+Sat Nov 07 01:58:47 2015 Processing PowerSearch phrase: for
+Sat Nov 07 01:58:47 2015 Checking that for = for
+Sat Nov 07 01:58:47 2015 Parsed by day: 151107
+Sat Nov 07 01:58:47 2015 Parsed by day: 151107
+Sat Nov 07 01:58:47 2015 Parsed PowerSearch
+Sat Nov 07 01:58:56 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:58:56 2015 Test custom command: add
+Sat Nov 07 01:58:56 2015 Parsing "view"
+Sat Nov 07 01:58:56 2015 Viewing...
+Sat Nov 07 01:59:07 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:59:07 2015 Test custom command: add
+Sat Nov 07 01:59:07 2015 Parsing "search"
+Sat Nov 07 01:59:07 2015 Checking that from = from
+Sat Nov 07 01:59:07 2015 Checking that from = from
+Sat Nov 07 01:59:07 2015 Checking that for = for
+Sat Nov 07 01:59:07 2015 Processing PowerSearch phrase: from
+Sat Nov 07 01:59:07 2015 Checking that from = from
+Sat Nov 07 01:59:07 2015 Parsing PowerSearch inputMode: from
+Sat Nov 07 01:59:07 2015 Processing PowerSearch phrase: 30
+Sat Nov 07 01:59:07 2015 Checking that to = to
+Sat Nov 07 01:59:07 2015 Checking that from = from
+Sat Nov 07 01:59:07 2015 Checking that dec = dec
+Sat Nov 07 01:59:07 2015 Parsed by date: 151230
+Sat Nov 07 01:59:07 2015 Parsed 30 dec to be date: 151230
+Sat Nov 07 01:59:07 2015 Parsing PowerSearch inputMode: to
+Sat Nov 07 01:59:07 2015 Processing PowerSearch phrase: 1
+Sat Nov 07 01:59:07 2015 Checking that for = for
+Sat Nov 07 01:59:07 2015 Checking that to = to
+Sat Nov 07 01:59:07 2015 Checking that jan = jan
+Sat Nov 07 01:59:07 2015 Parsed by date: 150101
+Sat Nov 07 01:59:07 2015 Parsing PowerSearch inputMode: for
+Sat Nov 07 01:59:07 2015 Processing PowerSearch phrase: for
+Sat Nov 07 01:59:07 2015 Checking that for = for
+Sat Nov 07 01:59:07 2015 Parsed PowerSearch
+Sat Nov 07 01:59:10 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:59:10 2015 Test custom command: add
+Sat Nov 07 01:59:10 2015 Parsing "view"
+Sat Nov 07 01:59:10 2015 Viewing...
+Sat Nov 07 01:59:19 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:59:19 2015 Test custom command: add
+Sat Nov 07 01:59:19 2015 Parsing "search"
+Sat Nov 07 01:59:19 2015 Checking that from = from
+Sat Nov 07 01:59:19 2015 Checking that from = from
+Sat Nov 07 01:59:19 2015 Checking that for = for
+Sat Nov 07 01:59:19 2015 Processing PowerSearch phrase: from
+Sat Nov 07 01:59:19 2015 Checking that from = from
+Sat Nov 07 01:59:19 2015 Parsing PowerSearch inputMode: from
+Sat Nov 07 01:59:19 2015 Processing PowerSearch phrase: 8
+Sat Nov 07 01:59:19 2015 Checking that to = to
+Sat Nov 07 01:59:19 2015 Checking that from = from
+Sat Nov 07 01:59:19 2015 Checking that sep = sep
+Sat Nov 07 01:59:19 2015 Parsed by date: 150908
+Sat Nov 07 01:59:19 2015 Parsed 8 sep to be date: 150908
+Sat Nov 07 01:59:19 2015 Parsing PowerSearch inputMode: to
+Sat Nov 07 01:59:19 2015 Processing PowerSearch phrase: 9
+Sat Nov 07 01:59:19 2015 Checking that for = for
+Sat Nov 07 01:59:19 2015 Checking that to = to
+Sat Nov 07 01:59:19 2015 Checking that sep = sep
+Sat Nov 07 01:59:19 2015 Parsed by date: 150909
+Sat Nov 07 01:59:19 2015 Parsing PowerSearch inputMode: for
+Sat Nov 07 01:59:19 2015 Processing PowerSearch phrase: for
+Sat Nov 07 01:59:19 2015 Checking that for = for
+Sat Nov 07 01:59:19 2015 Parsed PowerSearch
+Sat Nov 07 01:59:24 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:59:24 2015 Test custom command: add
+Sat Nov 07 01:59:24 2015 Parsing "view"
+Sat Nov 07 01:59:24 2015 Viewing...
+Sat Nov 07 01:59:27 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:59:27 2015 Test custom command: add
+Sat Nov 07 01:59:27 2015 Parsing "clear"
+Sat Nov 07 01:59:28 2015 Tb::COMMAND_ADD address in Utilities: 0149FDD0
+Sat Nov 07 01:59:28 2015 Test custom command: add
+Sat Nov 07 01:59:28 2015 Parsing "exit"
+Sat Nov 07 01:59:28 2015 Logger terminated
+
+Sat Nov 07 05:36:28 2015 Logger initialised
+Sat Nov 07 05:36:28 2015 Log level default: 2
+Sat Nov 07 05:36:28 2015 Parser instantiated
+Sat Nov 07 05:36:28 2015 Log level changed: 0
+Sat Nov 07 05:36:28 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:28 2015 Test custom command: add
+Sat Nov 07 05:36:28 2015 Parsing "view"
+Sat Nov 07 05:36:28 2015 Viewing...
+Sat Nov 07 05:36:34 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:34 2015 Test custom command: add
+Sat Nov 07 05:36:34 2015 Parsing "add"
+Sat Nov 07 05:36:34 2015 Parsing task
+Sat Nov 07 05:36:34 2015 Parsing field keyword: name
+Sat Nov 07 05:36:34 2015 Parsing string: subject
+Sat Nov 07 05:36:34 2015 Parsed task of type: FLOATING
+Sat Nov 07 05:36:39 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:39 2015 Test custom command: add
+Sat Nov 07 05:36:39 2015 Parsing "search"
+Sat Nov 07 05:36:44 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:44 2015 Test custom command: add
+Sat Nov 07 05:36:44 2015 Parsing "search"
+Sat Nov 07 05:36:48 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:48 2015 Test custom command: add
+Sat Nov 07 05:36:48 2015 Parsing "search"
+Sat Nov 07 05:36:53 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:36:53 2015 Test custom command: add
+Sat Nov 07 05:36:53 2015 Parsing "search"
+Sat Nov 07 05:37:02 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:37:02 2015 Test custom command: add
+Sat Nov 07 05:37:02 2015 Parsing "search"
+Sat Nov 07 05:37:05 2015 Tb::COMMAND_ADD address in Utilities: 013A0DD0
+Sat Nov 07 05:37:05 2015 Test custom command: add
+Sat Nov 07 05:37:05 2015 Parsing "exit"
+Sat Nov 07 05:37:05 2015 Logger terminated
+

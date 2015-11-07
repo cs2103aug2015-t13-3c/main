@@ -111,7 +111,7 @@ protected:
 	void sortPriority(std::vector<Task> &taskVector);
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
-	void removeFloatingTasks(std::vector<Task> &taskVector);
+	void removeTaskType(std::vector<Task> &taskVector, TaskType type);
 	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
@@ -239,6 +239,7 @@ private:
 	std::vector<Task> currentViewBeforeSearch;
 
 	std::string doSearch();
+	std::string doRegexSearch();
 	bool amendView(std::string listOfIds);
 public:
 	Search(std::string phraseString);
