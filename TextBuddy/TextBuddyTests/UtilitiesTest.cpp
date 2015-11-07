@@ -81,36 +81,36 @@ public:
 	TEST_METHOD(Utilities_getDate) {
 		// year removed if same as present year
 		int date = 151101;
-		std::string expectedDate = "1/11";
-		Assert::AreEqual(expectedDate,Utilities::getDate(date));
+		std::string expectedDate = "1/Nov";
+		Assert::AreEqual(expectedDate,Utilities::toDisplayDate(date));
 
 		// Boundary value : end of year and next year
 		date = 151231;
-		expectedDate = "31/12";
-		Assert::AreEqual(expectedDate,Utilities::getDate(date));
+		expectedDate = "31/Dec";
+		Assert::AreEqual(expectedDate,Utilities::toDisplayDate(date));
 
 		date = 160101;
-		expectedDate = "1/1/16";
-		Assert::AreEqual(expectedDate,Utilities::getDate(date));
+		expectedDate = "1/Jan/16";
+		Assert::AreEqual(expectedDate,Utilities::toDisplayDate(date));
 	}
 
 	TEST_METHOD(Utilities_getTime) {
 		int time = 900;
 		std::string expectedTime = "9.00 am";
-		Assert::AreEqual(expectedTime,Utilities::getTime(time));
+		Assert::AreEqual(expectedTime,Utilities::toDisplayTime(time));
 
 		time = 1800;
 		expectedTime = "6.00 pm";
-		Assert::AreEqual(expectedTime,Utilities::getTime(time));
+		Assert::AreEqual(expectedTime,Utilities::toDisplayTime(time));
 
 		// Boundary value : transition between am and pm
 		time = 1200;
 		expectedTime = "12.00 pm";
-		Assert::AreEqual(expectedTime,Utilities::getTime(time));
+		Assert::AreEqual(expectedTime,Utilities::toDisplayTime(time));
 
 		time = 0;
 		expectedTime = "12.00 am";
-		Assert::AreEqual(expectedTime,Utilities::getTime(time));
+		Assert::AreEqual(expectedTime,Utilities::toDisplayTime(time));
 
 	}
 

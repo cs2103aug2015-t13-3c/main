@@ -70,7 +70,6 @@ enum TaskType {
 class Task {
 private:
 	static int runningCount;
-	// static Task tempTask;
 
 	std::string name;
 	TaskType type;
@@ -128,7 +127,7 @@ public:
 	bool getReserveStatus();
 
 	std::string getDate_UI();
-	std::string getTime_UI();
+	std::string getDisplayTime();
 
 	// Setters, return true if successful
 	bool setName(std::string newName);
@@ -157,12 +156,7 @@ public:
 	void addReserveEndDate(int newReservation);
 	void addReserveEndTime(int newReservation);
 	void pickReserve();
-	/*
-	void clearReserveStartDate();
-	void clearReserveStartTime();
-	void clearReserveEndDate();
-	void clearReserveEndTime();
-	*/
+
 	void clearReserve();
 
 	bool isUrgent();

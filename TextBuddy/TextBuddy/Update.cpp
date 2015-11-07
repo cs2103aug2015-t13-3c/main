@@ -23,7 +23,7 @@ void Update::update() {
 		task.label = i->getLabelString();
 		task.description = i->getName();
 		task.date = i->getDate_UI();
-		task.time = i->getTime_UI();
+		task.time = i->getDisplayTime();
 		task.status = NORMAL;
 		if(i->getPriorityStatus()) {
 			task.status = PRIORITY;

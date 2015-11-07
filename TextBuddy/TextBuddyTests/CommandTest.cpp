@@ -265,7 +265,7 @@ public:
 		Assert::AreEqual(IDthree,iter->getID());
 		Assert::AreEqual(150101,iter->getEndDate());
 		Assert::AreEqual(150101,iter->getStartDate());
-		Assert::AreEqual(-1,iter->getStartTime());		
+		Assert::AreEqual(TIME_NOT_SET,iter->getStartTime());		
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence one."),iter->getName());
@@ -306,7 +306,7 @@ public:
 		Assert::AreEqual(IDthree,iter->getID());
 		Assert::AreEqual(150101,iter->getStartDate());
 		Assert::AreEqual(150201,iter->getEndDate());
-		Assert::AreEqual(-1,iter->getStartTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getStartTime());
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence one."),iter->getName());
@@ -967,6 +967,7 @@ public:
 		cmd->clearTaskStore();
 		parser = Parser::getInstance();
 		history = History::getInstance();
+		history->clearHistory();
 	}
 
 	TEST_METHOD(Command_Pick_reserve_empty) {

@@ -30,7 +30,7 @@ char* TbLogger::getLocalTime() {
 }
 
 int TbLogger::getDate() {
-	time_t rawtime = time(0);			// get current time
+	time_t rawtime = time(nullptr);		// Get current time
 	struct tm dayinfo;
 	localtime_s(&dayinfo,&rawtime);
 
