@@ -12,7 +12,7 @@ std::string Tb::MESSAGE_WELCOME = "Welcome to TextBuddy!";
 std::string Tb::COMMAND_ADD = "add";
 std::string Tb::COMMAND_DELETE = "delete";
 std::string Tb::COMMAND_MODIFY = "modify";
-std::string Tb::COMMAND_MODIFY_EDIT = "edit";		// Alternative keyword
+std::string Tb::COMMAND_MODIFY_EDIT = "edit";	// Alternative keyword
 std::string Tb::COMMAND_PICK_RESERVE = "pick";
 std::string Tb::COMMAND_SEARCH = "search";
 std::string Tb::COMMAND_MARKDONE = "done";
@@ -438,6 +438,11 @@ void Delete::setUndoDeleteInfo() {
 
 //============= MODIFY : PUBLIC METHODS ============
 
+Modify::Modify(int taskID, bool isModifyFloating) : Command(MODIFY) {
+	modifyID = taskID;
+	isSetFloating = isModifyFloating;
+}
+
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
 	fieldsToModify = fields;
@@ -463,9 +468,18 @@ Task Modify::getTempTask() {
 void Modify::execute() {
 	initialiseIterators(modifyID);
 	originalTask = *currViewIter;
-	doModify();
+	if(isSetFloating) {
+		taskStoreIter->setType(FLOATING);
+		taskStoreIter->resetDatesAndTimes();
+	} else {
+		doModify();
+		updateTaskTypes();
+		updateViewIter();
+		sortDate(taskStore);
+		initialiseIterators(modifyID);
+	}
 	Task::lastEditID = originalTask.getID();
-	//defaultView();
+	// defaultView();
 }
 
 void Modify::undo() {
@@ -541,13 +555,11 @@ void Modify::doModify() {
 			isTODO = true;
 			taskStoreIter->setEndDate(tempTask.getEndDate());
 			taskStoreIter->setEndTime(tempTask.getEndTime());
-			// taskStoreIter->setStartDate(tempTask.getStartDate());
 			break;
 		case TODO_TIME:
 			isTODO = true;
 			isEndTimeSet = true;
 			taskStoreIter->setEndTime(tempTask.getEndTime());
-			// taskStoreIter->setStartTime(tempTask.getStartTime());
 			break;
 		case RESERVE_START_DATE:
 			taskStoreIter->addReserveStartDate(tempTask.getReserveStartDate());
@@ -882,7 +894,7 @@ void Markdone::markDone() {
 	successMarkDone = taskStoreIter->markDone();
 	if(successMarkDone) {
 		taskName = currViewIter->getName();
-		//currentView.erase(currViewIter);
+		// currentView.erase(currViewIter);
 	}
 }
 
@@ -926,9 +938,9 @@ void UnmarkDone::unmarkDone() {
 	initialiseIterators(undoneID);
 
 	successUnmarkDone = taskStoreIter->unmarkDone();
-	//if(successUnmarkDone) {
+	// if(successUnmarkDone) {
 	//	currentView.erase(currViewIter);
-	//}
+	// }
 }
 
 //==================================================

@@ -208,7 +208,7 @@ std::string Task::getLabelString() {
 	return label;
 }
 
-std::string Task::getDate_UI() {
+std::string Task::getDisplayDate() {
 	std::string date;
 	if(startDate == DATE_NOT_SET) {
 		date = "";
@@ -325,6 +325,14 @@ bool Task::setEndDate(int newEndDate) {
 bool Task::setEndTime(int newEndTime) {
 	endTime = newEndTime;
 	return true;
+}
+
+void Task::resetDatesAndTimes() {
+	startDate = DATE_NOT_SET;
+	startTime = TIME_NOT_SET;
+	endDate = DATE_NOT_SET;
+	endTime = TIME_NOT_SET;
+	return;
 }
 
 bool Task::isUrgent() {

@@ -189,17 +189,18 @@ private:
 	int modifyID; // ID on GUI, not taskID
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
+	bool isSetFloating;
 	//==== UNDO ===
 	Task originalTask;
 	int prevCurrPos;
 
 	void doModify();
-	// void moveToPrevPos();
 
 	bool updateFLOATING();
 	bool updateTODO();
 	bool updateEVENT();
 public:
+	Modify(int taskID, bool isModifyFloating);
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	Modify(CommandType pick);
 	~Modify();

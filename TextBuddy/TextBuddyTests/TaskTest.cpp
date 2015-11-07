@@ -8,7 +8,7 @@ namespace TextBuddyTests {
 	TEST_CLASS(UnitTest) {
 public:
 
-	// Task::getDate_UI should return a string in:
+	// Task::getDisplayDate should return a string in:
 	// DD/MMM format if the date is the present year
 	// DD/MMM/YY format if the date is next year onwards
 	TEST_METHOD(Task_getDate_getDisplayTime) {
@@ -23,21 +23,21 @@ public:
 		std::string expectedTime = "";
 		task.setStartDate(startDate);
 		task.setEndDate(endDate);
-		Assert::AreEqual(expectedDate,task.getDate_UI());
+		Assert::AreEqual(expectedDate,task.getDisplayDate());
 		Assert::AreEqual(expectedTime,task.getDisplayTime());
 
 		// Task with 2 different date
 		endDate = 151130;
 		expectedDate = "20/Nov - 30/Nov";
 		task.setEndDate(endDate);
-		Assert::AreEqual(expectedDate,task.getDate_UI());
+		Assert::AreEqual(expectedDate,task.getDisplayDate());
 		Assert::AreEqual(expectedTime,task.getDisplayTime());
 
 		// Task with dates spanning different year
 		endDate = 160120;
 		expectedDate = "20/Nov - 20/Jan/16";
 		task.setEndDate(endDate);
-		Assert::AreEqual(expectedDate,task.getDate_UI());
+		Assert::AreEqual(expectedDate,task.getDisplayDate());
 		Assert::AreEqual(expectedTime,task.getDisplayTime());
 
 		// Task with 1 single time
@@ -51,7 +51,7 @@ public:
 		task.setEndTime(endTime);
 		expectedDate = "";
 		expectedTime = "6.00 pm";
-		Assert::AreEqual(expectedDate,task.getDate_UI());
+		Assert::AreEqual(expectedDate,task.getDisplayDate());
 		Assert::AreEqual(expectedTime,task.getDisplayTime());
 
 		// Task with 2 different time
@@ -59,7 +59,7 @@ public:
 		task.setStartTime(startTime);
 		expectedDate = "";
 		expectedTime = "3.00 pm - 6.00 pm";
-		Assert::AreEqual(expectedDate,task.getDate_UI());
+		Assert::AreEqual(expectedDate,task.getDisplayDate());
 		Assert::AreEqual(expectedTime,task.getDisplayTime());
 
 		// Task with 2 differnt date and time
@@ -68,7 +68,7 @@ public:
 		task.setStartDate(startDate);
 		task.setEndDate(endDate);
 		expectedDate = "20/Nov - 23/Nov";
-		Assert::AreEqual(expectedDate,task.getDate_UI());
+		Assert::AreEqual(expectedDate,task.getDisplayDate());
 		Assert::AreEqual(expectedTime,task.getDisplayTime());
 	}
 
