@@ -80,10 +80,12 @@ void Command::undo() {
 
 //================ COMMAND : PROTECTED METHODS ==================
 
-std::vector<Task> Command::taskStore;
-std::vector<Task> Command::currentView;
+TbLogger* Command::logger = TbLogger::getInstance();
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
+
+std::vector<Task> Command::taskStore;
+std::vector<Task> Command::currentView;
 
 // Initialises the corresponding iterators with the taskID
 // TaskID is the ID seen on GUI, not the unique task ID
@@ -228,21 +230,21 @@ void Command::addPeriod(std::vector<Task> &taskVector, int startDate, int startT
 }
 
 // Set currentView to be the same as taskStore
-bool Command::copyView() {
+bool Command::updateCurrView() {
 	currentView = taskStore;
 	return true;
 }
 
 // Updates only the modified task on the UI 
-void Command::updateView() {
+void Command::updateViewIter() {
 	*currViewIter = *taskStoreIter;
 	return;
 }
 
-// Switch back to default view: display all
+// Switch back to default view: DISPLAY_ALL
 void Command::defaultView() {
 	sortDate(taskStore);
-	copyView();
+	updateCurrView();
 	removeDoneTasks(currentView);
 	return;
 }
@@ -257,7 +259,7 @@ void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 								 index = currIter->getID();
 								 taskIter = matchTaskStoreIndex(index);
 							 } else {
-								 TbLogger::getInstance()->log(WARN,"Invalid index: " + std::to_string(index));
+								 logger->log(WARN,"Invalid index: " + std::to_string(index));
 								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
 							 }
 }
@@ -338,7 +340,7 @@ bool Add::doAdd() {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
 	}
 
-	copyView();
+	updateCurrView();
 	checkOverlap();
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
@@ -592,7 +594,7 @@ void Modify::doModify() {
 	}
 
 	updateTaskTypes();
-	updateView();
+	updateViewIter();
 	sortDate(taskStore);
 	initialiseIterators(modifyID);
 }
@@ -664,7 +666,7 @@ void Pick::execute() {
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
-	TbLogger::getInstance()->log(DEBUG,"Pick executed");
+	logger->log(DEBUG,"Pick executed");
 	defaultView();
 	initialiseIterators(modifyID);
 }
@@ -788,7 +790,7 @@ std::string Search::doRegexSearch() {
 
 	std::vector<Task> taskVector;
 	std::vector<Task>::iterator iter;
-	
+
 	taskVector = taskStore;
 	sortDate(taskVector);
 
@@ -933,15 +935,17 @@ void UnmarkDone::unmarkDone() {
 //                        VIEW
 //==================================================
 
-View::View(ViewType newView, std::string restOfInput) : Command(VIEW) {
+View::View(ViewType newView, std::string labels) : Command(VIEW) {
 	view = newView;
-	viewLabels = Utilities::stringToVec(restOfInput);
+	viewLabels = Utilities::stringToVec(labels);
 	previousView = currentView;
 }
 
-View::View(std::vector<std::string> viewParameters, ViewType period) : Command(VIEW) {
+View::View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period) : Command(VIEW) {
 	view = VIEWTYPE_PERIOD;
-	viewPeriodParams = viewParameters;
+	logger->log(DEBUG,"Setting view period");
+	periodParams = viewParameters;
+	periodString = periodInput;
 	previousView = currentView;
 }
 
@@ -952,7 +956,6 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
-	TbLogger* logger = TbLogger::getInstance();
 	logger->log(DEBUG,"Viewing...");
 
 	switch (view) {
@@ -1015,11 +1018,12 @@ void View::execute() {
 		Logic::setTodayMode();
 		break;
 	case VIEWTYPE_PERIOD: {
-		int startDate = Utilities::stringToInt(viewPeriodParams[1]);
-		int startTime = Utilities::stringToInt(viewPeriodParams[2]);
-		int endDate = Utilities::stringToInt(viewPeriodParams[3]);
-		int endTime = Utilities::stringToInt(viewPeriodParams[4]);
+		int startDate = Utilities::stringToInt(periodParams[1]);
+		int startTime = Utilities::stringToInt(periodParams[2]);
+		int endDate = Utilities::stringToInt(periodParams[3]);
+		int endTime = Utilities::stringToInt(periodParams[4]);
 		viewPeriod(startDate, startTime, endDate, endTime);
+		logger->log(DEBUG, "Viewing period from " + std::to_string(startDate) + " " + std::to_string(startTime) + " to " + std::to_string(endDate) + " " + std::to_string(endTime));
 		Logic::setEventsMode();
 		break;}
 	case VIEWTYPE_INVALID:
@@ -1039,8 +1043,10 @@ std::string View::getMessage() {
 		viewMsg = Tb::MESSAGE_WELCOME;
 	} else {
 		viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
-		if(Utilities::viewTypeToString(view) == VIEW_LABEL) {
+		if(view == VIEWTYPE_LABELS) {
 			viewMsg += " " + Utilities::vecToString(viewLabels);
+		} else if(view == VIEWTYPE_PERIOD) {
+			viewMsg = "Viewing: " + periodString;
 		}
 	}
 	return viewMsg;
@@ -1180,7 +1186,7 @@ DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {
 DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
-	copyView();
+	updateCurrView();
 	formatDefaultView();
 }
 
@@ -1263,7 +1269,7 @@ void Load::execute() {
 	try {
 		taskStore = io->loadFile(filePath);		// Exception thrown if file does not exist
 		History::getInstance()->clearHistory(); // Clear history after load, to avoid seg fault
-		copyView();
+		updateCurrView();
 	} catch (std::exception e) {
 		taskStore = temp;
 		loadSuccess = false;

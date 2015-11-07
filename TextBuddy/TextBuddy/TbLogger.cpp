@@ -46,8 +46,11 @@ TbLogger* TbLogger::getInstance() {
 }
 
 void TbLogger::setLogLevel(Level level) {
-	log(SYS,"Log level changed: " + std::to_string(level));
-	logLevel = level;
+	if(logLevel != level) {
+		log(SYS,"Log level changed from " + std::to_string(logLevel) + " to "+ std::to_string(level));
+		logLevel = level;
+	}
+	return;
 }
 
 void TbLogger::log(Level level, std::string message) {
@@ -57,6 +60,7 @@ void TbLogger::log(Level level, std::string message) {
 		logfile << getLocalTime() << " " << message << std::endl;
 		logfile.close();
 	}
+	return;
 }
 
 void TbLogger::clearLog() {

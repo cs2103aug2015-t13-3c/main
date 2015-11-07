@@ -54,7 +54,7 @@ enum CommandType {
 };
 
 // These are the valid View keywords
-// Count: 8
+// Count: 7
 const std::string VIEW_ALL = "all";
 const std::string VIEW_FLOATING = "floating";
 const std::string VIEW_EVENT = "events";
@@ -62,7 +62,7 @@ const std::string VIEW_TODO = "todo";
 const std::string VIEW_TODAY = "today";
 const std::string VIEW_PAST = "past";
 const std::string VIEW_WEEK = "week";
-const std::string VIEW_LABEL = "label";
+// const std::string VIEW_LABEL = "label";
 
 // These are the View enums
 // Count: 8 + VIEWTYPE_INVALID
@@ -85,6 +85,10 @@ private:
 	std::string userInput;
 
 protected:
+	static TbLogger* logger;
+	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
+	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
+
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
 
@@ -94,11 +98,8 @@ protected:
 	int currViewPos;
 	int taskStorePos;
 
-	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
-	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
-
-	bool copyView();
-	void updateView();
+	bool updateCurrView();
+	void updateViewIter();
 	void defaultView();
 
 	void initialiseIterators(int taskID);
@@ -295,7 +296,8 @@ private:
 	//== EXECUTE ==
 	ViewType view;
 	std::vector<std::string> viewLabels;
-	std::vector<std::string> viewPeriodParams;
+	std::vector<std::string> periodParams;
+	std::string periodString;
 	//==== UNDO ===
 	std::vector<Task> previousView;
 
@@ -307,7 +309,7 @@ private:
 	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
 public:
 	View(ViewType newView,std::string labels);
-	View(std::vector<std::string> viewParameters, ViewType period=VIEWTYPE_PERIOD);
+	View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period=VIEWTYPE_PERIOD);
 	~View();
 	ViewType getViewType();
 

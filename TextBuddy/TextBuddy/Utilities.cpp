@@ -41,8 +41,6 @@ CommandType Utilities::stringToCmdType(std::string str) {
 	std::ostringstream address;
 	address << (void*)&Tb::COMMAND_ADD;
 	std::string name = address.str();
-	TbLogger::getInstance()->log(SYS,"Tb::COMMAND_ADD address in Utilities: " + name);
-	TbLogger::getInstance()->log(SYS,"Test custom command: " + Tb::COMMAND_ADD);
 
 	if(equalsIgnoreCase(str, Tb::COMMAND_ADD))	{
 		cmd = ADD;
@@ -463,7 +461,6 @@ bool Utilities::containsAny(std::string words1, std::string words2) {
 	for(curr1=vecWords1.begin(); curr1!=vecWords1.end(); ++curr1) {
 		for(curr2=vecWords2.begin(); curr2!=vecWords2.end(); ++curr2) {
 			if(*curr1 == *curr2) {
-				TbLogger::getInstance()->log(DEBUG_INTERNAL,"Checking that " + *curr1 + " = " + *curr2);
 				return true;
 			}
 		}
