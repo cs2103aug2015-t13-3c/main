@@ -72,9 +72,9 @@ public:
 		// Assert::AreEqual(std::string(""),task.getLabelString());
 		// Assert::AreEqual(false,task.getDoneStatus());
 		// Assert::AreEqual(false,task.getPriorityStatus());
-		Assert::AreEqual(151107, task.getStartDate());
+		Assert::AreEqual(151114, task.getStartDate());
 		Assert::AreEqual(2000, task.getStartTime());
-		Assert::AreEqual(151107, task.getEndDate());
+		Assert::AreEqual(151114, task.getEndDate());
 		Assert::AreEqual(2000, task.getEndTime());
 
 		//===== EVENT with singleWordName, startDate and endDate =====
@@ -281,17 +281,17 @@ public:
 		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 		*/
 
-		expectedInt = 151102;
+		expectedInt = 151109;
 		userInput = "mon";
 		inputVec = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 
-		expectedInt = 151107;
+		expectedInt = 151114;
 		userInput = "this sat";
 		inputVec = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
 
-		expectedInt = 151108;
+		expectedInt = 151115;
 		userInput = "next sun";
 		inputVec = Utilities::stringToVec(userInput);
 		Assert::AreEqual(expectedInt,p->parseByDay(inputVec));
@@ -336,9 +336,9 @@ public:
 		// Assert::AreEqual(std::string(""),task.getLabelString());
 		// Assert::AreEqual(false,task.getDoneStatus());
 		// Assert::AreEqual(false,task.getPriorityStatus());
-		Assert::AreEqual(151106, task.getStartDate());
+		Assert::AreEqual(151113, task.getStartDate());
 		Assert::AreEqual(1800, task.getStartTime());
-		Assert::AreEqual(151108, task.getEndDate());
+		Assert::AreEqual(151115, task.getEndDate());
 		Assert::AreEqual(1600, task.getEndTime());
 
 		//===== (Modify) FLOATING with emptyAddLabels and setPriority =====
@@ -484,9 +484,9 @@ public:
 			*curr = *param;
 		}
 		Assert::AreEqual(std::string("lab"),*searchPhrase);
-		Assert::AreEqual(151102,Utilities::stringToInt(*startDate));
+		Assert::AreEqual(151109,Utilities::stringToInt(*startDate));
 		Assert::AreEqual(1300,Utilities::stringToInt(*startTime));
-		Assert::AreEqual(151103,Utilities::stringToInt(*endDate));
+		Assert::AreEqual(151110,Utilities::stringToInt(*endDate));
 		Assert::AreEqual(1400,Utilities::stringToInt(*endTime));
 		Assert::AreEqual(0,Utilities::stringToInt(*daysNeeded));
 		Assert::AreEqual(0,Utilities::stringToInt(*hrsNeeded));
@@ -500,9 +500,9 @@ public:
 			*curr = *param;
 		}
 		Assert::AreEqual(std::string("lecture"),*searchPhrase);
-		Assert::AreEqual(151104,Utilities::stringToInt(*startDate));
+		Assert::AreEqual(151111,Utilities::stringToInt(*startDate));
 		Assert::AreEqual(1500,Utilities::stringToInt(*startTime));
-		Assert::AreEqual(151104,Utilities::stringToInt(*endDate));
+		Assert::AreEqual(151111,Utilities::stringToInt(*endDate));
 		Assert::AreEqual(1600,Utilities::stringToInt(*endTime));
 		Assert::AreEqual(0,Utilities::stringToInt(*daysNeeded));
 		Assert::AreEqual(0,Utilities::stringToInt(*hrsNeeded));

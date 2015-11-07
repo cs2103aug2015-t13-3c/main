@@ -23,6 +23,11 @@
 #define TO " to "
 #define ON " on "
 #define AT " at "
+#define DISPLAY "display"
+#define EDIT "edit "
+#define LOAD "load "
+#define PICK "pick "
+#define REDO "redo"
 
 namespace UserInterface {
 

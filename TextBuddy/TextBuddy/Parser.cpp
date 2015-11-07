@@ -11,7 +11,7 @@ Parser::Parser() {
 	logger = TbLogger::getInstance();
 	logger->log(SYS,"Parser instantiated");
 	// logger->setLogLevel(DEBUG_INTERNAL);
-	logger->setLogLevel(DEBUG);
+	// logger->setLogLevel(DEBUG);
 }
 
 Parser::~Parser() {
@@ -108,10 +108,16 @@ Command* Parser::parse(std::string userInput) {
 				log(WARN,"No fields to modify: " + restOfInput);
 				throw std::runtime_error("No fields to modify!");
 		}
+		
 		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-		std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
-		Task* tempTaskPtr = parseTask(tempTaskString);
-		cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
+		if(Utilities::containsAny(tempTaskString,"float floating")) {
+			bool isSetFloating = true;
+			cmd = new Modify(modifyID,isSetFloating);
+		} else {
+			std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
+			Task* tempTaskPtr = parseTask(tempTaskString);
+			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
+		}
 		break;}
 
 	case PICK: {

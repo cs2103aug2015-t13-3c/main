@@ -69,10 +69,9 @@ std::string Logic::processCommand(std::string userCommand) {
 }
 
 void Logic::subscribe(std::vector<DisplayedTask>* tasks) {
-
-						  assert(updater == nullptr);
-						  updater = new Update(tasks,currentView);
-						  updater->update();
+	assert(updater == nullptr);
+	updater = new Update(tasks,currentView);
+	updater->update();
 }
 
 DisplayMode Logic::getMode() {
@@ -114,4 +113,3 @@ void Logic::setPastMode() {
 void Logic::resetUpdaterNULL() {
 	updater = nullptr;
 }
-

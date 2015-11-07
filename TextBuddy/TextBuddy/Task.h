@@ -126,7 +126,7 @@ public:
 	int getReserveEndTime();
 	bool getReserveStatus();
 
-	std::string getDate_UI();
+	std::string getDisplayDate();
 	std::string getDisplayTime();
 
 	// Setters, return true if successful
@@ -149,6 +149,7 @@ public:
 	bool setStartTime(int newStartTime);
 	bool setEndDate(int newEndDate);
 	bool setEndTime(int newEndTime);
+	void resetDatesAndTimes();
 
 	void setReserveType(TaskType newType);
 	void addReserveStartDate(int newReservation);
