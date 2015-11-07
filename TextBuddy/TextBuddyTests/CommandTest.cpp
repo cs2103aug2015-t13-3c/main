@@ -978,7 +978,10 @@ public:
 		userInput = "add Recursion Lecture on 1 dec by 2 pm";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getTaskStore().back();
+		userInput = "view all";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getCurrentView().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());
@@ -1008,7 +1011,10 @@ public:
 		userInput = "add Recursion Lecture on 1 dec by 2 pm reserve on 3 dec from 4 pm to 5 pm";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getTaskStore().back();
+		userInput = "view all";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getCurrentView().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());

@@ -110,7 +110,9 @@ protected:
 	bool isDateLogical(Task task);
 
 	void sortFloating(std::vector<Task> &taskVector);
+	void sortEvent(std::vector<Task> &taskVector);
 	void sortPriority(std::vector<Task> &taskVector);
+	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
 	void removeTaskType(std::vector<Task> &taskVector, TaskType type);
@@ -307,7 +309,7 @@ private:
 	bool viewDone();
 	bool viewToday();
 	bool viewLabel(std::vector<std::string> label);
-	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
+	
 public:
 	View(ViewType newView,std::string labels);
 	View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period=VIEWTYPE_PERIOD);

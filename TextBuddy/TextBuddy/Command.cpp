@@ -141,6 +141,34 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 	}
 }
 
+// Sorts Event tasks to be at the top
+void Command::sortEvent(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
+	Task tempTask;
+
+	// In-place sorting
+	i = taskVector.end()-1;	// Points to start of unsorted part
+	k = taskVector.begin();	// Points to end of unsorted part
+	while(i > k) {
+		if(i->getType() == EVENT) {
+			tempTask = *i;
+			for (j = i; j != taskVector.begin(); ++j) {
+				std::swap(*j, *(j-1)); 
+			}
+			*j = tempTask;
+			if(k == taskVector.end()) {
+				break;
+			} else {
+				++k;
+			}
+		} else {
+			--i;
+		}
+	}
+}
+
 // Sorts priority tasks to be at the top
 void Command::sortPriority(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
@@ -161,6 +189,38 @@ void Command::sortPriority(std::vector<Task> &taskVector) {
 			}
 		}
 		++i;
+	}
+}
+
+void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> weekStore;
+	currentView.clear();
+	weekStore = taskStore;
+	sortDate(weekStore);
+	removeDoneTasks(weekStore);
+	std::vector<Task>::iterator iter = weekStore.begin();
+
+	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
+		if(iter->getType() == FLOATING) {
+			currentView.push_back(*iter);
+		} else {
+			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
+				currentView.push_back(*iter);
+			}
+
+			// If date is the same, further filter using time in the date
+			if (iter->getStartDate() == startDate) {
+				if (iter->getStartTime() >= startTime) {
+					currentView.push_back(*iter);
+				}
+			}
+
+			if (iter->getStartDate() == endDate) {
+				if (iter->getStartTime() <= endTime) {
+					currentView.push_back(*iter);				
+				}
+			}
+		}
 	}
 }
 
@@ -241,11 +301,14 @@ void Command::updateViewIter() {
 	return;
 }
 
-// Switch back to default view: DISPLAY_ALL
+// Switch back to default view:
+// Shows only uncompleted items from today, tomorrow and the day after
+// Tasks are shown in the following order: Events, Todo, Float
 void Command::defaultView() {
 	sortDate(taskStore);
-	updateCurrView();
-	removeDoneTasks(currentView);
+	int today = Utilities::getLocalDay() + Utilities::getLocalMonth()*100 + Utilities::getLocalYear()*10000;
+	// TODO: Handle dates at end of month
+	viewPeriod(today,0,today+2,2400);
 	return;
 }
 
@@ -667,7 +730,7 @@ void Pick::execute() {
 	doPick();
 	Task::lastEditID = originalTask.getID();
 	logger->log(DEBUG,"Pick executed");
-	defaultView();
+	//defaultView();
 	initialiseIterators(modifyID);
 }
 
@@ -675,7 +738,7 @@ void Pick::undo() {
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
-	defaultView();
+	//defaultView();
 }
 
 std::string Pick::getMessage() {
@@ -1121,34 +1184,6 @@ bool View::viewLabel(std::vector<std::string> label) {
 
 	removeDoneTasks(currentView);	// Display done tasks only when viewing "all" and "past" (Aaron)
 	return true;
-}
-
-void View::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
-	std::vector<Task> weekStore;
-	currentView.clear();
-	weekStore = taskStore;
-	sortDate(weekStore);
-	removeDoneTasks(weekStore);
-	std::vector<Task>::iterator iter = weekStore.begin();
-
-	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
-		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
-			currentView.push_back(*iter);
-		}
-
-		// If date is the same, further filter using time in the date
-		if (iter->getStartDate() == startDate) {
-			if (iter->getStartTime() >= startTime) {
-				currentView.push_back(*iter);
-			}
-		}
-
-		if (iter->getStartDate() == endDate) {
-			if (iter->getStartTime() <= endTime) {
-				currentView.push_back(*iter);				
-			}
-		}
-	}
 }
 
 //==================================================
