@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -18,19 +18,19 @@
     <ClCompile Include="TextBuddyUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="timer.cpp">
+    <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="highlight.cpp">
+    <ClCompile Include="Highlight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="execute.cpp">
+    <ClCompile Include="Execute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyPress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DropDown.cpp">
+    <ClCompile Include="Dropdown.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CommandHistory.cpp">

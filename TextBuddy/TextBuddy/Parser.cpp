@@ -10,8 +10,8 @@ Parser* Parser::theOne = nullptr;
 Parser::Parser() {
 	logger = TbLogger::getInstance();
 	logger->log(SYS,"Parser instantiated");
-	logger->setLogLevel(DEBUG_INTERNAL);
-	// logger->setLogLevel(DEBUG);
+	// logger->setLogLevel(DEBUG_INTERNAL);
+	logger->setLogLevel(DEBUG);
 }
 
 Parser::~Parser() {
@@ -171,9 +171,10 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case VIEW: {
-		if(isPowerSearchFormat(restOfInput)) {
+		log(DEBUG_INTERNAL,"View option: " + restOfInput);
+		if(restOfInput!="" && isPowerSearchKeywords(restOfInput)) {
 			std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
-			cmd = new View(searchParameters);
+			cmd = new View(searchParameters,restOfInput);
 		} else {
 			ViewType newView = Utilities::stringToViewType(restOfInput);
 			cmd = new View(newView,restOfInput);
@@ -322,6 +323,9 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 			if((newDate = parseDate(inputString)) != INVALID_DATE_FORMAT) {
 				endDate = newDate;
 			} else if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+				if(endDate == DATE_NOT_SET) {
+					endDate = startDate;
+				}
 				endTime = newTime;
 			}
 
@@ -377,7 +381,8 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 	}
 
 	if(endDate < startDate) {
-		endDate = endDate + 10000; // Set end date as next year
+		// Set end date as next year
+		endDate = endDate + 10000;
 	}
 
 	if(startDate == DATE_NOT_SET) {
@@ -387,7 +392,7 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 		endDate = parseByDay(Utilities::stringToVec("today"));
 	}
 	if(startTime == TIME_NOT_SET) {
-		startTime = 0;
+		// startTime = 0;
 	}
 	if(endTime == TIME_NOT_SET) {
 		endTime = 2359;
@@ -549,7 +554,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 
 // Processes times in these formats:
 // - HH    AM/PM (default: assume AM)
-// - HH.MM AM/PM (default: assume AM) // TODO: Does not read minutes yet
+// - HH.MM AM/PM (default: assume AM)
 // - HHMM        (24-hour)
 int Parser::parseTime(std::vector<std::string> timeString) {
 	int time;
@@ -886,9 +891,7 @@ bool Parser::isPowerSearchKeywords(std::string str) {
 //		e.g. search                   from   8 am        to 2 pm for 1 h 
 bool Parser::isPowerSearchFormat(std::string searchStrings) {
 	assert(searchStrings!="");
-	std::vector<std::string> vecWords = Utilities::stringToVec(searchStrings);
-	std::string powerSearchKeywords = "from to at on before after for";
-	std::string searchPhrase = *(vecWords.begin());
+	std::string searchPhrase = Utilities::getFirstWord(searchStrings);
 
 	if(isPowerSearchKeywords(searchStrings)) {
 		if(!isPowerSearchKeywords(searchPhrase)) {
@@ -948,7 +951,6 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 	return fields;
 }
 
-// TODO: Remove actual keywords
 std::vector<std::string> Parser::removeSlashKeywords(std::vector<std::string> vecString) {
 	std::vector<std::string>::iterator curr;
 	std::string subString;

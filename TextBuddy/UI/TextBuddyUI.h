@@ -69,15 +69,6 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
 
-
-
-
-
-
-
-
-
-
 	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
@@ -435,7 +426,6 @@ namespace UserInterface {
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->display))->EndInit();
 				 this->ResumeLayout(false);
 				 this->PerformLayout();
-
 			 }
 
 #pragma endregion
@@ -461,9 +451,11 @@ namespace UserInterface {
 		System::Collections::Generic::List<String^>^ inputHistory;
 		System::Collections::Generic::List<String^>^ keywords;
 		System::Collections::Generic::List<String^>^ addCommands;
-		System::Collections::Generic::List<String^>^ modifyCommands;
-		System::Collections::Generic::List<String^>^ viewCommands;
+		System::Collections::Generic::List<String^>^ modifyCommands;		
+		System::Collections::Generic::List<String^>^ loadCommands;
+		System::Collections::Generic::List<String^>^ pickCommands;
 		System::Collections::Generic::List<String^>^ searchCommands;
+		System::Collections::Generic::List<String^>^ viewCommands;
 
 		// To be subscribed
 		std::vector<DisplayedTask>* tasks;
@@ -498,7 +490,7 @@ namespace UserInterface {
 		-Label
 		-Date/Time
 		=====================================================================*/
-		
+
 		void printFeedBackMessage(std::string message);
 
 		void commandAutoComplete();
@@ -520,5 +512,5 @@ namespace UserInterface {
 		void addCommandHistory();
 		void toPreviousCommand();
 		void toNextCommand();
-};
+	};
 }
