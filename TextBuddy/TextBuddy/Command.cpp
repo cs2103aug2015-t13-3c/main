@@ -720,7 +720,7 @@ std::string Search::getSearchPhrase() {
 void Search::execute() {
 	std::string output;
 	if (Utilities::isSubstring("*", searchPhrase) || Utilities::isSubstring("+", searchPhrase) ||
-		Utilities::isSubstring("?", searchPhrase)) { 
+		Utilities::isSubstring("?", searchPhrase) || Utilities::isSubstring(".", searchPhrase)) { 
 			output = doRegexSearch();
 	} else {
 		output = doSearch();
@@ -734,7 +734,7 @@ void Search::undo() {
 }
 
 std::string Search::getMessage() {
-	return "results for \"" + searchPhrase;
+	return "results for \"" + searchPhrase + "\"";
 }
 
 //================ SEARCH : PRIVATE METHODS =================
