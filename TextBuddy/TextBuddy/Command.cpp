@@ -542,6 +542,7 @@ void Modify::doModify() {
 			break;
 		case TODO_TIME:
 			isTODO = true;
+			isEndTimeSet = true;
 			taskStoreIter->setEndTime(tempTask.getEndTime());
 			// taskStoreIter->setStartTime(tempTask.getStartTime());
 			break;
@@ -579,7 +580,7 @@ void Modify::doModify() {
 		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
 		if (isStartTimeSet) {
 			taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
-		} else {
+		} else if (isEndTimeSet) {
 			taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
 		}
 	}
@@ -748,7 +749,7 @@ std::string Search::doSearch() {
 
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
 		taskName = iter->getName();
-		for(curr=tokens.begin(); curr!=tokens.end(); curr++) {
+		for(curr=tokens.begin(); curr!=tokens.end(); ++curr) {
 			if(!Utilities::isSubstring(*curr,taskName)) {
 				isMatch = false;
 			}
@@ -901,6 +902,12 @@ View::View(ViewType newView, std::string restOfInput) : Command(VIEW) {
 	previousView = currentView;
 }
 
+View::View(std::vector<std::string> viewParameters, ViewType period) : Command(VIEW) {
+	view = VIEWTYPE_PERIOD;
+	viewPeriodParams = viewParameters;
+	previousView = currentView;
+}
+
 View::~View() {}
 
 ViewType View::getViewType() {
@@ -959,8 +966,7 @@ void View::execute() {
 				weekDate += 100 - 28;
 			}
 		}
-
-		viewWeek(currentDate, 0, weekDate, 2359);
+		viewPeriod(currentDate, 0, weekDate, 2359);
 		Logic::setWeekMode();
 		break; }
 	case VIEWTYPE_LABELS:
@@ -971,6 +977,14 @@ void View::execute() {
 		viewToday();
 		Logic::setTodayMode();
 		break;
+	case VIEWTYPE_PERIOD: {
+		int startDate = Utilities::stringToInt(viewPeriodParams[1]);
+		int startTime = Utilities::stringToInt(viewPeriodParams[2]);
+		int endDate = Utilities::stringToInt(viewPeriodParams[3]);
+		int endTime = Utilities::stringToInt(viewPeriodParams[4]);
+		viewPeriod(startDate, startTime, endDate, endTime);
+		Logic::setEventsMode();
+		break;}
 	case VIEWTYPE_INVALID:
 		break;
 	}
@@ -1066,7 +1080,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 	return true;
 }
 
-void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
+void View::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task> weekStore;
 	currentView.clear();
 	weekStore = taskStore;

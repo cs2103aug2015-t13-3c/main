@@ -74,6 +74,7 @@ enum ViewType {
 	VIEWTYPE_TODAY,
 	VIEWTYPE_PAST,
 	VIEWTYPE_WEEK,
+	VIEWTYPE_PERIOD,
 	VIEWTYPE_LABELS,
 	VIEWTYPE_INVALID
 };
@@ -293,6 +294,7 @@ private:
 	//== EXECUTE ==
 	ViewType view;
 	std::vector<std::string> viewLabels;
+	std::vector<std::string> viewPeriodParams;
 	//==== UNDO ===
 	std::vector<Task> previousView;
 
@@ -301,9 +303,10 @@ private:
 	bool viewDone();
 	bool viewToday();
 	bool viewLabel(std::vector<std::string> label);
-	void viewWeek(int startDate, int EndDate, int StartTime, int EndTime);
+	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
 public:
 	View(ViewType newView,std::string labels);
+	View(std::vector<std::string> viewParameters, ViewType period=VIEWTYPE_PERIOD);
 	~View();
 	ViewType getViewType();
 
