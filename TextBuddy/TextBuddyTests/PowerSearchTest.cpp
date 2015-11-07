@@ -157,12 +157,6 @@ public:
 		++iter;
 		Assert::AreEqual(151016, iter->getStartDate());
 		Assert::AreEqual(2000, iter->getStartTime());
-		Assert::AreEqual(151017, iter->getEndDate());
-		Assert::AreEqual(800, iter->getEndTime());
-
-		++iter;
-		Assert::AreEqual(151017, iter->getStartDate());
-		Assert::AreEqual(800, iter->getStartTime());
 		Assert::AreEqual(151019, iter->getEndDate());
 		Assert::AreEqual(900, iter->getEndTime());
 	}
