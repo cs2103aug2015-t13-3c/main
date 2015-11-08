@@ -65,11 +65,10 @@ public:
 	static IO* getInstance();
 	~IO();
 	std::string getFilePath();
-	bool setFilePath(std::string newFilePath, std::vector<Task> taskVector);
+	bool setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile=true);
 
-	std::vector<Task> loadFile(std::string fileName);
-	bool saveFile(std::string fileName, std::vector<Task> taskVector);
-	// bool changeSourceFileLocation (std::string newFileLocation);
+	std::vector<Task> loadFile(std::string fileName, bool isOverwriteLoadFile=true);
+	bool saveFile(std::string filePath, std::vector<Task> taskVector);
 
 	//========== Getter for Testing ==========
 	std::vector<std::string> getText(std::string fileName);

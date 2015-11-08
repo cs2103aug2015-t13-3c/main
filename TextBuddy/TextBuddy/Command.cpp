@@ -1,6 +1,6 @@
 // Created and maintained by Aaron Chong Jun Hao
 // Private methods originally by Chin Kiat Boon
-// Modified to Command Pattern by Ng Ren Zhi @@author A0130463R
+// Converted to Command Pattern by Ng Ren Zhi @@author A0130463R
 
 #include "stdafx.h"
 #include "History.h"
@@ -717,56 +717,6 @@ currentView.insert(preCurrViewIter, tempTask);
 }
 */
 
-// Aaron Chong @@author A0110376N
-
-//==================================================
-//                       PICK
-//==================================================
-
-//============= PICK : PUBLIC METHODS ============
-
-Pick::Pick(int taskID, bool isPick) : Modify(PICK) {
-	modifyID = taskID;
-	pickReserve = isPick;
-}
-
-Pick::~Pick() {}
-
-void Pick::execute() {
-	initialiseIterators(modifyID);
-	originalTask = *currViewIter;
-	doPick();
-	Task::lastEditID = originalTask.getID();
-	logger->log(DEBUG,"Pick executed");
-	//defaultView();
-	initialiseIterators(modifyID);
-}
-
-void Pick::undo() {
-	*taskStoreIter = originalTask;
-	*currViewIter = originalTask;
-	Task::lastEditID = originalTask.getID();
-	//defaultView();
-}
-
-std::string Pick::getMessage() {
-	return "successfully picked!";
-}
-
-//============= PICK : PRIVATE METHODS ===========
-
-void Pick::doPick() {
-	if(pickReserve) {
-		if(taskStoreIter->getReserveStatus() == true) {
-			taskStoreIter->pickReserve();
-		}
-	}
-	taskStoreIter->clearReserve();
-
-	updateTaskTypes();
-	return;
-}
-
 // Chin Kiat Boon @@author A0096720A
 
 //==================================================
@@ -1065,18 +1015,18 @@ void View::execute() {
 			((weekDate%10000)/100) == 8 || 
 			((weekDate%10000)/100) == 10 || 
 			((weekDate%10000)/100) == 12) {
-				if(weekDate%10 > 31) {
+				if(weekDate%100 > 31) {
 					weekDate += 100 - 31;
 				}
 		} else if (((weekDate%10000)/100) == 4 || 
 			((weekDate%10000)/100) == 6 || 
 			((weekDate%10000)/100) == 9 || 
 			((weekDate%10000)/100) == 11) {
-				if(weekDate%10 > 30) {
+				if(weekDate%100 > 30) {
 					weekDate += 100 - 30;
 				}
 		} else if (((weekDate%10000)/100) == 2) {
-			if(weekDate%10 > 28) {
+			if(weekDate%100 > 28) {
 				weekDate += 100 - 28;
 			}
 		}
@@ -1145,7 +1095,7 @@ bool View::viewTaskType(TaskType type) {
 	}
 
 	sortDate(currentView);
-	removeDoneTasks(currentView);		// Done tasks only displayed when viewing "all" or "past" (Aaron)
+	removeDoneTasks(currentView);
 	return true;
 }
 
@@ -1193,7 +1143,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 		}
 	}
 
-	removeDoneTasks(currentView);	// Display done tasks only when viewing "all" and "past" (Aaron)
+	removeDoneTasks(currentView);
 	return true;
 }
 
@@ -1288,6 +1238,56 @@ void Redo::execute() {
 	History::getInstance()->redo();
 }
 
+// Aaron Chong @@author A0110376N
+
+//==================================================
+//                       PICK
+//==================================================
+
+//============= PICK : PUBLIC METHODS ============
+
+Pick::Pick(int taskID, bool isPick) : Modify(PICK) {
+	modifyID = taskID;
+	pickReserve = isPick;
+}
+
+Pick::~Pick() {}
+
+void Pick::execute() {
+	initialiseIterators(modifyID);
+	originalTask = *currViewIter;
+	doPick();
+	Task::lastEditID = originalTask.getID();
+	logger->log(DEBUG,"Pick executed");
+	//defaultView();
+	initialiseIterators(modifyID);
+}
+
+void Pick::undo() {
+	*taskStoreIter = originalTask;
+	*currViewIter = originalTask;
+	Task::lastEditID = originalTask.getID();
+	//defaultView();
+}
+
+std::string Pick::getMessage() {
+	return "successfully picked!";
+}
+
+//============= PICK : PRIVATE METHODS ===========
+
+void Pick::doPick() {
+	if(pickReserve) {
+		if(taskStoreIter->getReserveStatus() == true) {
+			taskStoreIter->pickReserve();
+		}
+	}
+	taskStoreIter->clearReserve();
+
+	updateTaskTypes();
+	return;
+}
+
 //==================================================
 //                        LOAD
 //==================================================
@@ -1299,9 +1299,10 @@ Load::Load() : Command(LOAD) {
 }
 
 // Load new file path, which is already parsed
-Load::Load(std::string newFilePath) : Command(LOAD) {
+Load::Load(std::string newFilePath, bool isOverwriteFile) : Command(LOAD) {
 	filePath = newFilePath;
 	loadSuccess = true;
+	isOverwriteLoadFile = isOverwriteFile;
 }
 
 Load::~Load() {}
@@ -1313,8 +1314,8 @@ std::string Load::getFilePath() {
 void Load::execute() {
 	std::vector<Task> temp = taskStore;
 	try {
-		taskStore = io->loadFile(filePath);		// Exception thrown if file does not exist
-		History::getInstance()->clearHistory(); // Clear history after load, to avoid seg fault
+		taskStore = io->loadFile(filePath,isOverwriteLoadFile); // Exception thrown if file does not exist
+		History::getInstance()->clearHistory();				 // Clear history after load, to avoid seg fault
 		updateCurrView();
 	} catch (std::exception e) {
 		taskStore = temp;
@@ -1342,8 +1343,9 @@ Save::Save() : Command(SAVE) {
 }
 
 // Save to new file path, which is already parsed
-Save::Save(std::string newFilePath) : Command(SAVE) {
+Save::Save(std::string newFilePath, bool isDeletePrevFile) : Command(SAVE) {
 	filePath = newFilePath;
+	isRemovePrevFile = isDeletePrevFile;
 }
 
 Save::~Save() {}
@@ -1353,7 +1355,7 @@ std::string Save::getFilePath() {
 }
 
 void Save::execute() {
-	saveSuccess = io->setFilePath(filePath,taskStore); // Returns false if unable to change file path
+	saveSuccess = io->setFilePath(filePath,taskStore,isRemovePrevFile);
 }
 
 std::string Save::getMessage() {

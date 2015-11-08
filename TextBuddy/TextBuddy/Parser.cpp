@@ -83,7 +83,7 @@ Command* Parser::parse(std::string userInput) {
 
 	switch(cmdType) {
 	case ADD: {
-		if(restOfInput=="") {
+		if(restOfInput == "") {
 			log(WARN,"No task to add: " + restOfInput);
 			throw std::runtime_error("No task to add!");
 		}
@@ -104,12 +104,15 @@ Command* Parser::parse(std::string userInput) {
 	case MODIFY: {
 		std::string tempTaskString;
 		if(restOfInput == "" ||
-			(tempTaskString = Utilities::removeFirstWord(restOfInput)) == "") {
+			((tempTaskString=Utilities::removeFirstWord(restOfInput)) == "") && Task::lastEditID == 0) {
 				log(WARN,"No fields to modify: " + restOfInput);
 				throw std::runtime_error("No fields to modify!");
 		}
-		
+
 		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+		if(modifyID == 0 && Task::lastEditID != 0) {
+			tempTaskString = restOfInput;
+		}
 		if(Utilities::containsAny(tempTaskString,"float floating")) {
 			bool isSetFloating = true;
 			cmd = new Modify(modifyID,isSetFloating);
@@ -136,7 +139,7 @@ Command* Parser::parse(std::string userInput) {
 
 	case POWERSEARCH:
 	case SEARCH: {
-		if(restOfInput=="") {
+		if(restOfInput == "") {
 			log(WARN,"No search phrase: " + restOfInput);
 			throw std::runtime_error("No search phrase!");
 
@@ -196,21 +199,30 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case LOAD: {
-		if(restOfInput=="") {
+		if(restOfInput == "") {
 			log(WARN,"No file path specified: " + restOfInput);
 			throw std::runtime_error("No file path specified!");
 		}
-		std::string newFileName = parseFileName(restOfInput);
-		cmd = new Load(parseFileName(newFileName));
+		bool isOverwriteFile = true;
+		if(Utilities::containsAny(Utilities::getFirstWord(restOfInput),"from")) {
+			isOverwriteFile = false;
+			restOfInput = Utilities::removeFirstWord(restOfInput);
+		}
+		cmd = new Load(parseFileName(restOfInput),isOverwriteFile);
 		break;}
 
-	case SAVE:
-		if(restOfInput=="") {
+	case SAVE: {
+		if(restOfInput == "") {
 			log(WARN,"No file path specified: " + restOfInput);
 			throw std::runtime_error("No file path specified!");
 		}
-		cmd = new Save(parseFileName(restOfInput));
-		break;
+		bool isDeletePrevFile = true;
+		if(Utilities::containsAny(Utilities::getFirstWord(restOfInput),"as to")) {
+			isDeletePrevFile = false;
+			restOfInput = Utilities::removeFirstWord(restOfInput);
+		}
+		cmd = new Save(parseFileName(restOfInput),isDeletePrevFile);
+		break;}
 
 	case EXIT:
 		cmd = new Exit;

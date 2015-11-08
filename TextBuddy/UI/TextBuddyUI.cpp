@@ -52,6 +52,7 @@ TextBuddyUI::TextBuddyUI() {
 	keywords->Add(DISPLAY);
 	keywords->Add(EDIT);
 	keywords->Add(LOAD);
+	keywords->Add(NOTDONE);
 	keywords->Add(PICK);
 	keywords->Add(REDO);
 	keywords->Add(FROM);
@@ -119,6 +120,18 @@ TextBuddyUI::TextBuddyUI() {
 	pickCommands->Add("pick <ID> reserve");
 	// add here...
 
+	//********** LOAD command formats *****************
+	loadCommands = gcnew List<String^>();
+	loadCommands->Add("load <FILEPATH>");
+	loadCommands->Add("load from <FILEPATH>");
+	// add here...
+
+	//********** SAVE command formats *****************
+	saveCommands = gcnew List<String^>();
+	saveCommands->Add("save <FILEPATH>");
+	saveCommands->Add("save to <FILEPATH>");
+	// add here...
+
 	suggestions = gcnew Hashtable();
 	suggestions->Add(HELP,HELP);
 	suggestions->Add(QUIT,QUIT);
@@ -126,12 +139,9 @@ TextBuddyUI::TextBuddyUI() {
 	suggestions->Add(DISPLAY,DISPLAY);
 	suggestions->Add(UNDO,UNDO);
 	suggestions->Add(REDO,REDO);
-
 	suggestions->Add(DEL,"delete <ID>");
 	suggestions->Add(DONE,"done <ID>");
-	// suggestions->Add("notdone ","notdone <ID>");
-	suggestions->Add(LOAD,"load <FILEPATH>");
-	suggestions->Add(SAVE,"save <FILEPATH>");
+	suggestions->Add(NOTDONE,"notdone <ID>");
 
 	suggestions->Add(ADD,addCommands);
 	suggestions->Add(MODIFY,modifyCommands);
@@ -139,6 +149,8 @@ TextBuddyUI::TextBuddyUI() {
 	suggestions->Add(PICK,pickCommands);
 	suggestions->Add(SEARCH,searchCommands);
 	suggestions->Add(VIEW,viewCommands);
+	suggestions->Add(LOAD,loadCommands);
+	suggestions->Add(SAVE,saveCommands);
 }
 
 TextBuddyUI::~TextBuddyUI() {

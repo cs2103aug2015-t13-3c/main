@@ -1,5 +1,5 @@
 // Created and maintained by Aaron Chong Jun Hao @@author A0110376N
-// Modified to Command Pattern by Ng Ren Zhi
+// Converted to Command Pattern by Ng Ren Zhi
 
 #ifndef COMMAND_H_
 #define COMMAND_H_
@@ -216,26 +216,6 @@ public:
 	std::string getMessage();
 };
 
-class Pick: public Modify {
-private:
-	//== EXECUTE ==
-	int modifyID; // ID on GUI, not taskID
-	bool pickReserve;
-	//==== UNDO ===
-	Task originalTask;
-	int prevCurrPos;
-
-	void doPick();
-
-public:
-	Pick(int taskID, bool isPick);
-	~Pick();
-
-	void execute();
-	void undo();
-	std::string getMessage();
-};
-
 class Search: public Command {
 private:
 	//== EXECUTE ==
@@ -370,15 +350,36 @@ public:
 	void execute();
 };
 
+class Pick: public Modify {
+private:
+	//== EXECUTE ==
+	int modifyID; // ID on GUI, not taskID
+	bool pickReserve;
+	//==== UNDO ===
+	Task originalTask;
+	int prevCurrPos;
+
+	void doPick();
+
+public:
+	Pick(int taskID, bool isPick);
+	~Pick();
+
+	void execute();
+	void undo();
+	std::string getMessage();
+};
+
 class Load: public Command {
 private:
 	IO* io;
 	std::string filePath;
 	bool loadSuccess;
+	bool isOverwriteLoadFile;
 
 public:
 	Load();
-	Load(std::string Load);
+	Load(std::string Load,bool isOverwriteFile=true);
 	~Load();
 	std::string getFilePath();
 
@@ -392,10 +393,11 @@ private:
 	IO* io;
 	std::string filePath;
 	bool saveSuccess;
+	bool isRemovePrevFile;
 
 public:
 	Save();
-	Save(std::string filePath);	
+	Save(std::string filePath, bool isDeletePrevFile=true);
 	~Save();
 	std::string getFilePath();
 
