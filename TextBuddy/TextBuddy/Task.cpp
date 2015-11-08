@@ -88,45 +88,45 @@ TaskType Task::getReserveType() {
 }
 
 int Task::getReserveStartDate() {
-	if(reserveStartDate.size() == 0) {
-		TbLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveStartDate: " + std::to_string(DATE_NOT_SET));
+	if (reserveStartDate.size() == 0) {
+		TsLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveStartDate: " + std::to_string(DATE_NOT_SET));
 		return DATE_NOT_SET;
 	}
 	int date = *(reserveStartDate.begin());
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartDate: " + std::to_string(date));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartDate: " + std::to_string(date));
 	return date;
 }
 
 int Task::getReserveStartTime() {
-	if(reserveStartTime.size() == 0) {
+	if (reserveStartTime.size() == 0) {
 		return TIME_NOT_SET;
 	}
 	int time = *(reserveStartTime.begin());
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartTime: " + std::to_string(time));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartTime: " + std::to_string(time));
 	return time;
 }
 
 int Task::getReserveEndDate() {
-	if(reserveEndDate.size() == 0) {
-		TbLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveEndDate: " + std::to_string(DATE_NOT_SET));
+	if (reserveEndDate.size() == 0) {
+		TsLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveEndDate: " + std::to_string(DATE_NOT_SET));
 		return DATE_NOT_SET;
 	}
 	int date = *(reserveEndDate.begin());
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndDate: " + std::to_string(date));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndDate: " + std::to_string(date));
 	return date;
 }
 
 int Task::getReserveEndTime() {
-	if(reserveEndTime.size() == 0) {
+	if (reserveEndTime.size() == 0) {
 		return TIME_NOT_SET;
 	}
 	int time = *(reserveEndTime.begin());
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndTime: " + std::to_string(time));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndTime: " + std::to_string(time));
 	return time;
 }
 
 bool Task::getReserveStatus() {
-	if(    reserveStartDate.size() != 0
+	if (    reserveStartDate.size() != 0
 		&& reserveStartTime.size() != 0
 		&& reserveEndDate.size()   != 0
 		&& reserveEndTime.size()   != 0) {
@@ -142,29 +142,29 @@ void Task::setReserveType(TaskType newType) {
 
 void Task::addReserveStartDate(int newReservation) {
 	reserveStartDate.clear();
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartDate: " + std::to_string(newReservation));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartDate: " + std::to_string(newReservation));
 	reserveStartDate.insert(newReservation);
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Successfully set reserveStartDate");
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Successfully set reserveStartDate");
 	return;
 }
 
 void Task::addReserveStartTime(int newReservation) {
 	reserveStartTime.clear();
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartTime: " + std::to_string(newReservation));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartTime: " + std::to_string(newReservation));
 	reserveStartTime.insert(newReservation);
 	return;
 }
 
 void Task::addReserveEndDate(int newReservation) {
 	reserveEndDate.clear();
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndDate: " + std::to_string(newReservation));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndDate: " + std::to_string(newReservation));
 	reserveEndDate.insert(newReservation);
 	return;
 }
 
 void Task::addReserveEndTime(int newReservation) {
 	reserveEndTime.clear();
-	TbLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndTime: " + std::to_string(newReservation));
+	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndTime: " + std::to_string(newReservation));
 	reserveEndTime.insert(newReservation);
 	return;
 }
@@ -188,7 +188,7 @@ void Task::clearReserve() {
 std::vector<std::string> Task::getLabels() {
 	std::vector<std::string> labelVector;
 	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
+	while (i != labels.end()) {
 		labelVector.push_back(*i);
 		++i;
 	}
@@ -198,11 +198,11 @@ std::vector<std::string> Task::getLabels() {
 std::string Task::getLabelString() {
 	std::string label;
 	std::set<std::string>::iterator i = labels.begin();
-	while(i != labels.end()) {
+	while (i != labels.end()) {
 		label = label + *i + " ";
 		++i;
 	}
-	if(!label.empty()) {
+	if (!label.empty()) {
 		label.pop_back();
 	}
 	return label;
@@ -210,11 +210,11 @@ std::string Task::getLabelString() {
 
 std::string Task::getDisplayDate() {
 	std::string date;
-	if(startDate == DATE_NOT_SET) {
+	if (startDate == DATE_NOT_SET) {
 		date = "";
-	} else if(startDate == endDate) {
+	} else if (startDate == endDate) {
 		date = Utilities::toDisplayDate(startDate);
-	} else if(startDate != endDate) {
+	} else if (startDate != endDate) {
 		date = Utilities::toDisplayDate(startDate) + " - " + Utilities::toDisplayDate(endDate);
 	}
 	return date;
@@ -222,11 +222,11 @@ std::string Task::getDisplayDate() {
 
 std::string Task::getDisplayTime() {
 	std::string time;
-	if(endTime == TIME_NOT_SET) {
+	if (endTime == TIME_NOT_SET) {
 		time = "";
-	} else if(startTime == TIME_NOT_SET || startTime == endTime) {
+	} else if (startTime == TIME_NOT_SET || startTime == endTime) {
 		time = Utilities::toDisplayTime(endTime);
-	} else if(startTime != endTime) {
+	} else if (startTime != endTime) {
 		time = Utilities::toDisplayTime(startTime) + " - " + Utilities::toDisplayTime(endTime);;
 	}
 	return time;
@@ -252,7 +252,7 @@ bool Task::setID(int newID) {
 
 bool Task::addLabels(std::vector<std::string> newLabels) {
 	std::vector<std::string>::iterator curr;
-	for(curr=newLabels.begin(); curr!=newLabels.end(); ++curr) {
+	for (curr=newLabels.begin(); curr!=newLabels.end(); ++curr) {
 		labels.insert(*curr);
 	}
 	return true;
@@ -261,11 +261,11 @@ bool Task::addLabels(std::vector<std::string> newLabels) {
 bool Task::deleteLabels(std::vector<std::string> badLabels) {
 	std::vector<std::string>::iterator badCurr;
 	std::set<std::string>::iterator labelsCurr;
-	for(badCurr=badLabels.begin(); badCurr!=badLabels.end(); ++badCurr) {
-		for(labelsCurr=labels.begin();labelsCurr!=labels.end(); ++labelsCurr) {
-			if(Utilities::equalsIgnoreCase(*badCurr,*labelsCurr)) {
+	for (badCurr=badLabels.begin(); badCurr!=badLabels.end(); ++badCurr) {
+		for (labelsCurr=labels.begin();labelsCurr!=labels.end(); ++labelsCurr) {
+			if (Utilities::equalsIgnoreCase(*badCurr,*labelsCurr)) {
 				labelsCurr = labels.erase(labelsCurr);
-				if(labelsCurr == labels.end()) {
+				if (labelsCurr == labels.end()) {
 					break;
 				}
 			}
@@ -280,7 +280,7 @@ bool Task::setLabelsToDelete(std::vector<std::string> oldLabels) {
 }
 
 bool Task::clearLabels() {
-	if(labels.size() == 0) {
+	if (labels.size() == 0) {
 		return false;
 	}
 	labels.clear();
@@ -336,7 +336,7 @@ void Task::resetDatesAndTimes() {
 }
 
 bool Task::isUrgent() {
-	if(type == FLOATING) {
+	if (type == FLOATING) {
 		return false;
 	}
 
@@ -353,7 +353,7 @@ bool Task::isUrgent() {
 	std::time_t b = std::mktime(&now);
 
 	double difference = std::difftime(a, b) / (60 * 60 * 24);
-	if(difference < 4) {
+	if (difference < 4) {
 		return true;
 	} 
 	return false;
@@ -368,7 +368,7 @@ bool Task::isToday() {
 	int month = (startDate % 10000)/100;
 	int year = startDate/10000;
 
-	if(day == currentDay && month == currentMonth && year == currentYear) {
+	if (day == currentDay && month == currentMonth && year == currentYear) {
 		return true;
 	} 
 	return false;
@@ -376,7 +376,7 @@ bool Task::isToday() {
 
 // For testing
 bool Task::tasksAreEqual(Task task1, Task task2) {
-	if(    (task1.getDoneStatus() != task2.getDoneStatus())
+	if (    (task1.getDoneStatus() != task2.getDoneStatus())
 		|| (task1.getEndDate() != task2.getEndDate())
 		|| (task1.getEndTime() != task2.getEndTime())
 		|| (task1.getID() != task2.getID())

@@ -6,11 +6,11 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 void addThreeSentences(std::vector<Task> copyTask);
 
-namespace TextBuddyTests {
+namespace TaskSharkTests {
 	TEST_CLASS(Command_Add) {
 public:
 	TEST_METHOD_INITIALIZE(InitialiseLogger) {
-		TbLogger::getInstance();
+		TsLogger::getInstance();
 	}
 
 	// Originally written by Kiat Boon
@@ -265,7 +265,7 @@ public:
 
 		copyTask = modifyThree.getTaskStore();
 		iter = copyTask.begin();
-		if(TODO != iter->getType()) assert (false);
+		if (TODO != iter->getType()) assert (false);
 		Assert::AreEqual(IDthree,iter->getID());
 		Assert::AreEqual(150101,iter->getEndDate());
 		Assert::AreEqual(150101,iter->getStartDate());
@@ -306,7 +306,7 @@ public:
 
 		copyTask = modifyThree.getTaskStore();
 		iter = copyTask.begin();
-		if(EVENT != iter->getType()) assert (false);
+		if (EVENT != iter->getType()) assert (false);
 		Assert::AreEqual(IDthree,iter->getID());
 		Assert::AreEqual(150101,iter->getStartDate());
 		Assert::AreEqual(150201,iter->getEndDate());

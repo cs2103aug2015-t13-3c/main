@@ -4,15 +4,15 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace TextBuddyTests {
+namespace TaskSharkTests {
 	TEST_CLASS(UtilitiesTest) {
 public:
 	TEST_CLASS_INITIALIZE(StartTestClass) {
-		TbLogger::getInstance()->clearLog();
+		TsLogger::getInstance()->clearLog();
 	}
 
 	TEST_METHOD_CLEANUP(EndTestMethod) {
-		TbLogger::getInstance()->log(SYS,"Test ended\n");
+		TsLogger::getInstance()->log(SYS,"Test ended\n");
 	}
 
 	TEST_METHOD(Utilities_fieldVecToString) {

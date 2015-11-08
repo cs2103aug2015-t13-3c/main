@@ -4,7 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace TextBuddyTests {
+namespace TaskSharkTests {
 	//========== LoadFileTest ==========
 	TEST_CLASS(LoadFileTest) {
 public:
@@ -53,7 +53,7 @@ public:
 		actualVector = io->loadFile("TEXT.txt");
 		Assert::AreEqual(textVector.size(), actualVector.size());
 
-		for(unsigned int i = 0; i < actualVector.size(); i++) {
+		for (unsigned int i = 0; i < actualVector.size(); i++) {
 			Task task1 = textVector[i];
 			Task task2 = actualVector[i];
 
@@ -69,7 +69,7 @@ public:
 			Assert::AreEqual(Utilities::taskTypeToString(task1.getType()) , Utilities::taskTypeToString(task2.getType()));
 			/*
 			// Assert::AreEqual cannot compare vectors and Tasks
-			if(!Task::tasksAreEqual(textVector[i], actualVector[i])) {
+			if (!Task::tasksAreEqual(textVector[i], actualVector[i])) {
 			Assert::Fail();
 			// Assert::AreEqual(textVector[i], actualVector[i]);
 			}
@@ -88,7 +88,7 @@ public:
 		std::vector<Task> actualVector = io->loadFile("TEXT.txt");
 		Assert::AreEqual(textVector.size(), actualVector.size());
 
-		for(unsigned int i = 0; i < actualVector.size(); i++) {
+		for (unsigned int i = 0; i < actualVector.size(); i++) {
 			Task task1 = textVector[i];
 			Task task2 = actualVector[i];
 
@@ -104,7 +104,7 @@ public:
 			Assert::AreEqual(Utilities::taskTypeToString(task1.getType()) , Utilities::taskTypeToString(task2.getType()));
 			/*
 			// Assert::AreEqual cannot compare vectors and Tasks
-			if(!Task::tasksAreEqual(textVector[i], actualVector[i])) {
+			if (!Task::tasksAreEqual(textVector[i], actualVector[i])) {
 			Assert::Fail();
 			// Assert::AreEqual(textVector[i], actualVector[i]);
 			}
@@ -117,7 +117,7 @@ public:
 	/*
 	// Test if what is read to rapidJSON is the correct file contents
 	std::ifstream inputFile("JSONTEXT.txt");
-	std::string hardstring = "\"TextBuddy Items\":\n[\n]";
+	std::string hardstring = "\"TaskShark Items\":\n[\n]";
 	std::string inputFileText((std::istreambuf_iterator<char>(inputFile)),
 
 	std::istreambuf_iterator<char>());
@@ -153,7 +153,7 @@ public:
 
 		std::string expectedText[] = {
 			"{",
-			"\t\"TextBuddy Items\":",
+			"\t\"TaskShark Items\":",
 			"\t[",
 			"\t\t{",
 			"\t\t\t\"name\": \"\",",
@@ -176,7 +176,7 @@ public:
 		// TODO: Assert::AreEqual for diff vector sizes
 		Assert::AreEqual((size_t) 17, actualText.size());
 
-		for(unsigned int i = 0; i < actualText.size(); i++) {
+		for (unsigned int i = 0; i < actualText.size(); i++) {
 			Assert::AreEqual(expectedText[i], actualText[i]);
 		}
 	}
@@ -195,7 +195,7 @@ public:
 
 		std::string expectedText[] = {
 			"{",
-			"\t\"TextBuddy Items\":",
+			"\t\"TaskShark Items\":",
 			"\t[",
 			"\t\t{",
 			"\t\t\t\"name\": \"\",",
@@ -245,7 +245,7 @@ public:
 			"}"
 		};
 
-		for(unsigned int i = 0; i < actualText.size(); i++) {
+		for (unsigned int i = 0; i < actualText.size(); i++) {
 			Assert::AreEqual(expectedText[i], actualText[i]);
 		}
 	}
@@ -254,7 +254,7 @@ public:
 	/*
 	io = IO::getInstance();
 	std::vector<Task> emptyVector;
-	std::string expectedText[] = {"{","\t\"TextBuddy Items\":", "\t[","\t]","}"};
+	std::string expectedText[] = {"{","\t\"TaskShark Items\":", "\t[","\t]","}"};
 
 	bool success = io->saveFile("TEXT.txt", emptyVector);
 
@@ -263,7 +263,7 @@ public:
 	// std::vector<std::string> actualTextVector = io->getText("TEXT.txt");
 	// std::string actualText = Utilities::vecToString(actualTextVector);
 
-	for(unsigned int i = 0; i < actualText.size(); i++) {
+	for (unsigned int i = 0; i < actualText.size(); i++) {
 	Assert::AreEqual(expectedText[i], actualText[i]);
 	}
 	}

@@ -1,5 +1,5 @@
 // Aaron Chong Jun Hao @@author A0110376N
-// Parser converts flexible natural language into commands and parameters for TextBuddy.
+// Parser converts flexible natural language into commands and parameters for TaskShark.
 
 #ifndef PARSER_H_
 #define PARSER_H_
@@ -9,11 +9,11 @@ private:
 	static Parser* theOne;
 	Parser();
 
-	TbLogger* logger;
+	TsLogger* logger;
 	void log(Level level, std::string message);
 	void logSetTaskType(TaskType type);
 
-	// This defines the file extension used by TextBuddy
+	// This defines the file extension used by TaskShark
 	static const std::string FILE_EXTENSION;
 
 	// These are the return values for invalid parameters

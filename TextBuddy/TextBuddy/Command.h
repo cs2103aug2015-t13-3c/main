@@ -6,7 +6,7 @@
 
 #include "IO.h"
 
-class Tb {
+class TS {
 public:
 	static bool firstLoad;
 	static std::string MESSAGE_WELCOME;
@@ -91,7 +91,7 @@ protected:
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
 
-	TbLogger* logger;
+	TsLogger* logger;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;

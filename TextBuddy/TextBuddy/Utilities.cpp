@@ -29,7 +29,7 @@ int Utilities::stringToInt(std::string str) {
 	int i = 0;
 	std::stringstream ss(str);
 	ss >> i;
-	if(ss.fail() || ss.get(c)) {
+	if (ss.fail() || ss.get(c)) {
 		return LAST_TASK_INDICATOR;
 	} else {
 		return i;
@@ -39,38 +39,38 @@ int Utilities::stringToInt(std::string str) {
 CommandType Utilities::stringToCmdType(std::string str) {
 	CommandType cmd;
 	std::ostringstream address;
-	address << (void*)&Tb::COMMAND_ADD;
+	address << (void*)&TS::COMMAND_ADD;
 	std::string name = address.str();
 
-	if(equalsIgnoreCase(str, Tb::COMMAND_ADD))	{
+	if (equalsIgnoreCase(str, TS::COMMAND_ADD))	{
 		cmd = ADD;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_DELETE)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_DELETE)) {
 		cmd = DELETE;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_MODIFY) || equalsIgnoreCase(str, Tb::COMMAND_MODIFY_EDIT)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_MODIFY) || equalsIgnoreCase(str, TS::COMMAND_MODIFY_EDIT)) {
 		cmd = MODIFY;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_PICK_RESERVE)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_PICK_RESERVE)) {
 		cmd = PICK;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_SEARCH)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_SEARCH)) {
 		cmd = SEARCH;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_MARKDONE)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_MARKDONE)) {
 		cmd = MARKDONE;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_UNMARKDONE)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_UNMARKDONE)) {
 		cmd = UNMARKDONE;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_UNDO)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_UNDO)) {
 		cmd = UNDO;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_REDO)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_REDO)) {
 		cmd = REDO;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_VIEW)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_VIEW)) {
 		cmd = VIEW;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_CLEAR_ALL)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_CLEAR_ALL)) {
 		cmd = CLEAR_ALL;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_DISPLAY_ALL)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_DISPLAY_ALL)) {
 		cmd = DISPLAY_ALL;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_LOAD)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_LOAD)) {
 		cmd = LOAD;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_SAVE)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_SAVE)) {
 		cmd = SAVE;
-	} else if(equalsIgnoreCase(str, Tb::COMMAND_EXIT)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_EXIT)) {
 		cmd = EXIT;
 	} else {
 		cmd = INVALID;
@@ -81,19 +81,19 @@ CommandType Utilities::stringToCmdType(std::string str) {
 Day Utilities::stringToDay(std::string dayString) {
 	Day day = INVALID_DAY;
 
-	if(containsAny(dayString,"sun sunday")) {
+	if (containsAny(dayString,"sun sunday")) {
 		day = SUN;
-	} else if(containsAny(dayString,"mon monday")) {
+	} else if (containsAny(dayString,"mon monday")) {
 		day = MON;
-	} else if(containsAny(dayString,"tue tues tuesday")) {
+	} else if (containsAny(dayString,"tue tues tuesday")) {
 		day = TUE;
-	} else if(containsAny(dayString,"wed wednesday")) {
+	} else if (containsAny(dayString,"wed wednesday")) {
 		day = WED;
-	} else if(containsAny(dayString,"thu thur thurs thursday")) {
+	} else if (containsAny(dayString,"thu thur thurs thursday")) {
 		day = THU;
-	} else if(containsAny(dayString,"fri friday")) {
+	} else if (containsAny(dayString,"fri friday")) {
 		day = FRI;
-	} else if(containsAny(dayString,"sat saturday")) {
+	} else if (containsAny(dayString,"sat saturday")) {
 		day = SAT;
 	}
 	return day;
@@ -102,29 +102,29 @@ Day Utilities::stringToDay(std::string dayString) {
 Month Utilities::stringToMonth(std::string monthString) {
 	Month monthInput = INVALID_MONTH;
 
-	if(containsAny(monthString,"1 jan january")) {
+	if (containsAny(monthString,"1 jan january")) {
 		monthInput = JAN;
-	} else if(containsAny(monthString,"2 feb february")) {
+	} else if (containsAny(monthString,"2 feb february")) {
 		monthInput = FEB;
-	} else if(containsAny(monthString,"3 mar march")) {
+	} else if (containsAny(monthString,"3 mar march")) {
 		monthInput = MAR;
-	} else if(containsAny(monthString,"4 apr april")) {
+	} else if (containsAny(monthString,"4 apr april")) {
 		monthInput = APR;
-	} else if(containsAny(monthString,"5 may")) {
+	} else if (containsAny(monthString,"5 may")) {
 		monthInput = MAY;
-	} else if(containsAny(monthString,"6 jun june")) {
+	} else if (containsAny(monthString,"6 jun june")) {
 		monthInput = JUN;
-	} else if(containsAny(monthString,"7 jul july")) {
+	} else if (containsAny(monthString,"7 jul july")) {
 		monthInput = JUL;
-	} else if(containsAny(monthString,"8 aug august")) {
+	} else if (containsAny(monthString,"8 aug august")) {
 		monthInput = AUG;
-	} else if(containsAny(monthString,"9 sep sept september")) {
+	} else if (containsAny(monthString,"9 sep sept september")) {
 		monthInput = SEP;
-	} else if(containsAny(monthString,"10 oct october")) {
+	} else if (containsAny(monthString,"10 oct october")) {
 		monthInput = OCT;
-	} else if(containsAny(monthString,"11 nov november")) {
+	} else if (containsAny(monthString,"11 nov november")) {
 		monthInput = NOV;
-	} else if(containsAny(monthString,"12 dec december")) {
+	} else if (containsAny(monthString,"12 dec december")) {
 		monthInput = DEC;
 	}
 	return monthInput;
@@ -133,27 +133,27 @@ Month Utilities::stringToMonth(std::string monthString) {
 FieldType Utilities::stringToFieldType(std::string fieldString) {
 	FieldType field;
 
-	if(equalsIgnoreCase(fieldString,FIELD_NAME)) {
+	if (equalsIgnoreCase(fieldString,FIELD_NAME)) {
 		field = NAME;
-	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_ADD)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_LABEL_ADD)) {
 		field = LABELS_ADD;
-	} else if(equalsIgnoreCase(fieldString,FIELD_LABEL_DELETE)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_LABEL_DELETE)) {
 		field = LABELS_DELETE;
-	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_SET)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_PRIORITY_SET)) {
 		field = PRIORITY_SET;
-	} else if(equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
 		field = PRIORITY_UNSET;
-	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
 		field = START_DATE;
-	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
 		field = START_DATE;
-	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
 		field = END_DATE;
-	} else if(equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
 		field = TODO_DATE;
-	} else if(equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
 		field = START_TIME;
-	} else if(equalsIgnoreCase(fieldString,FIELD_RESERVE_SWITCH)) {
+	} else if (equalsIgnoreCase(fieldString,FIELD_RESERVE_SWITCH)) {
 		field = RESERVE;
 	} else {
 		field = INVALID_FIELD;
@@ -164,11 +164,11 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 TaskType Utilities::stringToTaskType(std::string taskString) {
 	TaskType type = FLOATING;
 
-	if(taskString == "FLOATING") {
+	if (taskString == "FLOATING") {
 		type = FLOATING;
-	} else if(taskString == "EVENT") {
+	} else if (taskString == "EVENT") {
 		type = EVENT;
-	} else if(taskString == "TODO") {
+	} else if (taskString == "TODO") {
 		type = TODO;
 	}
 	return type;
@@ -177,21 +177,21 @@ TaskType Utilities::stringToTaskType(std::string taskString) {
 ViewType Utilities::stringToViewType(std::string viewString) {
 	ViewType view;
 
-	if(viewString == "") {
+	if (viewString == "") {
 		view = VIEWTYPE_INVALID;
-	} else if(equalsIgnoreCase(viewString,VIEW_ALL)) {
+	} else if (equalsIgnoreCase(viewString,VIEW_ALL)) {
 		view = VIEWTYPE_ALL;
-	} else if(equalsIgnoreCase(viewString,VIEW_FLOATING)) {
+	} else if (equalsIgnoreCase(viewString,VIEW_FLOATING)) {
 		view = VIEWTYPE_FLOATING;
-	} else if(equalsIgnoreCase(viewString,VIEW_EVENT)) {
+	} else if (equalsIgnoreCase(viewString,VIEW_EVENT)) {
 		view = VIEWTYPE_EVENT;
-	} else if(equalsIgnoreCase(viewString,VIEW_TODO)) {
+	} else if (equalsIgnoreCase(viewString,VIEW_TODO)) {
 		view = VIEWTYPE_TODO;
-	} else if(equalsIgnoreCase(viewString,VIEW_TODAY)) {
+	} else if (equalsIgnoreCase(viewString,VIEW_TODAY)) {
 		view = VIEWTYPE_TODAY;
-	} else if(equalsIgnoreCase(viewString,VIEW_PAST)) {
+	} else if (equalsIgnoreCase(viewString,VIEW_PAST)) {
 		view = VIEWTYPE_PAST;
-	} else if(equalsIgnoreCase(viewString,VIEW_WEEK)) {
+	} else if (equalsIgnoreCase(viewString,VIEW_WEEK)) {
 		view = VIEWTYPE_WEEK;
 	} else {
 		view = VIEWTYPE_LABELS;
@@ -211,7 +211,7 @@ std::vector<std::string> Utilities::stringToVec(std::string str) {
 //========== Type-to-String Converters ==========
 
 std::string Utilities::boolToString(bool boolean) {
-	if(boolean) {
+	if (boolean) {
 		return "true";
 	} else {
 		return "false";
@@ -304,7 +304,7 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fields) {
 	std::vector<FieldType>::iterator curr = fields.begin();
 	std::string newString;
 
-	while(curr != fields.end()) {
+	while (curr != fields.end()) {
 		switch(*curr) {
 		case NAME:
 			newString += FIELD_NAME;
@@ -354,7 +354,7 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fields) {
 			break;
 		}
 
-		if(++curr != fields.end()) {
+		if (++curr != fields.end()) {
 			newString += " ";
 		}
 	}
@@ -399,9 +399,9 @@ std::string Utilities::taskTypeToString(TaskType type) {
 std::string Utilities::vecToString(std::vector<std::string> vecString) {
 	std::string newString;
 	std::vector<std::string>::iterator curr;
-	for(curr=vecString.begin(); curr!=vecString.end(); ) {
+	for (curr=vecString.begin(); curr!=vecString.end(); ) {
 		newString += *curr;
-		if(++curr != vecString.end()) {
+		if (++curr != vecString.end()) {
 			newString += " ";
 		}
 	}
@@ -459,9 +459,9 @@ bool Utilities::containsAny(std::string words1, std::string words2) {
 	std::vector<std::string>::iterator curr1;
 	std::vector<std::string>::iterator curr2;
 
-	for(curr1=vecWords1.begin(); curr1!=vecWords1.end(); ++curr1) {
-		for(curr2=vecWords2.begin(); curr2!=vecWords2.end(); ++curr2) {
-			if(*curr1 == *curr2) {
+	for (curr1=vecWords1.begin(); curr1!=vecWords1.end(); ++curr1) {
+		for (curr2=vecWords2.begin(); curr2!=vecWords2.end(); ++curr2) {
+			if (*curr1 == *curr2) {
 				return true;
 			}
 		}
@@ -479,7 +479,7 @@ bool Utilities::isInt(std::string str) {
 bool Utilities::isPositiveNonZeroInt(std::string s) {
 	int i = stringToInt(s);
 
-	if(i == INVALID_NUMBER_FORMAT || i <= 0 ) {
+	if (i == INVALID_NUMBER_FORMAT || i <= 0 ) {
 		return false;
 	} else {
 		return true;
@@ -487,11 +487,11 @@ bool Utilities::isPositiveNonZeroInt(std::string s) {
 }
 
 bool Utilities::equalsIgnoreCase(const std::string& str1, const std::string& str2) {
-	if(str1.size() != str2.size()) {
+	if (str1.size() != str2.size()) {
 		return false;
 	} else {
 		for (std::string::const_iterator c1 = str1.begin(), c2 = str2.begin(); c1 != str1.end(); ++c1 , ++c2) {
-			if(tolower(*c1) != tolower(*c2)) {
+			if (tolower(*c1) != tolower(*c2)) {
 				return false;
 			}
 		}
@@ -511,7 +511,7 @@ std::string Utilities::removeFirstWord(std::string words) {
 }
 
 std::string Utilities::removeSpaces(const std::string& s, const std::string& delimiters) {
-	if(!s.empty()) {
+	if (!s.empty()) {
 		std::string trimEnd = s.substr(0, s.find_last_not_of(delimiters) + 1);
 		std::string trimStart = trimEnd.substr(trimEnd.find_first_not_of(delimiters));
 		return trimStart;
@@ -526,7 +526,7 @@ std::string Utilities::replace(std::string str, std::string from, std::string to
 	std::string newString = "";
 	do {
 		pos = str.find(from);
-		if(pos != -1) {
+		if (pos != -1) {
 			newString += str.substr(0,pos) + to;
 			str = str.substr(pos+fromLength); // Bugfix: infinite loop if str not updated (Ren Zhi)
 		}
@@ -539,7 +539,7 @@ bool Utilities::isSubstring(std::string subString, std::string words) {
 	bool isFound = false;
 	std::string::iterator pos = std::search(words.begin(), words.end(), 
 		subString.begin(),subString.end(),equalsIgnoreCase_char);
-	if(pos != words.end()) {
+	if (pos != words.end()) {
 		isFound = true;
 	}
 	return isFound;
@@ -550,8 +550,8 @@ bool Utilities::equalsIgnoreCase_char (char l, char r) {
 }
 
 std::string Utilities::addSlashForInvertedComma(std::string words) {
-	for(unsigned int i = 0; i < words.size(); i++) {
-		if(words[i] == '\"') {
+	for (unsigned int i = 0; i < words.size(); i++) {
+		if (words[i] == '\"') {
 			words.insert(i,"\\\\\\");
 			i++;
 			i++;
@@ -564,13 +564,13 @@ std::string Utilities::addSlashForInvertedComma(std::string words) {
 std::string Utilities::removeFirstAndLastInvertedCommas(std::string words) {
 	// Erase first inverted comma
 	std::string::iterator iter = words.begin();
-	if(*iter == '\"') {
+	if (*iter == '\"') {
 		words.erase(iter);
 	}
 
 	// Erase last inverted comma
 	iter = words.end()-1;
-	if(*iter == '\"') {
+	if (*iter == '\"') {
 		words.erase(iter);
 	}
 	return words;
@@ -589,7 +589,7 @@ std::string Utilities::toDisplayDate(int date) {
 	int year = date/10000;
 
 	std::string d = std::to_string(day) + "/" + monthToString((Month)month);
-	if(year != localYear) {
+	if (year != localYear) {
 		d = d + "/" + std::to_string(year);
 	}
 	return d;
@@ -600,13 +600,13 @@ std::string Utilities::toDisplayTime(int time) {
 	double time2;
 	std::stringstream stream;
 	std::string amOrPm;
-	if(time < 1200) {
-		if(time == 0) {
+	if (time < 1200) {
+		if (time == 0) {
 			time = 1200;
 		}
 		amOrPm = " am";
 	} else {
-		if(time > 1259) {
+		if (time > 1259) {
 			time = time - 1200;
 		}
 		amOrPm = " pm";

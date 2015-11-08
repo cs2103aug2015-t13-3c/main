@@ -21,8 +21,8 @@ private:
 	void writeTaskIntoJsonFormat(std::ofstream &newFile, Task task);
 	void initialiseRunningCount(std::vector<Task> taskVector);
 	bool setCommandKeyword(std::string &identifier, std::string keyword);
-	void setCustomCommands(std::ifstream& tbconfig);
-	void saveCustomCommands(std::ofstream& tbconfig);
+	void setCustomCommands(std::ifstream& TSconfig);
+	void saveCustomCommands(std::ofstream& TSconfig);
 
 	void extractName(Task &newTask, Value &item);
 	void extractType(Task &newTask, Value &item);

@@ -4,7 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace TextBuddyTests {
+namespace TaskSharkTests {
 	TEST_CLASS(LogicTest) {
 public:
 	TEST_METHOD(Logic_intitiateHistory) {
@@ -163,7 +163,7 @@ public:
 		iter = copyTask.begin();
 		iter++;
 		iter++;
-		if(EVENT != iter->getType()) {
+		if (EVENT != iter->getType()) {
 			Assert::Fail();
 		}
 		

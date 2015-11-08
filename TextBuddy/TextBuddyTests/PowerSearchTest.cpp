@@ -5,7 +5,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace TextBuddyTests {
+namespace TaskSharkTests {
 	TEST_CLASS(PowerSearchTest) {
 public:
 	TEST_METHOD(PowerSearch_setTasksWithinPeriod) {

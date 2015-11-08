@@ -6,25 +6,25 @@
 #include "History.h"
 #include "Logic.h"
 
-bool		Tb::firstLoad = true;
-std::string Tb::MESSAGE_WELCOME = "Welcome to TextBuddy!";
+bool		TS::firstLoad = true;
+std::string TS::MESSAGE_WELCOME = "Welcome to TaskShark!";
 
-std::string Tb::COMMAND_ADD = "add";
-std::string Tb::COMMAND_DELETE = "delete";
-std::string Tb::COMMAND_MODIFY = "modify";
-std::string Tb::COMMAND_MODIFY_EDIT = "edit";	// Alternative keyword
-std::string Tb::COMMAND_PICK_RESERVE = "pick";
-std::string Tb::COMMAND_SEARCH = "search";
-std::string Tb::COMMAND_MARKDONE = "done";
-std::string Tb::COMMAND_UNMARKDONE = "notdone";
-std::string Tb::COMMAND_UNDO = "undo";
-std::string Tb::COMMAND_REDO = "redo";
-std::string Tb::COMMAND_VIEW = "view";
-std::string Tb::COMMAND_CLEAR_ALL = "clear";
-std::string Tb::COMMAND_DISPLAY_ALL = "display";
-std::string Tb::COMMAND_LOAD = "load";
-std::string Tb::COMMAND_SAVE = "save";
-std::string Tb::COMMAND_EXIT = "exit";
+std::string TS::COMMAND_ADD = "add";
+std::string TS::COMMAND_DELETE = "delete";
+std::string TS::COMMAND_MODIFY = "modify";
+std::string TS::COMMAND_MODIFY_EDIT = "edit";	// Alternative keyword
+std::string TS::COMMAND_PICK_RESERVE = "pick";
+std::string TS::COMMAND_SEARCH = "search";
+std::string TS::COMMAND_MARKDONE = "done";
+std::string TS::COMMAND_UNMARKDONE = "notdone";
+std::string TS::COMMAND_UNDO = "undo";
+std::string TS::COMMAND_REDO = "redo";
+std::string TS::COMMAND_VIEW = "view";
+std::string TS::COMMAND_CLEAR_ALL = "clear";
+std::string TS::COMMAND_DISPLAY_ALL = "display";
+std::string TS::COMMAND_LOAD = "load";
+std::string TS::COMMAND_SAVE = "save";
+std::string TS::COMMAND_EXIT = "exit";
 
 //==================================================
 //                      COMMAND
@@ -33,7 +33,7 @@ std::string Tb::COMMAND_EXIT = "exit";
 //========== COMMAND : PUBLIC METHODS ==============
 
 Command::Command(CommandType newCmd, std::string rawInput) {
-	logger = TbLogger::getInstance();
+	logger = TsLogger::getInstance();
 	cmd = newCmd;
 	userInput = rawInput;
 }
@@ -123,14 +123,14 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 	// In-place sorting
 	i = taskVector.begin();	// Points to start of unsorted part
 	k = taskVector.end();	// Points to end of unsorted part
-	while(i < k) {
-		if(i->getType() == FLOATING) {
+	while (i < k) {
+		if (i->getType() == FLOATING) {
 			tempTask = *i;
 			for (j = i+1; j != taskVector.end(); ++j) {
 				std::swap(*j, *(j-1)); 
 			}
 			*(j-1) = tempTask;
-			if(k == taskVector.begin()) {
+			if (k == taskVector.begin()) {
 				break;
 			} else {
 				--k;
@@ -151,14 +151,14 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 	// In-place sorting
 	i = taskVector.end()-1;	// Points to start of unsorted part
 	k = taskVector.begin();	// Points to end of unsorted part
-	while(i > k) {
-		if(i->getType() == EVENT) {
+	while (i > k) {
+		if (i->getType() == EVENT) {
 			tempTask = *i;
 			for (j = i; j != taskVector.begin(); ++j) {
 				std::swap(*j, *(j-1)); 
 			}
 			*j = tempTask;
-			if(k == taskVector.end()) {
+			if (k == taskVector.end()) {
 				break;
 			} else {
 				++k;
@@ -201,7 +201,7 @@ void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime)
 	std::vector<Task>::iterator iter = weekStore.begin();
 
 	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
-		if(iter->getType() == FLOATING) {
+		if (iter->getType() == FLOATING) {
 			currentView.push_back(*iter);
 		} else {
 			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
@@ -234,7 +234,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 		assert((i->getStartDate() < i->getEndDate()) || 
 			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
 		for (j = i+1; j != taskVector.end(); ++j) {
-			if(j -> getStartTime() < i->getStartTime()) {
+			if (j -> getStartTime() < i->getStartTime()) {
 				std::swap(*i, *j);
 			}
 		}
@@ -243,7 +243,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	// Sorts date after time to ensure date is accurately sorted
 	for (i = taskVector.end(); i != taskVector.begin(); --i) {
 		for (j = taskVector.begin()+1; j != i; ++j) {
-			if((j-1) -> getStartDate() > j -> getStartDate()) {
+			if ((j-1) -> getStartDate() > j -> getStartDate()) {
 				std::swap(*j, *(j-1));
 			}
 		}
@@ -314,10 +314,10 @@ void Command::defaultView() {
 
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
-							 if(index == 0) {
+							 if (index == 0) {
 								 index = Task::lastEditID;
 							 }
-							 if(isValidIndex(index)) {	
+							 if (isValidIndex(index)) {	
 								 currIter = matchCurrentViewIndex(index);
 								 index = currIter->getID();
 								 taskIter = matchTaskStoreIndex(index);
@@ -328,7 +328,7 @@ void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 }
 
 bool Command::isValidIndex(int index) {
-	if(index <1 || index > (int)currentView.size()) {
+	if (index <1 || index > (int)currentView.size()) {
 		return false;
 	} 
 	return true;
@@ -337,7 +337,7 @@ bool Command::isValidIndex(int index) {
 std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
 	assert(index >0 && index <= (int)currentView.size());
 	std::vector<Task>::iterator iter = currentView.begin();
-	for(int i=1; i< index; ++i) {
+	for (int i=1; i< index; ++i) {
 		++iter;
 	}
 	return iter;
@@ -345,7 +345,7 @@ std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
 
 std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 	std::vector<Task>::iterator iter = taskStore.begin();
-	while(iter->getID() != index && iter != taskStore.end()) {
+	while (iter->getID() != index && iter != taskStore.end()) {
 		++iter;
 	}
 	assert(iter != taskStore.end());
@@ -461,7 +461,7 @@ void Delete::execute() {
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
 
-	if((unsigned int)taskStorePos < taskStore.size()) {
+	if ((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
 		taskStore.push_back(taskToBeDeleted);
@@ -469,7 +469,7 @@ void Delete::undo() {
 
 	/*
 	// For in-place undoing, if view is not set back to default
-	if((unsigned int)currViewPos < currentView.size()) {
+	if ((unsigned int)currViewPos < currentView.size()) {
 	currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
 	} else {
 	currentView.push_back(taskToBeDeleted);
@@ -532,7 +532,7 @@ Task Modify::getTempTask() {
 void Modify::execute() {
 	initialiseIterators(modifyID);
 	originalTask = *currViewIter;
-	if(isSetFloating) {
+	if (isSetFloating) {
 		taskStoreIter->setType(FLOATING);
 		taskStoreIter->resetDatesAndTimes();
 	} else {
@@ -567,10 +567,10 @@ void Modify::doModify() {
 	bool isStartTimeSet = false;
 	bool isEndTimeSet = false;
 
-	if(tempTask.getType() == EVENT) {
+	if (tempTask.getType() == EVENT) {
 		taskStoreIter->setType(EVENT);
 	}
-	if(tempTask.getReserveType() == EVENT) {
+	if (tempTask.getReserveType() == EVENT) {
 		taskStoreIter->setReserveType(EVENT);
 	}
 
@@ -609,7 +609,7 @@ void Modify::doModify() {
 			taskStoreIter->setEndDate(tempTask.getEndDate());
 			break;
 		case END_TIME:
-			if(taskStoreIter->getEndDate() == DATE_NOT_SET) {
+			if (taskStoreIter->getEndDate() == DATE_NOT_SET) {
 				taskStoreIter->setEndDate(tempTask.getStartDate());
 			}
 			taskStoreIter->setEndTime(tempTask.getEndTime());
@@ -654,7 +654,7 @@ void Modify::doModify() {
 		}
 	}
 
-	if(isTODO) {
+	if (isTODO) {
 		taskStoreIter->setType(TODO);
 		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
 		if (isStartTimeSet) {
@@ -663,7 +663,7 @@ void Modify::doModify() {
 			taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
 		}
 	}
-	if(isTODOreserve) {
+	if (isTODOreserve) {
 		taskStoreIter->setReserveType(TODO);
 		taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
 		taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
@@ -674,15 +674,15 @@ void Modify::doModify() {
 // If end date == start date: TODO
 // All others: EVENTS
 void Modify::updateTaskTypes() {
-	if(!updateFLOATING()) {
-		if(!updateTODO()) {
+	if (!updateFLOATING()) {
+		if (!updateTODO()) {
 			updateEVENT();
 		}
 	}
 }
 
 bool Modify::updateFLOATING() {
-	if(taskStoreIter->getStartDate()==DATE_NOT_SET && taskStoreIter->getStartTime()==TIME_NOT_SET
+	if (taskStoreIter->getStartDate()==DATE_NOT_SET && taskStoreIter->getStartTime()==TIME_NOT_SET
 		&& taskStoreIter->getEndDate()==DATE_NOT_SET && taskStoreIter->getEndTime()==TIME_NOT_SET) {
 			taskStoreIter->setType(FLOATING);
 			return true;
@@ -691,7 +691,7 @@ bool Modify::updateFLOATING() {
 }
 
 bool Modify::updateTODO() {
-	if(taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
+	if (taskStoreIter->getStartDate() == taskStoreIter->getEndDate()
 		&& taskStoreIter->getStartTime() == taskStoreIter->getEndTime()) {
 			taskStoreIter->setType(TODO);
 			return true;
@@ -779,13 +779,13 @@ std::string Search::doSearch() {
 
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
 		taskName = iter->getName();
-		for(curr=tokens.begin(); curr!=tokens.end(); ++curr) {
-			if(!Utilities::isSubstring(*curr,taskName)) {
+		for (curr=tokens.begin(); curr!=tokens.end(); ++curr) {
+			if (!Utilities::isSubstring(*curr,taskName)) {
 				isMatch = false;
 			}
 		}
 
-		if(isMatch) {
+		if (isMatch) {
 			id = iter->getID();
 			indexString << id << ",";
 		} else {
@@ -794,7 +794,7 @@ std::string Search::doSearch() {
 	}
 	returnString = indexString.str();
 
-	if(!returnString.empty()) {
+	if (!returnString.empty()) {
 		returnString.pop_back();
 	}
 	return returnString;
@@ -841,7 +841,7 @@ bool Search::amendView(std::string listOfIds) {
 
 	while (listOfIds != "") {
 		index = listOfIds.find(",");
-		if(index == -1) {
+		if (index == -1) {
 			idToken = listOfIds;
 			listOfIds = "";
 		} else {
@@ -852,7 +852,7 @@ bool Search::amendView(std::string listOfIds) {
 		id = stoi(idToken);
 		iter = taskStore.begin();
 		for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
-			if(id == iter->getID()) {
+			if (id == iter->getID()) {
 				currentView.push_back(*iter);
 			}
 		}
@@ -883,7 +883,7 @@ void Markdone::execute() {
 }
 
 void Markdone::undo() {
-	if(successMarkDone) {
+	if (successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
 		// currentView.insert(currViewIter,*taskStoreIter);
@@ -901,7 +901,7 @@ void Markdone::markDone() {
 	initialiseIterators(doneID);
 
 	successMarkDone = taskStoreIter->markDone();
-	if(successMarkDone) {
+	if (successMarkDone) {
 		taskName = currViewIter->getName();
 		// currentView.erase(currViewIter);
 	}
@@ -929,7 +929,7 @@ void UnmarkDone::execute() {
 }
 
 void UnmarkDone::undo() {
-	if(successUnmarkDone) {
+	if (successUnmarkDone) {
 		getIterator();
 		taskStoreIter->markDone();
 		// currentView.insert(currViewIter,*taskStoreIter);
@@ -949,7 +949,7 @@ void UnmarkDone::unmarkDone() {
 	initialiseIterators(undoneID);
 
 	successUnmarkDone = taskStoreIter->unmarkDone();
-	if(successUnmarkDone) {
+	if (successUnmarkDone) {
 		Logic::setTodayMode();
 		// currentView.erase(currViewIter);
 	}
@@ -1008,25 +1008,25 @@ void View::execute() {
 		int currentDate = logger->getDate();
 		int weekDate = currentDate + 7;
 		// In case weekDate overruns to next month
-		if(((weekDate%10000)/100) == 1 || 
+		if (((weekDate%10000)/100) == 1 || 
 			((weekDate%10000)/100) == 3 || 
 			((weekDate%10000)/100) == 5 || 
 			((weekDate%10000)/100) == 7 || 
 			((weekDate%10000)/100) == 8 || 
 			((weekDate%10000)/100) == 10 || 
 			((weekDate%10000)/100) == 12) {
-				if(weekDate%100 > 31) {
+				if (weekDate%100 > 31) {
 					weekDate += 100 - 31;
 				}
 		} else if (((weekDate%10000)/100) == 4 || 
 			((weekDate%10000)/100) == 6 || 
 			((weekDate%10000)/100) == 9 || 
 			((weekDate%10000)/100) == 11) {
-				if(weekDate%100 > 30) {
+				if (weekDate%100 > 30) {
 					weekDate += 100 - 30;
 				}
 		} else if (((weekDate%10000)/100) == 2) {
-			if(weekDate%100 > 28) {
+			if (weekDate%100 > 28) {
 				weekDate += 100 - 28;
 			}
 		}
@@ -1062,14 +1062,14 @@ void View::undo() {
 std::string View::getMessage() {
 	std::string viewMsg;
 
-	if(Tb::firstLoad == true) {
-		Tb::firstLoad = false;
-		viewMsg = Tb::MESSAGE_WELCOME;
+	if (TS::firstLoad == true) {
+		TS::firstLoad = false;
+		viewMsg = TS::MESSAGE_WELCOME;
 	} else {
 		viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
-		if(view == VIEWTYPE_LABELS) {
+		if (view == VIEWTYPE_LABELS) {
 			viewMsg += " " + Utilities::vecToString(viewLabels);
-		} else if(view == VIEWTYPE_PERIOD) {
+		} else if (view == VIEWTYPE_PERIOD) {
 			viewMsg = "Viewing: " + periodString;
 		}
 	}
@@ -1089,7 +1089,7 @@ bool View::viewTaskType(TaskType type) {
 	std::vector<Task>::iterator iter;
 
 	for (iter = taskStore.begin(); iter != taskStore.end(); ++iter) {
-		if(iter->getType() == type) {
+		if (iter->getType() == type) {
 			currentView.push_back(*iter);
 		}
 	}
@@ -1168,7 +1168,7 @@ void ClearAll::undo() {
 }
 
 std::string ClearAll::getMessage() {
-	return "TextBuddy cleared";
+	return "TaskShark cleared";
 }
 
 //==================================================
@@ -1191,9 +1191,9 @@ void DisplayAll::formatDefaultView() {
 	std::vector<Task> startUpView;
 	std::vector<Task> noStar;
 	std::vector<Task>::iterator i = currentView.begin();
-	while(i != currentView.end()) {
-		if(!(i->getDoneStatus())) {
-			if(i->getPriorityStatus()) {
+	while (i != currentView.end()) {
+		if (!(i->getDoneStatus())) {
+			if (i->getPriorityStatus()) {
 				startUpView.push_back(*i);
 			} else {
 				noStar.push_back(*i);
@@ -1277,8 +1277,8 @@ std::string Pick::getMessage() {
 //============= PICK : PRIVATE METHODS ===========
 
 void Pick::doPick() {
-	if(pickReserve) {
-		if(taskStoreIter->getReserveStatus() == true) {
+	if (pickReserve) {
+		if (taskStoreIter->getReserveStatus() == true) {
 			taskStoreIter->pickReserve();
 		}
 	}
@@ -1325,7 +1325,7 @@ void Load::execute() {
 }
 
 std::string Load::getMessage() {
-	if(loadSuccess) {
+	if (loadSuccess) {
 		return "\"" + filePath + "\" loaded successfully!";
 	} else {
 		return "\"" + filePath + "\" does not exist";
@@ -1359,7 +1359,7 @@ void Save::execute() {
 }
 
 std::string Save::getMessage() {
-	if(saveSuccess) {
+	if (saveSuccess) {
 		return "\"" + filePath + "\" saved successfully!";
 	} else {
 		return "Unable to save \"" + filePath + "\". Invalid path name.";
@@ -1376,7 +1376,7 @@ Exit::~Exit() {}
 
 void Exit::execute() {
 	IO* io = IO::getInstance();
-	io->saveFile(io->getFilePath(),taskStore); // In case user or system deletes file or .tbconfig
+	io->saveFile(io->getFilePath(),taskStore); // In case user or system deletes file or .TSconfig
 	delete logger;
 	exit(0);
 }

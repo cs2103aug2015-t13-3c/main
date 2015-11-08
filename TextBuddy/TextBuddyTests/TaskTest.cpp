@@ -4,7 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace TextBuddyTests {
+namespace TaskSharkTests {
 	TEST_CLASS(UnitTest) {
 public:
 

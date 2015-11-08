@@ -4,11 +4,11 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace TextBuddyTests {
+namespace TaskSharkTests {
 	TEST_CLASS(ParserTest) {
 public:
 	// Declare common variables to be used in tests
-	TbLogger* logger;
+	TsLogger* logger;
 	Parser* p;
 	Command* cmd;
 	Task task;
@@ -20,16 +20,16 @@ public:
 	static const int		 INVALID_DATE_FORMAT = -1;
 
 	TEST_CLASS_INITIALIZE(StartTestClass) {
-		TbLogger::getInstance()->clearLog();
+		TsLogger::getInstance()->clearLog();
 	}
 
 	TEST_METHOD_INITIALIZE(GetInstanceLoggerAndParser) {
-		logger = TbLogger::getInstance();
+		logger = TsLogger::getInstance();
 		p = Parser::getInstance();
 	}
 
 	TEST_METHOD_CLEANUP(EndTestMethod) {
-		TbLogger::getInstance()->log(SYS,"Test ended\n");
+		TsLogger::getInstance()->log(SYS,"Test ended\n");
 	}
 
 	TEST_METHOD(Parser_parseFileName) {
@@ -480,7 +480,7 @@ public:
 		// Tested: from, at, to
 		userInput = "lab from mon at 1 pm to tue at 2 pm";
 		searchParameters = p->parseSearchParameters(userInput);
-		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+		for (curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
 			*curr = *param;
 		}
 		Assert::AreEqual(std::string("lab"),*searchPhrase);
@@ -496,7 +496,7 @@ public:
 		// Tested: after, before
 		userInput = "lecture on wed after 3 pm before 4 pm";
 		searchParameters = p->parseSearchParameters(userInput);
-		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+		for (curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
 			*curr = *param;
 		}
 		Assert::AreEqual(std::string("lecture"),*searchPhrase);
@@ -512,7 +512,7 @@ public:
 		// Tested: for, d, m
 		userInput = "for 1 d 1 m";
 		searchParameters = p->parseSearchParameters(userInput);
-		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+		for (curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
 			*curr = *param;
 		}
 		Assert::AreEqual(std::string(""),*searchPhrase);
@@ -528,7 +528,7 @@ public:
 		// Tested: h defaults to 1 hour
 		userInput = "for";
 		searchParameters = p->parseSearchParameters(userInput);
-		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+		for (curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
 			*curr = *param;
 		}
 		Assert::AreEqual(std::string(""),*searchPhrase);
@@ -544,7 +544,7 @@ public:
 		// Tested: Searchphrase PowerSearch takes precedence over Freeslot Powersearch
 		userInput = "lecture for 1 d 1 m";
 		searchParameters = p->parseSearchParameters(userInput);
-		for(curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
+		for (curr=holder.begin(),param=searchParameters.begin(); curr!=holder.end(); curr++,param++) {
 			*curr = *param;
 		}
 		Assert::AreEqual(std::string("lecture"),*searchPhrase);

@@ -34,7 +34,7 @@ void History::add(Command *cmd) {
 
 // Undo most recent command in History stack
 void History::undo() {
-	if(commandHistory.size() == 0) {
+	if (commandHistory.size() == 0) {
 		throw std::runtime_error("Nothing to undo");
 	} else {
 		Command* cmdToUndo = commandHistory.back();
@@ -47,7 +47,7 @@ void History::undo() {
 
 // Redo most recent undone action in redo stack
 void History::redo() {
-	if(redoHistory.size() == 0) {
+	if (redoHistory.size() == 0) {
 		throw std::runtime_error("Nothing to redo");
 	} else {
 		Command* cmdToRedo = redoHistory.back();

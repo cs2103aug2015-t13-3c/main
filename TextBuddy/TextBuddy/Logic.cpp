@@ -33,13 +33,13 @@ Logic* Logic::getInstance() {
 	try {
 		initialLoad.execute();
 	} catch (std::exception e) {
-		TbLogger::getInstance()->log(WARN,"File not found: " + IO::getInstance()->getFilePath());
+		TsLogger::getInstance()->log(WARN,"File not found: " + IO::getInstance()->getFilePath());
 	}
 	return theOne;
 }
 
 std::string Logic::processCommand(std::string userCommand) {
-	if(userCommand.empty()) {
+	if (userCommand.empty()) {
 		throw std::runtime_error(ERROR_NO_INPUT);
 	}
 	std::string message;

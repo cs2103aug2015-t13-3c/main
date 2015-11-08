@@ -10,7 +10,7 @@ Update::Update(std::vector<DisplayedTask>* tasksToDisplay,
 }
 
 Update::~Update() {
-	if(tasksToDisplay != nullptr) {
+	if (tasksToDisplay != nullptr) {
 		delete tasksToDisplay;
 	}
 }
@@ -18,20 +18,20 @@ Update::~Update() {
 void Update::update() {
 	tasksToDisplay->clear();
 	std::vector<Task>::iterator i = currentView->begin();
-	while(i!=currentView->end()) {
+	while (i!=currentView->end()) {
 		DisplayedTask task;
 		task.label = i->getLabelString();
 		task.description = i->getName();
 		task.date = i->getDisplayDate();
 		task.time = i->getDisplayTime();
 		task.status = NORMAL;
-		if(i->getPriorityStatus()) {
+		if (i->getPriorityStatus()) {
 			task.status = PRIORITY;
 		}
-		if(i->isUrgent()) {
+		if (i->isUrgent()) {
 			task.status = URGENT;
 		}
-		if(i->getDoneStatus()) {
+		if (i->getDoneStatus()) {
 			task.status = PAST;
 		}
 		task.type = i->getType();

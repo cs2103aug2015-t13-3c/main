@@ -2,23 +2,22 @@
 
 #include "stdafx.h"
 #include "IO.h"
-// #include "Shlwapi.h"
 
 // TODO: Refactor IO.cpp - remove repeated file names
 
 using namespace rapidjson;
 
 std::string IO::filePath = "mytasks.txt";
-const std::string IO::configPath = ".tbconfig";
+const std::string IO::configPath = ".TSconfig";
 
 IO* IO::theOne = new IO();
 
 IO::IO() {
-	// TbLogger::getInstance()->log(SYS,"IO instantiated");
-	std::ifstream tbconfig(configPath);
-	tbconfig >> filePath;
-	// setCustomCommands(tbconfig);
-	tbconfig.close();
+	// TsLogger::getInstance()->log(SYS,"IO instantiated");
+	std::ifstream TSconfig(configPath);
+	TSconfig >> filePath;
+	// setCustomCommands(TSconfig);
+	TSconfig.close();
 }
 
 IO::~IO() {}
@@ -40,8 +39,8 @@ std::string IO::getFilePath() {
 // Note: Directory must already exist
 // Returns false if unable to set file path
 bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile) {
-	if(saveFile(newFilePath,taskVector)) {
-		if(isRemovePrevFile || filePath==newFilePath) {
+	if (saveFile(newFilePath,taskVector)) {
+		if (isRemovePrevFile || filePath==newFilePath) {
 			remove(filePath.c_str());
 		}
 		filePath = newFilePath;
@@ -54,7 +53,7 @@ bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool
 // Throws an assert() if file contents are invalid
 std::vector<Task> IO::loadFile(std::string fileName, bool isOverwriteLoadFile) {
 	std::ifstream inputFile(fileName);
-	if(!fileIsOpen(inputFile)) {
+	if (!fileIsOpen(inputFile)) {
 		throw std::runtime_error("File does not exist");
 	}
 
@@ -65,12 +64,12 @@ std::vector<Task> IO::loadFile(std::string fileName, bool isOverwriteLoadFile) {
 	Document document;
 	document.Parse(inputFileText);
 	assert(document.IsObject());
-	assert(document["TextBuddy Items"].IsArray());
-	Value& item = document["TextBuddy Items"];
+	assert(document["TaskShark Items"].IsArray());
+	Value& item = document["TaskShark Items"];
 
 	std::vector<Task> taskVector;
-	if(item.Size() > 0) {
-		for(SizeType i = 0; i < item.Size(); i++) {
+	if (item.Size() > 0) {
+		for (SizeType i = 0; i < item.Size(); i++) {
 			Task newTask = extractTaskFromJsonObject(item[i]);
 			taskVector.push_back(newTask);
 		}
@@ -78,7 +77,7 @@ std::vector<Task> IO::loadFile(std::string fileName, bool isOverwriteLoadFile) {
 	}
 
 	inputFile.close();
-	if(isOverwriteLoadFile) {
+	if (isOverwriteLoadFile) {
 		filePath = fileName;
 	}
 	return taskVector;
@@ -88,17 +87,17 @@ bool IO::saveFile(std::string fileName, std::vector<Task> taskVector) {
 	remove(fileName.c_str());
 	std::ofstream newfile(fileName);
 
-	if(!fileIsOpen(newfile)) {
+	if (!fileIsOpen(newfile)) {
 		return false;
 	}
 
 	initialiseJsonText(newfile);
 
-	for(unsigned int i = 0; i < taskVector.size(); i++) {
+	for (unsigned int i = 0; i < taskVector.size(); i++) {
 		Task task = taskVector[i];
 		writeTaskIntoJsonFormat(newfile,task);
 
-		if(i+1 < taskVector.size()) {
+		if (i+1 < taskVector.size()) {
 			newfile << "\t\t,\n";
 		}
 	}
@@ -126,7 +125,7 @@ return PathIsDirectory(newFullPathName);
 //                   PRIVATE METHODS
 //==================================================
 
-// Records down last saved location as .tbconfig file
+// Records down last saved location as .TSconfig file
 // for IO to find where to load when it launches
 void IO::setLastSavedLocation(std::string fileName) {
 	remove(configPath.c_str());
@@ -182,7 +181,7 @@ void IO::extractName(Task &newTask, Value &item) {
 	std::string name = item["name"].GetString();
 	bool success = newTask.setName(name);
 
-	if(!success) {
+	if (!success) {
 		throw std::runtime_error("NameNotFound");
 	}
 }
@@ -192,7 +191,7 @@ void IO::extractType(Task &newTask, Value &item) {
 	TaskType type = Utilities::stringToTaskType(typeString);
 	bool success = newTask.setType(type);
 
-	if(!success) {
+	if (!success) {
 		throw std::runtime_error("TypeNotFound");
 	}
 }
@@ -201,7 +200,7 @@ void IO::extractID(Task &newTask, Value &item) {
 	int ID = item["uniqueID"].GetInt();
 	bool success = newTask.setID(ID);
 
-	if(!success) {
+	if (!success) {
 		throw std::runtime_error("IDNotFound");
 	}
 }
@@ -210,12 +209,12 @@ void IO::extractLabel(Task &newTask, Value &item) {
 	int arraySize = item["label"].Size();
 	std::vector<std::string> labels;
 
-	for(int i = 0; i < arraySize; i++) {
+	for (int i = 0; i < arraySize; i++) {
 		labels.push_back(item["label"][i].GetString());
 	}
 	bool success = newTask.addLabels(labels);
 
-	if(!success) {
+	if (!success) {
 		throw std::runtime_error("LabelNotFound");
 	}
 }
@@ -223,13 +222,13 @@ void IO::extractLabel(Task &newTask, Value &item) {
 void IO::extractDone(Task &newTask, Value &item) {
 	bool isDone = item["isDone"].GetBool();
 	// bool success = false;
-	if(isDone) {
+	if (isDone) {
 		newTask.markDone();
 	}
 
-	// TODO: how to throw exception for GetBool
+	// TODO: how to throw exception for GeTSool
 	/*
-	if(!success) {
+	if (!success) {
 	throw "IDNotFound";
 	}
 	*/
@@ -238,13 +237,13 @@ void IO::extractDone(Task &newTask, Value &item) {
 void IO::extractPriority(Task &newTask, Value &item) {
 	bool isPriority = item["isPriority"].GetBool();
 	// bool success = false;
-	if(isPriority) {
+	if (isPriority) {
 		newTask.setPriority();
 	}
 
-	// TODO: how to throw exception for GetBool
+	// TODO: how to throw exception for GeTSool
 	/*
-	if(!success) {
+	if (!success) {
 	throw "IDNotFound";
 	}
 	*/
@@ -254,7 +253,7 @@ void IO::extractStartDate(Task &newTask, Value &item) {
 	int date = item["startDate"].GetInt();
 	bool success = newTask.setStartDate(date);
 
-	if(!success) {
+	if (!success) {
 		throw std::runtime_error("StartDateNotFound");
 	}
 }
@@ -263,7 +262,7 @@ void IO::extractStartTime(Task &newTask, Value &item) {
 	int time = item["startTime"].GetInt();
 	bool success = newTask.setStartTime(time);
 
-	if(!success) {
+	if (!success) {
 		throw std::runtime_error("StartTimeNotFound");
 	}
 }
@@ -272,7 +271,7 @@ void IO::extractEndDate(Task &newTask, Value &item) {
 	int date = item["endDate"].GetInt();
 	bool success = newTask.setEndDate(date);
 
-	if(!success) {
+	if (!success) {
 		throw ("EndDateNotFound");
 	}
 }
@@ -281,7 +280,7 @@ void IO::extractEndTime(Task &newTask, Value &item)  {
 	int time = item["endTime"].GetInt();
 	bool success = newTask.setEndTime(time);
 
-	if(!success) {
+	if (!success) {
 		throw std::runtime_error("EndTimeNotFound");
 	}
 }
@@ -418,7 +417,7 @@ std::string IO::retrieveLabel(Task task) {
 	std::vector<std::string> labelVector = task.getLabels();
 	string = "[";
 
-	for(unsigned int i = 0; i < labelVector.size(); i++) {
+	for (unsigned int i = 0; i < labelVector.size(); i++) {
 		string += "\"" + labelVector[i] + "\"";
 		if (i+1 < labelVector.size()) {
 			string += ",\n\t\t\t\t";
@@ -474,7 +473,7 @@ std::string IO::retrieveEndTime(Task task) {
 //========== Overloaded Functions ==========
 
 bool IO::fileIsOpen(std::ifstream& inputFile) {
-	if(inputFile.is_open())	{
+	if (inputFile.is_open())	{
 		return true;
 	} else {
 		return false;
@@ -482,7 +481,7 @@ bool IO::fileIsOpen(std::ifstream& inputFile) {
 }
 
 bool IO::fileIsOpen(std::ofstream& outputFile) {
-	if(outputFile.is_open())	{
+	if (outputFile.is_open())	{
 		return true;
 	} else {
 		return false;
@@ -490,7 +489,7 @@ bool IO::fileIsOpen(std::ofstream& outputFile) {
 }
 
 void IO::initialiseJsonText(std::ofstream& newfile) {
-	newfile << "{\n\t\"TextBuddy Items\":\n\t[\n";
+	newfile << "{\n\t\"TaskShark Items\":\n\t[\n";
 	return;
 }
 
@@ -509,127 +508,127 @@ void IO::initialiseRunningCount(std::vector<Task> taskVector) {
 // Aaron Chong Jun Hao @@author A0110376N
 
 bool IO::setCommandKeyword(std::string &identifier, std::string keyword) {
-	TbLogger::getInstance()->log(SYS,"Setting custom command...");
+	TsLogger::getInstance()->log(SYS,"Setting custom command...");
 
 	// Count: 14
-	if(keyword == "s" // Protected keyword used by UI for switching between 'tile' and 'list' views
-		|| (&identifier != &Tb::COMMAND_ADD				&& keyword == Tb::COMMAND_ADD)
-		|| (&identifier != &Tb::COMMAND_DELETE			&& keyword == Tb::COMMAND_DELETE)
-		|| (&identifier != &Tb::COMMAND_MODIFY			&& keyword == Tb::COMMAND_MODIFY)
-		|| (&identifier != &Tb::COMMAND_MODIFY_EDIT		&& keyword == Tb::COMMAND_MODIFY_EDIT)
-		|| (&identifier != &Tb::COMMAND_PICK_RESERVE	&& keyword == Tb::COMMAND_PICK_RESERVE)
-		|| (&identifier != &Tb::COMMAND_SEARCH			&& keyword == Tb::COMMAND_SEARCH)
-		|| (&identifier != &Tb::COMMAND_MARKDONE		&& keyword == Tb::COMMAND_MARKDONE)
-		|| (&identifier != &Tb::COMMAND_UNMARKDONE		&& keyword == Tb::COMMAND_UNMARKDONE)
-		|| (&identifier != &Tb::COMMAND_UNDO			&& keyword == Tb::COMMAND_UNDO)
-		|| (&identifier != &Tb::COMMAND_REDO			&& keyword == Tb::COMMAND_REDO)
-		|| (&identifier != &Tb::COMMAND_VIEW			&& keyword == Tb::COMMAND_VIEW)
-		|| (&identifier != &Tb::COMMAND_CLEAR_ALL		&& keyword == Tb::COMMAND_CLEAR_ALL)
-		|| (&identifier != &Tb::COMMAND_LOAD			&& keyword == Tb::COMMAND_LOAD)
-		|| (&identifier != &Tb::COMMAND_SAVE			&& keyword == Tb::COMMAND_SAVE)
-		|| (&identifier != &Tb::COMMAND_EXIT			&& keyword == Tb::COMMAND_EXIT) ) {
+	if (keyword == "s" // Protected keyword used by UI for switching between 'tile' and 'list' views
+		|| (&identifier != &TS::COMMAND_ADD				&& keyword == TS::COMMAND_ADD)
+		|| (&identifier != &TS::COMMAND_DELETE			&& keyword == TS::COMMAND_DELETE)
+		|| (&identifier != &TS::COMMAND_MODIFY			&& keyword == TS::COMMAND_MODIFY)
+		|| (&identifier != &TS::COMMAND_MODIFY_EDIT		&& keyword == TS::COMMAND_MODIFY_EDIT)
+		|| (&identifier != &TS::COMMAND_PICK_RESERVE	&& keyword == TS::COMMAND_PICK_RESERVE)
+		|| (&identifier != &TS::COMMAND_SEARCH			&& keyword == TS::COMMAND_SEARCH)
+		|| (&identifier != &TS::COMMAND_MARKDONE		&& keyword == TS::COMMAND_MARKDONE)
+		|| (&identifier != &TS::COMMAND_UNMARKDONE		&& keyword == TS::COMMAND_UNMARKDONE)
+		|| (&identifier != &TS::COMMAND_UNDO			&& keyword == TS::COMMAND_UNDO)
+		|| (&identifier != &TS::COMMAND_REDO			&& keyword == TS::COMMAND_REDO)
+		|| (&identifier != &TS::COMMAND_VIEW			&& keyword == TS::COMMAND_VIEW)
+		|| (&identifier != &TS::COMMAND_CLEAR_ALL		&& keyword == TS::COMMAND_CLEAR_ALL)
+		|| (&identifier != &TS::COMMAND_LOAD			&& keyword == TS::COMMAND_LOAD)
+		|| (&identifier != &TS::COMMAND_SAVE			&& keyword == TS::COMMAND_SAVE)
+		|| (&identifier != &TS::COMMAND_EXIT			&& keyword == TS::COMMAND_EXIT) ) {
 			return false;
 	}
 	identifier = keyword;
 	return true;
 }
 
-void IO::setCustomCommands(std::ifstream& tbconfig) {
+void IO::setCustomCommands(std::ifstream& TSconfig) {
 	std::string s;
 	std::vector<std::string> commandPair;
 	std::string identifier;
 	std::string keyword;
 
-	std::getline(tbconfig, s); // Skip newline character
-	std::getline(tbconfig, s); // Skip blank line
-	std::getline(tbconfig, s);
-	if(s == "Custom Commands") {
-		while(std::getline(tbconfig, s)) {
-			if(!s.empty()) {
+	std::getline(TSconfig, s); // Skip newline character
+	std::getline(TSconfig, s); // Skip blank line
+	std::getline(TSconfig, s);
+	if (s == "Custom Commands") {
+		while (std::getline(TSconfig, s)) {
+			if (!s.empty()) {
 				commandPair = Utilities::stringToVec(s);
-				if(commandPair.size() == 2) {
+				if (commandPair.size() == 2) {
 					identifier = commandPair[0];
 					keyword = commandPair[1];
 
-					TbLogger::getInstance()->log(SYS,"Looking up command: " + Tb::COMMAND_ADD);
-					if(identifier == "add") {
-						setCommandKeyword(Tb::COMMAND_ADD,keyword);
-					} else if(identifier == "delete") {
-						setCommandKeyword(Tb::COMMAND_DELETE,keyword);
-					} else if(identifier == "modify") {
-						setCommandKeyword(Tb::COMMAND_MODIFY,keyword);
-					} else if(identifier == "edit") {
-						setCommandKeyword(Tb::COMMAND_MODIFY_EDIT,keyword);
-					} else if(identifier == "pick") {
-						setCommandKeyword(Tb::COMMAND_PICK_RESERVE,keyword);
-					} else if(identifier == "search") {
-						setCommandKeyword(Tb::COMMAND_SEARCH,keyword);
-					} else if(identifier == "done") {
-						setCommandKeyword(Tb::COMMAND_MARKDONE,keyword);
-					} else if(identifier == "notdone") {
-						setCommandKeyword(Tb::COMMAND_UNMARKDONE,keyword);
-					} else if(identifier == "undo") {
-						setCommandKeyword(Tb::COMMAND_UNDO,keyword);
-					} else if(identifier == "redo") {
-						setCommandKeyword(Tb::COMMAND_REDO,keyword);
-					} else if(identifier == "view") {
-						setCommandKeyword(Tb::COMMAND_VIEW,keyword);
-					} else if(identifier == "clear") {
-						setCommandKeyword(Tb::COMMAND_CLEAR_ALL,keyword);
-					} else if(identifier == "display") {
-						setCommandKeyword(Tb::COMMAND_DISPLAY_ALL,keyword);
-					} else if(identifier == "load") {
-						setCommandKeyword(Tb::COMMAND_LOAD,keyword);
-					} else if(identifier == "save") {
-						setCommandKeyword(Tb::COMMAND_SAVE,keyword);
-					} else if(identifier == "exit") {
-						setCommandKeyword(Tb::COMMAND_EXIT,keyword);
+					TsLogger::getInstance()->log(SYS,"Looking up command: " + TS::COMMAND_ADD);
+					if (identifier == "add") {
+						setCommandKeyword(TS::COMMAND_ADD,keyword);
+					} else if (identifier == "delete") {
+						setCommandKeyword(TS::COMMAND_DELETE,keyword);
+					} else if (identifier == "modify") {
+						setCommandKeyword(TS::COMMAND_MODIFY,keyword);
+					} else if (identifier == "edit") {
+						setCommandKeyword(TS::COMMAND_MODIFY_EDIT,keyword);
+					} else if (identifier == "pick") {
+						setCommandKeyword(TS::COMMAND_PICK_RESERVE,keyword);
+					} else if (identifier == "search") {
+						setCommandKeyword(TS::COMMAND_SEARCH,keyword);
+					} else if (identifier == "done") {
+						setCommandKeyword(TS::COMMAND_MARKDONE,keyword);
+					} else if (identifier == "notdone") {
+						setCommandKeyword(TS::COMMAND_UNMARKDONE,keyword);
+					} else if (identifier == "undo") {
+						setCommandKeyword(TS::COMMAND_UNDO,keyword);
+					} else if (identifier == "redo") {
+						setCommandKeyword(TS::COMMAND_REDO,keyword);
+					} else if (identifier == "view") {
+						setCommandKeyword(TS::COMMAND_VIEW,keyword);
+					} else if (identifier == "clear") {
+						setCommandKeyword(TS::COMMAND_CLEAR_ALL,keyword);
+					} else if (identifier == "display") {
+						setCommandKeyword(TS::COMMAND_DISPLAY_ALL,keyword);
+					} else if (identifier == "load") {
+						setCommandKeyword(TS::COMMAND_LOAD,keyword);
+					} else if (identifier == "save") {
+						setCommandKeyword(TS::COMMAND_SAVE,keyword);
+					} else if (identifier == "exit") {
+						setCommandKeyword(TS::COMMAND_EXIT,keyword);
 					}
 				}
 			}
 		}
 	}
-	TbLogger::getInstance()->log(SYS,"Looking up command: " + Tb::COMMAND_ADD);
+	TsLogger::getInstance()->log(SYS,"Looking up command: " + TS::COMMAND_ADD);
 	return;
 }
 
-void IO::saveCustomCommands(std::ofstream& tbconfig) {
-	tbconfig << std::endl;
-	tbconfig << "Custom Commands" << std::endl;
+void IO::saveCustomCommands(std::ofstream& TSconfig) {
+	TSconfig << std::endl;
+	TSconfig << "Custom Commands" << std::endl;
 
 	// Count: 16
-	if("add" != Tb::COMMAND_ADD) {
-		tbconfig << "add" << " " << Tb::COMMAND_ADD << std::endl;
-	} else if("delete" != Tb::COMMAND_DELETE) {
-		tbconfig << "delete" << " " << Tb::COMMAND_DELETE << std::endl;
-	} else if("modify" != Tb::COMMAND_MODIFY) {
-		tbconfig << "modify" << " " << Tb::COMMAND_MODIFY << std::endl;
-	} else if("edit" != Tb::COMMAND_MODIFY_EDIT) {
-		tbconfig << "edit" << " " << Tb::COMMAND_MODIFY_EDIT << std::endl;
-	} else if("pick" != Tb::COMMAND_PICK_RESERVE) {
-		tbconfig << "pick" << " " << Tb::COMMAND_PICK_RESERVE << std::endl;
-	} else if("search" != Tb::COMMAND_SEARCH) {
-		tbconfig << "search" << " " << Tb::COMMAND_SEARCH << std::endl;
-	} else if("done" != Tb::COMMAND_MARKDONE) {
-		tbconfig << "done" << " " << Tb::COMMAND_MARKDONE << std::endl;
-	} else if("notdone" != Tb::COMMAND_UNMARKDONE) {
-		tbconfig << "notdone" << " " << Tb::COMMAND_UNMARKDONE << std::endl;
-	} else if("undo" != Tb::COMMAND_UNDO) {
-		tbconfig << "undo" << " " << Tb::COMMAND_UNDO << std::endl;
-	} else if("redo" != Tb::COMMAND_REDO) {
-		tbconfig << "redo" << " " << Tb::COMMAND_REDO << std::endl;
-	} else if("view" != Tb::COMMAND_VIEW) {
-		tbconfig << "view" << " " << Tb::COMMAND_VIEW << std::endl;
-	} else if("clear" != Tb::COMMAND_CLEAR_ALL) {
-		tbconfig << "clear" << " " << Tb::COMMAND_CLEAR_ALL << std::endl;
-	} else if("display" != Tb::COMMAND_DISPLAY_ALL) {
-		tbconfig << "display" << " " << Tb::COMMAND_DISPLAY_ALL << std::endl;
-	} else if("load" != Tb::COMMAND_LOAD) {
-		tbconfig << "load" << " " << Tb::COMMAND_LOAD << std::endl;
-	} else if("save" != Tb::COMMAND_SAVE) {
-		tbconfig << "save" << " " << Tb::COMMAND_SAVE << std::endl;
-	} else if("exit" != Tb::COMMAND_EXIT) {
-		tbconfig << "exit" << " " << Tb::COMMAND_EXIT << std::endl;
+	if ("add" != TS::COMMAND_ADD) {
+		TSconfig << "add" << " " << TS::COMMAND_ADD << std::endl;
+	} else if ("delete" != TS::COMMAND_DELETE) {
+		TSconfig << "delete" << " " << TS::COMMAND_DELETE << std::endl;
+	} else if ("modify" != TS::COMMAND_MODIFY) {
+		TSconfig << "modify" << " " << TS::COMMAND_MODIFY << std::endl;
+	} else if ("edit" != TS::COMMAND_MODIFY_EDIT) {
+		TSconfig << "edit" << " " << TS::COMMAND_MODIFY_EDIT << std::endl;
+	} else if ("pick" != TS::COMMAND_PICK_RESERVE) {
+		TSconfig << "pick" << " " << TS::COMMAND_PICK_RESERVE << std::endl;
+	} else if ("search" != TS::COMMAND_SEARCH) {
+		TSconfig << "search" << " " << TS::COMMAND_SEARCH << std::endl;
+	} else if ("done" != TS::COMMAND_MARKDONE) {
+		TSconfig << "done" << " " << TS::COMMAND_MARKDONE << std::endl;
+	} else if ("notdone" != TS::COMMAND_UNMARKDONE) {
+		TSconfig << "notdone" << " " << TS::COMMAND_UNMARKDONE << std::endl;
+	} else if ("undo" != TS::COMMAND_UNDO) {
+		TSconfig << "undo" << " " << TS::COMMAND_UNDO << std::endl;
+	} else if ("redo" != TS::COMMAND_REDO) {
+		TSconfig << "redo" << " " << TS::COMMAND_REDO << std::endl;
+	} else if ("view" != TS::COMMAND_VIEW) {
+		TSconfig << "view" << " " << TS::COMMAND_VIEW << std::endl;
+	} else if ("clear" != TS::COMMAND_CLEAR_ALL) {
+		TSconfig << "clear" << " " << TS::COMMAND_CLEAR_ALL << std::endl;
+	} else if ("display" != TS::COMMAND_DISPLAY_ALL) {
+		TSconfig << "display" << " " << TS::COMMAND_DISPLAY_ALL << std::endl;
+	} else if ("load" != TS::COMMAND_LOAD) {
+		TSconfig << "load" << " " << TS::COMMAND_LOAD << std::endl;
+	} else if ("save" != TS::COMMAND_SAVE) {
+		TSconfig << "save" << " " << TS::COMMAND_SAVE << std::endl;
+	} else if ("exit" != TS::COMMAND_EXIT) {
+		TSconfig << "exit" << " " << TS::COMMAND_EXIT << std::endl;
 	}
 	return;
 }
@@ -642,11 +641,11 @@ std::vector<std::string> IO::getText(std::string fileName) {
 
 	assert(fileIsOpen(inputFile));
 
-	while(!inputFile.eof()) {
+	while (!inputFile.eof()) {
 		std::string line;
 		getline(inputFile,line);
 
-		if(line != "") {
+		if (line != "") {
 			textVector.push_back(line);
 		}
 	}

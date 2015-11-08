@@ -2,10 +2,10 @@
 //
 //========== Setup for your Component Class ==========
 // Declare in header file as private member of the component class:
-//		TbLogger* logger;
+//		TsLogger* logger;
 //
 // Initialise in cpp file in constructor, change ### to class name:
-//		logger = TbLogger::getInstance();
+//		logger = TsLogger::getInstance();
 //		logger->setLogLevel(DEBUG);
 //		logger->log(SYS,"### instantiated");
 //
@@ -34,17 +34,17 @@ enum Level {
 	FATAL	// very severe error that will presumably lead the application to abort
 };
 
-class TbLogger {
+class TsLogger {
 private:
 	static const std::string logFileName;
-	static TbLogger* theOne;
+	static TsLogger* theOne;
 	Level logLevel;
-	TbLogger();
+	TsLogger();
 
 public:
 	char* getLocalTime();
-	static TbLogger* getInstance();
-	~TbLogger();
+	static TsLogger* getInstance();
+	~TsLogger();
 
 	void setLogLevel(Level level);
 	void log(Level level, std::string message);
