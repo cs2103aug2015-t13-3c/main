@@ -808,18 +808,30 @@ std::string Search::doRegexSearch() {
 	std::ostringstream indexString;
 	std::string returnString;
 	int id;
-
+	bool isMatch = false;
 	std::vector<Task> taskVector;
-	std::vector<Task>::iterator iter;
+	std::vector<Task>::iterator taskIter;	
+	std::vector<std::string> tokens;
+	std::vector<std::string>::iterator tokenIter;
+
 
 	taskVector = taskStore;
 	sortDate(taskVector);
 
-	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
-		if (std::regex_match(iter->getName(), std::regex(searchPhrase))) {
-			id = iter->getID();
+	for (taskIter = taskVector.begin(); taskIter != taskVector.end(); ++taskIter) {
+		tokens = Utilities::stringToVec(taskIter->getName());
+		for (tokenIter=tokens.begin(); tokenIter!=tokens.end(); ++tokenIter) {
+			if (std::regex_match(*tokenIter, std::regex(searchPhrase))) {
+				isMatch = true;
+			}
+		}
+
+		if (isMatch) {
+			id = taskIter->getID();
 			indexString << id << ",";
 		}
+
+		isMatch = false;
 	}
 
 	returnString = indexString.str();
