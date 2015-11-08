@@ -88,48 +88,42 @@ TaskType Task::getReserveType() {
 }
 
 int Task::getReserveStartDate() {
-	if (reserveStartDate.size() == 0) {
-		TsLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveStartDate: " + std::to_string(DATE_NOT_SET));
+	if (reserveStartDate.empty()) {
 		return DATE_NOT_SET;
 	}
 	int date = *(reserveStartDate.begin());
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartDate: " + std::to_string(date));
 	return date;
 }
 
 int Task::getReserveStartTime() {
-	if (reserveStartTime.size() == 0) {
+	if (reserveStartTime.empty()) {
 		return TIME_NOT_SET;
 	}
 	int time = *(reserveStartTime.begin());
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveStartTime: " + std::to_string(time));
 	return time;
 }
 
 int Task::getReserveEndDate() {
-	if (reserveEndDate.size() == 0) {
-		TsLogger::getInstance()->log(DEBUG_INTERNAL,"Returning reserveEndDate: " + std::to_string(DATE_NOT_SET));
+	if (reserveEndDate.empty()) {
 		return DATE_NOT_SET;
 	}
 	int date = *(reserveEndDate.begin());
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndDate: " + std::to_string(date));
 	return date;
 }
 
 int Task::getReserveEndTime() {
-	if (reserveEndTime.size() == 0) {
+	if (reserveEndTime.empty()) {
 		return TIME_NOT_SET;
 	}
 	int time = *(reserveEndTime.begin());
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Getting reserveEndTime: " + std::to_string(time));
 	return time;
 }
 
 bool Task::getReserveStatus() {
-	if (    reserveStartDate.size() != 0
-		&& reserveStartTime.size() != 0
-		&& reserveEndDate.size()   != 0
-		&& reserveEndTime.size()   != 0) {
+	if (   !reserveStartDate.empty()
+		|| !reserveStartTime.empty()
+		|| !reserveEndDate.empty()
+		|| !reserveEndTime.empty()) {
 			return true;
 	}
 	return false;
@@ -142,29 +136,24 @@ void Task::setReserveType(TaskType newType) {
 
 void Task::addReserveStartDate(int newReservation) {
 	reserveStartDate.clear();
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartDate: " + std::to_string(newReservation));
 	reserveStartDate.insert(newReservation);
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Successfully set reserveStartDate");
 	return;
 }
 
 void Task::addReserveStartTime(int newReservation) {
 	reserveStartTime.clear();
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveStartTime: " + std::to_string(newReservation));
 	reserveStartTime.insert(newReservation);
 	return;
 }
 
 void Task::addReserveEndDate(int newReservation) {
 	reserveEndDate.clear();
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndDate: " + std::to_string(newReservation));
 	reserveEndDate.insert(newReservation);
 	return;
 }
 
 void Task::addReserveEndTime(int newReservation) {
 	reserveEndTime.clear();
-	TsLogger::getInstance()->log(DEBUG_INTERNAL,"Setting reserveEndTime: " + std::to_string(newReservation));
 	reserveEndTime.insert(newReservation);
 	return;
 }
@@ -179,8 +168,8 @@ void Task::pickReserve() {
 
 void Task::clearReserve() {
 	reserveStartDate.clear();
-	reserveStartDate.clear();
-	reserveStartDate.clear();
+	reserveStartTime.clear();
+	reserveEndDate.clear();
 	reserveEndTime.clear();
 	return;
 }
@@ -217,6 +206,16 @@ std::string Task::getDisplayDate() {
 	} else if (startDate != endDate) {
 		date = Utilities::toDisplayDate(startDate) + " - " + Utilities::toDisplayDate(endDate);
 	}
+
+	if (getReserveStatus() == true) {
+		date += "\n";
+		if (reserveStartDate == reserveEndDate) {
+			date += Utilities::toDisplayDate(getReserveStartDate());
+		} else {
+			date += Utilities::toDisplayDate(getReserveStartDate()) + " - " +
+				Utilities::toDisplayDate(getReserveEndDate());
+		}
+	}
 	return date;
 }
 
@@ -228,6 +227,16 @@ std::string Task::getDisplayTime() {
 		time = Utilities::toDisplayTime(endTime);
 	} else if (startTime != endTime) {
 		time = Utilities::toDisplayTime(startTime) + " - " + Utilities::toDisplayTime(endTime);;
+	}
+
+	if (getReserveStatus() == true) {
+		time += "\n";
+		if (reserveStartTime == reserveEndTime) {
+			time += Utilities::toDisplayTime(getReserveStartTime());
+		} else {
+			time += Utilities::toDisplayTime(getReserveStartTime()) + " - " +
+				Utilities::toDisplayTime(getReserveEndTime());
+		}
 	}
 	return time;
 }
@@ -280,7 +289,7 @@ bool Task::setLabelsToDelete(std::vector<std::string> oldLabels) {
 }
 
 bool Task::clearLabels() {
-	if (labels.size() == 0) {
+	if (labels.empty()) {
 		return false;
 	}
 	labels.clear();

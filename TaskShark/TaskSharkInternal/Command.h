@@ -7,6 +7,8 @@
 #include "IO.h"
 
 class TS {
+	// Place these in a class to allow custom Commands
+	// Otherwise 'const' is needed for global strings
 public:
 	static bool firstLoad;
 	static std::string MESSAGE_WELCOME;
@@ -28,6 +30,7 @@ public:
 	static std::string COMMAND_DISPLAY_ALL;
 	static std::string COMMAND_LOAD;
 	static std::string COMMAND_SAVE;
+	static std::string COMMAND_SET;
 	static std::string COMMAND_EXIT;
 };
 
@@ -49,6 +52,7 @@ enum CommandType {
 	DISPLAY_ALL,
 	LOAD,
 	SAVE,
+	SET,
 	EXIT,
 	INVALID
 };
@@ -92,6 +96,9 @@ protected:
 	static std::vector<Task> taskStore;
 
 	TsLogger* logger;
+	bool isExecuteSuccess;
+	std::string invalidDateTimeString;
+	std::string msg;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -157,7 +164,7 @@ private:
 	void checkOverlap();
 	bool doAdd();
 public:
-	Add(Task task);
+	Add(Task task, std::string invalidDateTimeString="");
 	~Add();
 	Task getNewTask();
 
@@ -203,7 +210,7 @@ private:
 	bool updateEVENT();
 public:
 	Modify(int taskID, bool isModifyFloating);
-	Modify(int taskID, std::vector<FieldType> fields, Task task);
+	Modify(int taskID, std::vector<FieldType> fields, Task task, std::string invalidDateTimeString="");
 	Modify(CommandType pick);
 	~Modify();
 	int getModifyID();
@@ -290,7 +297,7 @@ private:
 	bool viewDone();
 	bool viewToday();
 	bool viewLabel(std::vector<std::string> label);
-	
+
 public:
 	View(ViewType newView,std::string labels);
 	View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period=VIEWTYPE_PERIOD);
@@ -384,7 +391,6 @@ public:
 	std::string getFilePath();
 
 	void execute();
-
 	std::string getMessage();
 };
 
@@ -402,7 +408,18 @@ public:
 	std::string getFilePath();
 
 	void execute();
+	std::string getMessage();
+};
 
+class Set: public Command {
+private:
+	std::string type;
+	std::string customString;
+public:
+	Set(std::string keyword, std::string userString);
+	~Set();
+
+	void execute();
 	std::string getMessage();
 };
 

@@ -29,7 +29,7 @@ private:
 	bool isDateField(FieldType field);
 	bool isTodoField(FieldType field);
 
-	void placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool &isReservation,
+	std::string placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool &isReservation,
 		FieldType inputMode, std::vector<std::string> inputString);	
 
 	FieldType convertFieldDateToTime(FieldType &inputMode);
@@ -38,7 +38,7 @@ private:
 	std::vector<std::string>	removeSlashKeywords(std::vector<std::string> vecString);
 
 public:
-	Task* parseTask(std::string restOfCommand);
+	Task* parseTask(std::string &restOfCommand);
 	std::vector<std::string> parseSearchParameters(std::string restOfInput);
 	int parseDate(std::vector<std::string> dateString);
 	int parseByDate(std::vector<std::string> dateString);

@@ -3,8 +3,6 @@
 #ifndef POWERSEARCH_H_
 #define POWERSEARCH_H_
 
-#include "Command.h"
-
 class PowerSearch: public Command {
 private:
 	std::string msg;
@@ -17,8 +15,10 @@ private:
 	int hrsNeeded;
 	int minsNeeded;
 
-	std::vector<Task> tasksWithinPeriod;	// tasks in the periods of interest
-	std::vector<Task> freePeriods;			// each task element stores the start and end of the free period
+	// Tasks that are within the period of interest
+	std::vector<Task> tasksWithinPeriod;	
+	// Contains "tasks" that hold the start and end of each free period found 
+	std::vector<Task> freePeriods;			
 
 	void convertTime(std::vector<Task> &taskVector);
 	void addPeriod(int startDate, int startTime, int endDate, int endTime);
@@ -40,7 +40,7 @@ public:
 	void searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime);
 	void regexSearch(std::string phr, int startDate, int startTime, int endDate, int endTime);
 	void searchFreeSlot(int startDate, int startTime, int endDate, int endTime, 
-		int daysNeeded, int hrsNeeded, int minsNeeded); // Start and end of the period of interest
+		int daysNeeded, int hrsNeeded, int minsNeeded); 
 
 
 	void execute();

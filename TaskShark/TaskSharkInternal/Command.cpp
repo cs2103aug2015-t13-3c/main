@@ -24,6 +24,7 @@ std::string TS::COMMAND_CLEAR_ALL = "clear";
 std::string TS::COMMAND_DISPLAY_ALL = "display";
 std::string TS::COMMAND_LOAD = "load";
 std::string TS::COMMAND_SAVE = "save";
+std::string TS::COMMAND_SET = "set";
 std::string TS::COMMAND_EXIT = "exit";
 
 //==================================================
@@ -362,10 +363,11 @@ std::string Command::getMessage() {
 
 //============== ADD : PUBLIC METHODS ===============
 
-Add::Add(Task task) : Command(ADD) {
+Add::Add(Task task, std::string restOfCommand) : Command(ADD) {
 	newTask = task;
 	currViewID = 0;
 	isOverlap = false;
+	invalidDateTimeString = restOfCommand;
 }
 
 Add::~Add() {}
@@ -390,10 +392,13 @@ void Add::undo() {
 
 std::string Add::getMessage() {
 	if (isOverlap) {
-		return "Task to be added overlaps with existing task!";
+		msg = "Task added overlaps with existing task!";
+	} else if (invalidDateTimeString != "") {
+		msg = "Task added contains invalid date/time: " + invalidDateTimeString;
 	} else {
-		return("\"" + newTask.getName() + "\"" + " added");
+		msg = "\"" + newTask.getName() + "\" added";
 	}
+	return msg;
 }
 
 //============== ADD : PRIVATE METHODS ===============
@@ -460,12 +465,12 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-
 	if ((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
 		taskStore.push_back(taskToBeDeleted);
 	}
+	Task::lastEditID = taskToBeDeleted.getID();
 
 	/*
 	// For in-place undoing, if view is not set back to default
@@ -475,9 +480,6 @@ void Delete::undo() {
 	currentView.push_back(taskToBeDeleted);
 	}
 	*/
-
-	Task::lastEditID = taskToBeDeleted.getID();
-
 	defaultView();
 }
 
@@ -506,11 +508,13 @@ Modify::Modify(int taskID, bool isModifyFloating) : Command(MODIFY) {
 	isSetFloating = isModifyFloating;
 }
 
-Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
-	modifyID = taskID;
-	isSetFloating = false;
-	fieldsToModify = fields;
-	tempTask = task;
+Modify::Modify(int taskID, std::vector<FieldType> fields,
+			   Task task, std::string restOfInput) : Command(MODIFY) {
+				   modifyID = taskID;
+				   isSetFloating = false;
+				   fieldsToModify = fields;
+				   tempTask = task;
+				   invalidDateTimeString = restOfInput;
 }
 
 Modify::Modify(CommandType pick) : Command(pick) {}
@@ -555,7 +559,12 @@ void Modify::undo() {
 }
 
 std::string Modify::getMessage() {
-	return "successfully modified!";
+	if (invalidDateTimeString != "") {
+		msg = "Task added contains invalid date/time: " + invalidDateTimeString;
+	} else {
+		msg = "successfully modified!";
+	}
+	return msg;
 }
 
 //============= MODIFY : PRIVATE METHODS ===========
@@ -583,10 +592,12 @@ void Modify::doModify() {
 			taskStoreIter->addLabels(tempTask.getLabels());
 			break;
 		case LABELS_DELETE:
-			taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
-			break;
 		case LABELS_CLEAR:
-			taskStoreIter->clearLabels();
+			if (tempTask.getLabelsToDelete().empty()) {
+				taskStoreIter->clearLabels();
+			} else {
+				taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
+			}
 			break;
 		case PRIORITY_SET:
 			taskStoreIter->setPriority();
@@ -640,12 +651,10 @@ void Modify::doModify() {
 		case RESERVE_TODO_DATE:
 			isTODOreserve = true;
 			taskStoreIter->addReserveEndDate(tempTask.getEndDate());
-			// taskStoreIter->addReserveStartDate(tempTask.getStartDate());
 			break;
 		case RESERVE_TODO_TIME:
 			isTODOreserve = true;
 			taskStoreIter->addReserveEndTime(tempTask.getEndTime());
-			// taskStoreIter->addReserveStartTime(tempTask.getStartTime());
 			break;
 		case RESERVE:
 			break;
@@ -808,18 +817,30 @@ std::string Search::doRegexSearch() {
 	std::ostringstream indexString;
 	std::string returnString;
 	int id;
-
+	bool isMatch = false;
 	std::vector<Task> taskVector;
-	std::vector<Task>::iterator iter;
+	std::vector<Task>::iterator taskIter;	
+	std::vector<std::string> tokens;
+	std::vector<std::string>::iterator tokenIter;
+
 
 	taskVector = taskStore;
 	sortDate(taskVector);
 
-	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
-		if (std::regex_match(iter->getName(), std::regex(searchPhrase))) {
-			id = iter->getID();
+	for (taskIter = taskVector.begin(); taskIter != taskVector.end(); ++taskIter) {
+		tokens = Utilities::stringToVec(taskIter->getName());
+		for (tokenIter=tokens.begin(); tokenIter!=tokens.end(); ++tokenIter) {
+			if (std::regex_match(*tokenIter, std::regex(searchPhrase))) {
+				isMatch = true;
+			}
+		}
+
+		if (isMatch) {
+			id = taskIter->getID();
 			indexString << id << ",";
 		}
+
+		isMatch = false;
 	}
 
 	returnString = indexString.str();
@@ -967,7 +988,6 @@ View::View(ViewType newView, std::string labels) : Command(VIEW) {
 
 View::View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period) : Command(VIEW) {
 	view = VIEWTYPE_PERIOD;
-	logger->log(DEBUG,"Setting view period");
 	periodParams = viewParameters;
 	periodString = periodInput;
 	previousView = currentView;
@@ -980,7 +1000,15 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
+
 	logger->log(DEBUG,"Viewing...");
+	/*
+	if (TS::firstLoad == true) {
+		defaultView();
+		Logic::setTodayMode();
+		return;
+	}
+	*/
 
 	switch (view) {
 	case VIEWTYPE_ALL:
@@ -1004,7 +1032,6 @@ void View::execute() {
 		Logic::setPastMode();
 		break;
 	case VIEWTYPE_WEEK: {
-		logger->log(DEBUG,"Viewing week");
 		int currentDate = logger->getDate();
 		int weekDate = currentDate + 7;
 		// In case weekDate overruns to next month
@@ -1047,12 +1074,12 @@ void View::execute() {
 		int endDate = Utilities::stringToInt(periodParams[3]);
 		int endTime = Utilities::stringToInt(periodParams[4]);
 		viewPeriod(startDate, startTime, endDate, endTime);
-		logger->log(DEBUG, "Viewing period from " + std::to_string(startDate) + " " + std::to_string(startTime) + " to " + std::to_string(endDate) + " " + std::to_string(endTime));
 		Logic::setEventsMode();
-		break;}
+		break; }
 	case VIEWTYPE_INVALID:
 		break;
 	}
+	return;
 }
 
 void View::undo() {
@@ -1060,20 +1087,19 @@ void View::undo() {
 }
 
 std::string View::getMessage() {
-	std::string viewMsg;
-
 	if (TS::firstLoad == true) {
 		TS::firstLoad = false;
-		viewMsg = TS::MESSAGE_WELCOME;
+		msg = TS::MESSAGE_WELCOME;
 	} else {
-		viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
+		msg = "Viewing: " + Utilities::viewTypeToString(view);
 		if (view == VIEWTYPE_LABELS) {
-			viewMsg += " " + Utilities::vecToString(viewLabels);
+			msg += " " + Utilities::vecToString(viewLabels);
 		} else if (view == VIEWTYPE_PERIOD) {
-			viewMsg = "Viewing: " + periodString;
+			msg = "Viewing: " + periodString;
 		}
 	}
-	return viewMsg;
+	logger->log(DEBUG, msg);
+	return msg;
 }
 
 //============== VIEW : PRIVATE METHODS ============
@@ -1240,8 +1266,7 @@ void Pick::execute() {
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
-	logger->log(DEBUG,"Pick executed");
-	// DefaultView();
+	//defaultView();
 	initialiseIterators(modifyID);
 }
 
@@ -1249,19 +1274,26 @@ void Pick::undo() {
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
-	// DefaultView();
+	//defaultView();
 }
 
 std::string Pick::getMessage() {
-	return "successfully picked!";
+	if (isExecuteSuccess) {
+		msg = "successfully picked!";
+	} else {
+		msg = "reserve not picked!";
+	}
+	return msg;
 }
 
 //============= PICK : PRIVATE METHODS ===========
 
 void Pick::doPick() {
+	isExecuteSuccess = false;
 	if (pickReserve) {
 		if (taskStoreIter->getReserveStatus() == true) {
 			taskStoreIter->pickReserve();
+			isExecuteSuccess = true;
 		}
 	}
 	taskStoreIter->clearReserve();
@@ -1346,6 +1378,39 @@ std::string Save::getMessage() {
 	} else {
 		return "Unable to save \"" + filePath + "\". Invalid path name.";
 	}
+}
+
+//==================================================
+//                        SET
+//==================================================
+
+Set::Set(std::string keyword, std::string userString) : Command(SET) {
+	type = keyword;
+	customString = userString;
+}
+
+Set::~Set() {}
+
+void Set::execute() {
+	isExecuteSuccess = false;
+	if (Utilities::equalsIgnoreCase(type,"welcome")) {
+		TS::MESSAGE_WELCOME = customString;
+	} else if (Utilities::stringToVec(customString).size() == 1) {
+		isExecuteSuccess = IO::getInstance()->setCustomCommand(type,customString);
+	}
+	return;
+}
+
+std::string Set::getMessage() {
+	msg = "";
+	if (Utilities::equalsIgnoreCase(type,"welcome")) {
+		msg = "Welcome message successfully set as: " + TS::MESSAGE_WELCOME;
+	} else if (isExecuteSuccess) {
+		msg = "Command \"" + type + "\" successfully set as: " + customString;
+	} else {
+		msg = "Invalid set attempt: " + type + " " + customString;
+	}
+	return msg;
 }
 
 //==================================================

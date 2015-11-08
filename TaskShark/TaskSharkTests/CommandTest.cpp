@@ -9,7 +9,7 @@ void addThreeSentences(std::vector<Task> copyTask);
 namespace TaskSharkTests {
 	TEST_CLASS(Command_Add) {
 public:
-	TEST_METHOD_INITIALIZE(InitialiseLogger) {
+	TEST_METHOD_INITIALIZE(GetInstanceForLogger) {
 		TsLogger::getInstance();
 	}
 
@@ -893,7 +893,7 @@ public:
 
 		copyTask = viewPast.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual(std::string("Sentence three."), iter->getName());
+		Assert::AreEqual(std::string("Sentence three."), iter->getName());		
 	}
 
 	TEST_METHOD(Command_View_Notdone) {
@@ -981,7 +981,7 @@ public:
 		userInput = "view all";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getCurrentView().back();
+		task = cmd->getTaskStore().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());
@@ -991,6 +991,8 @@ public:
 		Assert::AreEqual(1400, task.getStartTime());
 		Assert::AreEqual(151201, task.getEndDate());
 		Assert::AreEqual(1400, task.getEndTime());
+
+
 
 		userInput = "pick 1 reserve";
 		cmd = parser->parse(userInput);
@@ -1014,7 +1016,7 @@ public:
 		userInput = "view all";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getCurrentView().back();
+		task = cmd->getTaskStore().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());
