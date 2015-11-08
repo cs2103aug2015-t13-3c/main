@@ -893,7 +893,7 @@ public:
 
 		copyTask = viewPast.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual(std::string("Sentence three."), iter->getName());
+		Assert::AreEqual(std::string("Sentence three."), iter->getName());		
 	}
 
 	TEST_METHOD(Command_View_Notdone) {
@@ -991,6 +991,8 @@ public:
 		Assert::AreEqual(1400, task.getStartTime());
 		Assert::AreEqual(151201, task.getEndDate());
 		Assert::AreEqual(1400, task.getEndTime());
+
+
 
 		userInput = "pick 1 reserve";
 		cmd = parser->parse(userInput);

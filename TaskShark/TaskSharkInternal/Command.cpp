@@ -1000,11 +1000,15 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
+
+	logger->log(DEBUG,"Viewing...");
+	/*
 	if (TS::firstLoad == true) {
 		defaultView();
 		Logic::setTodayMode();
 		return;
 	}
+	*/
 
 	switch (view) {
 	case VIEWTYPE_ALL:
@@ -1262,7 +1266,7 @@ void Pick::execute() {
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
-	defaultView();
+	//defaultView();
 	initialiseIterators(modifyID);
 }
 
@@ -1270,7 +1274,7 @@ void Pick::undo() {
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
-	defaultView();
+	//defaultView();
 }
 
 std::string Pick::getMessage() {
