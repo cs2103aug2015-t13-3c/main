@@ -5,7 +5,6 @@
 using namespace System;
 using namespace UserInterface;
 using namespace System::Windows::Forms;
-using namespace System::Threading;
 
 [STAThread]
 int main() {
@@ -26,14 +25,12 @@ UI::UI() {
 	logic = logic->getInstance();
 	tasks = new std::vector<DisplayedTask>();
 	logic->subscribe(tasks);
-	input->Text = "view all";
+	input->Text = "view today";
 	getInput();
 	processAndExecute();
 	input->Clear();
 	originalRowPosition = 0;
 	tabs->Style = this->Style;
-	input->Focus();
-	this->ActiveControl = input;
 	//	floatingTaskDisplay->SelectionAlignment = HorizontalAlignment::Center;
 	inputHistoryCount = 0;
 	inputHistory = gcnew System::Collections::Generic::List<String^>();
@@ -154,7 +151,8 @@ UI::UI() {
 }
 
 UI::~UI() {
-	if (components) {
+	if(components) {
 		delete components;
 	}
 }
+

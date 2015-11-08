@@ -1199,28 +1199,10 @@ DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
 	updateCurrView();
-	formatDefaultView();
+	View view(VIEWTYPE_ALL,"");
+	view.execute();
 }
 
-void DisplayAll::formatDefaultView() {
-	// Requires refinement, possibly separating deadlines and events
-	std::vector<Task> startUpView;
-	std::vector<Task> noStar;
-	std::vector<Task>::iterator i = currentView.begin();
-	while (i != currentView.end()) {
-		if (!(i->getDoneStatus())) {
-			if (i->getPriorityStatus()) {
-				startUpView.push_back(*i);
-			} else {
-				noStar.push_back(*i);
-			}
-		}
-		++i;
-	}
-	sortDate(noStar);
-	noStar.insert(noStar.begin(),startUpView.begin(),startUpView.end());
-	currentView = noStar;
-}
 
 void DisplayAll::undo() {
 	currentView = previousView;	

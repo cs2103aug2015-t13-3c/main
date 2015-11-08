@@ -63,7 +63,7 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(TargetDir)
-del .tslog</Command>
+del .tblog</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,13 +78,19 @@ del .tslog</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="MetroFramework">
-      <HintPath>metrodll\MetroFramework.dll</HintPath>
+      <HintPath>..\TaskSharkUI\metrodll\MetroFramework.dll</HintPath>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
     </Reference>
     <Reference Include="MetroFramework.Design">
-      <HintPath>metrodll\MetroFramework.Design.dll</HintPath>
+      <HintPath>..\TaskSharkUI\metrodll\MetroFramework.Design.dll</HintPath>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
     </Reference>
     <Reference Include="MetroFramework.Fonts">
-      <HintPath>metrodll\MetroFramework.Fonts.dll</HintPath>
+      <HintPath>..\TaskSharkUI\metrodll\MetroFramework.Fonts.dll</HintPath>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -96,7 +102,6 @@ del .tslog</Command>
     <ClCompile Include="CommandHistory.cpp" />
     <ClCompile Include="Dropdown.cpp" />
     <ClCompile Include="Execute.cpp" />
-    <ClCompile Include="Highlight.cpp" />
     <ClCompile Include="Keypress.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Timer.cpp" />

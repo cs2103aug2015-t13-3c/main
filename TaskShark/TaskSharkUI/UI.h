@@ -53,37 +53,42 @@ namespace UserInterface {
 
 		// @@author generated
 		// @@windows form designer generated
-	private: System::Windows::Forms::RichTextBox^ input;
-	private: System::Windows::Forms::TextBox^ feedback;
-	private: System::Windows::Forms::TextBox^ currentTime;
-	private: System::Windows::Forms::Timer^ updateCurrentTime;
-	private: System::Windows::Forms::PictureBox^ help;
-	private: System::Windows::Forms::ComboBox^ dropDown;
-	private: MetroFramework::Controls::MetroTabControl^ tabs;
-	private: MetroFramework::Controls::MetroTabPage^ all;
-	private: MetroFramework::Controls::MetroTabPage^ today;
-	private: MetroFramework::Controls::MetroTabPage^ week;
-	private: MetroFramework::Controls::MetroTabPage^ events;
-	private: MetroFramework::Controls::MetroTabPage^ todo;
-	private: MetroFramework::Controls::MetroTabPage^ floating;
-	private: MetroFramework::Controls::MetroTabPage^ search;
-	private: MetroFramework::Controls::MetroTabPage^ past;
-	private: System::Windows::Forms::DataGridView^ display;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ label;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ description;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Date;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ time;
+	private: System::Windows::Forms::RichTextBox^  input;
+	private: System::Windows::Forms::TextBox^  feedback;
+	private: System::Windows::Forms::TextBox^  currentTime;
+	private: System::Windows::Forms::Timer^  updateCurrentTime;
+	private: System::Windows::Forms::PictureBox^  help;
+	private: System::Windows::Forms::ComboBox^  dropDown;
+	private: MetroFramework::Controls::MetroTabControl^  tabs;
+	private: MetroFramework::Controls::MetroTabPage^  all;
+	private: MetroFramework::Controls::MetroTabPage^  today;
+	private: MetroFramework::Controls::MetroTabPage^  week;
+	private: MetroFramework::Controls::MetroTabPage^  events;
+	private: MetroFramework::Controls::MetroTabPage^  todo;
+	private: MetroFramework::Controls::MetroTabPage^  floating;
+	private: MetroFramework::Controls::MetroTabPage^  search;
+	private: MetroFramework::Controls::MetroTabPage^  past;
+	private: System::Windows::Forms::DataGridView^  display;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  id;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  label;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Date;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
 
-	private: System::ComponentModel::IContainer^ components;
+
+
+
+
+
+	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
 
 			 /// Required method for Designer support - do not modify	
 			 void InitializeComponent(void) {
 				 this->components = (gcnew System::ComponentModel::Container());
-				 System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-				 System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 				 this->input = (gcnew System::Windows::Forms::RichTextBox());
 				 this->feedback = (gcnew System::Windows::Forms::TextBox());
 				 this->currentTime = (gcnew System::Windows::Forms::TextBox());
@@ -105,10 +110,10 @@ namespace UserInterface {
 				 this->floating = (gcnew MetroFramework::Controls::MetroTabPage());
 				 this->search = (gcnew MetroFramework::Controls::MetroTabPage());
 				 this->past = (gcnew MetroFramework::Controls::MetroTabPage());
-				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^ >(this->help))->BeginInit();
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->BeginInit();
 				 this->tabs->SuspendLayout();
 				 this->all->SuspendLayout();
-				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^ >(this->display))->BeginInit();
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->display))->BeginInit();
 				 this->SuspendLayout();
 				 // 
 				 // input
@@ -230,7 +235,7 @@ namespace UserInterface {
 				 this->display->BorderStyle = System::Windows::Forms::BorderStyle::None;
 				 this->display->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 				 this->display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-				 this->display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^ >(5) {this->id, this->label, 
+				 this->display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(5) {this->id, this->label, 
 					 this->description, this->Date, this->time});
 				 dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
 				 dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
@@ -266,6 +271,7 @@ namespace UserInterface {
 				 this->display->Size = System::Drawing::Size(746, 521);
 				 this->display->TabIndex = 11;
 				 this->display->TabStop = false;
+				 this->display->Click += gcnew System::EventHandler(this, &UI::display_Click);
 				 // 
 				 // id
 				 // 
@@ -413,6 +419,7 @@ namespace UserInterface {
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 				 this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+				 this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 				 this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 				 this->BackImagePadding = System::Windows::Forms::Padding(14, 15, 0, 0);
 				 this->BackMaxSize = 35;
@@ -431,13 +438,15 @@ namespace UserInterface {
 				 this->Resizable = false;
 				 this->Style = MetroFramework::MetroColorStyle::Orange;
 				 this->Text = L"      TaskShark";
+				 this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UI::UI_KeyDown);
 				 this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &UI::UI_KeyUp);
-				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^ >(this->help))->EndInit();
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->EndInit();
 				 this->tabs->ResumeLayout(false);
 				 this->all->ResumeLayout(false);
-				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^ >(this->display))->EndInit();
+				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->display))->EndInit();
 				 this->ResumeLayout(false);
 				 this->PerformLayout();
+
 			 }
 
 #pragma endregion
@@ -475,10 +484,10 @@ namespace UserInterface {
 
 		//===================== UI FUNCTIONS=======================================
 	private:	
-		System::Void input_KeyDown(System::Object^ sender,
-			System::Windows::Forms::KeyEventArgs^ e);
-		System::Void input_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e);
-		System::Void updateCurrentTime_Tick(System::Object^ sender, System::EventArgs^ e);
+		System::Void input_KeyDown(System::Object^  sender,
+			System::Windows::Forms::KeyEventArgs^  e);
+		System::Void input_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+		System::Void updateCurrentTime_Tick(System::Object^  sender, System::EventArgs^  e);
 
 		/*=====================================================================
 		reads the characters from textbox
@@ -526,47 +535,62 @@ namespace UserInterface {
 		void toPreviousCommand();
 		void toNextCommand();
 
-System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-		DisplayMode index = (DisplayMode)tabs->SelectedIndex;
-		switch (index) {
-		case ALL:
-			input->Text = "view all";
-			break;
-		case TODAY:
-			input->Text = "view today";
-			break;
-		case WEEK:
-			input->Text = "view week";
-			break;
-		case EVENTS:
-			input->Text = "view events";
-			break;
-		case DEADLINES:
-			input->Text = "view todo";
-			break;
-		case FLOATINGS:
-			input->Text = "view floating";
-			break;
-		case SEARCHES:
-			// not implemented
-			break;
-		case PAST_:
-			input->Text = "view past";
-			break;
-		case FREESLOTS:
-			// not implemented yet
-			break;
-		}
-		getInput();
-		processAndExecute();
-		input->Clear();
-	}
+		void scrollUp();
+		void scrollDown();
 
-private: System::Void UI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+
+		System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+			DisplayMode index = (DisplayMode)tabs->SelectedIndex;
+			switch (index) {
+			case ALL:
+				input->Text = "view all";
+				break;
+			case TODAY:
+				input->Text = "view today";
+				break;
+			case WEEK:
+				input->Text = "view week";
+				break;
+			case EVENTS:
+				input->Text = "view events";
+				break;
+			case DEADLINES:
+				input->Text = "view todo";
+				break;
+			case FLOATINGS:
+				input->Text = "view floating";
+				break;
+			case SEARCHES:
+				// not implemented
+				break;
+			case PAST_:
+				input->Text = "view past";
+				break;
+			case FREESLOTS:
+				// not implemented yet
+				break;
+			}
+			getInput();
+			processAndExecute();
+			input->Clear();
+		}
+		System::Void UI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			if(e->KeyCode == Keys::Escape) {	
-		this->WindowState = FormWindowState::Minimized;
-		return;
-	}
-		 }
-};
+				this->WindowState = FormWindowState::Minimized;
+				return;
+			}
+		}
+		System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
+			input->Focus();
+		}
+		System::Void UI_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			if(e->Shift) {	
+				if(e->KeyCode == Keys::Up) {
+					scrollUp();
+				} else if(e->KeyCode == Keys::Down) {
+					scrollDown();
+				}
+			}
+		}
+	};
 }

@@ -73,23 +73,54 @@ int UI::getTabIndex() {
 }
 
 void UI::updateTable(TabPage^ currentTab) {
+	bool todoDiscovered = false;
+	bool eventDiscovered = false;
+	bool floatingDiscovered = false;
 	display->Rows->Clear();
 	unsigned int size = tasks->size();
-	for (unsigned int i=0; i< size; ++i) {
+	int j = 0;
+	for(unsigned int i=0 ; i< size ; ++i) {
 		DisplayedTask task = (*tasks)[i];
 		String^ index = (i+1).ToString();
 		String^ label = gcnew String(task.label.c_str());
 		String^ title = wrapWord(task.description);
 		String^ d = gcnew String(task.date.c_str());
 		String^ t = gcnew String(task.time.c_str());	
-		display->Rows->Add(index,label,title,d,t);
-		if (task.status == PRIORITY) {
-			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Blue;
-		} else if (task.status == URGENT) {
-			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Red;
-		} else if (task.status == PAST) {
-			display->Rows[i]->DefaultCellStyle->ForeColor = Color::Gray;
+
+		if(!todoDiscovered && task.type == TODO) {
+			todoDiscovered = true;
+			display->Rows->Add("","","","","");
+			display->Rows->Add("","","Todo","","");
+			display->Rows[i+j+1]->DefaultCellStyle->BackColor = ColorTranslator::FromHtml("#FF6666");
+			j += 2;
+		} else if(!eventDiscovered && task.type == EVENT) {
+			eventDiscovered = true;
+			display->Rows->Add("","","","","");
+			display->Rows->Add("","","Events","","");
+			display->Rows[i+j+1]->DefaultCellStyle->BackColor = ColorTranslator::FromHtml("#FFB84D");
+			j += 2;
+		} else if(!floatingDiscovered && task.type == FLOATING) {
+			floatingDiscovered = true;
+			display->Rows->Add("","","","","");
+			display->Rows->Add("","","Floating","","");
+			display->Rows[i+j+1]->DefaultCellStyle->BackColor = ColorTranslator::FromHtml("#B9FF2D");
+			j += 2;
 		}
+		display->Rows->Add(index,label,title,d,t);
+		if(task.status == PRIORITY) {
+			display->Rows[i+j]->DefaultCellStyle->ForeColor = Color::Blue;
+		} else if(task.status == URGENT) {
+			display->Rows[i+j]->DefaultCellStyle->ForeColor = Color::Red;
+		} else if(task.status == PAST) {
+			display->Rows[i+j]->DefaultCellStyle->ForeColor = Color::Gray;
+		}
+		if(i == size-1) {
+			display->Rows->RemoveAt(0);
+		}
+	}
+	if(size > 0) {
+		display->Rows[0]->Selected = false;
+		display->FirstDisplayedScrollingRowIndex = 0;
 	}
 	currentTab->Controls->Add(display);
 }
@@ -208,4 +239,16 @@ void UI::processAndExecute() {
 
 void UI::printFeedBackMessage(std::string message) {
 	feedback->Text = gcnew String(message.c_str());
+}
+
+void UI::scrollDown() {
+	if(display->FirstDisplayedScrollingRowIndex < display->RowCount )
+		display->FirstDisplayedScrollingRowIndex = 
+		display->FirstDisplayedScrollingRowIndex + 1;
+}
+
+void UI::scrollUp() {
+	if(display->FirstDisplayedScrollingRowIndex > 0 )
+		display->FirstDisplayedScrollingRowIndex = 
+		display->FirstDisplayedScrollingRowIndex - 1;
 }
