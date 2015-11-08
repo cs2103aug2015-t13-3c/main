@@ -39,9 +39,11 @@ std::string IO::getFilePath() {
 
 // Note: Directory must already exist
 // Returns false if unable to set file path
-bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector) {
+bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile) {
 	if(saveFile(newFilePath,taskVector)) {
-		remove(filePath.c_str());
+		if(isRemovePrevFile || filePath==newFilePath) {
+			remove(filePath.c_str());
+		}
 		filePath = newFilePath;
 		return true;
 	}
@@ -50,7 +52,7 @@ bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector) {
 
 // Loads file and extracts JSON text into a task vector
 // Throws an assert() if file contents are invalid
-std::vector<Task> IO::loadFile(std::string fileName) {
+std::vector<Task> IO::loadFile(std::string fileName, bool isOverwriteLoadFile) {
 	std::ifstream inputFile(fileName);
 	if(!fileIsOpen(inputFile)) {
 		throw std::runtime_error("File does not exist");
@@ -76,7 +78,9 @@ std::vector<Task> IO::loadFile(std::string fileName) {
 	}
 
 	inputFile.close();
-	filePath = fileName;
+	if(isOverwriteLoadFile) {
+		filePath = fileName;
+	}
 	return taskVector;
 }
 

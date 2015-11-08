@@ -26,6 +26,7 @@
 #define DISPLAY "display"
 #define EDIT "edit "
 #define LOAD "load "
+#define NOTDONE "notdone "
 #define PICK "pick "
 #define REDO "redo"
 
@@ -459,6 +460,7 @@ namespace UserInterface {
 		System::Collections::Generic::List<String^>^ modifyCommands;		
 		System::Collections::Generic::List<String^>^ loadCommands;
 		System::Collections::Generic::List<String^>^ pickCommands;
+		System::Collections::Generic::List<String^>^ saveCommands;
 		System::Collections::Generic::List<String^>^ searchCommands;
 		System::Collections::Generic::List<String^>^ viewCommands;
 
