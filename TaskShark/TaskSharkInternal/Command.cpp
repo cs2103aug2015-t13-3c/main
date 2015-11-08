@@ -591,10 +591,12 @@ void Modify::doModify() {
 			taskStoreIter->addLabels(tempTask.getLabels());
 			break;
 		case LABELS_DELETE:
-			taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
-			break;
 		case LABELS_CLEAR:
-			taskStoreIter->clearLabels();
+			if (tempTask.getLabelsToDelete().empty()) {
+				taskStoreIter->clearLabels();
+			} else {
+				taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
+			}
 			break;
 		case PRIORITY_SET:
 			taskStoreIter->setPriority();
