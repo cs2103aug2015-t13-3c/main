@@ -199,12 +199,13 @@ namespace UserInterface {
 				 this->tabs->ItemSize = System::Drawing::Size(30, 20);
 				 this->tabs->Location = System::Drawing::Point(0, 51);
 				 this->tabs->Name = L"tabs";
-				 this->tabs->SelectedIndex = 0;
+				 this->tabs->SelectedIndex = 2;
 				 this->tabs->Size = System::Drawing::Size(745, 548);
 				 this->tabs->TabIndex = 10;
 				 this->tabs->TabStop = false;
 				 this->tabs->Theme = MetroFramework::MetroThemeStyle::Light;
 				 this->tabs->UseSelectable = true;
+				 this->tabs->SelectedIndexChanged += gcnew System::EventHandler(this, &TextBuddyUI::tabs_SelectedIndexChanged);
 				 // 
 				 // all
 				 // 
@@ -244,7 +245,9 @@ namespace UserInterface {
 				 dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
 				 this->display->DefaultCellStyle = dataGridViewCellStyle1;
 				 this->display->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
+				 this->display->ImeMode = System::Windows::Forms::ImeMode::Disable;
 				 this->display->Location = System::Drawing::Point(-1, 3);
+				 this->display->MultiSelect = false;
 				 this->display->Name = L"display";
 				 this->display->ReadOnly = true;
 				 this->display->RowHeadersVisible = false;
@@ -520,5 +523,42 @@ namespace UserInterface {
 		void addCommandHistory();
 		void toPreviousCommand();
 		void toNextCommand();
+
+
+System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+		DisplayMode index = (DisplayMode)tabs->SelectedIndex;
+		switch (index) {
+		case ALL:
+			input->Text = "view all";
+			break;
+		case TODAY:
+			input->Text = "view today";
+			break;
+		case WEEK:
+			input->Text = "view week";
+			break;
+		case EVENTS:
+			input->Text = "view events";
+			break;
+		case DEADLINES:
+			input->Text = "view todo";
+			break;
+		case FLOATINGS:
+			input->Text = "view floating";
+			break;
+		case SEARCHES:
+			// not implemented
+			break;
+		case PAST_:
+			input->Text = "view past";
+			break;
+		case FREESLOTS:
+			// not implemented yet
+			break;
+		}
+		getInput();
+		processAndExecute();
+		input->Clear();
+	}
 };
 }

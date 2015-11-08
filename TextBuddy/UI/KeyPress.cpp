@@ -6,10 +6,11 @@ using namespace UserInterface;
 // Response to different keys :
 // 1. [ALL]  - if helpMode is activated, helpMode will be disabled
 // 2. [HOME] - ignore the key
-// 3. [TAB]  - if dropdown box is active, increments the selection index, else
+// 3. [ESC]  - minimize window
+// 4. [TAB]  - if dropdown box is active, increments the selection index, else
 //			   check if the input textbox has parameters from autosuggest, and 
 //			   highlights the nearest field.
-// 4. All keys except [UP], [DOWN], [RETURN] :
+// 5. All keys except [UP], [DOWN], [RETURN] :
 //			 - performs autosuggest
 
 System::Void TextBuddyUI::input_KeyUp(
@@ -17,12 +18,12 @@ System::Void TextBuddyUI::input_KeyUp(
 	System::Windows::Forms::KeyEventArgs^ e) {
 
 	Keys key = e->KeyCode;
-	if(helpMode) {
-		closeHelpMode();
-		return;
-	}
 	if(e->KeyCode == Keys::Home) {
 		//do nothing 
+		return;
+	}
+	if(key == Keys::Escape) {	
+		this->WindowState = FormWindowState::Minimized;
 		return;
 	}
 	if(key == Keys::Tab) {
@@ -58,6 +59,10 @@ System::Void TextBuddyUI::input_KeyDown(
 	System::Windows::Forms::KeyEventArgs^  e) {
 
 	Keys key = e->KeyCode;	
+	if(helpMode) {
+		closeHelpMode();
+		return;
+	}
 	if(key == Keys::Return) { 
 		if(input->Text == "s") {
 			if(tileView) {

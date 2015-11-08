@@ -2414,3 +2414,51 @@ Wed Nov 04 08:15:32 2015 Parsing "clear"
 Wed Nov 04 08:15:33 2015 Parsing "exit"
 Wed Nov 04 08:15:33 2015 Logger terminated
 
+Fri Nov 06 22:58:05 2015 Logger initialised
+Fri Nov 06 22:58:05 2015 Log level default: 2
+Fri Nov 06 22:58:05 2015 Parser instantiated
+Fri Nov 06 22:58:05 2015 Log level changed: 0
+Fri Nov 06 22:58:07 2015 Tb::COMMAND_ADD address in Utilities: 001FFEA8
+Fri Nov 06 22:58:07 2015 Test custom command: add
+Fri Nov 06 22:58:07 2015 Parsing "view"
+Fri Nov 06 22:58:07 2015 Viewing...
+Fri Nov 06 22:58:07 2015 Tb::COMMAND_ADD address in Utilities: 001FFEA8
+Fri Nov 06 22:58:07 2015 Test custom command: add
+Fri Nov 06 22:58:07 2015 Parsing "view"
+Fri Nov 06 22:58:07 2015 Viewing...
+Fri Nov 06 23:00:38 2015 Logger initialised
+Fri Nov 06 23:00:38 2015 Log level default: 2
+Fri Nov 06 23:00:38 2015 Parser instantiated
+Fri Nov 06 23:00:38 2015 Log level changed: 0
+Fri Nov 06 23:00:41 2015 Tb::COMMAND_ADD address in Utilities: 00D5FEA8
+Fri Nov 06 23:00:41 2015 Test custom command: add
+Fri Nov 06 23:00:41 2015 Parsing "view"
+Fri Nov 06 23:00:41 2015 Viewing...
+Fri Nov 06 23:01:16 2015 Tb::COMMAND_ADD address in Utilities: 00D5FEA8
+Fri Nov 06 23:01:16 2015 Test custom command: add
+Fri Nov 06 23:01:16 2015 Parsing "view"
+Fri Nov 06 23:01:16 2015 Viewing...
+Fri Nov 06 23:03:29 2015 Logger initialised
+Fri Nov 06 23:03:29 2015 Log level default: 2
+Fri Nov 06 23:03:29 2015 Parser instantiated
+Fri Nov 06 23:03:29 2015 Log level changed: 0
+Fri Nov 06 23:03:32 2015 Tb::COMMAND_ADD address in Utilities: 0030FEA8
+Fri Nov 06 23:03:32 2015 Test custom command: add
+Fri Nov 06 23:03:32 2015 Parsing "view"
+Fri Nov 06 23:03:32 2015 Viewing...
+Fri Nov 06 23:03:54 2015 Tb::COMMAND_ADD address in Utilities: 0030FEA8
+Fri Nov 06 23:03:54 2015 Test custom command: add
+Fri Nov 06 23:03:54 2015 Parsing "view"
+Fri Nov 06 23:03:54 2015 Viewing...
+Fri Nov 06 23:05:55 2015 Logger initialised
+Fri Nov 06 23:05:55 2015 Log level default: 2
+Fri Nov 06 23:05:55 2015 Parser instantiated
+Fri Nov 06 23:05:55 2015 Log level changed: 0
+Fri Nov 06 23:05:58 2015 Tb::COMMAND_ADD address in Utilities: 009CFEA8
+Fri Nov 06 23:05:58 2015 Test custom command: add
+Fri Nov 06 23:05:58 2015 Parsing "view"
+Fri Nov 06 23:05:58 2015 Viewing...
+Fri Nov 06 23:07:15 2015 Tb::COMMAND_ADD address in Utilities: 009CFEA8
+Fri Nov 06 23:07:15 2015 Test custom command: add
+Fri Nov 06 23:07:15 2015 Parsing "view"
+Fri Nov 06 23:07:15 2015 Viewing...

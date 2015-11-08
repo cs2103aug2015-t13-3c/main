@@ -194,8 +194,11 @@ void TextBuddyUI::processAndExecute() {
 	try {
 		message = logic->processCommand(*userInput);
 		feedback->ForeColor = Color::Green;
-		updateDisplay();			
-		delete userInput;
+		updateDisplay();
+		if(userInput != nullptr) {
+			delete userInput;
+			userInput = nullptr;
+		}
 	} catch(std::exception e) {
 		feedback->ForeColor = Color::Red;
 		message = std::string(e.what()) + "\t(enter \"help\" for command formats)";

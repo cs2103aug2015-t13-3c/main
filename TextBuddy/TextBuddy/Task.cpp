@@ -233,6 +233,9 @@ std::string Task::getDate_UI() {
 		return "";
 	}
 	std::string date = Utilities::getDate(startDate);
+	if(type == TODO) {
+		return "by " + date;
+	}
 	if(startDate != endDate) {
 		date = date + " - " + Utilities::getDate(endDate);
 	}
@@ -360,7 +363,7 @@ bool Task::isUrgent() {
 	std::time_t a = std::mktime(&taskDate);
 	std::time_t b = std::mktime(&now);
 	difference = std::difftime(a, b) / (60 * 60 * 24);
-	if(difference < 4) {
+	if((type == TODO && difference < 4) || (type == EVENT && isToday())) {
 		return true;
 	} 
 	return false;
