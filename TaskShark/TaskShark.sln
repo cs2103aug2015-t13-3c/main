@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskSharkInternal", "TaskSharkInternal\TaskSharkInternal.vcxproj", "{53A52011-62D5-4D89-BF4D-00AF52446D5B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskSharkTests", "TaskSharkTests\TaskSharkTests.vcxproj", "{0CAC4A04-0AAD-43E1-A873-457EAC9B69F4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskSharkUI", "TaskSharkUI\TaskSharkUI.vcxproj", "{AEFAAA69-7A60-4886-89DF-1859F64D0276}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53A52011-62D5-4D89-BF4D-00AF52446D5B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{53A52011-62D5-4D89-BF4D-00AF52446D5B}.Debug|Win32.Build.0 = Debug|Win32
+		{53A52011-62D5-4D89-BF4D-00AF52446D5B}.Release|Win32.ActiveCfg = Release|Win32
+		{53A52011-62D5-4D89-BF4D-00AF52446D5B}.Release|Win32.Build.0 = Release|Win32
+		{0CAC4A04-0AAD-43E1-A873-457EAC9B69F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0CAC4A04-0AAD-43E1-A873-457EAC9B69F4}.Debug|Win32.Build.0 = Debug|Win32
+		{0CAC4A04-0AAD-43E1-A873-457EAC9B69F4}.Release|Win32.ActiveCfg = Release|Win32
+		{0CAC4A04-0AAD-43E1-A873-457EAC9B69F4}.Release|Win32.Build.0 = Release|Win32
+		{AEFAAA69-7A60-4886-89DF-1859F64D0276}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AEFAAA69-7A60-4886-89DF-1859F64D0276}.Debug|Win32.Build.0 = Debug|Win32
+		{AEFAAA69-7A60-4886-89DF-1859F64D0276}.Release|Win32.ActiveCfg = Release|Win32
+		{AEFAAA69-7A60-4886-89DF-1859F64D0276}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
