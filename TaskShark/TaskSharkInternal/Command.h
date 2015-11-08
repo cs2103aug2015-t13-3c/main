@@ -7,6 +7,8 @@
 #include "IO.h"
 
 class TS {
+	// Place these in a class to allow custom Commands
+	// Otherwise 'const' is needed for global strings
 public:
 	static bool firstLoad;
 	static std::string MESSAGE_WELCOME;
@@ -92,6 +94,7 @@ protected:
 	static std::vector<Task> taskStore;
 
 	TsLogger* logger;
+	std::string invalidDateTimeString;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -157,7 +160,7 @@ private:
 	void checkOverlap();
 	bool doAdd();
 public:
-	Add(Task task);
+	Add(Task task, std::string invalidDateTimeString="");
 	~Add();
 	Task getNewTask();
 
@@ -203,7 +206,7 @@ private:
 	bool updateEVENT();
 public:
 	Modify(int taskID, bool isModifyFloating);
-	Modify(int taskID, std::vector<FieldType> fields, Task task);
+	Modify(int taskID, std::vector<FieldType> fields, Task task, std::string invalidDateTimeString="");
 	Modify(CommandType pick);
 	~Modify();
 	int getModifyID();
@@ -290,7 +293,7 @@ private:
 	bool viewDone();
 	bool viewToday();
 	bool viewLabel(std::vector<std::string> label);
-	
+
 public:
 	View(ViewType newView,std::string labels);
 	View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period=VIEWTYPE_PERIOD);

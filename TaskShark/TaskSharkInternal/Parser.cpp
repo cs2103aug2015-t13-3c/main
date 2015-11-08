@@ -44,13 +44,11 @@ Parser* Parser::getInstance() {
 
 std::string Parser::parseFileName(char* argv[]) {
 	char* charFilePath = argv[1];
-	// Replace single backslash '\' with double backslash '\\'
+	// Replace forwardslash '/' and single backslash '\' with double backslash '\\'
 	std::string newFilePath = Utilities::replace(charFilePath,"\\","\\\\");
-	// Replace forwardslash '/' with double backslash '\\'
 	newFilePath = Utilities::replace(newFilePath,"/","\\\\");
-	// Find where it is supposed to be the file extension ".txt"
-	std::size_t fileExtensionPos = newFilePath.size() - FILE_EXTENSION.size();
-	// Append the file extension ".txt" if neccessary
+	
+	size_t fileExtensionPos = newFilePath.size() - FILE_EXTENSION.size();
 	charFilePath = &newFilePath[0u];
 	if (charFilePath + fileExtensionPos == FILE_EXTENSION) 	{
 		newFilePath = charFilePath;
@@ -62,8 +60,8 @@ std::string Parser::parseFileName(char* argv[]) {
 
 std::string Parser::parseFileName(std::string stringFilePath) {
 	char* charFilePath = &stringFilePath[0u];
-	char* argv[2]={"",charFilePath};
-	return parseFileName(argv);
+	char* argvForm[2]={"",charFilePath};
+	return parseFileName(argvForm);
 }
 
 // Throws exceptions for:
@@ -89,7 +87,7 @@ Command* Parser::parse(std::string userInput) {
 		}
 		Task* taskPtr = parseTask(restOfInput);
 		taskPtr->setID(Task::incrementRunningCount());
-		cmd = new Add(*taskPtr);
+		cmd = new Add(*taskPtr,restOfInput);
 		break;}
 
 	case DELETE: {
@@ -119,7 +117,7 @@ Command* Parser::parse(std::string userInput) {
 		} else {
 			std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
 			Task* tempTaskPtr = parseTask(tempTaskString);
-			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
+			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr,tempTaskString);
 		}
 		break;}
 
@@ -240,7 +238,7 @@ Command* Parser::parse(std::string userInput) {
 //                 PRIVATE METHODS
 //==================================================
 
-Task* Parser::parseTask(std::string restOfCommand) {
+Task* Parser::parseTask(std::string &restOfCommand) {
 	log(INFO,"Parsing task");
 	log(DEBUG_INTERNAL,"Parsing field keyword: name");
 	FieldType inputMode = NAME;
@@ -252,6 +250,8 @@ Task* Parser::parseTask(std::string restOfCommand) {
 	bool isTODO = false;
 	bool isTODOreserve = false;
 	bool isReservation = false;
+	std::string invalidDateTimeString = "";
+	std::string errorString;
 
 	while (curr != userInput.end() || inputMode == PRIORITY_SET) {
 		inputString.clear();
@@ -261,7 +261,12 @@ Task* Parser::parseTask(std::string restOfCommand) {
 			++curr;
 		}
 
-		placeInField(newTask,isTODO,isTODOreserve,isReservation,inputMode,inputString);
+		errorString = placeInField(newTask,isTODO,isTODOreserve,isReservation,inputMode,inputString);
+		if (errorString != "") {
+			if (invalidDateTimeString != "") {
+				invalidDateTimeString += ", " + errorString;
+			}
+		}
 
 		if (curr != userInput.end()) {
 			log(DEBUG_INTERNAL,"Parsing field keyword: " + *curr);
@@ -289,6 +294,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 	}
 
 	log(INFO,"Parsed task of type: " + Utilities::taskTypeToString(newTask->getType()));
+	restOfCommand = invalidDateTimeString;
 	return newTask;
 }
 
@@ -575,15 +581,19 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 // - HH.MM AM/PM (default: assume AM)
 // - HHMM        (24-hour)
 int Parser::parseTime(std::vector<std::string> timeString) {
-	int time;
-	std::string hourString;
-	int hour;
-	std::string minString;
-	int min = 0;
-
 	if (timeString.empty()) {
 		return INVALID_TIME_FORMAT;
 	}
+
+	int time;
+	int hour;
+	int min = 0;
+	std::string hourString;
+	std::string minString;
+
+	// Add space between joined am/pm
+	timeString = Utilities::stringToVec(Utilities::replace(Utilities::vecToString(timeString),"am"," am"));
+	timeString = Utilities::stringToVec(Utilities::replace(Utilities::vecToString(timeString),"pm"," pm"));
 
 	std::vector<std::string>::iterator curr = timeString.begin();
 	if (!Utilities::isPositiveNonZeroInt(*curr)) {
@@ -671,21 +681,26 @@ void Parser::convertFieldToReserve(FieldType &inputMode) {
 	return;
 }
 
-void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool &isReservation, FieldType inputMode, std::vector<std::string> inputString) {
+std::string Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool &isReservation, FieldType inputMode, std::vector<std::string> inputString) {
 	if (inputMode == RESERVE) {
 		isReservation = true;
-		return;
+		return "";
 	}
 
+	log(DEBUG_INTERNAL,"Parsing string: " + Utilities::vecToString(inputString));
 	int newDate = DATE_NOT_SET;
 	int newTime = TIME_NOT_SET;
-
-	log(DEBUG_INTERNAL,"Parsing string: " + Utilities::vecToString(inputString));
 
 	if (isDateField(inputMode)) {
 		newDate = parseDate(inputString);
 		if (newDate == INVALID_DATE_FORMAT) {
-			convertFieldDateToTime(inputMode);
+			newTime = parseTime(inputString);
+			if(newTime == INVALID_DATE_FORMAT) {
+				std::string invalidDateTimeString = Utilities::vecToString(inputString);
+				return invalidDateTimeString;
+			} else {
+				convertFieldDateToTime(inputMode);
+			}
 		}
 
 		if (!isReservation) {
@@ -835,7 +850,7 @@ void Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool
 	case INVALID_FIELD:
 		break;
 	}
-	return;
+	return "";
 }
 
 int Parser::findMaxDays(Month month, int year) { // default year is 2015
