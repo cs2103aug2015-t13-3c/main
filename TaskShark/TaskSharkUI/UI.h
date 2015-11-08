@@ -202,6 +202,7 @@ namespace UserInterface {
 				 this->tabs->TabStop = false;
 				 this->tabs->Theme = MetroFramework::MetroThemeStyle::Light;
 				 this->tabs->UseSelectable = true;
+				 this->tabs->SelectedIndexChanged += gcnew System::EventHandler(this, &UI::tabs_SelectedIndexChanged);
 				 // 
 				 // all
 				 // 
@@ -241,7 +242,9 @@ namespace UserInterface {
 				 dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
 				 this->display->DefaultCellStyle = dataGridViewCellStyle1;
 				 this->display->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
+				 this->display->ImeMode = System::Windows::Forms::ImeMode::Disable;
 				 this->display->Location = System::Drawing::Point(-1, 3);
+				 this->display->MultiSelect = false;
 				 this->display->Name = L"display";
 				 this->display->ReadOnly = true;
 				 this->display->RowHeadersVisible = false;
@@ -256,7 +259,6 @@ namespace UserInterface {
 				 dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
 				 this->display->RowsDefaultCellStyle = dataGridViewCellStyle2;
 				 this->display->ScrollBars = System::Windows::Forms::ScrollBars::None;
-				 this->display->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::CellSelect;
 				 this->display->ShowCellErrors = false;
 				 this->display->ShowCellToolTips = false;
 				 this->display->ShowEditingIcon = false;
@@ -268,7 +270,7 @@ namespace UserInterface {
 				 // id
 				 // 
 				 this->id->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
-				 this->id->HeaderText = L"Id";
+				 this->id->HeaderText = L"ID";
 				 this->id->Name = L"id";
 				 this->id->ReadOnly = true;
 				 this->id->Resizable = System::Windows::Forms::DataGridViewTriState::False;
@@ -294,7 +296,7 @@ namespace UserInterface {
 				 // Date
 				 // 
 				 this->Date->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
-				 this->Date->HeaderText = L"date";
+				 this->Date->HeaderText = L"Date";
 				 this->Date->Name = L"Date";
 				 this->Date->ReadOnly = true;
 				 this->Date->Resizable = System::Windows::Forms::DataGridViewTriState::True;
@@ -412,6 +414,8 @@ namespace UserInterface {
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 				 this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 				 this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+				 this->BackImagePadding = System::Windows::Forms::Padding(14, 15, 0, 0);
+				 this->BackMaxSize = 35;
 				 this->ClientSize = System::Drawing::Size(749, 644);
 				 this->Controls->Add(this->currentTime);
 				 this->Controls->Add(this->tabs);
@@ -419,13 +423,15 @@ namespace UserInterface {
 				 this->Controls->Add(this->help);
 				 this->Controls->Add(this->input);
 				 this->Controls->Add(this->dropDown);
+				 this->KeyPreview = true;
 				 this->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
 				 this->MaximizeBox = false;
 				 this->Name = L"UI";
 				 this->Padding = System::Windows::Forms::Padding(0, 60, 0, 0);
 				 this->Resizable = false;
 				 this->Style = MetroFramework::MetroColorStyle::Orange;
-				 this->Text = L"UI";
+				 this->Text = L"      TaskShark";
+				 this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &UI::UI_KeyUp);
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^ >(this->help))->EndInit();
 				 this->tabs->ResumeLayout(false);
 				 this->all->ResumeLayout(false);
@@ -519,5 +525,48 @@ namespace UserInterface {
 		void addCommandHistory();
 		void toPreviousCommand();
 		void toNextCommand();
-	};
+
+System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+		DisplayMode index = (DisplayMode)tabs->SelectedIndex;
+		switch (index) {
+		case ALL:
+			input->Text = "view all";
+			break;
+		case TODAY:
+			input->Text = "view today";
+			break;
+		case WEEK:
+			input->Text = "view week";
+			break;
+		case EVENTS:
+			input->Text = "view events";
+			break;
+		case DEADLINES:
+			input->Text = "view todo";
+			break;
+		case FLOATINGS:
+			input->Text = "view floating";
+			break;
+		case SEARCHES:
+			// not implemented
+			break;
+		case PAST_:
+			input->Text = "view past";
+			break;
+		case FREESLOTS:
+			// not implemented yet
+			break;
+		}
+		getInput();
+		processAndExecute();
+		input->Clear();
+	}
+
+private: System::Void UI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			if(e->KeyCode == Keys::Escape) {	
+		this->WindowState = FormWindowState::Minimized;
+		return;
+	}
+		 }
+};
 }

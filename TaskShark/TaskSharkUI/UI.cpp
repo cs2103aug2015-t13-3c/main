@@ -62,6 +62,7 @@ UI::UI() {
 	keywords->Add(AT);
 	this->help->Image = Image::FromFile(System::AppDomain::CurrentDomain->BaseDirectory + "help.png");
 	this->Icon = gcnew System::Drawing::Icon(System::AppDomain::CurrentDomain->BaseDirectory + "shark.ico");
+	this->BackImage = Image::FromFile(System::AppDomain::CurrentDomain->BaseDirectory + "shark_bmp.bmp");
 
 	//*********** ADD command formats ******************
 	addCommands = gcnew List<String^>();
