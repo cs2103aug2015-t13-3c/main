@@ -104,12 +104,15 @@ Command* Parser::parse(std::string userInput) {
 	case MODIFY: {
 		std::string tempTaskString;
 		if(restOfInput == "" ||
-			(tempTaskString = Utilities::removeFirstWord(restOfInput)) == "") {
+			((tempTaskString=Utilities::removeFirstWord(restOfInput)) == "") && Task::lastEditID == 0) {
 				log(WARN,"No fields to modify: " + restOfInput);
 				throw std::runtime_error("No fields to modify!");
 		}
 		
 		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+		if(modifyID == 0 && Task::lastEditID != 0) {
+			tempTaskString = restOfInput;
+		}
 		if(Utilities::containsAny(tempTaskString,"float floating")) {
 			bool isSetFloating = true;
 			cmd = new Modify(modifyID,isSetFloating);
