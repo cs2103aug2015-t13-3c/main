@@ -1003,11 +1003,13 @@ ViewType View::getViewType() {
 
 void View::execute() {
 	logger->log(DEBUG,"Viewing...");
+	/*
 	if (TS::firstLoad == true) {
 		defaultView();
 		Logic::setTodayMode();
 		return;
 	}
+	*/
 
 	switch (view) {
 	case VIEWTYPE_ALL:

@@ -893,7 +893,7 @@ public:
 
 		copyTask = viewPast.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual(std::string("Sentence three."), iter->getName());
+		Assert::AreEqual(std::string("Sentence three."), iter->getName());		
 	}
 
 	TEST_METHOD(Command_View_Notdone) {
