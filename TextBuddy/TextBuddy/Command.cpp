@@ -1015,18 +1015,18 @@ void View::execute() {
 			((weekDate%10000)/100) == 8 || 
 			((weekDate%10000)/100) == 10 || 
 			((weekDate%10000)/100) == 12) {
-				if(weekDate%10 > 31) {
+				if(weekDate%100 > 31) {
 					weekDate += 100 - 31;
 				}
 		} else if (((weekDate%10000)/100) == 4 || 
 			((weekDate%10000)/100) == 6 || 
 			((weekDate%10000)/100) == 9 || 
 			((weekDate%10000)/100) == 11) {
-				if(weekDate%10 > 30) {
+				if(weekDate%100 > 30) {
 					weekDate += 100 - 30;
 				}
 		} else if (((weekDate%10000)/100) == 2) {
-			if(weekDate%10 > 28) {
+			if(weekDate%100 > 28) {
 				weekDate += 100 - 28;
 			}
 		}
