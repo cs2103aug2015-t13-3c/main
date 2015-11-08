@@ -30,6 +30,7 @@ public:
 	static std::string COMMAND_DISPLAY_ALL;
 	static std::string COMMAND_LOAD;
 	static std::string COMMAND_SAVE;
+	static std::string COMMAND_SET;
 	static std::string COMMAND_EXIT;
 };
 
@@ -51,6 +52,7 @@ enum CommandType {
 	DISPLAY_ALL,
 	LOAD,
 	SAVE,
+	SET,
 	EXIT,
 	INVALID
 };
@@ -94,7 +96,9 @@ protected:
 	static std::vector<Task> taskStore;
 
 	TsLogger* logger;
+	bool isExecuteSuccess;
 	std::string invalidDateTimeString;
+	std::string msg;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -387,7 +391,6 @@ public:
 	std::string getFilePath();
 
 	void execute();
-
 	std::string getMessage();
 };
 
@@ -405,7 +408,18 @@ public:
 	std::string getFilePath();
 
 	void execute();
+	std::string getMessage();
+};
 
+class Set: public Command {
+private:
+	std::string type;
+	std::string customString;
+public:
+	Set(std::string keyword, std::string userString);
+	~Set();
+
+	void execute();
 	std::string getMessage();
 };
 

@@ -992,6 +992,8 @@ public:
 		Assert::AreEqual(151201, task.getEndDate());
 		Assert::AreEqual(1400, task.getEndTime());
 
+
+
 		userInput = "pick 1 reserve";
 		cmd = parser->parse(userInput);
 		cmd->execute();

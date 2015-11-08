@@ -26,8 +26,7 @@
 #define LOGGER_H_
 
 enum Level {
-	DEBUG_INTERNAL,	// set this for PRIVATE METHODS
-	DEBUG,			// set this when debugging API
+	DEBUG,	// set this when debugging
 	INFO,	// default
 	SYS,	// system information for when components are instantiated and destructed
 	WARN,	// error that will not stop the application from running

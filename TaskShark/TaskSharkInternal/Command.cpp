@@ -24,6 +24,7 @@ std::string TS::COMMAND_CLEAR_ALL = "clear";
 std::string TS::COMMAND_DISPLAY_ALL = "display";
 std::string TS::COMMAND_LOAD = "load";
 std::string TS::COMMAND_SAVE = "save";
+std::string TS::COMMAND_SET = "set";
 std::string TS::COMMAND_EXIT = "exit";
 
 //==================================================
@@ -390,7 +391,6 @@ void Add::undo() {
 }
 
 std::string Add::getMessage() {
-	std::string msg;
 	if (isOverlap) {
 		msg = "Task added overlaps with existing task!";
 	} else if (invalidDateTimeString != "") {
@@ -559,7 +559,6 @@ void Modify::undo() {
 }
 
 std::string Modify::getMessage() {
-	std::string msg;
 	if (invalidDateTimeString != "") {
 		msg = "Task added contains invalid date/time: " + invalidDateTimeString;
 	} else {
@@ -593,10 +592,12 @@ void Modify::doModify() {
 			taskStoreIter->addLabels(tempTask.getLabels());
 			break;
 		case LABELS_DELETE:
-			taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
-			break;
 		case LABELS_CLEAR:
-			taskStoreIter->clearLabels();
+			if (tempTask.getLabelsToDelete().empty()) {
+				taskStoreIter->clearLabels();
+			} else {
+				taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
+			}
 			break;
 		case PRIORITY_SET:
 			taskStoreIter->setPriority();
@@ -650,12 +651,10 @@ void Modify::doModify() {
 		case RESERVE_TODO_DATE:
 			isTODOreserve = true;
 			taskStoreIter->addReserveEndDate(tempTask.getEndDate());
-			// taskStoreIter->addReserveStartDate(tempTask.getStartDate());
 			break;
 		case RESERVE_TODO_TIME:
 			isTODOreserve = true;
 			taskStoreIter->addReserveEndTime(tempTask.getEndTime());
-			// taskStoreIter->addReserveStartTime(tempTask.getStartTime());
 			break;
 		case RESERVE:
 			break;
@@ -989,7 +988,6 @@ View::View(ViewType newView, std::string labels) : Command(VIEW) {
 
 View::View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period) : Command(VIEW) {
 	view = VIEWTYPE_PERIOD;
-	logger->log(DEBUG,"Setting view period");
 	periodParams = viewParameters;
 	periodString = periodInput;
 	previousView = currentView;
@@ -1002,6 +1000,7 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
+
 	logger->log(DEBUG,"Viewing...");
 	/*
 	if (TS::firstLoad == true) {
@@ -1033,7 +1032,6 @@ void View::execute() {
 		Logic::setPastMode();
 		break;
 	case VIEWTYPE_WEEK: {
-		logger->log(DEBUG,"Viewing week");
 		int currentDate = logger->getDate();
 		int weekDate = currentDate + 7;
 		// In case weekDate overruns to next month
@@ -1076,9 +1074,8 @@ void View::execute() {
 		int endDate = Utilities::stringToInt(periodParams[3]);
 		int endTime = Utilities::stringToInt(periodParams[4]);
 		viewPeriod(startDate, startTime, endDate, endTime);
-		logger->log(DEBUG, "Viewing period from " + std::to_string(startDate) + " " + std::to_string(startTime) + " to " + std::to_string(endDate) + " " + std::to_string(endTime));
 		Logic::setEventsMode();
-		break;}
+		break; }
 	case VIEWTYPE_INVALID:
 		break;
 	}
@@ -1090,20 +1087,19 @@ void View::undo() {
 }
 
 std::string View::getMessage() {
-	std::string viewMsg;
-
 	if (TS::firstLoad == true) {
 		TS::firstLoad = false;
-		viewMsg = TS::MESSAGE_WELCOME;
+		msg = TS::MESSAGE_WELCOME;
 	} else {
-		viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
+		msg = "Viewing: " + Utilities::viewTypeToString(view);
 		if (view == VIEWTYPE_LABELS) {
-			viewMsg += " " + Utilities::vecToString(viewLabels);
+			msg += " " + Utilities::vecToString(viewLabels);
 		} else if (view == VIEWTYPE_PERIOD) {
-			viewMsg = "Viewing: " + periodString;
+			msg = "Viewing: " + periodString;
 		}
 	}
-	return viewMsg;
+	logger->log(DEBUG, msg);
+	return msg;
 }
 
 //============== VIEW : PRIVATE METHODS ============
@@ -1270,8 +1266,7 @@ void Pick::execute() {
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
-	logger->log(DEBUG,"Pick executed");
-	// DefaultView();
+	//defaultView();
 	initialiseIterators(modifyID);
 }
 
@@ -1279,19 +1274,26 @@ void Pick::undo() {
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
-	// DefaultView();
+	//defaultView();
 }
 
 std::string Pick::getMessage() {
-	return "successfully picked!";
+	if (isExecuteSuccess) {
+		msg = "successfully picked!";
+	} else {
+		msg = "reserve not picked!";
+	}
+	return msg;
 }
 
 //============= PICK : PRIVATE METHODS ===========
 
 void Pick::doPick() {
+	isExecuteSuccess = false;
 	if (pickReserve) {
 		if (taskStoreIter->getReserveStatus() == true) {
 			taskStoreIter->pickReserve();
+			isExecuteSuccess = true;
 		}
 	}
 	taskStoreIter->clearReserve();
@@ -1376,6 +1378,39 @@ std::string Save::getMessage() {
 	} else {
 		return "Unable to save \"" + filePath + "\". Invalid path name.";
 	}
+}
+
+//==================================================
+//                        SET
+//==================================================
+
+Set::Set(std::string keyword, std::string userString) : Command(SET) {
+	type = keyword;
+	customString = userString;
+}
+
+Set::~Set() {}
+
+void Set::execute() {
+	isExecuteSuccess = false;
+	if (Utilities::equalsIgnoreCase(type,"welcome")) {
+		TS::MESSAGE_WELCOME = customString;
+	} else if (Utilities::stringToVec(customString).size() == 1) {
+		isExecuteSuccess = IO::getInstance()->setCustomCommand(type,customString);
+	}
+	return;
+}
+
+std::string Set::getMessage() {
+	msg = "";
+	if (Utilities::equalsIgnoreCase(type,"welcome")) {
+		msg = "Welcome message successfully set as: " + TS::MESSAGE_WELCOME;
+	} else if (isExecuteSuccess) {
+		msg = "Command \"" + type + "\" successfully set as: " + customString;
+	} else {
+		msg = "Invalid set attempt: " + type + " " + customString;
+	}
+	return msg;
 }
 
 //==================================================

@@ -63,7 +63,7 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(TargetDir)
-del .tblog</Command>
+del .tslog</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -70,6 +70,8 @@ CommandType Utilities::stringToCmdType(std::string str) {
 		cmd = LOAD;
 	} else if (equalsIgnoreCase(str, TS::COMMAND_SAVE)) {
 		cmd = SAVE;
+	} else if (equalsIgnoreCase(str, TS::COMMAND_SET)) {
+		cmd = SET;
 	} else if (equalsIgnoreCase(str, TS::COMMAND_EXIT)) {
 		cmd = EXIT;
 	} else {

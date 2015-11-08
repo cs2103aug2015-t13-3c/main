@@ -3,8 +3,6 @@
 #ifndef POWERSEARCH_H_
 #define POWERSEARCH_H_
 
-#include "Command.h"
-
 class PowerSearch: public Command {
 private:
 	std::string msg;
