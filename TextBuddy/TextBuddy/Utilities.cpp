@@ -41,8 +41,6 @@ CommandType Utilities::stringToCmdType(std::string str) {
 	std::ostringstream address;
 	address << (void*)&Tb::COMMAND_ADD;
 	std::string name = address.str();
-	TbLogger::getInstance()->log(SYS,"Tb::COMMAND_ADD address in Utilities: " + name);
-	TbLogger::getInstance()->log(SYS,"Test custom command: " + Tb::COMMAND_ADD);
 
 	if(equalsIgnoreCase(str, Tb::COMMAND_ADD))	{
 		cmd = ADD;
@@ -56,6 +54,8 @@ CommandType Utilities::stringToCmdType(std::string str) {
 		cmd = SEARCH;
 	} else if(equalsIgnoreCase(str, Tb::COMMAND_MARKDONE)) {
 		cmd = MARKDONE;
+	} else if(equalsIgnoreCase(str, Tb::COMMAND_UNMARKDONE)) {
+		cmd = UNMARKDONE;
 	} else if(equalsIgnoreCase(str, Tb::COMMAND_UNDO)) {
 		cmd = UNDO;
 	} else if(equalsIgnoreCase(str, Tb::COMMAND_REDO)) {
@@ -343,9 +343,17 @@ std::string Utilities::fieldVecToString(std::vector<FieldType> fields) {
 		case INVALID_FIELD:
 			newString += "FIELD_INVALID";
 			break;
+		case RESERVE:
+		case RESERVE_START_DATE:
+		case RESERVE_START_TIME:
+		case RESERVE_END_DATE:
+		case RESERVE_END_TIME:
+		case RESERVE_TODO_DATE:
+		case RESERVE_TODO_TIME:
+			newString += "FIELD_RESERVE";
+			break;
 		}
 
-		TbLogger::getInstance(); // Somehow removing this crashes the program (Aaron)
 		if(++curr != fields.end()) {
 			newString += " ";
 		}
@@ -428,6 +436,9 @@ std::string	Utilities::viewTypeToString(ViewType view) {
 	case VIEWTYPE_WEEK:
 		viewString = VIEW_WEEK;
 		break;
+	case VIEWTYPE_PERIOD:
+		viewString = "VIEW_PERIOD";
+		break;
 	case VIEWTYPE_LABELS:
 		viewString = VIEW_WEEK;
 		break;
@@ -448,10 +459,9 @@ bool Utilities::containsAny(std::string words1, std::string words2) {
 	std::vector<std::string>::iterator curr1;
 	std::vector<std::string>::iterator curr2;
 
-	for(curr1=vecWords1.begin(); curr1!=vecWords1.end(); curr1++) {
-		for(curr2=vecWords2.begin(); curr2!=vecWords2.end(); curr2++) {
+	for(curr1=vecWords1.begin(); curr1!=vecWords1.end(); ++curr1) {
+		for(curr2=vecWords2.begin(); curr2!=vecWords2.end(); ++curr2) {
 			if(*curr1 == *curr2) {
-				TbLogger::getInstance()->log(DEBUG_INTERNAL,"Checking that " + *curr1 + " = " + *curr2);
 				return true;
 			}
 		}
@@ -571,7 +581,7 @@ std::string Utilities::removeFirstAndLastInvertedCommas(std::string words) {
 //           STRING-FOR-DISPLAY FORMATTERS
 //==================================================
 
-std::string Utilities::getDate(int date) {
+std::string Utilities::toDisplayDate(int date) {
 	assert(time != 0);
 	int localYear = getLocalYear(); 
 	int day = date % 100;
@@ -585,7 +595,7 @@ std::string Utilities::getDate(int date) {
 	return d;
 }
 
-std::string Utilities::getTime(int time) {
+std::string Utilities::toDisplayTime(int time) {
 	assert(time >= 0);
 	double time2;
 	std::stringstream stream;
@@ -607,21 +617,21 @@ std::string Utilities::getTime(int time) {
 }
 
 int Utilities::getLocalDay() {
-	time_t t = time(0); 
+	time_t t = time(nullptr); 
 	struct tm now;
 	localtime_s(&now,&t);
 	return now.tm_mday;
 }
 
 int Utilities::getLocalMonth() {
-	time_t t = time(0); 
+	time_t t = time(nullptr); 
 	struct tm now;
 	localtime_s(&now,&t);
 	return now.tm_mon + 1;
 }
 
 int Utilities::getLocalYear() {
-	time_t t = time(0); 
+	time_t t = time(nullptr); 
 	struct tm now;
 	localtime_s(&now,&t);
 	return now.tm_year - 100;

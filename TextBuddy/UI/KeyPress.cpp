@@ -22,10 +22,6 @@ System::Void TextBuddyUI::input_KeyUp(
 		//do nothing 
 		return;
 	}
-	if(key == Keys::Escape) {	
-		this->WindowState = FormWindowState::Minimized;
-		return;
-	}
 	if(key == Keys::Tab) {
 		if(dropDown->DroppedDown) {
 			incrementDropCount();

@@ -176,27 +176,7 @@ void Task::pickReserve() {
 	endTime = getReserveEndTime();
 	return;
 }
-/*
-void Task::clearReserveStartDate() {
-reserveStartDate.clear();
-return;
-}
 
-void Task::clearReserveStartTime() {
-reserveStartTime.clear();
-return;
-}
-
-void Task::clearReserveEndDate() {
-reserveStartDate.clear();
-return;
-}
-
-void Task::clearReserveEndTime() {
-reserveEndTime.clear();
-return;
-}
-*/
 void Task::clearReserve() {
 	reserveStartDate.clear();
 	reserveStartDate.clear();
@@ -228,27 +208,27 @@ std::string Task::getLabelString() {
 	return label;
 }
 
-std::string Task::getDate_UI() {
-	if(startDate == 0) {
-		return "";
-	}
-	std::string date = Utilities::getDate(startDate);
-	if(type == TODO) {
-		return "by " + date;
-	}
-	if(startDate != endDate) {
-		date = date + " - " + Utilities::getDate(endDate);
+
+std::string Task::getDisplayDate() {
+	std::string date;
+	if(startDate == DATE_NOT_SET) {
+		date = "";
+	} else if(startDate == endDate) {
+		date = Utilities::toDisplayDate(startDate);
+	} else if(startDate != endDate) {
+		date = Utilities::toDisplayDate(startDate) + " - " + Utilities::toDisplayDate(endDate);
 	}
 	return date;
 }
 
-std::string Task::getTime_UI() {
+std::string Task::getDisplayTime() {
+	std::string time;
 	if(endTime == TIME_NOT_SET) {
-		return "";
-	}
-	std::string time = Utilities::getTime(endTime);
-	if(startTime != endTime) {
-		time = Utilities::getTime(startTime) + " - " + time;
+		time = "";
+	} else if(startTime == TIME_NOT_SET || startTime == endTime) {
+		time = Utilities::toDisplayTime(endTime);
+	} else if(startTime != endTime) {
+		time = Utilities::toDisplayTime(startTime) + " - " + Utilities::toDisplayTime(endTime);;
 	}
 	return time;
 }
@@ -273,7 +253,7 @@ bool Task::setID(int newID) {
 
 bool Task::addLabels(std::vector<std::string> newLabels) {
 	std::vector<std::string>::iterator curr;
-	for(curr=newLabels.begin(); curr!=newLabels.end(); curr++) {
+	for(curr=newLabels.begin(); curr!=newLabels.end(); ++curr) {
 		labels.insert(*curr);
 	}
 	return true;
@@ -282,8 +262,8 @@ bool Task::addLabels(std::vector<std::string> newLabels) {
 bool Task::deleteLabels(std::vector<std::string> badLabels) {
 	std::vector<std::string>::iterator badCurr;
 	std::set<std::string>::iterator labelsCurr;
-	for(badCurr=badLabels.begin(); badCurr!=badLabels.end(); badCurr++) {
-		for(labelsCurr=labels.begin();labelsCurr!=labels.end(); labelsCurr++) {
+	for(badCurr=badLabels.begin(); badCurr!=badLabels.end(); ++badCurr) {
+		for(labelsCurr=labels.begin();labelsCurr!=labels.end(); ++labelsCurr) {
 			if(Utilities::equalsIgnoreCase(*badCurr,*labelsCurr)) {
 				labelsCurr = labels.erase(labelsCurr);
 				if(labelsCurr == labels.end()) {
@@ -348,21 +328,31 @@ bool Task::setEndTime(int newEndTime) {
 	return true;
 }
 
+void Task::resetDatesAndTimes() {
+	startDate = DATE_NOT_SET;
+	startTime = TIME_NOT_SET;
+	endDate = DATE_NOT_SET;
+	endTime = TIME_NOT_SET;
+	return;
+}
+
 bool Task::isUrgent() {
 	if(type == FLOATING) {
 		return false;
 	}
-	double difference;
-	int day = startDate % 100;
+
+	int day	  = startDate % 100;
 	int month = (startDate % 10000)/100;
-	int year = startDate/10000;
-	time_t t = time(0); 
+	int year  = startDate/10000;
+
 	struct tm now;
-	localtime_s(&now,&t);  
+	time_t t = time(nullptr);
+	localtime_s(&now,&t);
+
 	struct tm taskDate = {0,0,0,day,month-1,year+100}; 
 	std::time_t a = std::mktime(&taskDate);
 	std::time_t b = std::mktime(&now);
-	difference = std::difftime(a, b) / (60 * 60 * 24);
+	int difference = std::difftime(a, b) / (60 * 60 * 24);
 	if((type == TODO && difference < 4) || (type == EVENT && isToday())) {
 		return true;
 	} 

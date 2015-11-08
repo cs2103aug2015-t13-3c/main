@@ -16,6 +16,7 @@ History::History() {
 History::~History() {}
 
 //========== PUBLIC METHODS ==========
+
 History* History::getInstance() {
 	return theOne;
 }

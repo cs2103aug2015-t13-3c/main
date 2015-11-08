@@ -10,7 +10,7 @@ Parser* Parser::theOne = nullptr;
 Parser::Parser() {
 	logger = TbLogger::getInstance();
 	logger->log(SYS,"Parser instantiated");
-	logger->setLogLevel(DEBUG_INTERNAL);
+	// logger->setLogLevel(DEBUG_INTERNAL);
 	// logger->setLogLevel(DEBUG);
 }
 
@@ -108,10 +108,16 @@ Command* Parser::parse(std::string userInput) {
 				log(WARN,"No fields to modify: " + restOfInput);
 				throw std::runtime_error("No fields to modify!");
 		}
+		
 		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-		std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
-		Task* tempTaskPtr = parseTask(tempTaskString);
-		cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
+		if(Utilities::containsAny(tempTaskString,"float floating")) {
+			bool isSetFloating = true;
+			cmd = new Modify(modifyID,isSetFloating);
+		} else {
+			std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
+			Task* tempTaskPtr = parseTask(tempTaskString);
+			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr);
+		}
 		break;}
 
 	case PICK: {
@@ -171,8 +177,14 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case VIEW: {
-		ViewType newView = Utilities::stringToViewType(restOfInput);
-		cmd = new View(newView,restOfInput);
+		log(DEBUG_INTERNAL,"View option: " + restOfInput);
+		if(restOfInput!="" && isPowerSearchKeywords(restOfInput)) {
+			std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
+			cmd = new View(searchParameters,restOfInput);
+		} else {
+			ViewType newView = Utilities::stringToViewType(restOfInput);
+			cmd = new View(newView,restOfInput);
+		}
 		break;}
 
 	case CLEAR_ALL:
@@ -234,7 +246,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 
 		while(curr!=userInput.end() && !isFieldKeyword(*curr)) {
 			inputString.push_back(*curr);
-			curr++;
+			++curr;
 		}
 
 		placeInField(newTask,isTODO,isTODOreserve,isReservation,inputMode,inputString);
@@ -242,7 +254,7 @@ Task* Parser::parseTask(std::string restOfCommand) {
 		if(curr != userInput.end()) {
 			log(DEBUG_INTERNAL,"Parsing field keyword: " + *curr);
 			inputMode = Utilities::stringToFieldType(*curr);
-			curr++;
+			++curr;
 		} else {
 			break;
 		}
@@ -275,9 +287,9 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 	int digit;
 	// Powersearch keywords: from, to, on, at, before, after, for
 	std::string searchPhrase;
-	int startDate = DATE_NOT_SET;
+	int startDate = parseByDay(Utilities::stringToVec("today"));		// Allow "before"
 	int startTime = TIME_NOT_SET;
-	int endDate = DATE_NOT_SET;
+	int endDate = parseByDate(Utilities::stringToVec("31 dec")) + 10000; // Allow "after"
 	int endTime = TIME_NOT_SET;
 	int daysNeeded = 0;
 	int hoursNeeded = 1; // Default duration
@@ -295,7 +307,7 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 
 		while(curr!=userInput.end() && !isPowerSearchKeywords(*curr)) {
 			inputString.push_back(*curr);
-			curr++;
+			++curr;
 		}
 
 		if(Utilities::equalsIgnoreCase(inputMode,"searchPhrase")) {
@@ -305,36 +317,39 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 			}
 
 		} else if(Utilities::containsAny(inputMode,"from after")) {
-			if((newDate=parseDate(inputString)) != INVALID_DATE_FORMAT) {
+			if((newDate = parseDate(inputString)) != INVALID_DATE_FORMAT) {
 				startDate = newDate;
 				log(DEBUG_INTERNAL,"Parsed " + Utilities::vecToString(inputString) + " to be date: " + std::to_string(newDate));
-			} else if((newTime=parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			} else if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
 				startTime = newTime;
 				log(DEBUG_INTERNAL,"Parsed " + Utilities::vecToString(inputString) + " to be time: " + std::to_string(newTime));
 			}
 
 		} else if(Utilities::containsAny(inputMode,"to before")) {
-			if((newDate=parseDate(inputString)) != INVALID_DATE_FORMAT) {
+			if((newDate = parseDate(inputString)) != INVALID_DATE_FORMAT) {
 				endDate = newDate;
-			} else if((newTime=parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			} else if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+				if(endDate == DATE_NOT_SET) {
+					endDate = startDate;
+				}
 				endTime = newTime;
 			}
 
 		} else if(Utilities::equalsIgnoreCase(inputMode,"on")) {
-			if((newDate=parseDate(inputString)) != INVALID_DATE_FORMAT) {
+			if((newDate = parseDate(inputString)) != INVALID_DATE_FORMAT) {
 				startDate = newDate;
 				endDate = newDate;
 			}
 
 		} else if(Utilities::equalsIgnoreCase(inputMode,"at")) {
-			if((newTime=parseTime(inputString)) != INVALID_TIME_FORMAT) {
-				if(startDate==DATE_NOT_SET) {
+			if((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+				if(startDate == DATE_NOT_SET) {
 					startDate = parseByDay(Utilities::stringToVec("today"));
 				}
-				if(endDate==DATE_NOT_SET) {
+				if(endDate == DATE_NOT_SET) {
 					endDate = startDate;
 				}
-				if(startTime==TIME_NOT_SET) {
+				if(startTime == TIME_NOT_SET) {
 					startTime = newTime;
 				} else {
 					endTime = newTime;
@@ -364,7 +379,7 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 			log(DEBUG_INTERNAL,"Parsing PowerSearch inputMode: " + *curr);
 			inputMode = *curr;
 			if(!Utilities::equalsIgnoreCase(inputMode,"for")) {
-				curr++;
+				++curr;
 			}
 		} else {
 			break;
@@ -372,7 +387,8 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 	}
 
 	if(endDate < startDate) {
-		endDate = endDate + 10000; // Set end date as next year
+		// Set end date as next year
+		endDate = endDate + 10000;
 	}
 
 	if(startDate == DATE_NOT_SET) {
@@ -382,7 +398,7 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 		endDate = parseByDay(Utilities::stringToVec("today"));
 	}
 	if(startTime == TIME_NOT_SET) {
-		startTime = 0;
+		// startTime = 0;
 	}
 	if(endTime == TIME_NOT_SET) {
 		endTime = 2359;
@@ -426,7 +442,7 @@ int Parser::parseByDate(std::vector<std::string> dateString) {
 	}
 
 	std::vector<std::string>::iterator curr;
-	for(curr=dateString.begin(); curr!=dateString.end(); curr++) {
+	for(curr=dateString.begin(); curr!=dateString.end(); ++curr) {
 		*curr = Utilities::stringToLower(*curr);
 	}
 	curr = dateString.begin();
@@ -442,7 +458,7 @@ int Parser::parseByDate(std::vector<std::string> dateString) {
 	if(curr!=dateString.end() && Utilities::isInt(*curr)) {
 
 		dateInput = Utilities::stringToInt(*curr);
-		curr++;
+		++curr;
 
 		// Get monthInput
 		if(curr!=dateString.end()) {
@@ -450,14 +466,14 @@ int Parser::parseByDate(std::vector<std::string> dateString) {
 			if(monthInput != INVALID_MONTH) {
 				maxDays = findMaxDays(monthInput);
 			}
-			curr++;
+			++curr;
 
 			// Get yearInput
 			if(curr==dateString.end()) {
 				yearInput = findYear();				// Get current year
 			} else if(Utilities::isInt(*curr)) {
 				yearInput = findYear(*curr);		// Exception thrown if year is not current or next
-				curr++;
+				++curr;
 			}
 			assert(yearInput>=0 && yearInput<=99);
 		}
@@ -482,7 +498,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 	}
 
 	std::vector<std::string>::iterator curr;
-	for(curr=dayString.begin(); curr!=dayString.end(); curr++) {
+	for(curr=dayString.begin(); curr!=dayString.end(); ++curr) {
 		*curr = Utilities::stringToLower(*curr);
 	}
 	curr = dayString.begin();
@@ -490,7 +506,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 	int maxDays;
 	int newDate = INVALID_DATE_FORMAT;
 
-	time_t currTime = time(0);
+	time_t currTime = time(nullptr);
 	struct tm localTime;
 	localtime_s(&localTime,&currTime);
 	int year = localTime.tm_year - 100;				// tm_year: years since 1990
@@ -500,22 +516,22 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 	int date =				localTime.tm_mday;
 
 	if(*curr == "today" || *curr == "later") {
-		curr++;
+		++curr;
 	} else if(*curr == "tmr" || *curr == "tomorrow") {
-		date++;
-		curr++;
+		++date;
+		++curr;
 	} else if(*curr == "this") {
-		curr++;
+		++curr;
 	} else if(*curr == "next") {
 		date += 7;
-		curr++;
+		++curr;
 	}
 
 	if(curr!=dayString.end()) {
 		Day newDay = Utilities::stringToDay(*curr);
 		if(newDay != INVALID_DAY) {
 			date += (int)newDay - (int)day;
-			curr++;
+			++curr;
 		}
 	}
 
@@ -544,7 +560,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 
 // Processes times in these formats:
 // - HH    AM/PM (default: assume AM)
-// - HH.MM AM/PM (default: assume AM) // TODO: Does not read minutes yet
+// - HH.MM AM/PM (default: assume AM)
 // - HHMM        (24-hour)
 int Parser::parseTime(std::vector<std::string> timeString) {
 	int time;
@@ -589,7 +605,7 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 		}
 	}
 
-	curr++;
+	++curr;
 	if(curr != timeString.end()) {
 		if(Utilities::containsAny(*curr,"am") && hour <= 12) {
 			if(hour == 12) {
@@ -602,7 +618,7 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 		} else {
 			return INVALID_TIME_FORMAT;
 		}
-		curr++;
+		++curr;
 	}
 
 	if(curr == timeString.end()) {
@@ -845,7 +861,7 @@ int Parser::findMaxDays(Month month, int year) { // default year is 2015
 // Returns year in YY
 // Throws exception if invalid yearString
 int Parser::findYear(std::string yearString) {
-	time_t t = time(0);				// Get current time
+	time_t t = time(nullptr);		// Get current time
 	struct tm now;
 	localtime_s(&now,&t);
 	int year = now.tm_year - 100;	// Get current year, tm_year: years since 1900
@@ -881,9 +897,7 @@ bool Parser::isPowerSearchKeywords(std::string str) {
 //		e.g. search                   from   8 am        to 2 pm for 1 h 
 bool Parser::isPowerSearchFormat(std::string searchStrings) {
 	assert(searchStrings!="");
-	std::vector<std::string> vecWords = Utilities::stringToVec(searchStrings);
-	std::string powerSearchKeywords = "from to at on before after for";
-	std::string searchPhrase = *(vecWords.begin());
+	std::string searchPhrase = Utilities::getFirstWord(searchStrings);
 
 	if(isPowerSearchKeywords(searchStrings)) {
 		if(!isPowerSearchKeywords(searchPhrase)) {
@@ -914,7 +928,7 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 	std::vector<FieldType> fields;
 
 	if(Utilities::isInt(*curr)){
-		curr++;
+		++curr;
 	}
 
 	if(Utilities::stringToFieldType(*curr) == INVALID_FIELD) {
@@ -936,18 +950,17 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 		} else if(newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}
-		curr++;
+		++curr;
 	}
 
 	log(DEBUG,"Fields extracted: " + Utilities::fieldVecToString(fields));
 	return fields;
 }
 
-// TODO: Remove actual keywords
 std::vector<std::string> Parser::removeSlashKeywords(std::vector<std::string> vecString) {
 	std::vector<std::string>::iterator curr;
 	std::string subString;
-	for(curr=vecString.begin(); curr!=vecString.end(); curr++) {
+	for(curr=vecString.begin(); curr!=vecString.end(); ++curr) {
 		if( ((*curr)[0] == '/' || (*curr)[0] == '\\') && isFieldKeyword(subString = (*curr).substr(1)) ) {
 			*curr = subString;
 		}

@@ -7,13 +7,13 @@
 PowerSearch::PowerSearch(std::vector<std::string> searchParameters) : Command(POWERSEARCH) {
 	msg = "";
 	searchPhrase = searchParameters[0];
-	startDate = Utilities::stringToInt(searchParameters[1]);
-	startTime = Utilities::stringToInt(searchParameters[2]);
-	endDate = Utilities::stringToInt(searchParameters[3]);
-	endTime = Utilities::stringToInt(searchParameters[4]);
-	daysNeeded = Utilities::stringToInt(searchParameters[5]);
-	hrsNeeded = Utilities::stringToInt(searchParameters[6]);
-	minsNeeded = Utilities::stringToInt(searchParameters[7]);
+	startDate	= Utilities::stringToInt(searchParameters[1]);
+	startTime	= Utilities::stringToInt(searchParameters[2]);
+	endDate		= Utilities::stringToInt(searchParameters[3]);
+	endTime		= Utilities::stringToInt(searchParameters[4]);
+	daysNeeded	= Utilities::stringToInt(searchParameters[5]);
+	hrsNeeded	= Utilities::stringToInt(searchParameters[6]);
+	minsNeeded	= Utilities::stringToInt(searchParameters[7]);
 }
 
 PowerSearch::~PowerSearch() {}
@@ -25,11 +25,10 @@ void PowerSearch::convertTime(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator iter;
 
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
-		if (iter->getStartTime() == -1) {
+		if (iter->getStartTime() == TIME_NOT_SET) {
 			iter->setStartTime(0);
 		}
-
-		if (iter->getEndTime() == -1) {
+		if (iter->getEndTime() == TIME_NOT_SET) {
 			iter->setEndTime(0);
 		}
 	}
@@ -165,7 +164,8 @@ void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int 
 	int freeTimeStart = startTime;
 
 	removeDoneTasks(taskVector);
-	removeFloatingTasks(taskVector);
+	removeTaskType(taskVector, FLOATING);
+	removeTaskType(taskVector, TODO);
 	sortDate(taskVector);
 	convertTime(taskVector);
 
@@ -173,21 +173,16 @@ void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int 
 
 	// Need to take into account the period before start of first task
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
-		/*if (iter->getStartTime() == -1) {
-		iter->setStartTime(0);	
-		}
-
-		if (iter->getEndTime() == -1) {
-		iter->setEndTime(0);
-		}*/
-
-		if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
-			addPeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
-		}
-		// Condition set to prevent freeDateStart from "going back"
-		if ((freeDateStart < iter->getEndDate()) || ((freeDateStart == iter->getEndDate()) && (freeTimeStart < iter->getEndTime()))) {
-			freeDateStart = iter->getEndDate();			
-			freeTimeStart = iter->getEndTime();
+		// Do not consider 'events' input that do not actually contain a period eg. from 5 nov at 11 pm to 5 nov at 11 pm 
+		if (!((iter->getStartDate() == iter->getEndDate()) && (iter->getStartTime() == iter->getEndTime()))) {
+			if ((iter->getStartDate() > freeDateStart) || ((iter->getStartDate() == freeDateStart) && (iter->getStartTime() >= freeTimeStart))) {
+				addPeriod(freeDateStart, freeTimeStart, iter->getStartDate(), iter->getStartTime()); 
+			}
+			// Condition set to prevent freeDateStart from "going back"
+			if ((freeDateStart < iter->getEndDate()) || ((freeDateStart == iter->getEndDate()) && (freeTimeStart < iter->getEndTime()))) {
+				freeDateStart = iter->getEndDate();			
+				freeTimeStart = iter->getEndTime();
+			}
 		}
 	}
 

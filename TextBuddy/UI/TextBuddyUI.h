@@ -23,6 +23,11 @@
 #define TO " to "
 #define ON " on "
 #define AT " at "
+#define DISPLAY "display"
+#define EDIT "edit "
+#define LOAD "load "
+#define PICK "pick "
+#define REDO "redo"
 
 namespace UserInterface {
 
@@ -68,10 +73,6 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
-
-
-
-
 
 
 
@@ -199,7 +200,7 @@ namespace UserInterface {
 				 this->tabs->ItemSize = System::Drawing::Size(30, 20);
 				 this->tabs->Location = System::Drawing::Point(0, 51);
 				 this->tabs->Name = L"tabs";
-				 this->tabs->SelectedIndex = 2;
+				 this->tabs->SelectedIndex = 0;
 				 this->tabs->Size = System::Drawing::Size(745, 548);
 				 this->tabs->TabIndex = 10;
 				 this->tabs->TabStop = false;
@@ -262,7 +263,6 @@ namespace UserInterface {
 				 dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
 				 this->display->RowsDefaultCellStyle = dataGridViewCellStyle2;
 				 this->display->ScrollBars = System::Windows::Forms::ScrollBars::None;
-				 this->display->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::CellSelect;
 				 this->display->ShowCellErrors = false;
 				 this->display->ShowCellToolTips = false;
 				 this->display->ShowEditingIcon = false;
@@ -274,7 +274,7 @@ namespace UserInterface {
 				 // id
 				 // 
 				 this->id->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
-				 this->id->HeaderText = L"Id";
+				 this->id->HeaderText = L"ID";
 				 this->id->Name = L"id";
 				 this->id->ReadOnly = true;
 				 this->id->Resizable = System::Windows::Forms::DataGridViewTriState::False;
@@ -300,7 +300,7 @@ namespace UserInterface {
 				 // Date
 				 // 
 				 this->Date->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::None;
-				 this->Date->HeaderText = L"date";
+				 this->Date->HeaderText = L"Date";
 				 this->Date->Name = L"Date";
 				 this->Date->ReadOnly = true;
 				 this->Date->Resizable = System::Windows::Forms::DataGridViewTriState::True;
@@ -418,6 +418,8 @@ namespace UserInterface {
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 				 this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 				 this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+				 this->BackImagePadding = System::Windows::Forms::Padding(14, 15, 0, 0);
+				 this->BackMaxSize = 35;
 				 this->ClientSize = System::Drawing::Size(749, 644);
 				 this->Controls->Add(this->currentTime);
 				 this->Controls->Add(this->tabs);
@@ -425,13 +427,15 @@ namespace UserInterface {
 				 this->Controls->Add(this->help);
 				 this->Controls->Add(this->input);
 				 this->Controls->Add(this->dropDown);
+				 this->KeyPreview = true;
 				 this->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
 				 this->MaximizeBox = false;
 				 this->Name = L"TextBuddyUI";
 				 this->Padding = System::Windows::Forms::Padding(0, 60, 0, 0);
 				 this->Resizable = false;
 				 this->Style = MetroFramework::MetroColorStyle::Orange;
-				 this->Text = L"UI";
+				 this->Text = L"      TaskShark";
+				 this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::TextBuddyUI_KeyUp);
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->EndInit();
 				 this->tabs->ResumeLayout(false);
 				 this->all->ResumeLayout(false);
@@ -464,9 +468,11 @@ namespace UserInterface {
 		System::Collections::Generic::List<String^>^ inputHistory;
 		System::Collections::Generic::List<String^>^ keywords;
 		System::Collections::Generic::List<String^>^ addCommands;
-		System::Collections::Generic::List<String^>^ modifyCommands;
-		System::Collections::Generic::List<String^>^ viewCommands;
+		System::Collections::Generic::List<String^>^ modifyCommands;		
+		System::Collections::Generic::List<String^>^ loadCommands;
+		System::Collections::Generic::List<String^>^ pickCommands;
 		System::Collections::Generic::List<String^>^ searchCommands;
+		System::Collections::Generic::List<String^>^ viewCommands;
 
 		// To be subscribed
 		std::vector<DisplayedTask>* tasks;
@@ -501,7 +507,7 @@ namespace UserInterface {
 		-Label
 		-Date/Time
 		=====================================================================*/
-		
+
 		void printFeedBackMessage(std::string message);
 
 		void commandAutoComplete();
@@ -560,5 +566,12 @@ System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArg
 		processAndExecute();
 		input->Clear();
 	}
+private: System::Void TextBuddyUI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			if(e->KeyCode == Keys::Escape) {	
+		this->WindowState = FormWindowState::Minimized;
+		return;
+	}
+		 }
 };
+
 }

@@ -54,7 +54,7 @@ enum CommandType {
 };
 
 // These are the valid View keywords
-// Count: 8
+// Count: 7
 const std::string VIEW_ALL = "all";
 const std::string VIEW_FLOATING = "floating";
 const std::string VIEW_EVENT = "events";
@@ -62,7 +62,7 @@ const std::string VIEW_TODO = "todo";
 const std::string VIEW_TODAY = "today";
 const std::string VIEW_PAST = "past";
 const std::string VIEW_WEEK = "week";
-const std::string VIEW_LABEL = "label";
+// const std::string VIEW_LABEL = "label";
 
 // These are the View enums
 // Count: 8 + VIEWTYPE_INVALID
@@ -74,6 +74,7 @@ enum ViewType {
 	VIEWTYPE_TODAY,
 	VIEWTYPE_PAST,
 	VIEWTYPE_WEEK,
+	VIEWTYPE_PERIOD,
 	VIEWTYPE_LABELS,
 	VIEWTYPE_INVALID
 };
@@ -84,8 +85,13 @@ private:
 	std::string userInput;
 
 protected:
+	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
+	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
+
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
+
+	TbLogger* logger;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
@@ -93,11 +99,8 @@ protected:
 	int currViewPos;
 	int taskStorePos;
 
-	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
-	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
-
-	bool copyView();
-	void updateView();
+	bool updateCurrView();
+	void updateViewIter();
 	void defaultView();
 
 	void initialiseIterators(int taskID);
@@ -107,10 +110,12 @@ protected:
 	bool isDateLogical(Task task);
 
 	void sortFloating(std::vector<Task> &taskVector);
+	void sortEvent(std::vector<Task> &taskVector);
 	void sortPriority(std::vector<Task> &taskVector);
+	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
-	void removeFloatingTasks(std::vector<Task> &taskVector);
+	void removeTaskType(std::vector<Task> &taskVector, TaskType type);
 	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
 
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
@@ -186,17 +191,18 @@ private:
 	int modifyID; // ID on GUI, not taskID
 	std::vector<FieldType> fieldsToModify;
 	Task tempTask;
+	bool isSetFloating;
 	//==== UNDO ===
 	Task originalTask;
 	int prevCurrPos;
 
 	void doModify();
-	// void moveToPrevPos();
 
 	bool updateFLOATING();
 	bool updateTODO();
 	bool updateEVENT();
 public:
+	Modify(int taskID, bool isModifyFloating);
 	Modify(int taskID, std::vector<FieldType> fields, Task task);
 	Modify(CommandType pick);
 	~Modify();
@@ -238,6 +244,7 @@ private:
 	std::vector<Task> currentViewBeforeSearch;
 
 	std::string doSearch();
+	std::string doRegexSearch();
 	bool amendView(std::string listOfIds);
 public:
 	Search(std::string phraseString);
@@ -293,6 +300,8 @@ private:
 	//== EXECUTE ==
 	ViewType view;
 	std::vector<std::string> viewLabels;
+	std::vector<std::string> periodParams;
+	std::string periodString;
 	//==== UNDO ===
 	std::vector<Task> previousView;
 
@@ -301,9 +310,10 @@ private:
 	bool viewDone();
 	bool viewToday();
 	bool viewLabel(std::vector<std::string> label);
-	void viewWeek(int startDate, int EndDate, int StartTime, int EndTime);
+	
 public:
 	View(ViewType newView,std::string labels);
+	View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period=VIEWTYPE_PERIOD);
 	~View();
 	ViewType getViewType();
 

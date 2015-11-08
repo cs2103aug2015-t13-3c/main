@@ -21,16 +21,6 @@
 // Use in cpp file in methods, refer to enum for Level options:
 //		log(Level,std::string);
 //
-//========== Note for Logic ==========
-// Include the following upon exit command:
-//		delete parser;
-//		delete IO;
-//
-//========== Note for UI ==========
-// Include the following upon exit command:
-//		delete logic;
-//		logger->close();
-//
 
 #ifndef LOGGER_H_
 #define LOGGER_H_

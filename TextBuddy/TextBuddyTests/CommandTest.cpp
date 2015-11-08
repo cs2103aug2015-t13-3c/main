@@ -9,6 +9,10 @@ void addThreeSentences(std::vector<Task> copyTask);
 namespace TextBuddyTests {
 	TEST_CLASS(Command_Add) {
 public:
+	TEST_METHOD_INITIALIZE(InitialiseLogger) {
+		TbLogger::getInstance();
+	}
+
 	// Originally written by Kiat Boon
 	TEST_METHOD(Command_Add_execute) {
 		Task taskOne;
@@ -265,7 +269,7 @@ public:
 		Assert::AreEqual(IDthree,iter->getID());
 		Assert::AreEqual(150101,iter->getEndDate());
 		Assert::AreEqual(150101,iter->getStartDate());
-		Assert::AreEqual(-1,iter->getStartTime());		
+		Assert::AreEqual(TIME_NOT_SET,iter->getStartTime());		
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence one."),iter->getName());
@@ -306,7 +310,7 @@ public:
 		Assert::AreEqual(IDthree,iter->getID());
 		Assert::AreEqual(150101,iter->getStartDate());
 		Assert::AreEqual(150201,iter->getEndDate());
-		Assert::AreEqual(-1,iter->getStartTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getStartTime());
 		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
 		++iter;
 		Assert::AreEqual(std::string("Sentence one."),iter->getName());
@@ -967,13 +971,17 @@ public:
 		cmd->clearTaskStore();
 		parser = Parser::getInstance();
 		history = History::getInstance();
+		history->clearHistory();
 	}
 
 	TEST_METHOD(Command_Pick_reserve_empty) {
 		userInput = "add Recursion Lecture on 1 dec by 2 pm";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getTaskStore().back();
+		userInput = "view all";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getCurrentView().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());
@@ -1003,7 +1011,10 @@ public:
 		userInput = "add Recursion Lecture on 1 dec by 2 pm reserve on 3 dec from 4 pm to 5 pm";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getTaskStore().back();
+		userInput = "view all";
+		cmd = parser->parse(userInput);
+		cmd->execute();
+		task = cmd->getCurrentView().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());

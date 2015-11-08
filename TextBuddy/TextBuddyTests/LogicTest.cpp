@@ -38,8 +38,8 @@ public:
 		Assert::AreEqual(std::string("this"),iter->getName());
 		Assert::AreEqual(151013,iter->getStartDate());
 		Assert::AreEqual(151015,iter->getEndDate());
-		Assert::AreEqual(-1,iter->getStartTime());
-		Assert::AreEqual(-1,iter->getEndTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getStartTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getEndTime());
 
 		++iter;
 		Assert::AreEqual(std::string("that"), iter->getName());
@@ -126,8 +126,8 @@ public:
 		Assert::AreEqual(std::string("this"),iter->getName());
 		Assert::AreEqual(151013,iter->getStartDate());
 		Assert::AreEqual(151015,iter->getEndDate());
-		Assert::AreEqual(-1,iter->getStartTime());
-		Assert::AreEqual(-1,iter->getEndTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getStartTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getEndTime());
 
 		++iter;
 		Assert::AreEqual(std::string("that"), iter->getName());
@@ -138,8 +138,8 @@ public:
 		Assert::AreEqual(std::string("then"), iter->getName());
 		Assert::AreEqual(0,iter->getStartDate());
 		Assert::AreEqual(0,iter->getEndDate());
-		Assert::AreEqual(-1,iter->getStartTime());
-		Assert::AreEqual(-1,iter->getEndTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getStartTime());
+		Assert::AreEqual(TIME_NOT_SET,iter->getEndTime());
 
 		Assert::AreEqual(3,history->getUndoSize());
 

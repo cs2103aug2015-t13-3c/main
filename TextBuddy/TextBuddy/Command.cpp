@@ -12,7 +12,7 @@ std::string Tb::MESSAGE_WELCOME = "Welcome to TextBuddy!";
 std::string Tb::COMMAND_ADD = "add";
 std::string Tb::COMMAND_DELETE = "delete";
 std::string Tb::COMMAND_MODIFY = "modify";
-std::string Tb::COMMAND_MODIFY_EDIT = "edit";		// Alternative keyword
+std::string Tb::COMMAND_MODIFY_EDIT = "edit";	// Alternative keyword
 std::string Tb::COMMAND_PICK_RESERVE = "pick";
 std::string Tb::COMMAND_SEARCH = "search";
 std::string Tb::COMMAND_MARKDONE = "done";
@@ -33,6 +33,7 @@ std::string Tb::COMMAND_EXIT = "exit";
 //========== COMMAND : PUBLIC METHODS ==============
 
 Command::Command(CommandType newCmd, std::string rawInput) {
+	logger = TbLogger::getInstance();
 	cmd = newCmd;
 	userInput = rawInput;
 }
@@ -80,10 +81,11 @@ void Command::undo() {
 
 //================ COMMAND : PROTECTED METHODS ==================
 
-std::vector<Task> Command::taskStore;
-std::vector<Task> Command::currentView;
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
+
+std::vector<Task> Command::taskStore;
+std::vector<Task> Command::currentView;
 
 // Initialises the corresponding iterators with the taskID
 // TaskID is the ID seen on GUI, not the unique task ID
@@ -139,6 +141,34 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 	}
 }
 
+// Sorts Event tasks to be at the top
+void Command::sortEvent(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
+	Task tempTask;
+
+	// In-place sorting
+	i = taskVector.end()-1;	// Points to start of unsorted part
+	k = taskVector.begin();	// Points to end of unsorted part
+	while(i > k) {
+		if(i->getType() == EVENT) {
+			tempTask = *i;
+			for (j = i; j != taskVector.begin(); ++j) {
+				std::swap(*j, *(j-1)); 
+			}
+			*j = tempTask;
+			if(k == taskVector.end()) {
+				break;
+			} else {
+				++k;
+			}
+		} else {
+			--i;
+		}
+	}
+}
+
 // Sorts priority tasks to be at the top
 void Command::sortPriority(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
@@ -159,6 +189,38 @@ void Command::sortPriority(std::vector<Task> &taskVector) {
 			}
 		}
 		++i;
+	}
+}
+
+void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> weekStore;
+	currentView.clear();
+	weekStore = taskStore;
+	sortDate(weekStore);
+	removeDoneTasks(weekStore);
+	std::vector<Task>::iterator iter = weekStore.begin();
+
+	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
+		if(iter->getType() == FLOATING) {
+			currentView.push_back(*iter);
+		} else {
+			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
+				currentView.push_back(*iter);
+			}
+
+			// If date is the same, further filter using time in the date
+			if (iter->getStartDate() == startDate) {
+				if (iter->getStartTime() >= startTime) {
+					currentView.push_back(*iter);
+				}
+			}
+
+			if (iter->getStartDate() == endDate) {
+				if (iter->getStartTime() <= endTime) {
+					currentView.push_back(*iter);				
+				}
+			}
+		}
 	}
 }
 
@@ -203,11 +265,11 @@ void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	}
 }
 
-void Command::removeFloatingTasks(std::vector<Task> &taskVector) {
+void Command::removeTaskType(std::vector<Task> &taskVector, TaskType type) {
 	std::vector<Task>::iterator i = taskVector.begin();
 
 	while (i != taskVector.end()) {
-		if (i->getType() == FLOATING) {
+		if (i->getType() == type) {
 			i = taskVector.erase(i);
 		} else {
 			++i;
@@ -228,22 +290,25 @@ void Command::addPeriod(std::vector<Task> &taskVector, int startDate, int startT
 }
 
 // Set currentView to be the same as taskStore
-bool Command::copyView() {
+bool Command::updateCurrView() {
 	currentView = taskStore;
 	return true;
 }
 
 // Updates only the modified task on the UI 
-void Command::updateView() {
+void Command::updateViewIter() {
 	*currViewIter = *taskStoreIter;
 	return;
 }
 
-// Switch back to default view: display all
+// Switch back to default view:
+// Shows only uncompleted items from today, tomorrow and the day after
+// Tasks are shown in the following order: Events, Todo, Float
 void Command::defaultView() {
 	sortDate(taskStore);
-	copyView();
-	removeDoneTasks(currentView);
+	int today = Utilities::getLocalDay() + Utilities::getLocalMonth()*100 + Utilities::getLocalYear()*10000;
+	// TODO: Handle dates at end of month
+	viewPeriod(today,0,today+2,2400);
 	return;
 }
 
@@ -257,7 +322,7 @@ void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 								 index = currIter->getID();
 								 taskIter = matchTaskStoreIndex(index);
 							 } else {
-								 TbLogger::getInstance()->log(WARN,"Invalid index: " + std::to_string(index));
+								 logger->log(WARN,"Invalid index: " + std::to_string(index));
 								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
 							 }
 }
@@ -338,7 +403,7 @@ bool Add::doAdd() {
 		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
 	}
 
-	copyView();
+	updateCurrView();
 	checkOverlap();
 	taskStore.push_back(newTask);
 	currentView.push_back(newTask);
@@ -350,7 +415,7 @@ bool Add::doAdd() {
 void Add::checkOverlap() {
 	std::vector<Task> taskStoreCopy = taskStore;
 	removeDoneTasks(taskStoreCopy);
-	removeFloatingTasks(taskStoreCopy);
+	removeTaskType(taskStoreCopy, FLOATING);
 	sortDate(taskStoreCopy);
 
 	std::vector<Task>::iterator iter = taskStoreCopy.begin();
@@ -436,8 +501,14 @@ void Delete::setUndoDeleteInfo() {
 
 //============= MODIFY : PUBLIC METHODS ============
 
+Modify::Modify(int taskID, bool isModifyFloating) : Command(MODIFY) {
+	modifyID = taskID;
+	isSetFloating = isModifyFloating;
+}
+
 Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
 	modifyID = taskID;
+	isSetFloating = false;
 	fieldsToModify = fields;
 	tempTask = task;
 }
@@ -461,9 +532,18 @@ Task Modify::getTempTask() {
 void Modify::execute() {
 	initialiseIterators(modifyID);
 	originalTask = *currViewIter;
-	doModify();
+	if(isSetFloating) {
+		taskStoreIter->setType(FLOATING);
+		taskStoreIter->resetDatesAndTimes();
+	} else {
+		doModify();
+	}
+	updateTaskTypes();
+	updateViewIter();
+	sortDate(taskStore);
+	initialiseIterators(modifyID);
 	Task::lastEditID = originalTask.getID();
-	//defaultView();
+	// defaultView();
 }
 
 void Modify::undo() {
@@ -520,8 +600,8 @@ void Modify::doModify() {
 		case START_TIME:
 			taskStoreIter->setStartTime(tempTask.getStartTime());
 			if ((fieldIter+1 != fieldsToModify.end()) && (fieldIter+2 != fieldsToModify.end())
-				&& ((*(fieldIter+2)) == START_TIME)) {							// Accounts for events that modifies endTime
-					(*(fieldIter+2)) = END_TIME;
+				&& (*(fieldIter+2) == START_TIME)) {	// Accounts for events that modifies endTime
+					*(fieldIter+2) = END_TIME;
 			}
 			isStartTimeSet = true;
 			break;
@@ -538,12 +618,12 @@ void Modify::doModify() {
 		case TODO_DATE:
 			isTODO = true;
 			taskStoreIter->setEndDate(tempTask.getEndDate());
-			// taskStoreIter->setStartDate(tempTask.getStartDate());
+			taskStoreIter->setEndTime(tempTask.getEndTime());
 			break;
 		case TODO_TIME:
 			isTODO = true;
+			isEndTimeSet = true;
 			taskStoreIter->setEndTime(tempTask.getEndTime());
-			// taskStoreIter->setStartTime(tempTask.getStartTime());
 			break;
 		case RESERVE_START_DATE:
 			taskStoreIter->addReserveStartDate(tempTask.getReserveStartDate());
@@ -579,7 +659,7 @@ void Modify::doModify() {
 		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
 		if (isStartTimeSet) {
 			taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
-		} else {
+		} else if (isEndTimeSet) {
 			taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
 		}
 	}
@@ -588,11 +668,6 @@ void Modify::doModify() {
 		taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
 		taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
 	}
-
-	updateTaskTypes();
-	updateView();
-	sortDate(taskStore);
-	initialiseIterators(modifyID);
 }
 
 // If start date == 0 && end date == 0: FLOATING
@@ -662,8 +737,8 @@ void Pick::execute() {
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
-	TbLogger::getInstance()->log(DEBUG,"Pick executed");
-	defaultView();
+	logger->log(DEBUG,"Pick executed");
+	//defaultView();
 	initialiseIterators(modifyID);
 }
 
@@ -671,7 +746,7 @@ void Pick::undo() {
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
-	defaultView();
+	//defaultView();
 }
 
 std::string Pick::getMessage() {
@@ -714,7 +789,13 @@ std::string Search::getSearchPhrase() {
 // Returns a string of names
 // If it is unnecessary info for add/delete, will change output of processInfo to vector<Task>
 void Search::execute() {
-	std::string output = doSearch();
+	std::string output;
+	if (Utilities::isSubstring("*", searchPhrase) || Utilities::isSubstring("+", searchPhrase) ||
+		Utilities::isSubstring("?", searchPhrase) || Utilities::isSubstring(".", searchPhrase)) { 
+			output = doRegexSearch();
+	} else {
+		output = doSearch();
+	}
 	Logic::setSearchMode();
 	amendView(output);
 }
@@ -724,7 +805,7 @@ void Search::undo() {
 }
 
 std::string Search::getMessage() {
-	return "results for \"" + searchPhrase;
+	return "results for \"" + searchPhrase + "\"";
 }
 
 //================ SEARCH : PRIVATE METHODS =================
@@ -748,7 +829,7 @@ std::string Search::doSearch() {
 
 	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
 		taskName = iter->getName();
-		for(curr=tokens.begin(); curr!=tokens.end(); curr++) {
+		for(curr=tokens.begin(); curr!=tokens.end(); ++curr) {
 			if(!Utilities::isSubstring(*curr,taskName)) {
 				isMatch = false;
 			}
@@ -764,6 +845,36 @@ std::string Search::doSearch() {
 	returnString = indexString.str();
 
 	if(!returnString.empty()) {
+		returnString.pop_back();
+	}
+	return returnString;
+}
+
+// Takes in input of regex format and allows UI to display matching searches
+// Supports "*", "+", "?"
+// If no time boundary, all time-related parameters to be set to -1
+// If time boundary present, floating tasks will not be added into the search
+std::string Search::doRegexSearch() {
+	std::ostringstream indexString;
+	std::string returnString;
+	int id;
+
+	std::vector<Task> taskVector;
+	std::vector<Task>::iterator iter;
+
+	taskVector = taskStore;
+	sortDate(taskVector);
+
+	for (iter = taskVector.begin(); iter != taskVector.end(); ++iter) {
+		if (std::regex_match(iter->getName(), std::regex(searchPhrase))) {
+			id = iter->getID();
+			indexString << id << ",";
+		}
+	}
+
+	returnString = indexString.str();
+
+	if (!returnString.empty()) {
 		returnString.pop_back();
 	}
 	return returnString;
@@ -825,7 +936,7 @@ void Markdone::undo() {
 	if(successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
-		//currentView.insert(currViewIter,*taskStoreIter);
+		// currentView.insert(currViewIter,*taskStoreIter);
 	}	
 	defaultView();
 }
@@ -842,7 +953,7 @@ void Markdone::markDone() {
 	successMarkDone = taskStoreIter->markDone();
 	if(successMarkDone) {
 		taskName = currViewIter->getName();
-		//currentView.erase(currViewIter);
+		// currentView.erase(currViewIter);
 	}
 }
 
@@ -871,12 +982,14 @@ void UnmarkDone::undo() {
 	if(successUnmarkDone) {
 		getIterator();
 		taskStoreIter->markDone();
-		//currentView.insert(currViewIter,*taskStoreIter);
+		// currentView.insert(currViewIter,*taskStoreIter);
 	}
 	defaultView();
 }
 
 std::string UnmarkDone::getMessage() {
+	getIterator();
+	currViewIter->getName();
 	return "\"" + currViewIter->getName() + "\" marked as not done";
 }
 
@@ -886,18 +999,27 @@ void UnmarkDone::unmarkDone() {
 	initialiseIterators(undoneID);
 
 	successUnmarkDone = taskStoreIter->unmarkDone();
-	//if(successUnmarkDone) {
-	//	currentView.erase(currViewIter);
-	//}
+	if(successUnmarkDone) {
+		Logic::setTodayMode();
+		// currentView.erase(currViewIter);
+	}
 }
 
 //==================================================
 //                        VIEW
 //==================================================
 
-View::View(ViewType newView, std::string restOfInput) : Command(VIEW) {
+View::View(ViewType newView, std::string labels) : Command(VIEW) {
 	view = newView;
-	viewLabels = Utilities::stringToVec(restOfInput);
+	viewLabels = Utilities::stringToVec(labels);
+	previousView = currentView;
+}
+
+View::View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period) : Command(VIEW) {
+	view = VIEWTYPE_PERIOD;
+	logger->log(DEBUG,"Setting view period");
+	periodParams = viewParameters;
+	periodString = periodInput;
 	previousView = currentView;
 }
 
@@ -908,7 +1030,6 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
-	TbLogger* logger = TbLogger::getInstance();
 	logger->log(DEBUG,"Viewing...");
 
 	switch (view) {
@@ -944,23 +1065,22 @@ void View::execute() {
 			((weekDate%10000)/100) == 8 || 
 			((weekDate%10000)/100) == 10 || 
 			((weekDate%10000)/100) == 12) {
-				if(weekDate > 31) {
+				if(weekDate%10 > 31) {
 					weekDate += 100 - 31;
 				}
 		} else if (((weekDate%10000)/100) == 4 || 
 			((weekDate%10000)/100) == 6 || 
 			((weekDate%10000)/100) == 9 || 
 			((weekDate%10000)/100) == 11) {
-				if(weekDate > 30) {
+				if(weekDate%10 > 30) {
 					weekDate += 100 - 30;
 				}
 		} else if (((weekDate%10000)/100) == 2) {
-			if(weekDate > 28) {
+			if(weekDate%10 > 28) {
 				weekDate += 100 - 28;
 			}
 		}
-
-		viewWeek(currentDate, 0, weekDate, 2359);
+		viewPeriod(currentDate, 0, weekDate, 2359);
 		Logic::setWeekMode();
 		break; }
 	case VIEWTYPE_LABELS:
@@ -971,6 +1091,15 @@ void View::execute() {
 		viewToday();
 		Logic::setTodayMode();
 		break;
+	case VIEWTYPE_PERIOD: {
+		int startDate = Utilities::stringToInt(periodParams[1]);
+		int startTime = Utilities::stringToInt(periodParams[2]);
+		int endDate = Utilities::stringToInt(periodParams[3]);
+		int endTime = Utilities::stringToInt(periodParams[4]);
+		viewPeriod(startDate, startTime, endDate, endTime);
+		logger->log(DEBUG, "Viewing period from " + std::to_string(startDate) + " " + std::to_string(startTime) + " to " + std::to_string(endDate) + " " + std::to_string(endTime));
+		Logic::setEventsMode();
+		break;}
 	case VIEWTYPE_INVALID:
 		break;
 	}
@@ -988,8 +1117,10 @@ std::string View::getMessage() {
 		viewMsg = Tb::MESSAGE_WELCOME;
 	} else {
 		viewMsg = "Viewing: " + Utilities::viewTypeToString(view);
-		if(Utilities::viewTypeToString(view) == VIEW_LABEL) {
+		if(view == VIEWTYPE_LABELS) {
 			viewMsg += " " + Utilities::vecToString(viewLabels);
+		} else if(view == VIEWTYPE_PERIOD) {
+			viewMsg = "Viewing: " + periodString;
 		}
 	}
 	return viewMsg;
@@ -1066,34 +1197,6 @@ bool View::viewLabel(std::vector<std::string> label) {
 	return true;
 }
 
-void View::viewWeek(int startDate, int startTime, int endDate, int endTime) {
-	std::vector<Task> weekStore;
-	currentView.clear();
-	weekStore = taskStore;
-	sortDate(weekStore);
-	removeDoneTasks(weekStore);
-	std::vector<Task>::iterator iter = weekStore.begin();
-
-	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
-		if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
-			currentView.push_back(*iter);
-		}
-
-		// If date is the same, further filter using time in the date
-		if (iter->getStartDate() == startDate) {
-			if (iter->getStartTime() >= startTime) {
-				currentView.push_back(*iter);
-			}
-		}
-
-		if (iter->getStartDate() == endDate) {
-			if (iter->getStartTime() <= endTime) {
-				currentView.push_back(*iter);				
-			}
-		}
-	}
-}
-
 //==================================================
 //                    CLEAR_ALL
 //==================================================
@@ -1129,7 +1232,7 @@ DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {
 DisplayAll::~DisplayAll() {}
 
 void DisplayAll::execute() {
-	copyView();
+	updateCurrView();
 	formatDefaultView();
 }
 
@@ -1212,7 +1315,7 @@ void Load::execute() {
 	try {
 		taskStore = io->loadFile(filePath);		// Exception thrown if file does not exist
 		History::getInstance()->clearHistory(); // Clear history after load, to avoid seg fault
-		copyView();
+		updateCurrView();
 	} catch (std::exception e) {
 		taskStore = temp;
 		loadSuccess = false;
@@ -1272,6 +1375,6 @@ Exit::~Exit() {}
 void Exit::execute() {
 	IO* io = IO::getInstance();
 	io->saveFile(io->getFilePath(),taskStore); // In case user or system deletes file or .tbconfig
-	delete TbLogger::getInstance();
+	delete logger;
 	exit(0);
 }
