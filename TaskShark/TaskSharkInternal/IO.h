@@ -20,9 +20,11 @@ private:
 	Task extractTaskFromJsonObject(Value& item);
 	void writeTaskIntoJsonFormat(std::ofstream &newFile, Task task);
 	void initialiseRunningCount(std::vector<Task> taskVector);
-	bool setCommandKeyword(std::string &identifier, std::string keyword);
-	void setCustomCommands(std::ifstream& TSconfig);
+	void loadWelcomeMessage(std::ifstream& TSconfig);
+	void saveWelcomeMessage(std::ofstream& TSconfig);
+	void loadCustomCommands(std::ifstream& TSconfig);
 	void saveCustomCommands(std::ofstream& TSconfig);
+	bool setCommandKeyword(std::string &identifier, std::string keyword);
 
 	void extractName(Task &newTask, Value &item);
 	void extractType(Task &newTask, Value &item);
@@ -66,9 +68,9 @@ public:
 	~IO();
 	std::string getFilePath();
 	bool setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile=true);
-
-	std::vector<Task> loadFile(std::string fileName, bool isOverwriteLoadFile=true);
+	bool setCustomCommand(std::string identifier, std::string keyword);
 	bool saveFile(std::string filePath, std::vector<Task> taskVector);
+	std::vector<Task> loadFile(std::string fileName, bool isOverwriteLoadFile=true);
 
 	//========== Getter for Testing ==========
 	std::vector<std::string> getText(std::string fileName);

@@ -13,10 +13,11 @@ const std::string IO::configPath = ".tsconfig";
 IO* IO::theOne = new IO();
 
 IO::IO() {
-	// TsLogger::getInstance()->log(SYS,"IO instantiated");
+	TsLogger::getInstance()->log(SYS,"IO instantiated");
 	std::ifstream TSconfig(configPath);
 	TSconfig >> filePath;
-	// setCustomCommands(TSconfig);
+	loadWelcomeMessage(TSconfig);
+	loadCustomCommands(TSconfig);
 	TSconfig.close();
 }
 
@@ -132,6 +133,7 @@ void IO::setLastSavedLocation(std::string fileName) {
 	std::ofstream lastSaved(configPath);
 	lastSaved << fileName << std::endl;
 
+	saveWelcomeMessage(lastSaved);
 	saveCustomCommands(lastSaved);
 	lastSaved.close();
 }
@@ -507,88 +509,50 @@ void IO::initialiseRunningCount(std::vector<Task> taskVector) {
 
 // Aaron Chong Jun Hao @@author A0110376N
 
-bool IO::setCommandKeyword(std::string &identifier, std::string keyword) {
-	TsLogger::getInstance()->log(SYS,"Setting custom command...");
-
-	// Count: 14
-	if (keyword == "s" // Protected keyword used by UI for switching between 'tile' and 'list' views
-		|| (&identifier != &TS::COMMAND_ADD				&& keyword == TS::COMMAND_ADD)
-		|| (&identifier != &TS::COMMAND_DELETE			&& keyword == TS::COMMAND_DELETE)
-		|| (&identifier != &TS::COMMAND_MODIFY			&& keyword == TS::COMMAND_MODIFY)
-		|| (&identifier != &TS::COMMAND_MODIFY_EDIT		&& keyword == TS::COMMAND_MODIFY_EDIT)
-		|| (&identifier != &TS::COMMAND_PICK_RESERVE	&& keyword == TS::COMMAND_PICK_RESERVE)
-		|| (&identifier != &TS::COMMAND_SEARCH			&& keyword == TS::COMMAND_SEARCH)
-		|| (&identifier != &TS::COMMAND_MARKDONE		&& keyword == TS::COMMAND_MARKDONE)
-		|| (&identifier != &TS::COMMAND_UNMARKDONE		&& keyword == TS::COMMAND_UNMARKDONE)
-		|| (&identifier != &TS::COMMAND_UNDO			&& keyword == TS::COMMAND_UNDO)
-		|| (&identifier != &TS::COMMAND_REDO			&& keyword == TS::COMMAND_REDO)
-		|| (&identifier != &TS::COMMAND_VIEW			&& keyword == TS::COMMAND_VIEW)
-		|| (&identifier != &TS::COMMAND_CLEAR_ALL		&& keyword == TS::COMMAND_CLEAR_ALL)
-		|| (&identifier != &TS::COMMAND_LOAD			&& keyword == TS::COMMAND_LOAD)
-		|| (&identifier != &TS::COMMAND_SAVE			&& keyword == TS::COMMAND_SAVE)
-		|| (&identifier != &TS::COMMAND_EXIT			&& keyword == TS::COMMAND_EXIT) ) {
-			return false;
-	}
-	identifier = keyword;
-	return true;
-}
-
-void IO::setCustomCommands(std::ifstream& TSconfig) {
+void IO::loadWelcomeMessage(std::ifstream& TSconfig) {
 	std::string s;
 	std::vector<std::string> commandPair;
 	std::string identifier;
 	std::string keyword;
 
-	std::getline(TSconfig, s); // Skip newline character
-	std::getline(TSconfig, s); // Skip blank line
-	std::getline(TSconfig, s);
+	getline(TSconfig, s); // Skip newline character
+	getline(TSconfig, s); // Skip blank line
+	getline(TSconfig, s);
+	if (s == "Welcome Message") {
+		getline(TSconfig, s);
+		TS::MESSAGE_WELCOME = s;
+	}
+	return;
+}
+
+void IO::saveWelcomeMessage(std::ofstream& TSconfig) {
+	TSconfig << std::endl;
+	TSconfig << "Welcome Message" << std::endl;
+	TSconfig << TS::MESSAGE_WELCOME << std::endl;
+	return;
+}
+
+void IO::loadCustomCommands(std::ifstream& TSconfig) {
+	std::string s;
+	std::vector<std::string> commandPair;
+	std::string identifier;
+	std::string keyword;
+
+	// getline(TSconfig, s); // Skip newline character
+	getline(TSconfig, s); // Skip blank line
+	getline(TSconfig, s);
 	if (s == "Custom Commands") {
-		while (std::getline(TSconfig, s)) {
+		while (getline(TSconfig, s)) {
 			if (!s.empty()) {
 				commandPair = Utilities::stringToVec(s);
 				if (commandPair.size() == 2) {
 					identifier = commandPair[0];
 					keyword = commandPair[1];
-
-					TsLogger::getInstance()->log(SYS,"Looking up command: " + TS::COMMAND_ADD);
-					if (identifier == "add") {
-						setCommandKeyword(TS::COMMAND_ADD,keyword);
-					} else if (identifier == "delete") {
-						setCommandKeyword(TS::COMMAND_DELETE,keyword);
-					} else if (identifier == "modify") {
-						setCommandKeyword(TS::COMMAND_MODIFY,keyword);
-					} else if (identifier == "edit") {
-						setCommandKeyword(TS::COMMAND_MODIFY_EDIT,keyword);
-					} else if (identifier == "pick") {
-						setCommandKeyword(TS::COMMAND_PICK_RESERVE,keyword);
-					} else if (identifier == "search") {
-						setCommandKeyword(TS::COMMAND_SEARCH,keyword);
-					} else if (identifier == "done") {
-						setCommandKeyword(TS::COMMAND_MARKDONE,keyword);
-					} else if (identifier == "notdone") {
-						setCommandKeyword(TS::COMMAND_UNMARKDONE,keyword);
-					} else if (identifier == "undo") {
-						setCommandKeyword(TS::COMMAND_UNDO,keyword);
-					} else if (identifier == "redo") {
-						setCommandKeyword(TS::COMMAND_REDO,keyword);
-					} else if (identifier == "view") {
-						setCommandKeyword(TS::COMMAND_VIEW,keyword);
-					} else if (identifier == "clear") {
-						setCommandKeyword(TS::COMMAND_CLEAR_ALL,keyword);
-					} else if (identifier == "display") {
-						setCommandKeyword(TS::COMMAND_DISPLAY_ALL,keyword);
-					} else if (identifier == "load") {
-						setCommandKeyword(TS::COMMAND_LOAD,keyword);
-					} else if (identifier == "save") {
-						setCommandKeyword(TS::COMMAND_SAVE,keyword);
-					} else if (identifier == "exit") {
-						setCommandKeyword(TS::COMMAND_EXIT,keyword);
-					}
+					setCustomCommand(identifier,keyword);
 				}
 			}
 		}
 	}
-	TsLogger::getInstance()->log(SYS,"Looking up command: " + TS::COMMAND_ADD);
 	return;
 }
 
@@ -631,6 +595,73 @@ void IO::saveCustomCommands(std::ofstream& TSconfig) {
 		TSconfig << "exit" << " " << TS::COMMAND_EXIT << std::endl;
 	}
 	return;
+}
+
+bool IO::setCustomCommand(std::string identifier, std::string keyword) {
+	bool isSet = false;
+
+	if (identifier == TS::COMMAND_ADD) {
+		isSet = setCommandKeyword(TS::COMMAND_ADD,keyword);
+	} else if (identifier == TS::COMMAND_DELETE) {
+		isSet = setCommandKeyword(TS::COMMAND_DELETE,keyword);
+	} else if (identifier == TS::COMMAND_MODIFY) {
+		isSet = setCommandKeyword(TS::COMMAND_MODIFY,keyword);
+	} else if (identifier == TS::COMMAND_MODIFY_EDIT) {
+		isSet = setCommandKeyword(TS::COMMAND_MODIFY_EDIT,keyword);
+	} else if (identifier == TS::COMMAND_PICK_RESERVE) {
+		isSet = setCommandKeyword(TS::COMMAND_PICK_RESERVE,keyword);
+	} else if (identifier == TS::COMMAND_SEARCH) {
+		isSet = setCommandKeyword(TS::COMMAND_SEARCH,keyword);
+	} else if (identifier == TS::COMMAND_MARKDONE) {
+		isSet = setCommandKeyword(TS::COMMAND_MARKDONE,keyword);
+	} else if (identifier == TS::COMMAND_UNMARKDONE) {
+		isSet = setCommandKeyword(TS::COMMAND_UNMARKDONE,keyword);
+	} else if (identifier == TS::COMMAND_UNDO) {
+		isSet = setCommandKeyword(TS::COMMAND_UNDO,keyword);
+	} else if (identifier == TS::COMMAND_REDO) {
+		isSet = setCommandKeyword(TS::COMMAND_REDO,keyword);
+	} else if (identifier == TS::COMMAND_VIEW) {
+		isSet = setCommandKeyword(TS::COMMAND_VIEW,keyword);
+	} else if (identifier == TS::COMMAND_CLEAR_ALL) {
+		isSet = setCommandKeyword(TS::COMMAND_CLEAR_ALL,keyword);
+	} else if (identifier == TS::COMMAND_DISPLAY_ALL) {
+		isSet = setCommandKeyword(TS::COMMAND_DISPLAY_ALL,keyword);
+	} else if (identifier == TS::COMMAND_LOAD) {
+		isSet = setCommandKeyword(TS::COMMAND_LOAD,keyword);
+	} else if (identifier == TS::COMMAND_SAVE) {
+		isSet = setCommandKeyword(TS::COMMAND_SAVE,keyword);
+	} else if (identifier == TS::COMMAND_EXIT) {
+		isSet = setCommandKeyword(TS::COMMAND_EXIT,keyword);
+	}
+	return isSet;
+}
+
+bool IO::setCommandKeyword(std::string &identifier, std::string keyword) {
+	TsLogger::getInstance()->log(SYS,"Setting custom command...");
+
+	// Count: 14
+	if (keyword == "s"		// Protected keyword: switch between 'tile' and 'list' views
+		|| keyword == "set"	// Protected keyword: set custom messages or command identifiers
+		|| (&identifier != &TS::COMMAND_ADD				&& keyword == TS::COMMAND_ADD)
+		|| (&identifier != &TS::COMMAND_DELETE			&& keyword == TS::COMMAND_DELETE)
+		|| (&identifier != &TS::COMMAND_MODIFY			&& keyword == TS::COMMAND_MODIFY)
+		|| (&identifier != &TS::COMMAND_MODIFY_EDIT		&& keyword == TS::COMMAND_MODIFY_EDIT)
+		|| (&identifier != &TS::COMMAND_PICK_RESERVE	&& keyword == TS::COMMAND_PICK_RESERVE)
+		|| (&identifier != &TS::COMMAND_SEARCH			&& keyword == TS::COMMAND_SEARCH)
+		|| (&identifier != &TS::COMMAND_MARKDONE		&& keyword == TS::COMMAND_MARKDONE)
+		|| (&identifier != &TS::COMMAND_UNMARKDONE		&& keyword == TS::COMMAND_UNMARKDONE)
+		|| (&identifier != &TS::COMMAND_UNDO			&& keyword == TS::COMMAND_UNDO)
+		|| (&identifier != &TS::COMMAND_REDO			&& keyword == TS::COMMAND_REDO)
+		|| (&identifier != &TS::COMMAND_VIEW			&& keyword == TS::COMMAND_VIEW)
+		|| (&identifier != &TS::COMMAND_CLEAR_ALL		&& keyword == TS::COMMAND_CLEAR_ALL)
+		|| (&identifier != &TS::COMMAND_DISPLAY_ALL		&& keyword == TS::COMMAND_DISPLAY_ALL)
+		|| (&identifier != &TS::COMMAND_LOAD			&& keyword == TS::COMMAND_LOAD)
+		|| (&identifier != &TS::COMMAND_SAVE			&& keyword == TS::COMMAND_SAVE)
+		|| (&identifier != &TS::COMMAND_EXIT			&& keyword == TS::COMMAND_EXIT) ) {
+			return false;
+	}
+	identifier = keyword;
+	return true;
 }
 
 //========== Getter for Testing ==========

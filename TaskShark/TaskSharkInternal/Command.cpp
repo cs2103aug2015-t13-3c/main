@@ -24,6 +24,7 @@ std::string TS::COMMAND_CLEAR_ALL = "clear";
 std::string TS::COMMAND_DISPLAY_ALL = "display";
 std::string TS::COMMAND_LOAD = "load";
 std::string TS::COMMAND_SAVE = "save";
+std::string TS::COMMAND_SET = "set";
 std::string TS::COMMAND_EXIT = "exit";
 
 //==================================================
@@ -1252,7 +1253,6 @@ void Redo::execute() {
 Pick::Pick(int taskID, bool isPick) : Modify(PICK) {
 	modifyID = taskID;
 	pickReserve = isPick;
-	isExecuteSuccess = false;
 }
 
 Pick::~Pick() {}
@@ -1285,6 +1285,7 @@ std::string Pick::getMessage() {
 //============= PICK : PRIVATE METHODS ===========
 
 void Pick::doPick() {
+	isExecuteSuccess = false;
 	if (pickReserve) {
 		if (taskStoreIter->getReserveStatus() == true) {
 			taskStoreIter->pickReserve();
@@ -1373,6 +1374,39 @@ std::string Save::getMessage() {
 	} else {
 		return "Unable to save \"" + filePath + "\". Invalid path name.";
 	}
+}
+
+//==================================================
+//                        SET
+//==================================================
+
+Set::Set(std::string keyword, std::string userString) : Command(SET) {
+	type = keyword;
+	customString = userString;
+}
+
+Set::~Set() {}
+
+void Set::execute() {
+	isExecuteSuccess = false;
+	if (Utilities::equalsIgnoreCase(type,"welcome")) {
+		TS::MESSAGE_WELCOME = customString;
+	} else if (Utilities::stringToVec(customString).size() == 1) {
+		isExecuteSuccess = IO::getInstance()->setCustomCommand(type,customString);
+	}
+	return;
+}
+
+std::string Set::getMessage() {
+	msg = "";
+	if (Utilities::equalsIgnoreCase(type,"welcome")) {
+		msg = "Welcome message successfully set as: " + TS::MESSAGE_WELCOME;
+	} else if (isExecuteSuccess) {
+		msg = "Command \"" + type + "\" successfully set as: " + customString;
+	} else {
+		msg = "Invalid set attempt: " + type + " " + customString;
+	}
+	return msg;
 }
 
 //==================================================
