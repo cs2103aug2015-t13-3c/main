@@ -353,7 +353,7 @@ bool Task::isUrgent() {
 	std::time_t b = std::mktime(&now);
 
 	int difference = std::difftime(a, b) / (60 * 60 * 24);
-	if((type == TODO && difference < 4) || (type == EVENT && isToday())) {
+	if((type == TODO && difference < 4)) {
 		return true;
 	} 
 	return false;

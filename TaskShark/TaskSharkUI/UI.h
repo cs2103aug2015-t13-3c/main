@@ -463,7 +463,7 @@ namespace UserInterface {
 		std::string* userInput;
 		std::string* userFeedback_cppString;
 		Logic* logic;
-		TbLogger* logger;
+		TsLogger* logger;
 		int cursorPosition;
 		int originalRowPosition;
 		int inputHistoryCount;
@@ -539,57 +539,58 @@ namespace UserInterface {
 		void scrollDown();
 
 
-System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-		DisplayMode index = (DisplayMode)tabs->SelectedIndex;
-		switch (index) {
-		case ALL:
-			input->Text = "view all";
-			break;
-		case TODAY:
-			input->Text = "view today";
-			break;
-		case WEEK:
-			input->Text = "view week";
-			break;
-		case EVENTS:
-			input->Text = "view events";
-			break;
-		case DEADLINES:
-			input->Text = "view todo";
-			break;
-		case FLOATINGS:
-			input->Text = "view floating";
-			break;
-		case SEARCHES:
-			// not implemented
-			break;
-		case PAST_:
-			input->Text = "view past";
-			break;
-		case FREESLOTS:
-			// not implemented yet
-			break;
+		System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+			DisplayMode index = (DisplayMode)tabs->SelectedIndex;
+			switch (index) {
+			case ALL:
+				input->Text = "view all";
+				break;
+			case TODAY:
+				input->Text = "view today";
+				break;
+			case WEEK:
+				input->Text = "view week";
+				break;
+			case EVENTS:
+				input->Text = "view events";
+				break;
+			case DEADLINES:
+				input->Text = "view todo";
+				break;
+			case FLOATINGS:
+				input->Text = "view floating";
+				break;
+			case SEARCHES:
+				// not implemented
+				break;
+			case PAST_:
+				input->Text = "view past";
+				break;
+			case FREESLOTS:
+				// not implemented yet
+				break;
+			}
+			getInput();
+			processAndExecute();
+			input->Clear();
 		}
-		getInput();
-		processAndExecute();
-		input->Clear();
-	}
-System::Void UI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+		System::Void UI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			if(e->KeyCode == Keys::Escape) {	
 				this->WindowState = FormWindowState::Minimized;
 				return;
 			}
-		 }
-System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
-			 input->Focus();
-		 }
-System::Void UI_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-	if(e->Shift) {	
-		if(e->KeyCode == Keys::Up) {
-			scrollUp();
-		} else if(e->KeyCode == Keys::Down) {
-			scrollDown();
 		}
-	}
+		System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
+			input->Focus();
+		}
+		System::Void UI_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			if(e->Shift) {	
+				if(e->KeyCode == Keys::Up) {
+					scrollUp();
+				} else if(e->KeyCode == Keys::Down) {
+					scrollDown();
+				}
+			}
+		}
+	};
 }
-};

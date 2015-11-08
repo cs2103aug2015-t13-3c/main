@@ -20,12 +20,12 @@ UI::UI() {
 	selectingFields = false;
 	helpMode = false;
 	tileView = false;
-	logger = TbLogger::getInstance();
+	logger = TsLogger::getInstance();
 	InitializeComponent();
 	logic = logic->getInstance();
 	tasks = new std::vector<DisplayedTask>();
 	logic->subscribe(tasks);
-	input->Text = "view all";
+	input->Text = "view today";
 	getInput();
 	processAndExecute();
 	input->Clear();

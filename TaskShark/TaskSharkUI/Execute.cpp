@@ -86,11 +86,13 @@ void UI::updateTable(TabPage^ currentTab) {
 		String^ title = wrapWord(task.description);
 		String^ d = gcnew String(task.date.c_str());
 		String^ t = gcnew String(task.time.c_str());	
+
 		if(!todoDiscovered && task.type == TODO) {
 			todoDiscovered = true;
+			display->Rows->Add("","","","","");
 			display->Rows->Add("","","Todo","","");
-			display->Rows[i]->DefaultCellStyle->BackColor = ColorTranslator::FromHtml("#FF6666");
-			j = 1;
+			display->Rows[i+j+1]->DefaultCellStyle->BackColor = ColorTranslator::FromHtml("#FF6666");
+			j += 2;
 		} else if(!eventDiscovered && task.type == EVENT) {
 			eventDiscovered = true;
 			display->Rows->Add("","","","","");
@@ -113,9 +115,7 @@ void UI::updateTable(TabPage^ currentTab) {
 			display->Rows[i+j]->DefaultCellStyle->ForeColor = Color::Gray;
 		}
 		if(i == size-1) {
-			if((*tasks)[0].type != TODO) {
-				display->Rows->RemoveAt(0);
-			}
+			display->Rows->RemoveAt(0);
 		}
 	}
 	if(size > 0) {
