@@ -161,7 +161,13 @@ void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int 
 	std::vector<Task>::iterator iter;
 	Task freeDateTask;
 	int freeDateStart = startDate;
-	int freeTimeStart = startTime;
+	int freeTimeStart;
+
+	if (startTime == TIME_NOT_SET) {
+		freeTimeStart = 0;
+	} else {
+		freeTimeStart = startTime;
+	}
 
 	removeDoneTasks(taskVector);
 	removeTaskType(taskVector, FLOATING);
