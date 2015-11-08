@@ -362,10 +362,11 @@ std::string Command::getMessage() {
 
 //============== ADD : PUBLIC METHODS ===============
 
-Add::Add(Task task) : Command(ADD) {
+Add::Add(Task task, std::string restOfCommand) : Command(ADD) {
 	newTask = task;
 	currViewID = 0;
 	isOverlap = false;
+	invalidDateTimeString = restOfCommand;
 }
 
 Add::~Add() {}
@@ -389,11 +390,15 @@ void Add::undo() {
 }
 
 std::string Add::getMessage() {
+	std::string msg;
 	if (isOverlap) {
-		return "Task to be added overlaps with existing task!";
+		msg = "Task added overlaps with existing task!";
+	} else if (invalidDateTimeString != "") {
+		msg = "Task added contains invalid date/time: " + invalidDateTimeString;
 	} else {
-		return("\"" + newTask.getName() + "\"" + " added");
+		msg = "\"" + newTask.getName() + "\" added";
 	}
+	return msg;
 }
 
 //============== ADD : PRIVATE METHODS ===============
@@ -460,12 +465,12 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
-
 	if ((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
 		taskStore.push_back(taskToBeDeleted);
 	}
+	Task::lastEditID = taskToBeDeleted.getID();
 
 	/*
 	// For in-place undoing, if view is not set back to default
@@ -475,9 +480,6 @@ void Delete::undo() {
 	currentView.push_back(taskToBeDeleted);
 	}
 	*/
-
-	Task::lastEditID = taskToBeDeleted.getID();
-
 	defaultView();
 }
 
@@ -506,11 +508,13 @@ Modify::Modify(int taskID, bool isModifyFloating) : Command(MODIFY) {
 	isSetFloating = isModifyFloating;
 }
 
-Modify::Modify(int taskID, std::vector<FieldType> fields, Task task) : Command(MODIFY) {
-	modifyID = taskID;
-	isSetFloating = false;
-	fieldsToModify = fields;
-	tempTask = task;
+Modify::Modify(int taskID, std::vector<FieldType> fields,
+			   Task task, std::string restOfInput) : Command(MODIFY) {
+				   modifyID = taskID;
+				   isSetFloating = false;
+				   fieldsToModify = fields;
+				   tempTask = task;
+				   invalidDateTimeString = restOfInput;
 }
 
 Modify::Modify(CommandType pick) : Command(pick) {}
@@ -555,7 +559,13 @@ void Modify::undo() {
 }
 
 std::string Modify::getMessage() {
-	return "successfully modified!";
+	std::string msg;
+	if (invalidDateTimeString != "") {
+		msg = "Task added contains invalid date/time: " + invalidDateTimeString;
+	} else {
+		msg = "successfully modified!";
+	}
+	return msg;
 }
 
 //============= MODIFY : PRIVATE METHODS ===========
@@ -981,6 +991,11 @@ ViewType View::getViewType() {
 
 void View::execute() {
 	logger->log(DEBUG,"Viewing...");
+	if (TS::firstLoad == true) {
+		defaultView();
+		Logic::setTodayMode();
+		return;
+	}
 
 	switch (view) {
 	case VIEWTYPE_ALL:
@@ -1053,6 +1068,7 @@ void View::execute() {
 	case VIEWTYPE_INVALID:
 		break;
 	}
+	return;
 }
 
 void View::undo() {

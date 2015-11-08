@@ -269,19 +269,26 @@ public:
 	*/
 	};
 
-	//========== SetFilePathTest ==========
+	// Aaron Chong Jun Hao @@author A0110376N
 	TEST_CLASS(SetFilePathTest) {
 public:
 	Parser* parser;
 	IO* io;
+	Task task;
+	std::vector<Task> taskVector;
+	std::string userInput;
+	std::string newFilePath;
 
-	TEST_METHOD(IO_setFilePath_parentDirectory) {
+	TEST_METHOD_INITIALIZE(GetInstanceForParserAndIO) {
 		parser = Parser::getInstance();
 		io = IO::getInstance();
-		std::vector<Task> taskVector;
-		Task task = *parser->parseTask("dummy");
-		std::string userInput = "../test";
-		std::string newFilePath = parser->parseFileName(userInput);
+	}
+
+	TEST_METHOD(IO_setFilePath_parentDirectory) {
+		userInput = "dummy";
+		task = *parser->parseTask(userInput);
+		userInput = "../test";
+		newFilePath = parser->parseFileName(userInput);
 		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 
 		// Remove file created
@@ -289,12 +296,10 @@ public:
 	}
 
 	TEST_METHOD(IO_setFilePath_parentOfParentDirectory) {
-		parser = Parser::getInstance();
-		io = IO::getInstance();
-		std::vector<Task> taskVector;
-		Task task = *parser->parseTask("dummy");
-		std::string userInput = "../../test";
-		std::string newFilePath = parser->parseFileName(userInput);
+		userInput = "dummy";
+		task = *parser->parseTask(userInput);
+		userInput = "../../test";
+		newFilePath = parser->parseFileName(userInput);
 		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 
 		// Remove file created
@@ -302,12 +307,10 @@ public:
 	}
 
 	TEST_METHOD(IO_setFilePath_userDirectory) {
-		parser = Parser::getInstance();
-		io = IO::getInstance();
-		std::vector<Task> taskVector;
-		Task task = *parser->parseTask("dummy");
-		std::string userInput = "C:/Users/Public/TEXT";
-		std::string newFilePath = parser->parseFileName(userInput);
+		userInput = "dummy";
+		task = *parser->parseTask(userInput);
+		userInput = "C:/Users/Public/TEXT";
+		newFilePath = parser->parseFileName(userInput);
 		Assert::AreEqual(true,io->setFilePath(newFilePath,taskVector));
 
 		// Remove file created
@@ -315,17 +318,4 @@ public:
 	}
 
 	};
-
-	//========== ChangeDirectoryTest ==========
-	/*
-	TEST_CLASS(ChangeDirectoryTest)	{
-	public:
-	TEST_METHOD(IO_changeDirectory_invalidPath)	{
-	io = IO::getInstance();
-	// Cannot open file to save
-	std::string pathName = "Desktop";
-	bool success = io->changeSourceFileLocation(pathName);
-	Assert::AreEqual(false, success);
-	}
-	*/
 }

@@ -9,7 +9,7 @@ void addThreeSentences(std::vector<Task> copyTask);
 namespace TaskSharkTests {
 	TEST_CLASS(Command_Add) {
 public:
-	TEST_METHOD_INITIALIZE(InitialiseLogger) {
+	TEST_METHOD_INITIALIZE(GetInstanceForLogger) {
 		TsLogger::getInstance();
 	}
 
@@ -981,7 +981,7 @@ public:
 		userInput = "view all";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getCurrentView().back();
+		task = cmd->getTaskStore().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());
@@ -1014,7 +1014,7 @@ public:
 		userInput = "view all";
 		cmd = parser->parse(userInput);
 		cmd->execute();
-		task = cmd->getCurrentView().back();
+		task = cmd->getTaskStore().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());

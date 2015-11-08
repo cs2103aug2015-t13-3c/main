@@ -63,7 +63,7 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(TargetDir)
-del .tblog</Command>
+del .tslog</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,13 +78,13 @@ del .tblog</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="MetroFramework">
-      <HintPath>..\metrodll\MetroFramework.dll</HintPath>
+      <HintPath>metrodll\MetroFramework.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework.Design">
-      <HintPath>..\metrodll\MetroFramework.Design.dll</HintPath>
+      <HintPath>metrodll\MetroFramework.Design.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework.Fonts">
-      <HintPath>..\metrodll\MetroFramework.Fonts.dll</HintPath>
+      <HintPath>metrodll\MetroFramework.Fonts.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
