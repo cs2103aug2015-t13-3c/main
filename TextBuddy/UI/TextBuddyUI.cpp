@@ -5,7 +5,6 @@
 using namespace System;
 using namespace UserInterface;
 using namespace System::Windows::Forms;
-using namespace System::Threading;
 
 [STAThread]
 int main() {
@@ -32,8 +31,6 @@ TextBuddyUI::TextBuddyUI() {
 	input->Clear();
 	originalRowPosition = 0;
 	tabs->Style = this->Style;
-	input->Focus();
-	this->ActiveControl = input;
 	//	floatingTaskDisplay->SelectionAlignment = HorizontalAlignment::Center;
 	inputHistoryCount = 0;
 	inputHistory = gcnew System::Collections::Generic::List<String^>();

@@ -271,6 +271,7 @@ namespace UserInterface {
 				 this->display->Size = System::Drawing::Size(746, 521);
 				 this->display->TabIndex = 11;
 				 this->display->TabStop = false;
+				 this->display->Click += gcnew System::EventHandler(this, &TextBuddyUI::display_Click);
 				 // 
 				 // id
 				 // 
@@ -418,6 +419,7 @@ namespace UserInterface {
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 				 this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+				 this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 				 this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 				 this->BackImagePadding = System::Windows::Forms::Padding(14, 15, 0, 0);
 				 this->BackMaxSize = 35;
@@ -436,6 +438,7 @@ namespace UserInterface {
 				 this->Resizable = false;
 				 this->Style = MetroFramework::MetroColorStyle::Orange;
 				 this->Text = L"      TaskShark";
+				 this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::TextBuddyUI_KeyDown);
 				 this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &TextBuddyUI::TextBuddyUI_KeyUp);
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->help))->EndInit();
 				 this->tabs->ResumeLayout(false);
@@ -532,6 +535,9 @@ namespace UserInterface {
 		void toPreviousCommand();
 		void toNextCommand();
 
+		void scrollUp();
+		void scrollDown();
+
 
 System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 		DisplayMode index = (DisplayMode)tabs->SelectedIndex;
@@ -568,12 +574,24 @@ System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArg
 		processAndExecute();
 		input->Clear();
 	}
-private: System::Void TextBuddyUI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+System::Void TextBuddyUI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			if(e->KeyCode == Keys::Escape) {	
-		this->WindowState = FormWindowState::Minimized;
-		return;
-	}
+				this->WindowState = FormWindowState::Minimized;
+				return;
+			}
 		 }
+System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
+			 input->Focus();
+		 }
+System::Void TextBuddyUI_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	if(e->Shift) {	
+		if(e->KeyCode == Keys::Up) {
+			scrollUp();
+		} else if(e->KeyCode == Keys::Down) {
+			scrollDown();
+		}
+	}
+}
 };
 
 }

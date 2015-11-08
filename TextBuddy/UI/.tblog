@@ -2462,3 +2462,8 @@ Fri Nov 06 23:07:15 2015 Tb::COMMAND_ADD address in Utilities: 009CFEA8
 Fri Nov 06 23:07:15 2015 Test custom command: add
 Fri Nov 06 23:07:15 2015 Parsing "view"
 Fri Nov 06 23:07:15 2015 Viewing...
+Sun Nov 08 16:26:57 2015 Logger initialised
+Sun Nov 08 16:26:57 2015 Log level default: 2
+Sun Nov 08 16:26:57 2015 Parser instantiated
+Sun Nov 08 16:27:00 2015 File not found: tablet.txt
+Sun Nov 08 16:27:00 2015 Parsing "view"
