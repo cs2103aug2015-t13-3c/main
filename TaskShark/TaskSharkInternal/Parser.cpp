@@ -79,7 +79,7 @@ Command* Parser::parse(std::string userInput) {
 	Command* cmd = new Command(INVALID,userInput);
 	log(INFO,"Parsing \"" + Utilities::getFirstWord(userInput) + "\"");
 
-	switch(cmdType) {
+	switch (cmdType) {
 	case ADD: {
 		if (restOfInput == "") {
 			log(WARN,"No task to add: " + restOfInput);
@@ -88,7 +88,7 @@ Command* Parser::parse(std::string userInput) {
 		Task* taskPtr = parseTask(restOfInput);
 		taskPtr->setID(Task::incrementRunningCount());
 		cmd = new Add(*taskPtr,restOfInput);
-		break;}
+		break; }
 
 	case DELETE: {
 		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
@@ -97,7 +97,7 @@ Command* Parser::parse(std::string userInput) {
 		}
 		int deleteID = Utilities::stringToInt(restOfInput);
 		cmd = new Delete(deleteID);
-		break;}
+		break; }
 
 	case MODIFY: {
 		std::string tempTaskString;
@@ -119,7 +119,7 @@ Command* Parser::parse(std::string userInput) {
 			Task* tempTaskPtr = parseTask(tempTaskString);
 			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr,tempTaskString);
 		}
-		break;}
+		break; }
 
 	case PICK: {
 		bool isPick = false;
@@ -133,7 +133,7 @@ Command* Parser::parse(std::string userInput) {
 			isPick = true;
 		}
 		cmd = new Pick(pickID,isPick);
-		break;}
+		break; }
 
 	case POWERSEARCH:
 	case SEARCH: {
@@ -149,7 +149,7 @@ Command* Parser::parse(std::string userInput) {
 			std::string searchPhrase = restOfInput;
 			cmd = new Search(searchPhrase);
 		}
-		break;}
+		break; }
 
 	case MARKDONE: {
 		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
@@ -158,7 +158,7 @@ Command* Parser::parse(std::string userInput) {
 		}
 		int doneID = Utilities::stringToInt(restOfInput);
 		cmd = new Markdone(doneID);
-		break;}
+		break; }
 
 	case UNMARKDONE: {
 		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
@@ -167,7 +167,7 @@ Command* Parser::parse(std::string userInput) {
 		}
 		int notdoneID = Utilities::stringToInt(restOfInput);
 		cmd = new UnmarkDone(notdoneID);
-		break;}
+		break; }
 
 	case UNDO:
 		cmd = new Undo;
@@ -186,7 +186,7 @@ Command* Parser::parse(std::string userInput) {
 			ViewType newView = Utilities::stringToViewType(restOfInput);
 			cmd = new View(newView,restOfInput);
 		}
-		break;}
+		break; }
 
 	case CLEAR_ALL:
 		cmd = new ClearAll;
@@ -207,7 +207,7 @@ Command* Parser::parse(std::string userInput) {
 			restOfInput = Utilities::removeFirstWord(restOfInput);
 		}
 		cmd = new Load(parseFileName(restOfInput),isOverwriteFile);
-		break;}
+		break; }
 
 	case SAVE: {
 		if (restOfInput == "") {
@@ -220,7 +220,7 @@ Command* Parser::parse(std::string userInput) {
 			restOfInput = Utilities::removeFirstWord(restOfInput);
 		}
 		cmd = new Save(parseFileName(restOfInput),isDeletePrevFile);
-		break;}
+		break; }
 
 	case EXIT:
 		cmd = new Exit;
@@ -337,10 +337,8 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 		} else if (Utilities::containsAny(inputMode,"from after")) {
 			if ((newDate = parseDate(inputString)) != INVALID_DATE_FORMAT) {
 				startDate = newDate;
-				log(DEBUG_INTERNAL,"Parsed " + Utilities::vecToString(inputString) + " to be date: " + std::to_string(newDate));
 			} else if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
 				startTime = newTime;
-				log(DEBUG_INTERNAL,"Parsed " + Utilities::vecToString(inputString) + " to be time: " + std::to_string(newTime));
 			}
 
 		} else if (Utilities::containsAny(inputMode,"to before")) {
@@ -436,8 +434,8 @@ std::vector<std::string> Parser::parseSearchParameters(std::string restOfInput) 
 
 int Parser::parseDate(std::vector<std::string> dateString) {
 	int newDate;
-	if (    ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)   // Try parseByDate first
-		|| ((newDate=parseByDay(dateString))  != INVALID_DATE_FORMAT)) { // Try parseByDay if previous is invalid
+	if (   ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)
+		|| ((newDate=parseByDay(dateString))  != INVALID_DATE_FORMAT)) {
 			return newDate;
 	} else if (dateString.size()==1) {
 		// Convert DD/MM(/YY) to DD MM( YY)
@@ -681,7 +679,8 @@ void Parser::convertFieldToReserve(FieldType &inputMode) {
 	return;
 }
 
-std::string Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserve, bool &isReservation, FieldType inputMode, std::vector<std::string> inputString) {
+std::string Parser::placeInField(Task* newTask,bool &isTODO,bool &isTODOreserve,bool &isReservation,
+								 FieldType inputMode,std::vector<std::string> inputString) {
 	if (inputMode == RESERVE) {
 		isReservation = true;
 		return "";
@@ -720,7 +719,7 @@ std::string Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserv
 		}
 	}
 
-	switch(inputMode) {
+	switch (inputMode) {
 	case NAME:
 		newTask->setName(Utilities::vecToString(removeSlashKeywords(inputString)));
 		break;
@@ -836,7 +835,8 @@ std::string Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserv
 				newTask->addReserveEndDate(newTask->getReserveStartDate());
 			}
 			newTask->addReserveEndTime(newTime);
-			if (newTask->getReserveStartTime()!=TIME_NOT_SET && newTask->getReserveStartTime()!=newTask->getReserveEndTime()) {
+			if (   newTask->getReserveStartTime() != TIME_NOT_SET
+				&& newTask->getReserveStartTime() != newTask->getReserveEndTime()) {
 				newTask->setReserveType(EVENT);
 			} else if (newTask->getReserveType()==EVENT && newTask->getReserveStartTime()==TIME_NOT_SET) {
 				newTask->addReserveStartTime(newTime);
@@ -856,7 +856,7 @@ std::string Parser::placeInField(Task* newTask, bool &isTODO, bool &isTODOreserv
 int Parser::findMaxDays(Month month, int year) { // default year is 2015
 	int maxDays = 0;
 	bool isLeap;
-	switch(month) {
+	switch (month) {
 	case JAN:
 	case MAR:
 	case MAY:
@@ -963,17 +963,21 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 	}
 
 	FieldType newField;
+	std::vector<std::string>::iterator end;
 	while (curr != vecInput.end()) {
 		newField = Utilities::stringToFieldType(*curr);
 		if (newField == LABELS_DELETE
 			&& curr+1 != vecInput.end()
 			&& Utilities::stringToFieldType(*(curr+1)) != INVALID_FIELD) {
 				fields.push_back(LABELS_CLEAR);
-		} else if (isDateField(newField)
-			&& curr+1 != vecInput.end()
-			&& curr+2 != vecInput.end()
-			&& parseDate(std::vector<std::string>(curr+1,curr+3)) == INVALID_DATE_FORMAT) {
+		} else if (isDateField(newField) && curr+1 != vecInput.end()) {
+			end = curr+2;
+			if (curr+2 != vecInput.end()) {
+				end = curr+3;
+			}
+			if (parseDate(std::vector<std::string>(curr+1,end)) == INVALID_DATE_FORMAT) {
 				fields.push_back(convertFieldDateToTime(newField));
+			}
 		} else if (newField != INVALID_FIELD) {
 			fields.push_back(newField);
 		}

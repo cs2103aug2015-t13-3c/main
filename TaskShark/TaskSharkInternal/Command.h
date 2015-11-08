@@ -94,7 +94,9 @@ protected:
 	static std::vector<Task> taskStore;
 
 	TsLogger* logger;
+	bool isExecuteSuccess;
 	std::string invalidDateTimeString;
+	std::string msg;
 
 	//===== FOR UNDO =====
 	std::vector<Task>::iterator currViewIter;
