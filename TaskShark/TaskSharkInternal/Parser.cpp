@@ -581,15 +581,19 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 // - HH.MM AM/PM (default: assume AM)
 // - HHMM        (24-hour)
 int Parser::parseTime(std::vector<std::string> timeString) {
-	int time;
-	std::string hourString;
-	int hour;
-	std::string minString;
-	int min = 0;
-
 	if (timeString.empty()) {
 		return INVALID_TIME_FORMAT;
 	}
+
+	int time;
+	int hour;
+	int min = 0;
+	std::string hourString;
+	std::string minString;
+
+	// Add space between joined am/pm
+	timeString = Utilities::stringToVec(Utilities::replace(Utilities::vecToString(timeString),"am"," am"));
+	timeString = Utilities::stringToVec(Utilities::replace(Utilities::vecToString(timeString),"pm"," pm"));
 
 	std::vector<std::string>::iterator curr = timeString.begin();
 	if (!Utilities::isPositiveNonZeroInt(*curr)) {
