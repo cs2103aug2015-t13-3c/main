@@ -74,12 +74,6 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
-
-
-
-
-
-
 	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
@@ -451,23 +445,24 @@ namespace UserInterface {
 
 #pragma endregion
 
-			 //****************** AUTHOR : Soon Hao Ye *******************
-			 // Soon Hao Ye @@author A0126677U
+//========================== PRIVATE VARIABLES ================================
+	private:	
+		Logic* logic;
+		TsLogger* logger;
+		std::string* userInput;
+		std::string* userFeedback_cppString;
+		int inputHistoryCount;
+		
+		// To be subscribed
+		std::vector<DisplayedTask>* tasks;
 
-			 //==================== PRIVATE VARIABLES ====================
-	private:
+		// Flags for different states
 		DisplayMode mode;
 		bool tileView;
 		bool selectingFields;
 		bool helpMode;
-		std::string* userInput;
-		std::string* userFeedback_cppString;
-		Logic* logic;
-		TsLogger* logger;
-		int cursorPosition;
-		int originalRowPosition;
-		int inputHistoryCount;
-		String^ searchPhrase;
+
+		// Data structures to store autoComplete suggestions
 		System::Collections::Hashtable^ suggestions;
 		System::Collections::Generic::List<String^>^ inputHistory;
 		System::Collections::Generic::List<String^>^ keywords;
@@ -479,118 +474,42 @@ namespace UserInterface {
 		System::Collections::Generic::List<String^>^ searchCommands;
 		System::Collections::Generic::List<String^>^ viewCommands;
 
-		// To be subscribed
-		std::vector<DisplayedTask>* tasks;
-
-		//===================== UI FUNCTIONS=======================================
-	private:	
-		System::Void input_KeyDown(System::Object^  sender,
-			System::Windows::Forms::KeyEventArgs^  e);
-		System::Void input_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-		System::Void updateCurrentTime_Tick(System::Object^  sender, System::EventArgs^  e);
-
-		/*=====================================================================
-		reads the characters from textbox
-		converts the entire input from CLI String to std::string
-		stores the input into class variable
-		=====================================================================*/
+//========================= UI FUNCTIONS=======================================
+	private:
+		// Definition in Keypress.cpp
+		System::Void input_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e);
+		System::Void input_KeyDown(System::Object^ sender,System::Windows::Forms::KeyEventArgs^ e);
+		System::Void UI_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e);
+		System::Void UI_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e);	
+		System::Void display_Click(System::Object^ sender, System::EventArgs^ e);
+		System::Void tabs_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e); 
+		
+		// Definition in Execute.cpp
 		void getInput();
-
-		/*=====================================================================
-		passes UserInput to Logic
-		prints feedback message if needed
-		updates current display of task if needed
-		updates floating tasks entries
-		=====================================================================*/
 		void processAndExecute();
-
-		/*=====================================================================
-		loops through the subscribed fields
-		writes data to the cells :
-		-ID
-		-Description
-		-Label
-		-Date/Time
-		=====================================================================*/
-
-		void printFeedBackMessage(std::string message);
-
-		void commandAutoComplete();
-		bool matchKeyword(String^ keyword);
-		void showSuggestedCommands(String^ keyword);
-		void selectFields();
-
 		void updateDisplay();
 		void updateTable(TabPage^ currentTab);
 		int getTabIndex();
 		void addTilesToTab(TabPage^ currentTab);
 		String^ wrapWord(std::string content);
+		void printFeedBackMessage(std::string message);
+		void closeHelpMode();
+		void scrollUp();
+		void scrollDown();
+		System::Void updateCurrentTime_Tick(System::Object^ sender, System::EventArgs^ e);
 
+		// Definition in Dropdown.cpp
+		void commandAutoComplete();
+		bool matchKeyword(String^ keyword);
+		void showSuggestedCommands(String^ keyword);
 		void incrementDropCount();
 		void decrementDropCount();
 		bool acceptAutosuggest();
+		void selectFields();
 
-		void closeHelpMode();
+		// Definition in CommandHistory.cpp
 		void addCommandHistory();
 		void toPreviousCommand();
 		void toNextCommand();
-
-		void scrollUp();
-		void scrollDown();
-
-
-		System::Void tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-			DisplayMode index = (DisplayMode)tabs->SelectedIndex;
-			switch (index) {
-			case ALL:
-				input->Text = "view all";
-				break;
-			case TODAY:
-				input->Text = "view today";
-				break;
-			case WEEK:
-				input->Text = "view week";
-				break;
-			case EVENTS:
-				input->Text = "view events";
-				break;
-			case DEADLINES:
-				input->Text = "view todo";
-				break;
-			case FLOATINGS:
-				input->Text = "view floating";
-				break;
-			case SEARCHES:
-				// not implemented
-				break;
-			case PAST_:
-				input->Text = "view past";
-				break;
-			case FREESLOTS:
-				// not implemented yet
-				break;
-			}
-			getInput();
-			processAndExecute();
-			input->Clear();
-		}
-		System::Void UI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			if(e->KeyCode == Keys::Escape) {	
-				this->WindowState = FormWindowState::Minimized;
-				return;
-			}
-		}
-		System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
-			input->Focus();
-		}
-		System::Void UI_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			if(e->Shift) {	
-				if(e->KeyCode == Keys::Up) {
-					scrollUp();
-				} else if(e->KeyCode == Keys::Down) {
-					scrollDown();
-				}
-			}
-		}
 	};
 }

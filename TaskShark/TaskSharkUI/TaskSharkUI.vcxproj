@@ -104,7 +104,6 @@ del .tblog</Command>
     <ClCompile Include="Execute.cpp" />
     <ClCompile Include="Keypress.cpp" />
     <ClCompile Include="UI.cpp" />
-    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UI.h">
