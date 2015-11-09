@@ -30,7 +30,6 @@ UI::UI() {
 	processAndExecute();
 	input->Clear();
 	tabs->Style = this->Style;
-	//	floatingTaskDisplay->SelectionAlignment = HorizontalAlignment::Center;
 	inputHistoryCount = 0;
 	inputHistory = gcnew System::Collections::Generic::List<String^>();
 	keywords = gcnew List<String^>();
@@ -71,7 +70,6 @@ UI::UI() {
 	addCommands->Add("add <EVENT> from <DATE> to <DATE>");
 	addCommands->Add("add <EVENT> from <DATE> at <TIME> to <DATE> at <TIME>");
 	addCommands->Add("add <EVENT> from <TIME> to <TIME>");
-	// add here...
 
 	//********** VIEW command formats ******************
 	viewCommands = gcnew List<String^>();
@@ -86,7 +84,6 @@ UI::UI() {
 	viewCommands->Add("view after <DATE>");
 	viewCommands->Add("view before <DATE>");
 	viewCommands->Add("view from <DATE> at <TIME> to <DATE> at <TIME>");
-	// add here...
 
 	//********** MODIFY command formats *****************
 	modifyCommands = gcnew List<String^>();
@@ -97,7 +94,6 @@ UI::UI() {
 	modifyCommands->Add("modify <ID> float");
 	modifyCommands->Add("modify <ID> star");
 	modifyCommands->Add("modify <ID> unstar");
-	// add here...
 
 	//********** SEARCH command formats *****************
 	searchCommands = gcnew List<String^>();
@@ -108,25 +104,21 @@ UI::UI() {
 	searchCommands->Add("search after <DATE> for <NUM> d <NUM> h <NUM> m");
 	searchCommands->Add("search before <DATE> for <NUM> d <NUM> h <NUM> m");
 	searchCommands->Add("search from <DATE> to <DATE> for <NUM> d <NUM> h <NUM> m");
-	// add here...
 
 	//********** PICK command formats *****************
 	pickCommands = gcnew List<String^>();
 	pickCommands->Add("pick <ID>");
 	pickCommands->Add("pick <ID> reserve");
-	// add here...
 
 	//********** LOAD command formats *****************
 	loadCommands = gcnew List<String^>();
 	loadCommands->Add("load <FILEPATH>");
 	loadCommands->Add("load from <FILEPATH>");
-	// add here...
 
 	//********** SAVE command formats *****************
 	saveCommands = gcnew List<String^>();
 	saveCommands->Add("save <FILEPATH>");
 	saveCommands->Add("save to <FILEPATH>");
-	// add here...
 
 	suggestions = gcnew Hashtable();
 	suggestions->Add(HELP,HELP);
