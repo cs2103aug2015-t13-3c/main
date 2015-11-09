@@ -88,12 +88,21 @@ const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
 
-// Initialises the corresponding iterators with the taskID
-// TaskID is the ID seen on GUI, not the unique task ID
+// Initialises the corresponding iterators with the guiID
+// guiID is the ID seen on GUI, not the unique task ID
 // Use for in-place insertion / deletion for undo methods
-void Command::initialiseIterators(int taskID) {
-	matchIndex(taskID,currViewIter,taskStoreIter);
+void Command::initialiseIteratorsFromGuiID(int guiID) {
+	matchIndex(guiID,currViewIter,taskStoreIter);
 	currViewPos = currViewIter - currentView.begin();
+	taskStorePos = taskStoreIter - taskStore.begin();
+}
+
+// Initialises the corresponding iterators with the uniqueID
+// uniqueID is not the ID seen on GUI
+// Use for constrcutors to undo
+void Command::initialiseIteratorsFromUniqueID() {
+	taskStoreIter = matchTaskStoreIndex(uniqueID);
+	currViewPos = -1;
 	taskStorePos = taskStoreIter - taskStore.begin();
 }
 
@@ -378,6 +387,7 @@ Add::Add(Task task, std::string restOfCommand) : Command(ADD) {
 	currViewID = 0;
 	isOverlap = false;
 	invalidDateTimeString = restOfCommand;
+	uniqueID = task.getID();
 }
 
 Add::~Add() {}
@@ -396,7 +406,7 @@ void Add::execute() {
 // Add must have executed before undoing,
 // otherwise currViewID will not be updated
 void Add::undo() {
-	Delete taskToDelete(currViewID);
+	Delete taskToDelete(uniqueID,true);
 	taskToDelete.execute();
 	Task::lastEditID = 0;
 }
@@ -457,7 +467,15 @@ void Add::checkOverlap() {
 //============ DELETE : PUBLIC METHODS =============
 
 Delete::Delete(int currentViewID) : Command(DELETE) {
-	deleteID = currentViewID;	
+	deleteID = currentViewID;
+	initialiseIteratorsFromGuiID(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
+	setUndoDeleteInfo();
+}
+
+//Overloaded Delete constructor used for undo only
+Delete::Delete(int taskID, bool undo) : Command(DELETE) {
+	uniqueID = taskID;
+	initialiseIteratorsFromUniqueID();
 }
 
 Delete::~Delete() {}
@@ -467,8 +485,6 @@ int Delete::getDeleteID() {
 }
 
 void Delete::execute() {
-	initialiseIterators(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
-	setUndoDeleteInfo();
 	doDelete();
 	Task::lastEditID = 0;
 	defaultView();
@@ -546,7 +562,7 @@ Task Modify::getTempTask() {
 }
 
 void Modify::execute() {
-	initialiseIterators(modifyID);
+	initialiseIteratorsFromGuiID(modifyID);
 	originalTask = *currViewIter;
 	if (isSetFloating) {
 		taskStoreIter->setType(FLOATING);
@@ -557,7 +573,7 @@ void Modify::execute() {
 	updateTaskTypes();
 	updateViewIter();
 	sortDate(taskStore);
-	initialiseIterators(modifyID);
+	initialiseIteratorsFromGuiID(modifyID);
 	Task::lastEditID = originalTask.getID();
 	//defaultView();
 }
@@ -932,7 +948,7 @@ std::string Markdone::getMessage() {
 //============= MARKDONE : PRIVATE METHODS ===========
 
 void Markdone::markDone() {
-	initialiseIterators(doneID);
+	initialiseIteratorsFromGuiID(doneID);
 
 	successMarkDone = taskStoreIter->markDone();
 	if (successMarkDone) {
@@ -981,7 +997,7 @@ std::string UnmarkDone::getMessage() {
 //=========== UNMARKDONE : PRIVATE METHODS ==========
 
 void UnmarkDone::unmarkDone() {
-	initialiseIterators(undoneID);
+	initialiseIteratorsFromGuiID(undoneID);
 
 	successUnmarkDone = taskStoreIter->unmarkDone();
 	if (successUnmarkDone) {
@@ -1284,12 +1300,12 @@ Pick::Pick(int taskID, bool isPick) : Modify(PICK) {
 Pick::~Pick() {}
 
 void Pick::execute() {
-	initialiseIterators(modifyID);
+	initialiseIteratorsFromGuiID(modifyID);
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
 	// defaultView();
-	initialiseIterators(modifyID);
+	initialiseIteratorsFromGuiID(modifyID);
 }
 
 void Pick::undo() {

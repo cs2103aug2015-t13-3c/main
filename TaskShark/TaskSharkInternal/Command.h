@@ -107,12 +107,14 @@ protected:
 	std::vector<Task>::iterator taskStoreIter;
 	int currViewPos;
 	int taskStorePos;
+	int uniqueID;
 
 	bool updateCurrView();
 	void updateViewIter();
 	void defaultView();
 
-	void initialiseIterators(int taskID);
+	void initialiseIteratorsFromGuiID(int guiID);
+	void initialiseIteratorsFromUniqueID();
 	void getIterator();
 
 	// Returns false if start is later than end, by checking date then time
@@ -185,7 +187,8 @@ private:
 	void setUndoDeleteInfo();
 	void doDelete();
 public:
-	Delete(int taskID);
+	Delete(int currentViewID);
+	Delete(int taskID, bool undo);
 	~Delete();
 	int getDeleteID();
 
