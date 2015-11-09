@@ -1,5 +1,52 @@
 {
 	"TaskShark Items":
 	[
+		{
+			"name": "event",
+			"type": "EVENT",
+			"uniqueID": 6,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151010,
+			"startTime": 2200,
+
+			"endDate": 151212,
+			"endTime": 1000
+		}
+		,
+		{
+			"name": "this",
+			"type": "FLOATING",
+			"uniqueID": 4,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
+		}
+		,
+		{
+			"name": "this",
+			"type": "FLOATING",
+			"uniqueID": 5,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 0,
+			"startTime": -1,
+
+			"endDate": 0,
+			"endTime": -1
+		}
 	]
 }
