@@ -46,7 +46,7 @@ CommandType Utilities::stringToCmdType(std::string str) {
 		cmd = ADD;
 	} else if (equalsIgnoreCase(str, TS::COMMAND_DELETE)) {
 		cmd = DELETE;
-	} else if (equalsIgnoreCase(str, TS::COMMAND_MODIFY) || equalsIgnoreCase(str, TS::COMMAND_MODIFY_EDIT)) {
+	} else if (equalsIgnoreCase(str, TS::COMMAND_MODIFY)) {
 		cmd = MODIFY;
 	} else if (equalsIgnoreCase(str, TS::COMMAND_PICK_RESERVE)) {
 		cmd = PICK;
@@ -62,6 +62,8 @@ CommandType Utilities::stringToCmdType(std::string str) {
 		cmd = REDO;
 	} else if (equalsIgnoreCase(str, TS::COMMAND_VIEW)) {
 		cmd = VIEW;
+	} else if (equalsIgnoreCase(str, TS::COMMAND_VIEW_HOME) || equalsIgnoreCase(str, TS::COMMAND_VIEW_HOME_TS)) {
+		cmd = VIEW_DEFAULT;
 	} else if (equalsIgnoreCase(str, TS::COMMAND_CLEAR_ALL)) {
 		cmd = CLEAR_ALL;
 	} else if (equalsIgnoreCase(str, TS::COMMAND_DISPLAY_ALL)) {

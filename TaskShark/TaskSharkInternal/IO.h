@@ -67,7 +67,7 @@ public:
 	static IO* getInstance();
 	~IO();
 	std::string getFilePath();
-	bool setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile=true);
+	bool setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile=false);
 	bool setCustomCommand(std::string identifier, std::string keyword);
 	bool saveFile(std::string filePath, std::vector<Task> taskVector);
 	std::vector<Task> loadFile(std::string fileName, bool isOverwriteLoadFile=true);

@@ -14,11 +14,10 @@ public:
 	static std::string MESSAGE_WELCOME;
 
 	// These are the valid Command keywords
-	// Count: 14
+	// Count: 18
 	static std::string COMMAND_ADD;
 	static std::string COMMAND_DELETE;
 	static std::string COMMAND_MODIFY;
-	static std::string COMMAND_MODIFY_EDIT;		// Alternative keyword
 	static std::string COMMAND_PICK_RESERVE;
 	static std::string COMMAND_SEARCH;
 	static std::string COMMAND_MARKDONE;
@@ -26,6 +25,8 @@ public:
 	static std::string COMMAND_UNDO;
 	static std::string COMMAND_REDO;
 	static std::string COMMAND_VIEW;
+	static std::string COMMAND_VIEW_HOME;
+	static std::string COMMAND_VIEW_HOME_TS;
 	static std::string COMMAND_CLEAR_ALL;
 	static std::string COMMAND_DISPLAY_ALL;
 	static std::string COMMAND_LOAD;
@@ -60,6 +61,7 @@ enum CommandType {
 	UNDO,
 	REDO,
 	VIEW,
+	VIEW_DEFAULT,
 	CLEAR_ALL,
 	DISPLAY_ALL,
 	LOAD,
@@ -79,7 +81,6 @@ const std::string VIEW_TODO = "todo";
 const std::string VIEW_TODAY = "today";
 const std::string VIEW_PAST = "past";
 const std::string VIEW_WEEK = "week";
-// const std::string VIEW_LABEL = "label";
 
 // These are the View enums
 // Count: 10 + VIEWTYPE_INVALID
@@ -422,7 +423,7 @@ private:
 
 public:
 	Save();
-	Save(std::string filePath, bool isDeletePrevFile=true);
+	Save(std::string filePath, bool isDeletePrevFile=false);
 	~Save();
 	std::string getFilePath();
 
