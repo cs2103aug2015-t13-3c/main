@@ -238,6 +238,9 @@ public:
 		std::vector<Task>::iterator iter;
 		addThreeSentences(copyTask);
 
+		View viewAll(VIEWTYPE_ALL, "");
+		viewAll.execute();
+
 		std::vector<FieldType> fields;
 		fields.push_back(NAME);
 		Task modifiedTask;
@@ -319,7 +322,7 @@ public:
 		Assert::AreEqual(std::string("Sentence two."),iter->getName());
 	}
 
-	TEST_METHOD(Command_Modify_undo_TODOtoEVENT) {
+	TEST_METHOD(Command_Modify_undo) {
 		std::vector<Task> copyTask;
 		std::vector<Task>::iterator iter;
 		addThreeSentences(copyTask);
@@ -361,19 +364,80 @@ public:
 
 		copyTask = modifyThree.getCurrentView();
 		iter = copyTask.begin();
-		Assert::AreEqual(0,iter->getStartDate());
-		Assert::AreEqual(0,iter->getEndDate());
-		Assert::AreEqual(std::string("Sentence one."),iter->getName());
-		++iter;
-		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
-		++iter;
 		Assert::AreEqual(std::string("Sentence three."),iter->getName());
 		Assert::AreEqual(0,iter->getStartDate());
+		Assert::AreEqual(0,iter->getEndDate());
+		++iter;
+		Assert::AreEqual(std::string("Sentence one."),iter->getName());
+		++iter;
+		Assert::AreEqual(0,iter->getStartDate());
+		Assert::AreEqual(0,iter->getEndDate());
+		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
 
 		modifyTwo.undo();
 
 		copyTask = modifyTwo.getTaskStore();
 		iter = copyTask.begin();
+		++iter;
+		++iter;
+		Assert::AreEqual(std::string("Sentence two."),iter->getName());
+	}
+
+	TEST_METHOD(Command_Modify_undo_changeview) {
+		std::vector<Task> copyTask;
+		std::vector<Task>::iterator iter;
+		addThreeSentences(copyTask);
+
+		std::vector<FieldType> fields;
+		fields.push_back(NAME);
+		Task modifiedTask;
+		modifiedTask.setName("New Sentence Two");
+		Modify modifyTwo(2, fields, modifiedTask);
+
+		modifyTwo.execute();
+
+		copyTask = modifyTwo.getTaskStore();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("Sentence one."),iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("Sentence three."),iter->getName());
+
+		fields.push_back(TODO_DATE);
+		modifiedTask.setName("New Sentence Three");
+		modifiedTask.setStartDate(150101);
+		modifiedTask.setEndDate(150101);
+		Modify modifyThree(3, fields, modifiedTask);
+
+		modifyThree.execute();
+
+		copyTask = modifyThree.getTaskStore();
+		iter = copyTask.begin();
+		Assert::AreEqual(std::string("New Sentence Three"),iter->getName());
+		Assert::AreEqual(150101,iter->getEndDate());
+		++iter;
+		Assert::AreEqual(std::string("Sentence one."),iter->getName());
+		++iter;
+		Assert::AreEqual(std::string("New Sentence Two"),iter->getName());		
+		
+		View viewTodo(VIEWTYPE_TODO, "");
+		viewTodo.execute();
+
+		modifyThree.undo();
+
+		copyTask = modifyThree.getCurrentView();
+		iter = copyTask.begin();
+		Assert::AreEqual((size_t)1,copyTask.size());
+		Assert::AreEqual(std::string("Sentence three."),iter->getName());
+		Assert::AreEqual(0,iter->getStartDate());
+		Assert::AreEqual(0,iter->getEndDate());
+		
+		modifyTwo.undo();
+
+		copyTask = modifyTwo.getTaskStore();
+		iter = copyTask.begin();
+		++iter;
 		++iter;
 		Assert::AreEqual(std::string("Sentence two."),iter->getName());
 	}

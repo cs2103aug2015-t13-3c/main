@@ -34,6 +34,18 @@ public:
 	static std::string COMMAND_EXIT;
 };
 
+enum DisplayMode {
+	HOME,
+	ALL,
+	TODAY,
+	WEEK,
+	EVENTS,
+	DEADLINES,
+	FLOATINGS,
+	SEARCHES,
+	PAST_,
+};
+
 // These are the Command enums
 // Count: 14 + INVALID
 enum CommandType {
@@ -134,6 +146,7 @@ protected:
 	bool isValidIndex(int index);
 	std::vector<Task>::iterator matchCurrentViewIndex(int index);
 	std::vector<Task>::iterator matchTaskStoreIndex(int index);
+	std::vector<Task>::iterator matchCurrentViewUniqueID(int ID);
 
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");

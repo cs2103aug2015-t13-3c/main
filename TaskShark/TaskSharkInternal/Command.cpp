@@ -102,7 +102,16 @@ void Command::initialiseIteratorsFromGuiID(int guiID) {
 // Use for constrcutors to undo
 void Command::initialiseIteratorsFromUniqueID() {
 	taskStoreIter = matchTaskStoreIndex(uniqueID);
-	currViewPos = -1;
+	if(currentView.size() > 0) {
+		currViewIter = matchCurrentViewUniqueID(uniqueID);
+		currViewPos = currViewIter - currentView.begin();
+		if(currViewPos >= currentView.size()) {
+			currViewPos = -1;
+		}
+	} else {
+		currViewPos = -1;
+	}
+
 	taskStorePos = taskStoreIter - taskStore.begin();
 }
 
@@ -354,6 +363,7 @@ bool Command::isValidIndex(int index) {
 	return true;
 } 
 
+// Index is ID as seen on GUI
 std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
 	assert(index >0 && index <= (int)currentView.size());
 	std::vector<Task>::iterator iter = currentView.begin();
@@ -363,12 +373,22 @@ std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
 	return iter;
 }
 
+// Index is uniqueID
 std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
 	std::vector<Task>::iterator iter = taskStore.begin();
 	while (iter->getID() != index && iter != taskStore.end()) {
 		++iter;
 	}
 	assert(iter != taskStore.end());
+	return iter;
+}
+
+// Index is uniqueID
+std::vector<Task>::iterator Command::matchCurrentViewUniqueID(int ID) {
+	std::vector<Task>::iterator iter = currentView.begin();
+	while (iter != currentView.end() && iter->getID() != ID) {
+		++iter;
+	}
 	return iter;
 }
 
@@ -509,6 +529,7 @@ void Delete::undo() {
 	}
 	*/
 	defaultView();
+	Logic::setHomeMode();
 }
 
 std::string Delete::getMessage() {
@@ -534,6 +555,8 @@ void Delete::setUndoDeleteInfo() {
 Modify::Modify(int taskID, bool isModifyFloating) : Command(MODIFY) {
 	modifyID = taskID;
 	isSetFloating = isModifyFloating;
+	initialiseIteratorsFromGuiID(modifyID);
+	originalTask = *currViewIter;
 }
 
 Modify::Modify(int taskID, std::vector<FieldType> fields,
@@ -543,6 +566,8 @@ Modify::Modify(int taskID, std::vector<FieldType> fields,
 				   fieldsToModify = fields;
 				   tempTask = task;
 				   invalidDateTimeString = restOfInput;
+				   initialiseIteratorsFromGuiID(modifyID);
+	originalTask = *currViewIter;
 }
 
 Modify::Modify(CommandType pick) : Command(pick) {}
@@ -561,28 +586,36 @@ Task Modify::getTempTask() {
 	return tempTask;
 }
 
-void Modify::execute() {
-	initialiseIteratorsFromGuiID(modifyID);
-	originalTask = *currViewIter;
+void Modify::execute() {	
+	uniqueID = originalTask.getID();
+	initialiseIteratorsFromUniqueID();
+
 	if (isSetFloating) {
 		taskStoreIter->setType(FLOATING);
-		taskStoreIter->resetDatesAndTimes();
+		taskStoreIter->resetDatesAndTimes();		
 	} else {
 		doModify();
+		updateTaskTypes();
 	}
-	updateTaskTypes();
 	updateViewIter();
 	sortDate(taskStore);
-	initialiseIteratorsFromGuiID(modifyID);
+	sortDate(currentView);	
 	Task::lastEditID = originalTask.getID();
 	//defaultView();
 }
 
 void Modify::undo() {
-	taskStore.erase(taskStoreIter);
-	currentView.erase(currViewIter);
-	taskStore.insert(taskStoreIter,originalTask);
-	currentView.insert(currViewIter,originalTask);
+	initialiseIteratorsFromUniqueID();
+	*taskStoreIter = originalTask;
+	if(currViewPos != -1) {
+		*currViewIter = originalTask;
+		//currentView.erase(currViewIter);
+		//currentView.insert(currViewIter,originalTask);
+	}
+
+	sortDate(taskStore);
+	sortDate(currentView);
+	initialiseIteratorsFromUniqueID();
 	Task::lastEditID = originalTask.getID();
 }
 
@@ -1036,7 +1069,7 @@ void View::execute() {
 		Logic::setHomeMode();
 		return;
 	}
-	
+
 	switch (view) {
 	case VIEWTYPE_HOME:
 		viewHome();
@@ -1269,7 +1302,7 @@ Undo::~Undo() {}
 
 void Undo::execute() {
 	History::getInstance()->undo();
-	Logic::setHomeMode();
+	//Logic::setHomeMode();
 }
 
 //==================================================

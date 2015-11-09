@@ -163,6 +163,11 @@ public:
 	}
 
 	TEST_METHOD(Parser_parse_Modify) {
+		Task task;
+		Add add(task);
+		add.execute();
+		add.execute();
+		add.execute();
 		/*
 		expectedInt = 1;
 		expectedString = "Name: Two turtle doves\nType: 1\nStart Time: 800\nEnd Date: 151024\nEnd Time: 800\n";
@@ -173,8 +178,7 @@ public:
 		userInput = "modify 3 : star";
 
 		Command* cmd = p->parse(userInput);
-
-		Task task;
+				
 		int taskID = 0;
 		std::vector<FieldType> fieldsToModify;
 		std::string searchPhrase;

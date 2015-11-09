@@ -8,18 +8,6 @@
 #include "Parser.h"
 #include "Update.h"
 
-enum DisplayMode {
-	HOME,
-	ALL,
-	TODAY,
-	WEEK,
-	EVENTS,
-	DEADLINES,
-	FLOATINGS,
-	SEARCHES,
-	PAST_,
-};
-
 class Logic {
 private:
 	static Logic* theOne;
