@@ -12,6 +12,8 @@ private:
 	static std::vector<Command*> commandHistory;
 	static std::vector<Command*> redoHistory;
 
+	bool checkUndoableCommand(Command* cmd);
+
 public:
 	static History* getInstance();
 	~History();

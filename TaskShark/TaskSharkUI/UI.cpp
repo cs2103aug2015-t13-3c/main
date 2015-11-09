@@ -25,6 +25,7 @@ UI::UI() {
 	logic = logic->getInstance();
 	tasks = new std::vector<DisplayedTask>();
 	logic->subscribe(tasks);
+	TS::firstLoad = true;
 	input->Text = "view today";
 	getInput();
 	processAndExecute();

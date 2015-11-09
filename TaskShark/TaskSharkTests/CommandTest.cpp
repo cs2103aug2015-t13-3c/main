@@ -963,6 +963,7 @@ public:
 	TEST_CLASS(Command_Pick) {
 public:
 	Command* cmd;
+	Command* viewAllCmd;
 	Parser* parser;
 	History* history;
 	Task task;
@@ -973,6 +974,7 @@ public:
 		parser = Parser::getInstance();
 		history = History::getInstance();
 		history->clearHistory();
+		TS::firstLoad = false;
 	}
 
 	TEST_METHOD(Command_Pick_reserve_empty) {
@@ -980,8 +982,8 @@ public:
 		cmd = parser->parse(userInput);
 		cmd->execute();
 		userInput = "view all";
-		cmd = parser->parse(userInput);
-		cmd->execute();
+		viewAllCmd = parser->parse(userInput);
+		viewAllCmd->execute();
 		task = cmd->getTaskStore().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
@@ -1015,8 +1017,8 @@ public:
 		cmd = parser->parse(userInput);
 		cmd->execute();
 		userInput = "view all";
-		cmd = parser->parse(userInput);
-		cmd->execute();
+		viewAllCmd = parser->parse(userInput);
+		viewAllCmd->execute();
 		task = cmd->getTaskStore().back();
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
@@ -1065,6 +1067,7 @@ public:
 		Assert::AreEqual(1400, task.getStartTime());
 		Assert::AreEqual(151201, task.getEndDate());
 		Assert::AreEqual(1400, task.getEndTime());
+		TS::firstLoad = true;
 	}
 	};
 }
