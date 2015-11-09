@@ -1033,7 +1033,7 @@ void View::execute() {
 	if (TS::firstLoad == true) {
 		logger->log(DEBUG,"Startup view");
 		defaultView();
-		Logic::setTodayMode();
+		Logic::setHomeMode();
 		return;
 	}
 	
