@@ -12,7 +12,6 @@ std::string TS::MESSAGE_WELCOME = "Welcome to TaskShark!";
 std::string TS::COMMAND_ADD = "add";
 std::string TS::COMMAND_DELETE = "delete";
 std::string TS::COMMAND_MODIFY = "modify";
-std::string TS::COMMAND_MODIFY_EDIT = "edit";	// Alternative keyword
 std::string TS::COMMAND_PICK_RESERVE = "pick";
 std::string TS::COMMAND_SEARCH = "search";
 std::string TS::COMMAND_MARKDONE = "done";
@@ -20,6 +19,8 @@ std::string TS::COMMAND_UNMARKDONE = "notdone";
 std::string TS::COMMAND_UNDO = "undo";
 std::string TS::COMMAND_REDO = "redo";
 std::string TS::COMMAND_VIEW = "view";
+std::string TS::COMMAND_VIEW_HOME = "home";	 // For easy access to default view
+std::string TS::COMMAND_VIEW_HOME_TS = "ts"; // For easy access to default view
 std::string TS::COMMAND_CLEAR_ALL = "clear";
 std::string TS::COMMAND_DISPLAY_ALL = "display";
 std::string TS::COMMAND_LOAD = "load";
@@ -1367,8 +1368,9 @@ void Load::execute() {
 	std::vector<Task> temp = taskStore;
 	try {
 		taskStore = io->loadFile(filePath,isOverwriteLoadFile); // Exception thrown if file does not exist
-		History::getInstance()->clearHistory();				 // Clear history after load, to avoid seg fault
+		History::getInstance()->clearHistory();					// Clear history after load, to avoid seg fault
 		defaultView();
+		Logic::setHomeMode();
 	} catch (std::exception e) {
 		taskStore = temp;
 		loadSuccess = false;

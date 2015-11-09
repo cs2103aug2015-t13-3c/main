@@ -41,9 +41,9 @@ std::string IO::getFilePath() {
 // Returns false if unable to set file path
 bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile) {
 	if (saveFile(newFilePath,taskVector)) {
-		/*if (isRemovePrevFile || filePath==newFilePath) {
+		if (isRemovePrevFile) {
 			remove(filePath.c_str());
-		}*/ //Should leave original text file there even after saving to new location
+		}
 		filePath = newFilePath;
 		return true;
 	}
@@ -567,8 +567,6 @@ void IO::saveCustomCommands(std::ofstream& TSconfig) {
 		TSconfig << "delete" << " " << TS::COMMAND_DELETE << std::endl;
 	} else if ("modify" != TS::COMMAND_MODIFY) {
 		TSconfig << "modify" << " " << TS::COMMAND_MODIFY << std::endl;
-	} else if ("edit" != TS::COMMAND_MODIFY_EDIT) {
-		TSconfig << "edit" << " " << TS::COMMAND_MODIFY_EDIT << std::endl;
 	} else if ("pick" != TS::COMMAND_PICK_RESERVE) {
 		TSconfig << "pick" << " " << TS::COMMAND_PICK_RESERVE << std::endl;
 	} else if ("search" != TS::COMMAND_SEARCH) {
@@ -606,8 +604,6 @@ bool IO::setCustomCommand(std::string identifier, std::string keyword) {
 		isSet = setCommandKeyword(TS::COMMAND_DELETE,keyword);
 	} else if (identifier == TS::COMMAND_MODIFY) {
 		isSet = setCommandKeyword(TS::COMMAND_MODIFY,keyword);
-	} else if (identifier == TS::COMMAND_MODIFY_EDIT) {
-		isSet = setCommandKeyword(TS::COMMAND_MODIFY_EDIT,keyword);
 	} else if (identifier == TS::COMMAND_PICK_RESERVE) {
 		isSet = setCommandKeyword(TS::COMMAND_PICK_RESERVE,keyword);
 	} else if (identifier == TS::COMMAND_SEARCH) {
@@ -641,11 +637,13 @@ bool IO::setCommandKeyword(std::string &identifier, std::string keyword) {
 
 	// Count: 14
 	if (keyword == "s"		// Protected keyword: switch between 'tile' and 'list' views
+		|| keyword == "ts"	// Protected keyword: shortcut for default 'home' view
+		|| keyword == "home"// Protected keyword: shortcut for default 'home' view
+		|| keyword == "help"// Protected keyword: show help page
 		|| keyword == "set"	// Protected keyword: set custom messages or command identifiers
 		|| (&identifier != &TS::COMMAND_ADD				&& keyword == TS::COMMAND_ADD)
 		|| (&identifier != &TS::COMMAND_DELETE			&& keyword == TS::COMMAND_DELETE)
 		|| (&identifier != &TS::COMMAND_MODIFY			&& keyword == TS::COMMAND_MODIFY)
-		|| (&identifier != &TS::COMMAND_MODIFY_EDIT		&& keyword == TS::COMMAND_MODIFY_EDIT)
 		|| (&identifier != &TS::COMMAND_PICK_RESERVE	&& keyword == TS::COMMAND_PICK_RESERVE)
 		|| (&identifier != &TS::COMMAND_SEARCH			&& keyword == TS::COMMAND_SEARCH)
 		|| (&identifier != &TS::COMMAND_MARKDONE		&& keyword == TS::COMMAND_MARKDONE)

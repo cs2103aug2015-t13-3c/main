@@ -187,6 +187,10 @@ Command* Parser::parse(std::string userInput) {
 		}
 		break; }
 
+	case VIEW_DEFAULT:
+		cmd = new View(VIEWTYPE_HOME,restOfInput);
+		break;
+
 	case CLEAR_ALL:
 		cmd = new ClearAll;
 		break;
@@ -213,9 +217,9 @@ Command* Parser::parse(std::string userInput) {
 			log(WARN,"No file path specified!");
 			throw std::runtime_error("No file path specified!");
 		}
-		bool isDeletePrevFile = true;
-		if (Utilities::containsAny(Utilities::getFirstWord(restOfInput),"as to")) {
-			isDeletePrevFile = false;
+		bool isDeletePrevFile = false;
+		if (Utilities::equalsIgnoreCase(Utilities::getFirstWord(restOfInput),"to")) {
+			isDeletePrevFile = true;
 			restOfInput = Utilities::removeFirstWord(restOfInput);
 		}
 		cmd = new Save(parseFileName(restOfInput),isDeletePrevFile);
@@ -446,15 +450,21 @@ int Parser::parseDate(std::vector<std::string> dateString) {
 	if (   ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)
 		|| ((newDate=parseByDay(dateString))  != INVALID_DATE_FORMAT)) {
 			return newDate;
-	} else if (dateString.size()==1) {
+	} else if (dateString.size()==1 && parseTime(dateString)==INVALID_TIME_FORMAT) {
 		// Convert DD/MM(/YY) to DD MM( YY)
 		dateString = Utilities::stringToVec(Utilities::replace(Utilities::vecToString(dateString),"/"," "));
 		// Try both parseByDate and parseByDay again
-		if (    ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)
+		if (   ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)
 			|| ((newDate=parseByDay(dateString))  != INVALID_DATE_FORMAT)) {
 				return newDate;
 		}
-
+		// Convert DD.MM(.YY) to DD MM( YY)
+		dateString = Utilities::stringToVec(Utilities::replace(Utilities::vecToString(dateString),"."," "));
+		// Try both parseByDate and parseByDay again
+		if (   ((newDate=parseByDate(dateString)) != INVALID_DATE_FORMAT)
+			|| ((newDate=parseByDay(dateString))  != INVALID_DATE_FORMAT)) {
+				return newDate;
+		}
 	}
 	return INVALID_DATE_FORMAT;
 }
@@ -588,7 +598,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 // - HH.MM AM/PM (default: assume AM)
 // - HHMM        (24-hour)
 int Parser::parseTime(std::vector<std::string> timeString) {
-	if (timeString.empty()) {
+	if (timeString.empty() || count(timeString.begin(),timeString.end(),'.')>1) {
 		return INVALID_TIME_FORMAT;
 	}
 
@@ -604,24 +614,28 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 
 	std::vector<std::string>::iterator curr = timeString.begin();
 	if (!Utilities::isPositiveNonZeroInt(*curr)) {
-		// HH.MM AM/PM
 		size_t iSemiColon = (*curr).find('.');
 		if (iSemiColon == std::string::npos) {
 			return INVALID_TIME_FORMAT;
 		} else {
+			// HH.MM AM/PM
 			hourString = (*curr).substr(0, iSemiColon);
 			minString = (*curr).substr(iSemiColon + 1);
 			hour = Utilities::stringToInt(hourString);
 			min = Utilities::stringToInt(minString);
-			if (!Utilities::isPositiveNonZeroInt(hourString) || hour >= 24 || min >= 60) {
-				return INVALID_TIME_FORMAT;
+			if (!Utilities::isPositiveNonZeroInt(hourString) || hour >= 24
+				|| !Utilities::isPositiveNonZeroInt(minString) || min >= 60) {
+					return INVALID_TIME_FORMAT;
 			}
 		}
 	} else {
 		time = Utilities::stringToInt(*curr);
-		if (time < 13) {
-			// HH AM/PM
+		if (time <= 12) {
+			// HH (AM/PM)
 			hour = time;
+		} else if (time>12 && time<24 && timeString.size()==1) {
+			// HH (24-hour)
+			hour = time-12;
 		} else if (time <= 2359) {
 			// HHMM
 			hour = time/100;
@@ -984,8 +998,9 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 			if (curr+2 != vecInput.end()) {
 				end = curr+3;
 			}
-			if (parseDate(std::vector<std::string>(curr+1,end)) == INVALID_DATE_FORMAT) {
-				fields.push_back(convertFieldDateToTime(newField));
+			if (parseDate(std::vector<std::string>(curr+1,end)) == INVALID_DATE_FORMAT
+				&& parseTime(std::vector<std::string>(curr+1,end)) != INVALID_TIME_FORMAT) {
+					fields.push_back(convertFieldDateToTime(newField));
 			}
 		} else if (newField != INVALID_FIELD) {
 			fields.push_back(newField);
