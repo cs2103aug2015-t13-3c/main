@@ -568,7 +568,7 @@ Modify::Modify(int taskID, std::vector<FieldType> fields,
 				   tempTask = task;
 				   invalidDateTimeString = restOfInput;
 				   initialiseIteratorsFromGuiID(modifyID);
-	originalTask = *currViewIter;
+				   originalTask = *currViewIter;
 }
 
 Modify::Modify(CommandType pick) : Command(pick) {}
@@ -667,9 +667,16 @@ void Modify::doModify() {
 		case PRIORITY_UNSET:
 			taskStoreIter->unsetPriority();
 			break;
+		case START_END_DATE:
 		case START_DATE:
 			taskStoreIter->setStartDate(tempTask.getStartDate());
+			if(*fieldIter != START_END_DATE) {
+				break;
+			}
+		case END_DATE:
+			taskStoreIter->setEndDate(tempTask.getEndDate());
 			break;
+		case START_END_TIME:
 		case START_TIME:
 			taskStoreIter->setStartTime(tempTask.getStartTime());
 			if ((fieldIter+1 != fieldsToModify.end()) && (fieldIter+2 != fieldsToModify.end())
@@ -677,10 +684,9 @@ void Modify::doModify() {
 					*(fieldIter+2) = END_TIME;
 			}
 			isStartTimeSet = true;
-			break;
-		case END_DATE:
-			taskStoreIter->setEndDate(tempTask.getEndDate());
-			break;
+			if(*fieldIter != START_END_TIME) {
+				break;
+			}
 		case END_TIME:
 			if (taskStoreIter->getEndDate() == DATE_NOT_SET) {
 				taskStoreIter->setEndDate(tempTask.getStartDate());

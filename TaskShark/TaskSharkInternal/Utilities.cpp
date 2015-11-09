@@ -148,7 +148,7 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	} else if (equalsIgnoreCase(fieldString,FIELD_PRIORITY_UNSET)) {
 		field = PRIORITY_UNSET;
 	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_ON)) {
-		field = START_DATE;
+		field = START_END_DATE;
 	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_FROM)) {
 		field = START_DATE;
 	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_TO)) {
@@ -156,7 +156,7 @@ FieldType Utilities::stringToFieldType(std::string fieldString) {
 	} else if (equalsIgnoreCase(fieldString,FIELD_DATE_BY)) {
 		field = TODO_DATE;
 	} else if (equalsIgnoreCase(fieldString,FIELD_TIME_AT)) {
-		field = START_TIME;
+		field = START_END_TIME;
 	} else if (equalsIgnoreCase(fieldString,FIELD_RESERVE_SWITCH)) {
 		field = RESERVE;
 	} else {
