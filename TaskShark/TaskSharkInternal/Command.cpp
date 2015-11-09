@@ -390,6 +390,7 @@ void Add::execute() {
 	doAdd();
 	Task::lastEditID = newTask.getID();
 	defaultView();
+	Logic::setHomeMode();
 }
 
 // Add must have executed before undoing,
@@ -471,6 +472,7 @@ void Delete::execute() {
 	doDelete();
 	Task::lastEditID = 0;
 	defaultView();
+	Logic::setHomeMode();
 }
 
 // Adds the deleted task back to the exact location it was before
@@ -557,7 +559,7 @@ void Modify::execute() {
 	sortDate(taskStore);
 	initialiseIterators(modifyID);
 	Task::lastEditID = originalTask.getID();
-	// defaultView();
+	//defaultView();
 }
 
 void Modify::undo() {
@@ -911,6 +913,7 @@ int Markdone::getDoneID() {
 void Markdone::execute() {
 	markDone();
 	defaultView();
+	Logic::setHomeMode();
 }
 
 void Markdone::undo() {
@@ -957,6 +960,7 @@ int UnmarkDone::getUndoneID() {
 void UnmarkDone::execute() {
 	unmarkDone();
 	defaultView();
+	Logic::setHomeMode();
 }
 
 void UnmarkDone::undo() {
@@ -1019,8 +1023,11 @@ void View::execute() {
 		return;
 	}
 	
-
 	switch (view) {
+	case VIEWTYPE_HOME:
+		viewHome();
+		Logic::setHomeMode();
+		break;
 	case VIEWTYPE_ALL:
 		viewAll();
 		Logic::setAllMode();
@@ -1113,6 +1120,11 @@ std::string View::getMessage() {
 }
 
 //============== VIEW : PRIVATE METHODS ============
+
+bool View::viewHome() {
+	defaultView();
+	return true;
+}
 
 bool View::viewAll() {
 	currentView = taskStore;
@@ -1243,6 +1255,7 @@ Undo::~Undo() {}
 
 void Undo::execute() {
 	History::getInstance()->undo();
+	Logic::setHomeMode();
 }
 
 //==================================================

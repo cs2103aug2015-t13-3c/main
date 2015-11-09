@@ -74,6 +74,8 @@ namespace UserInterface {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  description;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  time;
+	private: MetroFramework::Controls::MetroTabPage^  home;
+
 	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
@@ -81,8 +83,8 @@ namespace UserInterface {
 			 /// Required method for Designer support - do not modify	
 			 void InitializeComponent(void) {
 				 this->components = (gcnew System::ComponentModel::Container());
-				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle3 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+				 System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle4 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 				 this->input = (gcnew System::Windows::Forms::RichTextBox());
 				 this->feedback = (gcnew System::Windows::Forms::TextBox());
 				 this->currentTime = (gcnew System::Windows::Forms::TextBox());
@@ -90,6 +92,7 @@ namespace UserInterface {
 				 this->help = (gcnew System::Windows::Forms::PictureBox());
 				 this->dropDown = (gcnew System::Windows::Forms::ComboBox());
 				 this->tabs = (gcnew MetroFramework::Controls::MetroTabControl());
+				 this->home = (gcnew MetroFramework::Controls::MetroTabPage());
 				 this->all = (gcnew MetroFramework::Controls::MetroTabPage());
 				 this->display = (gcnew System::Windows::Forms::DataGridView());
 				 this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -184,6 +187,7 @@ namespace UserInterface {
 				 // 
 				 // tabs
 				 // 
+				 this->tabs->Controls->Add(this->home);
 				 this->tabs->Controls->Add(this->all);
 				 this->tabs->Controls->Add(this->today);
 				 this->tabs->Controls->Add(this->week);
@@ -202,6 +206,20 @@ namespace UserInterface {
 				 this->tabs->Theme = MetroFramework::MetroThemeStyle::Light;
 				 this->tabs->UseSelectable = true;
 				 this->tabs->SelectedIndexChanged += gcnew System::EventHandler(this, &UI::tabs_SelectedIndexChanged);
+				 // 
+				 // home
+				 // 
+				 this->home->HorizontalScrollbarBarColor = true;
+				 this->home->HorizontalScrollbarHighlightOnWheel = false;
+				 this->home->HorizontalScrollbarSize = 10;
+				 this->home->Location = System::Drawing::Point(4, 24);
+				 this->home->Name = L"home";
+				 this->home->Size = System::Drawing::Size(737, 520);
+				 this->home->TabIndex = 8;
+				 this->home->Text = L"Home";
+				 this->home->VerticalScrollbarBarColor = true;
+				 this->home->VerticalScrollbarHighlightOnWheel = false;
+				 this->home->VerticalScrollbarSize = 10;
 				 // 
 				 // all
 				 // 
@@ -231,15 +249,15 @@ namespace UserInterface {
 				 this->display->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 				 this->display->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(5) {this->id, this->label, 
 					 this->description, this->Date, this->time});
-				 dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
-				 dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
-				 dataGridViewCellStyle1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
+				 dataGridViewCellStyle3->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+				 dataGridViewCellStyle3->BackColor = System::Drawing::SystemColors::Window;
+				 dataGridViewCellStyle3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
 					 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-				 dataGridViewCellStyle1->ForeColor = System::Drawing::SystemColors::ControlText;
-				 dataGridViewCellStyle1->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-				 dataGridViewCellStyle1->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-				 dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-				 this->display->DefaultCellStyle = dataGridViewCellStyle1;
+				 dataGridViewCellStyle3->ForeColor = System::Drawing::SystemColors::ControlText;
+				 dataGridViewCellStyle3->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+				 dataGridViewCellStyle3->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+				 dataGridViewCellStyle3->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+				 this->display->DefaultCellStyle = dataGridViewCellStyle3;
 				 this->display->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
 				 this->display->ImeMode = System::Windows::Forms::ImeMode::Disable;
 				 this->display->Location = System::Drawing::Point(-1, 3);
@@ -248,15 +266,15 @@ namespace UserInterface {
 				 this->display->ReadOnly = true;
 				 this->display->RowHeadersVisible = false;
 				 this->display->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::DisableResizing;
-				 dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
-				 dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Window;
-				 dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+				 dataGridViewCellStyle4->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+				 dataGridViewCellStyle4->BackColor = System::Drawing::SystemColors::Window;
+				 dataGridViewCellStyle4->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(0)));
-				 dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::ControlText;
-				 dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-				 dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-				 dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-				 this->display->RowsDefaultCellStyle = dataGridViewCellStyle2;
+				 dataGridViewCellStyle4->ForeColor = System::Drawing::SystemColors::ControlText;
+				 dataGridViewCellStyle4->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+				 dataGridViewCellStyle4->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+				 dataGridViewCellStyle4->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+				 this->display->RowsDefaultCellStyle = dataGridViewCellStyle4;
 				 this->display->ScrollBars = System::Windows::Forms::ScrollBars::None;
 				 this->display->ShowCellErrors = false;
 				 this->display->ShowCellToolTips = false;
@@ -430,7 +448,6 @@ namespace UserInterface {
 				 this->Name = L"UI";
 				 this->Padding = System::Windows::Forms::Padding(0, 60, 0, 0);
 				 this->Resizable = false;
-				 this->Style = MetroFramework::MetroColorStyle::Blue;
 				 this->Text = L"      TaskShark";
 				 this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UI::UI_KeyDown);
 				 this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &UI::UI_KeyUp);
