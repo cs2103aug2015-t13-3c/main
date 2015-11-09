@@ -289,8 +289,6 @@ public:
 		iter = copyTask.begin();
 		//++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
-<<<<<<< HEAD
-=======
 		
 		// Redo UnmarkDone
 		logic->processCommand(std::string("Redo"));
@@ -302,8 +300,6 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(false,iter->getDoneStatus());
-		
->>>>>>> 354f31a9d4cfe694d31a8f79a827ee85e5304308
 		// delete logic;
 	}
 
