@@ -81,11 +81,6 @@ void Command::undo() {
 	throw std::runtime_error("Action cannot be undone");
 }
 
-
-std::string Command::getMessage() {
-	return "";
-}
-
 //================ COMMAND : PROTECTED METHODS ==================
 
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
@@ -95,12 +90,6 @@ const std::string Command::ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE = "Action ca
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
 bool			  Command::isFreePeriodMode;
-
-//================ COMMAND : INITIALISSATION METHODS ==================
-// Methods to initialise relevant iterators and variables
-// Used in contrsuctors of COMMAND sub-classes
-
-
 // Initialises the corresponding iterators with the guiID
 // guiID is the ID seen on GUI, not the unique task ID
 // Use for in-place insertion / deletion for undo methods
@@ -118,7 +107,7 @@ void Command::initialiseIteratorsFromUniqueID() {
 	if(currentView.size() > 0) {
 		currViewIter = matchCurrentViewUniqueID(uniqueID);
 		currViewPos = currViewIter - currentView.begin();
-		if(currViewPos >= currentView.size()) {
+		if((unsigned int)currViewPos >= currentView.size()) {
 			currViewPos = -1;
 		}
 	} else {
@@ -143,6 +132,221 @@ bool Command::isDateLogical(Task task) {
 			return false;
 	}
 	return true;
+}
+
+// Sorts floating tasks to be at the bottom
+void Command::sortFloating(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
+	Task tempTask;
+
+	// In-place sorting
+	i = taskVector.begin();	// Points to start of unsorted part
+	k = taskVector.end();	// Points to end of unsorted part
+	while (i < k) {
+		if (i->getType() == FLOATING) {
+			tempTask = *i;
+			for (j = i+1; j != taskVector.end(); ++j) {
+				std::swap(*j, *(j-1)); 
+			}
+			*(j-1) = tempTask;
+			if (k == taskVector.begin()) {
+				break;
+			} else {
+				--k;
+			}
+		} else {
+			++i;
+		}
+	}
+}
+
+// Sorts Event tasks to be at the top
+void Command::sortEvent(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator k;
+	Task tempTask;
+
+	if(taskVector.size() == 0) {
+		return;
+	}
+
+	// In-place sorting
+	i = taskVector.end()-1;	// Points to start of unsorted part
+	k = taskVector.begin();	// Points to end of unsorted part
+	while (i > k) {
+		if (i->getType() == EVENT) {
+			tempTask = *i;
+			for (j = i; j != taskVector.begin(); --j) {
+				std::swap(*j, *(j-1)); 
+			}
+			*j = tempTask;
+			if (k == taskVector.end()) {
+				break;
+			} else {
+				++k;
+			}
+		} else {
+			--i;
+		}
+	}
+
+	sortDate(taskVector.begin(),k+1);
+}
+
+void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> periodStore;
+	currentView.clear();
+	periodStore = taskStore;
+	sortDefault(periodStore);
+	removeDoneTasks(periodStore);
+	std::vector<Task>::iterator iter = periodStore.begin();
+
+	for (iter = periodStore.begin(); iter != periodStore.end(); ++iter) {
+		if (iter->getType() == FLOATING) {
+			currentView.push_back(*iter);
+		} else {
+			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
+				currentView.push_back(*iter);
+			}
+
+			// If date is the same, further filter using time in the date
+			if (iter->getStartDate() == startDate) {
+				if (iter->getStartTime() >= startTime) {
+					currentView.push_back(*iter);
+				}
+			}
+
+			if (iter->getStartDate() == endDate) {
+				if (iter->getStartTime() <= endTime) {
+					currentView.push_back(*iter);				
+				}
+			}
+		}
+	}
+}
+
+// Sorts tasks by increasing order of start date
+void Command::sortDate(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+
+	// Sorts date after time to ensure date is accurately sorted
+	// Uses bubblesort algorithm
+	for (i = taskVector.end(); i != taskVector.begin(); --i) {
+		for (j = taskVector.begin()+1; j != i; ++j) {
+			if ((j-1) -> getStartDate() > j -> getStartDate()) {
+				std::swap(*j, *(j-1));
+			}
+		}
+	}
+}
+
+// sortDate for specific portions of the Task vector only
+// start: iterator to first element to sort
+// end: iterator to last element to sort + 1 [just like .end()]
+void Command::sortDate(std::vector<Task>::iterator start, std::vector<Task>::iterator end) {
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	
+	// Sorts date after time to ensure date is accurately sorted
+	// Uses bubblesort algorithm
+	for (i = end; i != start; --i) {
+		for (j = start+1; j != i; ++j) {
+			if ((j-1) -> getStartDate() > j -> getStartDate()) {
+				std::swap(*j, *(j-1));
+			}
+		}
+	}
+}
+
+void Command::sortTime(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i;
+	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator smallest;
+
+	// Uses selection sort algorithm for startTime
+	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
+		assert((i->getStartDate() < i->getEndDate()) || 
+			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
+		smallest = i;
+		for (j = i+1; j != taskVector.end(); ++j) {
+			if (j->getStartTime() < smallest->getStartTime()) {
+				smallest = j;
+			}
+		}
+		std::swap(*i, *smallest);
+	}	
+}
+
+// Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
+// Use this before returning to UI for display
+void Command::sortDefault(std::vector<Task> &taskVector) {
+	sortTime(taskVector);
+	sortDate(taskVector);	
+	sortFloating(taskVector);
+	sortEvent(taskVector);
+}
+
+void Command::removeDoneTasks(std::vector<Task> &taskVector) {
+	std::vector<Task>::iterator i = taskVector.begin();
+
+	while (i != taskVector.end()) {
+		if (i->getDoneStatus() == true) {
+			i = taskVector.erase(i);
+		} else {
+			++i;
+		}
+	}
+}
+
+void Command::removeTaskType(std::vector<Task> &taskVector, TaskType type) {
+	std::vector<Task>::iterator i = taskVector.begin();
+
+	while (i != taskVector.end()) {
+		if (i->getType() == type) {
+			i = taskVector.erase(i);
+		} else {
+			++i;
+		}
+	}
+}
+
+// Adds a period where there are no undone tasks on hand to freeSlots
+void Command::addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime) {
+	Task freePeriod;
+
+	freePeriod.setStartDate(startDate);
+	freePeriod.setStartTime(startTime);
+	freePeriod.setEndDate(endDate);
+	freePeriod.setEndTime(endTime);
+
+	taskVector.push_back(freePeriod);
+}
+
+// Set currentView to be the same as taskStore
+bool Command::updateCurrView() {
+	currentView = taskStore;
+	return true;
+}
+
+// Updates only the modified task on the UI 
+void Command::updateViewIter() {
+	*currViewIter = *taskStoreIter;
+	return;
+}
+
+// Switch back to default view:
+// Shows only uncompleted items from today, tomorrow and the day after
+// Tasks are shown in the following order: Events, Todo, Float
+void Command::defaultView() {
+	sortDefault(taskStore);
+	int today = Utilities::getLocalDay() + Utilities::getLocalMonth()*100 + Utilities::getLocalYear()*10000;
+	// TODO: Handle dates at end of month
+	viewPeriod(today,TIME_NOT_SET,today+2,2359);
+	return;
 }
 
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
@@ -196,225 +400,9 @@ std::vector<Task>::iterator Command::matchCurrentViewUniqueID(int ID) {
 	return iter;
 }
 
-//================ COMMAND : SORTING METHODS ==================
-// Methods to sort TaskVector before returning it to UI
-
-// Sorts floating tasks to be at the bottom
-void Command::sortFloating(std::vector<Task> &taskVector) {
-	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-	std::vector<Task>::iterator k;
-	Task tempTask;
-
-	// In-place sorting
-	i = taskVector.begin();	// Points to start of unsorted part
-	k = taskVector.end();	// Points to end of unsorted part
-	while (i < k) {
-		if (i->getType() == FLOATING) {
-			tempTask = *i;
-			for (j = i+1; j != taskVector.end(); ++j) {
-				std::swap(*j, *(j-1)); 
-			}
-			*(j-1) = tempTask;
-			if (k == taskVector.begin()) {
-				break;
-			} else {
-				--k;
-			}
-		} else {
-			++i;
-		}
-	}
+std::string Command::getMessage() {
+	return "";
 }
-
-// Sorts Event tasks to be at the top
-void Command::sortEvent(std::vector<Task> &taskVector) {
-	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-	std::vector<Task>::iterator k;
-	Task tempTask;
-
-	if(taskVector.size() == 0) {
-		return;
-	}
-
-	// In-place sorting
-	i = taskVector.end()-1;	// Points to start of unsorted part
-	k = taskVector.begin();	// Points to end of unsorted part
-	while (i > k+1) {
-		if (i->getType() == EVENT) {
-			tempTask = *i;
-			for (j = i; j != taskVector.begin(); --j) {
-				std::swap(*j, *(j-1)); 
-			}
-			*j = tempTask;
-			if (k == taskVector.end()) {
-				break;
-			} else {
-				++k;
-			}
-		} else {
-			--i;
-		}
-	}
-
-	//sortDate(taskVector.begin(),k+1);
-}
-
-// Sorts tasks by increasing order of start date
-void Command::sortDate(std::vector<Task> &taskVector) {
-	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-
-	// Sorts date after time to ensure date is accurately sorted
-	// Uses bubblesort algorithm
-	for (i = taskVector.end(); i != taskVector.begin(); --i) {
-		for (j = taskVector.begin()+1; j != i; ++j) {
-			if ((j-1) -> getStartDate() > j -> getStartDate()) {
-				std::swap(*j, *(j-1));
-			}
-		}
-	}
-}
-
-// sortDate for specific portions of the Task vector only
-// start: iterator to first element to sort
-// end: iterator to last element to sort + 1 [just like .end()]
-void Command::sortDate(std::vector<Task>::iterator start, std::vector<Task>::iterator end) {
-	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-
-	// Sorts date after time to ensure date is accurately sorted
-	// Uses bubblesort algorithm
-	for (i = end; i != start; --i) {
-		for (j = start+1; j != i; ++j) {
-			if ((j-1) -> getStartDate() > j -> getStartDate()) {
-				std::swap(*j, *(j-1));
-			}
-		}
-	}
-}
-
-void Command::sortTime(std::vector<Task> &taskVector) {
-	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-	std::vector<Task>::iterator smallest;
-
-	// Uses selection sort algorithm for startTime
-	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
-		assert((i->getStartDate() < i->getEndDate()) || 
-			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
-		smallest = i;
-		for (j = i+1; j != taskVector.end(); ++j) {
-			if (j->getStartTime() < smallest->getStartTime()) {
-				smallest = j;
-			}
-		}
-		std::swap(*i, *smallest);
-	}	
-}
-
-// Sorts in increasing order of dates (except for floating tasks, which are at the bottom)
-// Use this before returning to UI for display
-void Command::sortDefault(std::vector<Task> &taskVector) {
-	sortTime(taskVector);
-	sortDate(taskVector);	
-	sortFloating(taskVector);
-	sortEvent(taskVector);
-}
-
-void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
-	std::vector<Task> periodStore;
-	currentView.clear();
-	periodStore = taskStore;
-	sortDefault(periodStore);
-	removeDoneTasks(periodStore);
-	std::vector<Task>::iterator iter = periodStore.begin();
-
-	for (iter = periodStore.begin(); iter != periodStore.end(); ++iter) {
-		if (iter->getType() == FLOATING) {
-			currentView.push_back(*iter);
-		} else {
-			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
-				currentView.push_back(*iter);
-			}
-
-			// If date is the same, further filter using time in the date
-			if (iter->getStartDate() == startDate) {
-				if (iter->getStartTime() >= startTime) {
-					currentView.push_back(*iter);
-				}
-			}
-
-			if (iter->getStartDate() == endDate) {
-				if (iter->getStartTime() <= endTime) {
-					currentView.push_back(*iter);				
-				}
-			}
-		}
-	}
-}
-
-void Command::removeDoneTasks(std::vector<Task> &taskVector) {
-	std::vector<Task>::iterator i = taskVector.begin();
-
-	while (i != taskVector.end()) {
-		if (i->getDoneStatus() == true) {
-			i = taskVector.erase(i);
-		} else {
-			++i;
-		}
-	}
-}
-
-// Removes all tasks of a certain type, e.g. events, floating, todo
-void Command::removeTaskType(std::vector<Task> &taskVector, TaskType type) {
-	std::vector<Task>::iterator i = taskVector.begin();
-
-	while (i != taskVector.end()) {
-		if (i->getType() == type) {
-			i = taskVector.erase(i);
-		} else {
-			++i;
-		}
-	}
-}
-
-// Adds a period where there are no undone tasks on hand to freeSlots
-void Command::addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime) {
-	Task freePeriod;
-
-	freePeriod.setStartDate(startDate);
-	freePeriod.setStartTime(startTime);
-	freePeriod.setEndDate(endDate);
-	freePeriod.setEndTime(endTime);
-
-	taskVector.push_back(freePeriod);
-}
-
-// Set currentView to be the same as taskStore
-bool Command::updateCurrView() {
-	currentView = taskStore;
-	return true;
-}
-
-// Updates only the modified task on the UI 
-void Command::updateViewIter() {
-	*currViewIter = *taskStoreIter;
-	return;
-}
-
-// Switch back to default view:
-// Shows only uncompleted items from today, tomorrow and the day after
-// Tasks are shown in the following order: Events, Todo, Float
-void Command::defaultView() {
-	sortDefault(taskStore);
-	int today = Utilities::getLocalDay() + Utilities::getLocalMonth()*100 + Utilities::getLocalYear()*10000;
-	// TODO: Handle dates at end of month
-	viewPeriod(today,TIME_NOT_SET,today+2,2359);
-	return;
-}
-
 
 //==================================================
 //                        ADD
@@ -547,6 +535,14 @@ void Delete::undo() {
 	}
 	Task::lastEditID = taskToBeDeleted.getID();
 
+	/*
+	// For in-place undoing, if view is not set back to default
+	if ((unsigned int)currViewPos < currentView.size()) {
+	currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
+	} else {
+	currentView.push_back(taskToBeDeleted);
+	}
+	*/
 	defaultView();
 	Logic::setHomeMode();
 }
@@ -628,6 +624,7 @@ void Modify::execute() {
 	sortDefault(taskStore);
 	sortDefault(currentView);	
 	Task::lastEditID = originalTask.getID();
+	//defaultView();
 }
 
 void Modify::undo() {
@@ -696,6 +693,9 @@ void Modify::doModify() {
 				break;
 			case START_DATE:
 				taskStoreIter->setStartDate(tempTask.getStartDate());
+				if(tempTask.getType() == EVENT) {
+					taskStoreIter->setEndDate(taskStoreIter->getStartDate());
+				}
 				break;
 			case START_TIME:
 				taskStoreIter->setStartTime(tempTask.getStartTime());
@@ -751,29 +751,20 @@ void Modify::doModify() {
 				throw std::runtime_error("Error in fetching field name"); 
 			}
 		}
-	}
-
-	setTodo(isTODO, isStartTimeSet, isEndTimeSet);
-	setTodoReserve(isTODOreserve);
-}
-
-void Modify::setTodo(bool isTODO, bool isStartTimeSet, bool isEndTimeSet) {
-	if (isTODO) {
-		taskStoreIter->setType(TODO);
-		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
-		if (isStartTimeSet) {
-			taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
-		} else if (isEndTimeSet) {
-			taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
+		if (isTODO) {
+			taskStoreIter->setType(TODO);
+			taskStoreIter->setStartDate(taskStoreIter->getEndDate());
+			if (isStartTimeSet) {
+				taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
+			} else if (isEndTimeSet) {
+				taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
+			}
 		}
-	}
-}
-
-void Modify::setTodoReserve(bool isTODOreserve) {
-	if (isTODOreserve) {
-		taskStoreIter->setReserveType(TODO);
-		taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
-		taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
+		if (isTODOreserve) {
+			taskStoreIter->setReserveType(TODO);
+			taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
+			taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
+		}
 	}
 }
 
@@ -811,7 +802,18 @@ bool Modify::updateEVENT() {
 	return true;
 }
 
+// Moves modified back to previous position before executing
+// In case sequence was swapped during sorting
+/*
+void Modify::moveToPrevPos() {
+std::vector<Task>::iterator preCurrViewIter;
+Task tempTask = *currViewIter;
+currentView.erase(currViewIter);
 
+preCurrViewIter = currentView.begin() + prevCurrPos;
+currentView.insert(preCurrViewIter, tempTask);
+}
+*/
 
 // Chin Kiat Boon @@author A0096720A
 
@@ -979,11 +981,9 @@ bool Search::amendView(std::string listOfIds) {
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
 	if (isFreePeriodMode) {
 		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
-	} else {		
+	} else {
 		doneID = taskID;
-		initialiseIteratorsFromGuiID(doneID);
 		taskName = "";
-		uniqueID = currViewIter->getID();
 	}
 }
 
@@ -994,9 +994,8 @@ int Markdone::getDoneID() {
 }
 
 void Markdone::execute() {
-	initialiseIteratorsFromUniqueID();
 	markDone();
-	defaultView();	
+	defaultView();
 	Logic::setHomeMode();
 }
 
@@ -1005,7 +1004,7 @@ void Markdone::undo() {
 	if (successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
-	}
+	}	
 	defaultView();
 }
 
