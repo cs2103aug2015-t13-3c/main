@@ -316,10 +316,9 @@ public:
 		++iter;
 		Assert::AreEqual(true,iter->getDoneStatus());
 
-		/*
 		// UnmarkDone
 		logic->processCommand(std::string("view past"));
-		logic->processCommand(std::string("Undone 1"));
+		logic->processCommand(std::string("notdone 1"));
 		logic->processCommand(std::string("view all"));
 		copyTask = cmd.getCurrentView();
 		Assert::AreEqual((size_t)2,copyTask.size());
@@ -349,7 +348,7 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(false,iter->getDoneStatus());
-		*/
+		
 		// delete logic;
 	}
 

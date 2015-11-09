@@ -1016,8 +1016,6 @@ std::string Markdone::getMessage() {
 //============= MARKDONE : PRIVATE METHODS ===========
 
 void Markdone::markDone() {
-
-
 	successMarkDone = taskStoreIter->markDone();
 	if (successMarkDone) {
 		taskName = currViewIter->getName();
@@ -1035,6 +1033,9 @@ UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
 		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
 	} else {
 		undoneID = taskID;
+		initialiseIteratorsFromGuiID(taskID);
+		uniqueID = currViewIter->getID();
+		initialiseIteratorsFromUniqueID();
 	}
 }
 
@@ -1057,6 +1058,7 @@ void UnmarkDone::undo() {
 		taskStoreIter->markDone();
 	}
 	defaultView();
+	Logic::setHomeMode();
 }
 
 std::string UnmarkDone::getMessage() {
@@ -1068,13 +1070,7 @@ std::string UnmarkDone::getMessage() {
 //=========== UNMARKDONE : PRIVATE METHODS ==========
 
 void UnmarkDone::unmarkDone() {
-	initialiseIteratorsFromGuiID(undoneID);
-
 	successUnmarkDone = taskStoreIter->unmarkDone();
-	if (successUnmarkDone) {
-		Logic::setTodayMode();
-		// currentView.erase(currViewIter);
-	}
 }
 
 //==================================================
