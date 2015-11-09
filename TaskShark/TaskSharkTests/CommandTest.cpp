@@ -15,6 +15,7 @@ public:
 
 	// Originally written by Kiat Boon
 	TEST_METHOD(Command_Add_execute) {
+		TS::firstLoad = false;
 		Task taskOne;
 		taskOne.setID(Task::incrementRunningCount());	// Added to fix uniqueID (Aaron)
 		taskOne.setName("Sentence one.");
