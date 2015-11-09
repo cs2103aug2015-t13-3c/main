@@ -1001,6 +1001,8 @@ std::vector<FieldType> Parser::extractFields(std::string restOfInput) {
 			if (parseDate(std::vector<std::string>(curr+1,end)) == INVALID_DATE_FORMAT
 				&& parseTime(std::vector<std::string>(curr+1,end)) != INVALID_TIME_FORMAT) {
 					fields.push_back(convertFieldDateToTime(newField));
+			} else if (parseDate(std::vector<std::string>(curr+1,end)) != INVALID_DATE_FORMAT) {
+				fields.push_back(newField);
 			}
 		} else if (newField != INVALID_FIELD) {
 			fields.push_back(newField);
