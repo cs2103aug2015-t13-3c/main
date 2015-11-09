@@ -176,7 +176,7 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 	// In-place sorting
 	i = taskVector.end()-1;	// Points to start of unsorted part
 	k = taskVector.begin();	// Points to end of unsorted part
-	while (i > k) {
+	while (i > k+1) {
 		if (i->getType() == EVENT) {
 			tempTask = *i;
 			for (j = i; j != taskVector.begin(); --j) {
@@ -193,7 +193,7 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 		}
 	}
 
-	sortDate(taskVector.begin(),k+1);
+	//sortDate(taskVector.begin(),k+1);
 }
 
 void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
@@ -980,9 +980,11 @@ bool Search::amendView(std::string listOfIds) {
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
 	if (isFreePeriodMode) {
 		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
-	} else {
+	} else {		
 		doneID = taskID;
+		initialiseIteratorsFromGuiID(doneID);
 		taskName = "";
+		uniqueID = currViewIter->getID();
 	}
 }
 
@@ -993,8 +995,9 @@ int Markdone::getDoneID() {
 }
 
 void Markdone::execute() {
+	initialiseIteratorsFromUniqueID();
 	markDone();
-	defaultView();
+	defaultView();	
 	Logic::setHomeMode();
 }
 
@@ -1003,7 +1006,7 @@ void Markdone::undo() {
 	if (successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
-	}	
+	}
 	defaultView();
 }
 
@@ -1014,7 +1017,7 @@ std::string Markdone::getMessage() {
 //============= MARKDONE : PRIVATE METHODS ===========
 
 void Markdone::markDone() {
-	initialiseIteratorsFromGuiID(doneID);
+	
 
 	successMarkDone = taskStoreIter->markDone();
 	if (successMarkDone) {
