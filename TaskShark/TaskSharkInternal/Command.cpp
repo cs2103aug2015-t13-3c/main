@@ -970,9 +970,11 @@ bool Search::amendView(std::string listOfIds) {
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
 	if (isFreePeriodMode) {
 		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
-	} else {
+	} else {		
 		doneID = taskID;
+		initialiseIteratorsFromGuiID(doneID);
 		taskName = "";
+		uniqueID = currViewIter->getID();
 	}
 }
 
@@ -983,8 +985,9 @@ int Markdone::getDoneID() {
 }
 
 void Markdone::execute() {
+	initialiseIteratorsFromUniqueID();
 	markDone();
-	defaultView();
+	defaultView();	
 	Logic::setHomeMode();
 }
 
@@ -993,7 +996,7 @@ void Markdone::undo() {
 	if (successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
-	}	
+	}
 	defaultView();
 }
 
