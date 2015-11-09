@@ -155,7 +155,7 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 	while (i > k) {
 		if (i->getType() == EVENT) {
 			tempTask = *i;
-			for (j = i; j != taskVector.begin(); ++j) {
+			for (j = i; j != taskVector.begin(); --j) {
 				std::swap(*j, *(j-1)); 
 			}
 			*j = tempTask;
@@ -194,14 +194,14 @@ void Command::sortPriority(std::vector<Task> &taskVector) {
 }
 
 void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
-	std::vector<Task> weekStore;
+	std::vector<Task> periodStore;
 	currentView.clear();
-	weekStore = taskStore;
-	sortDate(weekStore);
-	removeDoneTasks(weekStore);
-	std::vector<Task>::iterator iter = weekStore.begin();
+	periodStore = taskStore;
+	sortDate(periodStore);
+	removeDoneTasks(periodStore);
+	std::vector<Task>::iterator iter = periodStore.begin();
 
-	for (iter = weekStore.begin(); iter != weekStore.end(); ++iter) {
+	for (iter = periodStore.begin(); iter != periodStore.end(); ++iter) {
 		if (iter->getType() == FLOATING) {
 			currentView.push_back(*iter);
 		} else {
@@ -230,18 +230,23 @@ void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime)
 void Command::sortDate(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
+	std::vector<Task>::iterator smallest;
 
+	// Uses selection sort algorithm for startTime
 	for (i = taskVector.begin(); i != taskVector.end(); ++i) {
 		assert((i->getStartDate() < i->getEndDate()) || 
 			((i->getStartDate() == i->getEndDate()) && (i->getStartTime() <= i->getEndTime())));
+		smallest = i;
 		for (j = i+1; j != taskVector.end(); ++j) {
-			if (j -> getStartTime() < i->getStartTime()) {
-				std::swap(*i, *j);
+			if (j->getStartTime() < smallest->getStartTime()) {
+				smallest = j;
 			}
 		}
+		std::swap(*i, *smallest);
 	}
 
 	// Sorts date after time to ensure date is accurately sorted
+	// Uses bubblesort algorithm
 	for (i = taskVector.end(); i != taskVector.begin(); --i) {
 		for (j = taskVector.begin()+1; j != i; ++j) {
 			if ((j-1) -> getStartDate() > j -> getStartDate()) {
@@ -251,7 +256,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 	}
 
 	sortFloating(taskVector);
-	sortPriority(taskVector);
+	// sortPriority(taskVector);
 }
 
 void Command::removeDoneTasks(std::vector<Task> &taskVector) {
@@ -1107,6 +1112,10 @@ std::string View::getMessage() {
 bool View::viewAll() {
 	currentView = taskStore;
 	removeDoneTasks(currentView);
+	// sortDate(currentView);
+	sortEvent(currentView);
+	sortDate(currentView);
+	sortEvent(currentView);
 	return true;
 }
 
