@@ -24,11 +24,13 @@
 #define ON " on "
 #define AT " at "
 #define DISPLAY "display"
-#define EDIT "edit "
 #define LOAD "load "
 #define NOTDONE "notdone "
 #define PICK "pick "
 #define REDO "redo"
+#define SET "set "
+#define VIEW_HOME "home"
+#define VIEW_HOME_TS "ts"
 
 namespace UserInterface {
 
@@ -489,6 +491,7 @@ namespace UserInterface {
 		System::Collections::Generic::List<String^>^ pickCommands;
 		System::Collections::Generic::List<String^>^ saveCommands;
 		System::Collections::Generic::List<String^>^ searchCommands;
+		System::Collections::Generic::List<String^>^ setCommands;
 		System::Collections::Generic::List<String^>^ viewCommands;
 
 //========================= UI FUNCTIONS=======================================

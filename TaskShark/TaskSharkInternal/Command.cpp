@@ -1037,7 +1037,7 @@ void View::execute() {
 		Logic::setHomeMode();
 		return;
 	}
-	
+
 	switch (view) {
 	case VIEWTYPE_HOME:
 		viewHome();
@@ -1123,11 +1123,12 @@ std::string View::getMessage() {
 		TS::firstLoad = false;
 		msg = TS::MESSAGE_WELCOME;
 	} else {
-		msg = "Viewing: " + Utilities::viewTypeToString(view);
 		if (view == VIEWTYPE_LABELS) {
 			msg += " " + Utilities::vecToString(viewLabels);
 		} else if (view == VIEWTYPE_PERIOD) {
 			msg = "Viewing: " + periodString;
+		} else {
+			msg = "Viewing: " + Utilities::viewTypeToString(view);
 		}
 	}
 	logger->log(DEBUG, msg);

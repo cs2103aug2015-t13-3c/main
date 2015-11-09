@@ -46,7 +46,6 @@ UI::UI() {
 	keywords->Add(QUIT);
 	keywords->Add(HELP);
 	keywords->Add(DISPLAY);
-	keywords->Add(EDIT);
 	keywords->Add(LOAD);
 	keywords->Add(NOTDONE);
 	keywords->Add(PICK);
@@ -121,8 +120,15 @@ UI::UI() {
 	saveCommands->Add("save <FILEPATH>");
 	saveCommands->Add("save to <FILEPATH>");
 
+	//********** SET command formats *****************
+	saveCommands = gcnew List<String^>();
+	saveCommands->Add("set welcome <MESSAGE>");
+	saveCommands->Add("set <COMMAND KEYWORD> <CUSTOM KEYWORD>");
+
 	suggestions = gcnew Hashtable();
 	suggestions->Add(HELP,HELP);
+	suggestions->Add(VIEW_HOME,VIEW_HOME);
+	suggestions->Add(VIEW_HOME_TS,VIEW_HOME_TS);
 	suggestions->Add(QUIT,QUIT);
 	suggestions->Add(CLEAR,CLEAR);
 	suggestions->Add(DISPLAY,DISPLAY);
@@ -134,12 +140,12 @@ UI::UI() {
 
 	suggestions->Add(ADD,addCommands);
 	suggestions->Add(MODIFY,modifyCommands);
-	suggestions->Add(EDIT,modifyCommands);
 	suggestions->Add(PICK,pickCommands);
 	suggestions->Add(SEARCH,searchCommands);
 	suggestions->Add(VIEW,viewCommands);
 	suggestions->Add(LOAD,loadCommands);
 	suggestions->Add(SAVE,saveCommands);
+	suggestions->Add(SET,setCommands);
 }
 
 UI::~UI() {
