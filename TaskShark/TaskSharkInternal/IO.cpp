@@ -41,9 +41,9 @@ std::string IO::getFilePath() {
 // Returns false if unable to set file path
 bool IO::setFilePath(std::string newFilePath, std::vector<Task> taskVector, bool isRemovePrevFile) {
 	if (saveFile(newFilePath,taskVector)) {
-		if (isRemovePrevFile || filePath==newFilePath) {
+		/*if (isRemovePrevFile || filePath==newFilePath) {
 			remove(filePath.c_str());
-		}
+		}*/ //Should leave original text file there even after saving to new location
 		filePath = newFilePath;
 		return true;
 	}

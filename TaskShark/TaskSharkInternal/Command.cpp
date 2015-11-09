@@ -149,6 +149,10 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator k;
 	Task tempTask;
 
+	if(taskVector.size() == 0) {
+		return;
+	}
+
 	// In-place sorting
 	i = taskVector.end()-1;	// Points to start of unsorted part
 	k = taskVector.begin();	// Points to end of unsorted part
@@ -255,8 +259,9 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
+	//sortPriority(taskVector);
 	sortFloating(taskVector);
-	// sortPriority(taskVector);
+	sortEvent(taskVector);
 }
 
 void Command::removeDoneTasks(std::vector<Task> &taskVector) {
@@ -1112,10 +1117,7 @@ std::string View::getMessage() {
 bool View::viewAll() {
 	currentView = taskStore;
 	removeDoneTasks(currentView);
-	// sortDate(currentView);
-	sortEvent(currentView);
 	sortDate(currentView);
-	sortEvent(currentView);
 	return true;
 }
 
@@ -1339,7 +1341,7 @@ void Load::execute() {
 	try {
 		taskStore = io->loadFile(filePath,isOverwriteLoadFile); // Exception thrown if file does not exist
 		History::getInstance()->clearHistory();				 // Clear history after load, to avoid seg fault
-		updateCurrView();
+		defaultView();
 	} catch (std::exception e) {
 		taskStore = temp;
 		loadSuccess = false;

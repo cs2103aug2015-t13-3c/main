@@ -150,13 +150,13 @@ public:
 
 		copyTask = addFour.getTaskStore();
 		iter = copyTask.begin();
+		Assert::AreEqual(150809, iter->getStartDate());	
+		++iter;
+		Assert::AreEqual(150910, iter->getStartDate());	
+		++iter;
 		Assert::AreEqual(150910,iter->getStartDate());
 		++iter;
 		Assert::AreEqual(151010, iter->getStartDate());
-		++iter;
-		Assert::AreEqual(150809, iter->getStartDate());
-		++iter;
-		Assert::AreEqual(150910, iter->getStartDate());
 	}
 	};
 
