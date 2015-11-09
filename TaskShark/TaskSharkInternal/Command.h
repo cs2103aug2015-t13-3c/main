@@ -71,6 +71,7 @@ const std::string VIEW_WEEK = "week";
 // These are the View enums
 // Count: 8 + VIEWTYPE_INVALID
 enum ViewType {
+	VIEWTYPE_HOME,
 	VIEWTYPE_ALL,
 	VIEWTYPE_FLOATING,
 	VIEWTYPE_EVENT,
@@ -292,6 +293,7 @@ private:
 	//==== UNDO ===
 	std::vector<Task> previousView;
 
+	bool viewHome();
 	bool viewAll();
 	bool viewTaskType(TaskType type);
 	bool viewDone();

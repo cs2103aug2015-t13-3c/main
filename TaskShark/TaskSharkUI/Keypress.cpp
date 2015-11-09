@@ -104,6 +104,9 @@ System::Void UI::input_KeyDown(
 System::Void UI::tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 	DisplayMode index = (DisplayMode)tabs->SelectedIndex;
 	switch (index) {
+	case HOME:
+		input->Text = "view home";
+		break;
 	case ALL:
 		input->Text = "view all";
 		break;
@@ -122,14 +125,8 @@ System::Void UI::tabs_SelectedIndexChanged(System::Object^  sender, System::Even
 	case FLOATINGS:
 		input->Text = "view floating";
 		break;
-	case SEARCHES:
-		// not implemented
-		break;
 	case PAST_:
 		input->Text = "view past";
-		break;
-	case FREESLOTS:
-		// not implemented yet
 		break;
 	}
 	getInput();

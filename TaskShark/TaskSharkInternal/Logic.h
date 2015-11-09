@@ -9,6 +9,7 @@
 #include "Update.h"
 
 enum DisplayMode {
+	HOME,
 	ALL,
 	TODAY,
 	WEEK,
@@ -17,7 +18,6 @@ enum DisplayMode {
 	FLOATINGS,
 	SEARCHES,
 	PAST_,
-	FREESLOTS
 };
 
 class Logic {
@@ -42,6 +42,7 @@ public:
 	std::string processCommand(std::string userCommand);
 	void subscribe(std::vector<DisplayedTask>* tasks);
 	DisplayMode getMode();
+	static void setHomeMode();
 	static void setTodayMode();
 	static void setWeekMode();
 	static void setAllMode();

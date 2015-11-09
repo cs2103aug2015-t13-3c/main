@@ -41,6 +41,9 @@ int UI::getTabIndex() {
 	assert(mode >= 0 && mode < 8);
 	int tabIndex = 0;
 	switch (mode) {
+	case HOME:
+		tabIndex = HOME;
+		break;
 	case ALL:
 		tabIndex = ALL;
 		break;
@@ -64,9 +67,6 @@ int UI::getTabIndex() {
 		break;
 	case PAST_:
 		tabIndex = PAST_;
-		break;
-	case FREESLOTS:
-		tabIndex = SEARCHES;
 		break;
 	}
 	return tabIndex;
@@ -130,9 +130,7 @@ void UI::updateDisplay() {
 	tabs->SelectTab(tabIndex);
 	TabPage^ currentTab = tabs->SelectedTab;
 	currentTab->Controls->Clear();
-	if (mode == FREESLOTS) {
-		// DisplayFreeSlots(currentTab);
-	} else if (tileView) {
+	if (tileView) {
 		addTilesToTab(currentTab);
 	} else {
 		updateTable(currentTab);

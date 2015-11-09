@@ -78,6 +78,10 @@ DisplayMode Logic::getMode() {
 	return mode;
 }
 
+void Logic::setHomeMode() {
+	mode = HOME;
+}
+
 void Logic::setAllMode() {
 	mode = ALL;
 }
