@@ -5,7 +5,7 @@
 
 Update::Update(std::vector<DisplayedTask>* tasksToDisplay,
 			   std::vector<Task>* currentView ) {
-				  this->tasksToDisplay = tasksToDisplay;
+				   this->tasksToDisplay = tasksToDisplay;
 				   this->currentView = currentView;
 }
 
@@ -39,5 +39,3 @@ void Update::update() {
 		++i;
 	}
 }
-
-

@@ -4,8 +4,8 @@
 
 using namespace UserInterface;
 
-// if the selected index in the dropdown menu is not the last item, move the 
-// selection to the next item
+// If the selected index in the dropdown menu is not the last item,
+// move the selection to the next item
 
 void UI::incrementDropCount() {
 	assert(dropDown->DroppedDown);

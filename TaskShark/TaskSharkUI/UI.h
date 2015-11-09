@@ -430,7 +430,7 @@ namespace UserInterface {
 				 this->Name = L"UI";
 				 this->Padding = System::Windows::Forms::Padding(0, 60, 0, 0);
 				 this->Resizable = false;
-				 this->Style = MetroFramework::MetroColorStyle::Orange;
+				 this->Style = MetroFramework::MetroColorStyle::Blue;
 				 this->Text = L"      TaskShark";
 				 this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UI::UI_KeyDown);
 				 this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &UI::UI_KeyUp);
