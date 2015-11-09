@@ -624,7 +624,7 @@ int Parser::parseTime(std::vector<std::string> timeString) {
 			hour = Utilities::stringToInt(hourString);
 			min = Utilities::stringToInt(minString);
 			if (!Utilities::isPositiveNonZeroInt(hourString) || hour >= 24
-				|| !Utilities::isPositiveNonZeroInt(minString) || min >= 60) {
+				|| !Utilities::isInt(minString) || min >= 60) {
 					return INVALID_TIME_FORMAT;
 			}
 		}
