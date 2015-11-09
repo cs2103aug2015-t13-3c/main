@@ -229,36 +229,24 @@ void Command::sortFloating(std::vector<Task> &taskVector) {
 
 // Sorts Event tasks to be at the top
 void Command::sortEvent(std::vector<Task> &taskVector) {
+	std::vector<Task> eventVector;
+	std::vector<Task> nonEventVector;
 	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-	std::vector<Task>::iterator k;
 	Task tempTask;
-
+	
 	if(taskVector.size() == 0) {
 		return;
 	}
-
-	// In-place sorting
-	i = taskVector.end()-1;	// Points to start of unsorted part
-	k = taskVector.begin();	// Points to end of unsorted part
-	while (i > k+1) {
-		if (i->getType() == EVENT) {
-			tempTask = *i;
-			for (j = i; j != taskVector.begin(); --j) {
-				std::swap(*j, *(j-1)); 
-			}
-			*j = tempTask;
-			if (k == taskVector.end()) {
-				break;
-			} else {
-				++k;
-			}
+	for(i = taskVector.begin(); i != taskVector.end(); i++) {
+		if(i->getType() == EVENT) {
+			eventVector.push_back(*i);
 		} else {
-			--i;
+			nonEventVector.push_back(*i);
 		}
 	}
 
-	//sortDate(taskVector.begin(),k+1);
+	taskVector = eventVector;
+	taskVector.insert(taskVector.end(),nonEventVector.begin(),nonEventVector.end());
 }
 
 // Sorts tasks by increasing order of start date
@@ -1034,8 +1022,7 @@ UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
 	} else {
 		undoneID = taskID;
 		initialiseIteratorsFromGuiID(taskID);
-		uniqueID = currViewIter->getID();
-		initialiseIteratorsFromUniqueID();
+		uniqueID = currViewIter->getID();		
 	}
 }
 
@@ -1046,6 +1033,7 @@ int UnmarkDone::getUndoneID() {
 }
 
 void UnmarkDone::execute() {
+	initialiseIteratorsFromUniqueID();
 	unmarkDone();
 	defaultView();
 	Logic::setHomeMode();
