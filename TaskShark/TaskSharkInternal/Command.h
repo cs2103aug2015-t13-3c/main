@@ -139,6 +139,9 @@ protected:
 	void sortEvent(std::vector<Task> &taskVector);
 	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
 	void sortDate(std::vector<Task> &taskVector);
+	void sortDate(std::vector<Task>::iterator start, std::vector<Task>::iterator end);
+	void sortTime(std::vector<Task> &taskVector);
+	void sortDefault(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
 	void removeTaskType(std::vector<Task> &taskVector, TaskType type);
 	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
