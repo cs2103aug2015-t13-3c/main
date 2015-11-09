@@ -598,7 +598,7 @@ int Parser::parseByDay(std::vector<std::string> dayString) {
 // - HH.MM AM/PM (default: assume AM)
 // - HHMM        (24-hour)
 int Parser::parseTime(std::vector<std::string> timeString) {
-	if (timeString.empty() || count(timeString.begin(),timeString.end(),'.')>1) {
+	if (timeString.empty() || std::count(timeString.at(0).begin(),timeString.at(0).end(),'.')>1) {
 		return INVALID_TIME_FORMAT;
 	}
 
