@@ -16,6 +16,13 @@ private:
 	// This defines the file extension used by TaskShark
 	static const std::string FILE_EXTENSION;
 
+	static const std::string WARNING_INVALID_INT_STRING;
+	static const std::string WARNING_NULL_FILE_PATH;
+	static const std::string WARNING_NULL_MODIFY_STRING;
+	static const std::string WARNING_NULL_PICK_TASK;
+	static const std::string WARNING_NULL_SEARCH_STRING;
+	static const std::string WARNING_NULL_TASK_STRING;
+
 	// These are the return values for invalid parameters
 	static const int INVALID_DATE_FORMAT = -1;
 	static const int INVALID_TIME_FORMAT = -1;
@@ -34,6 +41,7 @@ private:
 
 	FieldType convertFieldDateToTime(FieldType &inputMode);
 	void convertFieldToReserve(FieldType &inputMode);
+	void createCmd(CommandType cmdType, std::string restOfInput, Command*& cmd);
 	std::vector<FieldType>		extractFields(std::string restOfInput);
 	std::vector<std::string>	removeSlashKeywords(std::vector<std::string> vecString);
 
@@ -50,6 +58,7 @@ public:
 	static Parser* getInstance();
 	std::string parseFileName(char* argv[]);
 	std::string parseFileName(std::string stringFilePath);
+
 	Command* parse(std::string userInput);
 };
 

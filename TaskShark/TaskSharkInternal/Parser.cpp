@@ -20,6 +20,14 @@ Parser::~Parser() {
 // This defines the file extension used by TaskShark
 const std::string Parser::FILE_EXTENSION = ".txt";
 
+// Warnings when throwing exceptions
+const std::string Parser::WARNING_INVALID_INT_STRING = "Invalid integer string: ";
+const std::string Parser::WARNING_NULL_FILE_PATH	 = "No file path specified!";
+const std::string Parser::WARNING_NULL_MODIFY_STRING = "No fields to modify!";
+const std::string Parser::WARNING_NULL_PICK_TASK	 = "No blocked task to pick!";
+const std::string Parser::WARNING_NULL_SEARCH_STRING = "No search phrase!";
+const std::string Parser::WARNING_NULL_TASK_STRING	 = "No tasks to add!";
+
 void Parser::log(Level level, std::string message) {
 	logger->log(level,message);
 	return;
@@ -63,110 +71,96 @@ std::string Parser::parseFileName(std::string stringFilePath) {
 	return parseFileName(argvForm);
 }
 
-// Throws exceptions for:
-// ADD		- NullTaskString	"No tasks to add!"
-// DELETE	- InvalidIntString	"Invalid integer string!"
-// MODIFY	- NullModifyString	"No fields to modify!"
-// SEARCH	- NullSearchString	"No search phrase!"
-// MARKDONE	- InvalidIntString	"Invalid integer string!"
-// LOAD		- NullFilePath		"No file path specified!"
-// SAVE		- NullFilePath		"No file path specified!"
-Command* Parser::parse(std::string userInput) {
-	CommandType cmdType		= Utilities::stringToCmdType(Utilities::getFirstWord(userInput));
-	std::string restOfInput = Utilities::removeFirstWord(userInput);
-
-	Command* cmd = new Command(INVALID,userInput);
-	log(INFO,"Parsing \"" + Utilities::getFirstWord(userInput) + "\"");
-
+void Parser::createCmd(CommandType cmdType, std::string restOfInput, Command*& cmd) {
 	switch (cmdType) {
 	case ADD: {
-		if (restOfInput == "") {
-			log(WARN,"No task to add: " + restOfInput);
-			throw std::runtime_error("No task to add!");
-		}
-		Task* taskPtr = parseTask(restOfInput);
-		taskPtr->setID(Task::incrementRunningCount());
-		cmd = new Add(*taskPtr,restOfInput);
-		break; }
+			if (restOfInput == "") {
+				log(WARN,WARNING_NULL_TASK_STRING);
+				throw std::runtime_error(WARNING_NULL_TASK_STRING);
+			}
+			Task* taskPtr = parseTask(restOfInput);
+			taskPtr->setID(Task::incrementRunningCount());
+			cmd = new Add(*taskPtr,restOfInput);
+			break; }
 
 	case DELETE: {
-		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
-			log(WARN,"Invalid integer string: " + restOfInput);
-			throw std::runtime_error("Invalid integer string!");
-		}
-		int deleteID = Utilities::stringToInt(restOfInput);
-		cmd = new Delete(deleteID);
-		break; }
+			if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
+				log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
+				throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
+			}
+			int deleteID = Utilities::stringToInt(restOfInput);
+			cmd = new Delete(deleteID);
+			break; }
 
 	case MODIFY: {
-		std::string tempTaskString;
-		if (restOfInput == "" ||
-			((tempTaskString=Utilities::removeFirstWord(restOfInput)) == "") && Task::lastEditID == 0) {
-				log(WARN,"No fields to modify: " + restOfInput);
-				throw std::runtime_error("No fields to modify!");
-		}
+			std::string tempTaskString;
+			if (restOfInput == "" ||
+				((tempTaskString=Utilities::removeFirstWord(restOfInput)) == "") && Task::lastEditID == 0) {
+				log(WARN,WARNING_NULL_MODIFY_STRING);
+				throw std::runtime_error(WARNING_NULL_MODIFY_STRING);
+			}
 
-		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-		if (modifyID == 0 && Task::lastEditID != 0) {
-			tempTaskString = restOfInput;
-		}
-		if (Utilities::containsAny(tempTaskString,"float floating")) {
-			bool isSetFloating = true;
-			cmd = new Modify(modifyID,isSetFloating);
-		} else {
-			std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
-			Task* tempTaskPtr = parseTask(tempTaskString);
-			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr,tempTaskString);
-		}
-		break; }
+			int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+			if (modifyID == 0 && Task::lastEditID != 0) {
+				tempTaskString = restOfInput;
+			}
+			if (Utilities::containsAny(tempTaskString,"float floating")) {
+				bool isSetFloating = true;
+				cmd = new Modify(modifyID,isSetFloating);
+			} else {
+				std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
+				Task* tempTaskPtr = parseTask(tempTaskString);
+				cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr,tempTaskString);
+			}
+			break; }
 
 	case PICK: {
-		bool isPick = false;
-		if (restOfInput == "") {
-			log(WARN,"No blocked task to pick: " + restOfInput);
-			throw std::runtime_error("No blocked task to pick!");
-		}
-		int pickID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-		std::string pickString = Utilities::removeFirstWord(restOfInput);
-		if (!pickString.empty() && Utilities::containsAny(pickString,"r re reserve")) {
-			isPick = true;
-		}
-		cmd = new Pick(pickID,isPick);
-		break; }
+			bool isPick = false;
+			if (restOfInput == "") {
+				log(WARN,WARNING_NULL_PICK_TASK);
+				throw std::runtime_error(WARNING_NULL_PICK_TASK);
+			}
+			int pickID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+			std::string pickString = Utilities::removeFirstWord(restOfInput);
+			if (!pickString.empty() && Utilities::containsAny(pickString,"r re reserve")) {
+				isPick = true;
+			}
+			cmd = new Pick(pickID,isPick);
+			break; }
 
 	case POWERSEARCH:
 	case SEARCH: {
-		if (restOfInput == "") {
-			log(WARN,"No search phrase: " + restOfInput);
-			throw std::runtime_error("No search phrase!");
+			if (restOfInput == "") {
+				log(WARN,WARNING_NULL_SEARCH_STRING + ": " + restOfInput);
+				throw std::runtime_error(WARNING_NULL_SEARCH_STRING + "!");
 
-		} else if (isPowerSearchFormat(restOfInput)) {
-			std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
-			cmd = new PowerSearch(searchParameters);
+			} else if (isPowerSearchFormat(restOfInput)) {
+				std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
+				cmd = new PowerSearch(searchParameters);
 
-		} else {
-			std::string searchPhrase = restOfInput;
-			cmd = new Search(searchPhrase);
-		}
-		break; }
+			} else {
+				std::string searchPhrase = restOfInput;
+				cmd = new Search(searchPhrase);
+			}
+			break; }
 
 	case MARKDONE: {
-		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
-			log(WARN,"Invalid integer string: " + restOfInput);
-			throw std::runtime_error("Invalid integer string!");
-		}
-		int doneID = Utilities::stringToInt(restOfInput);
-		cmd = new Markdone(doneID);
-		break; }
+			if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
+				log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
+				throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
+			}
+			int doneID = Utilities::stringToInt(restOfInput);
+			cmd = new Markdone(doneID);
+			break; }
 
 	case UNMARKDONE: {
-		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
-			log(WARN,"Invalid integer string: " + restOfInput);
-			throw std::runtime_error("Invalid integer string!");
-		}
-		int notdoneID = Utilities::stringToInt(restOfInput);
-		cmd = new UnmarkDone(notdoneID);
-		break; }
+			if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
+				log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
+				throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
+			}
+			int notdoneID = Utilities::stringToInt(restOfInput);
+			cmd = new UnmarkDone(notdoneID);
+			break; }
 
 	case UNDO:
 		cmd = new Undo;
@@ -177,15 +171,15 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case VIEW: {
-		log(DEBUG,"View option: " + restOfInput);
-		if (restOfInput!="" && isPowerSearchKeywords(restOfInput)) {
-			std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
-			cmd = new View(searchParameters,restOfInput);
-		} else {
-			ViewType newView = Utilities::stringToViewType(restOfInput);
-			cmd = new View(newView,restOfInput);
-		}
-		break; }
+			log(DEBUG,"View option: " + restOfInput);
+			if (restOfInput!="" && isPowerSearchKeywords(restOfInput)) {
+				std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
+				cmd = new View(searchParameters,restOfInput);
+			} else {
+				ViewType newView = Utilities::stringToViewType(restOfInput);
+				cmd = new View(newView,restOfInput);
+			}
+			break; }
 
 	case VIEW_DEFAULT:
 		cmd = new View(VIEWTYPE_HOME,restOfInput);
@@ -200,40 +194,40 @@ Command* Parser::parse(std::string userInput) {
 		break;
 
 	case LOAD: {
-		if (restOfInput == "") {
-			log(WARN,"No file path specified: " + restOfInput);
-			throw std::runtime_error("No file path specified!");
-		}
-		bool isOverwriteFile = true;
-		if (Utilities::containsAny(Utilities::getFirstWord(restOfInput),"from")) {
-			isOverwriteFile = false;
-			restOfInput = Utilities::removeFirstWord(restOfInput);
-		}
-		cmd = new Load(parseFileName(restOfInput),isOverwriteFile);
-		break; }
+			if (restOfInput == "") {
+				log(WARN,WARNING_NULL_FILE_PATH);
+				throw std::runtime_error(WARNING_NULL_FILE_PATH);
+			}
+			bool isOverwriteFile = true;
+			if (Utilities::containsAny(Utilities::getFirstWord(restOfInput),"from")) {
+				isOverwriteFile = false;
+				restOfInput = Utilities::removeFirstWord(restOfInput);
+			}
+			cmd = new Load(parseFileName(restOfInput),isOverwriteFile);
+			break; }
 
 	case SAVE: {
-		if (restOfInput == "") {
-			log(WARN,"No file path specified!");
-			throw std::runtime_error("No file path specified!");
-		}
-		bool isDeletePrevFile = false;
-		if (Utilities::equalsIgnoreCase(Utilities::getFirstWord(restOfInput),"to")) {
-			isDeletePrevFile = true;
-			restOfInput = Utilities::removeFirstWord(restOfInput);
-		}
-		cmd = new Save(parseFileName(restOfInput),isDeletePrevFile);
-		break; }
+			if (restOfInput == "") {
+				log(WARN,WARNING_NULL_FILE_PATH);
+				throw std::runtime_error(WARNING_NULL_FILE_PATH);
+			}
+			bool isDeletePrevFile = false;
+			if (Utilities::equalsIgnoreCase(Utilities::getFirstWord(restOfInput),"to")) {
+				isDeletePrevFile = true;
+				restOfInput = Utilities::removeFirstWord(restOfInput);
+			}
+			cmd = new Save(parseFileName(restOfInput),isDeletePrevFile);
+			break; }
 
 	case SET: {
-		if (restOfInput == "") {
-			log(WARN,"Nothing to set!");
-			throw std::runtime_error("Nothing to set!");
-		}
-		std::string keyword = Utilities::getFirstWord(restOfInput);
-		std::string userString = Utilities::removeFirstWord(restOfInput);
-		cmd = new Set(keyword,userString);
-		break; }
+			if (restOfInput == "") {
+				log(WARN,"Nothing to set!");
+				throw std::runtime_error("Nothing to set!");
+			}
+			std::string keyword = Utilities::getFirstWord(restOfInput);
+			std::string userString = Utilities::removeFirstWord(restOfInput);
+			cmd = new Set(keyword,userString);
+			break; }
 
 	case EXIT:
 		cmd = new Exit;
@@ -243,7 +237,21 @@ Command* Parser::parse(std::string userInput) {
 		log(WARN,"Invalid command: " + restOfInput);
 		break;
 	}
+}
 
+// Throws exceptions for:
+// ADD		- NullTaskString	"No tasks to add!"
+// DELETE	- InvalidIntString	"Invalid integer string!"
+// MODIFY	- NullModifyString	"No fields to modify!"
+// SEARCH	- NullSearchString	"No search phrase!"
+// MARKDONE	- InvalidIntString	"Invalid integer string!"
+// LOAD		- NullFilePath		"No file path specified!"
+// SAVE		- NullFilePath		"No file path specified!"
+Command* Parser::parse(std::string userInput) {
+	CommandType cmdType		= Utilities::stringToCmdType(Utilities::getFirstWord(userInput));
+	std::string restOfInput = Utilities::removeFirstWord(userInput);
+	Command*	cmd			= new Command(INVALID,userInput);
+	createCmd(cmdType, restOfInput, cmd);
 	return cmd;
 }
 
