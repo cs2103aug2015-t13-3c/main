@@ -348,7 +348,7 @@ public:
 		iter = copyTask.begin();
 		++iter;
 		Assert::AreEqual(false,iter->getDoneStatus());
-		
+
 		// delete logic;
 	}
 
