@@ -206,10 +206,21 @@ void UI::addTilesToTab(TabPage^ currentTab) {
 	}	
 }
 
+// Reads the characters from textbox
+// Converts the entire input from CLI String to std::string
+// Stores the input into class variable
+
 void UI::getInput() {
 	msclr::interop::marshal_context context;
 	userInput = new std::string(context.marshal_as<std::string>(input->Text));
 }
+
+// Passes UserInput to Logic
+// prints feedback message :
+//	[GREEN] - command successfully processed
+//  [RED]	- exception caught, invalid command
+// updates current display of task 
+// If the input is "help", does not call logic, it will show help page within UI
 
 void UI::processAndExecute() {
 	feedback->Clear();
@@ -237,9 +248,13 @@ void UI::processAndExecute() {
 	printFeedBackMessage(" " + message);
 }
 
+// Channels output of "message" to feedback textbox
+
 void UI::printFeedBackMessage(std::string message) {
 	feedback->Text = gcnew String(message.c_str());
 }
+
+// Decrements the first displayed row index of the table to simulate scrolling
 
 void UI::scrollDown() {
 	if(display->FirstDisplayedScrollingRowIndex < display->RowCount )
@@ -247,8 +262,21 @@ void UI::scrollDown() {
 		display->FirstDisplayedScrollingRowIndex + 1;
 }
 
+// Increments the first displayed row index of the table to simulate scrolling
+
 void UI::scrollUp() {
 	if(display->FirstDisplayedScrollingRowIndex > 0 )
 		display->FirstDisplayedScrollingRowIndex = 
 		display->FirstDisplayedScrollingRowIndex - 1;
+}
+
+// Updates the date display every 5 seconds
+
+System::Void UI::updateCurrentTime_Tick(System::Object^ sender, System::EventArgs^ e) {
+	DateTime localDateTime = DateTime::Now;
+	String^ month = gcnew String(Utilities::monthToString((Month)localDateTime.Month).c_str());
+	String^ t = (localDateTime.DayOfWeek).ToString() + " " + 
+		(localDateTime.Day).ToString() + "/" + month;
+
+	currentTime->Text = t;
 }

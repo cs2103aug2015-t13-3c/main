@@ -59,11 +59,13 @@ public:
 		Add addSix(testTask);
 		addSix.execute();
 
+		// Should set all tasks that appear within 15 Oct at 10 pm to 16 Oct at 3 pm"
 		testPwrSearch.setTasksWithinPeriod(151015,2200,151016,1500);
 
 		std::vector<Task> copyTask = testPwrSearch.getTasksWithinPeriod();
 		std::vector<Task>::iterator iter;
 
+		// Below are the expected results of the time of the tasks to be found within the period
 		iter = copyTask.begin();
 		Assert::AreEqual(iter->getStartDate(), 151015);
 		Assert::AreEqual(iter->getStartTime(), 2300);
@@ -73,6 +75,7 @@ public:
 	}
 
 	TEST_METHOD(PowerSearch_searchFreeSlot) {
+		// Vector created to allow creation of testPwrSearch
 		std::vector<std::string> paraVec; 
 		paraVec.push_back("");
 		paraVec.push_back("0");
@@ -84,8 +87,6 @@ public:
 		paraVec.push_back("0");
 
 		PowerSearch testPwrSearch(paraVec);
-		// Create method to "fit in" an event that may or may not exceed the range of free period
-		// Or can set parameter x such that free period mentioned must exceed x
 		Task testTask;
 		testTask.setStartDate(151010);
 		testTask.setStartTime(0);
@@ -136,11 +137,13 @@ public:
 		Add addSix(testTask);
 		addSix.execute();
 
+		// Equivalent to user input "Search from 9 Oct at 11 pm to 19 Oct at 9 am"
 		testPwrSearch.setFreePeriods(151009,2300,151019,900);
 
 		std::vector<Task> copyTask = testPwrSearch.getFreePeriods();
 		std::vector<Task>::iterator iter;
 
+		// Below are the expected results of the free periods to be found within the period
 		iter = copyTask.begin();
 		Assert::AreEqual(151009, iter->getStartDate());
 		Assert::AreEqual(2300, iter->getStartTime());

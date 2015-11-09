@@ -108,10 +108,13 @@ int PowerSearch::numOfMin(int date, int time) {
 // Evaluates based on number of minutes
 bool PowerSearch::isWithinFreePeriod(Task freePeriod, int daysNeeded, int hrsNeeded, int minsNeeded) {
 	int numMinNeeded;			
-	int numMinAvail;			// Number of minutes in the free period	
+	int numMinAvail;			// Number of minutes present within the free period	
 
 	numMinAvail = numOfMin(freePeriod.getEndDate(), freePeriod.getEndTime()) - numOfMin(freePeriod.getStartDate(), freePeriod.getStartTime());
 	numMinNeeded = daysNeeded*24*60 + hrsNeeded*60 + minsNeeded;
+
+	assert(numMinAvail > 0);
+	assert(numMinNeeded > 0);
 
 	if (numMinAvail >= numMinNeeded) {
 		return true;
@@ -122,6 +125,7 @@ bool PowerSearch::isWithinFreePeriod(Task freePeriod, int daysNeeded, int hrsNee
 
 //========== Public Methods ==========
 
+// Stores all tasks found within the period of interest into tasksWithinPeriod vector
 void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task> taskVector = taskStore;
 	std::vector<Task>::iterator iter;
@@ -156,6 +160,7 @@ void PowerSearch::setTasksWithinPeriod(int startDate, int startTime, int endDate
 	}
 }
 
+// Stores all free periods found within the period of interest into freePeriods vector
 void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task> taskVector = taskStore;
 	std::vector<Task>::iterator iter;
@@ -206,7 +211,7 @@ std::vector<Task> PowerSearch::getFreePeriods() {
 	return freePeriods;
 }
 
-// Searches for a phrase within a particular time period, stores the output in currentView
+// Searches for a phrase within a particular time period, stores the output in currentView vector
 void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task>::iterator iter;
 	std::string taskName;
@@ -227,16 +232,26 @@ void PowerSearch::searchInfo(std::string phr, int startDate, int startTime, int 
 // If no time boundary, all time-related parameters to be set to -1
 // If time boundary present, floating tasks will not be added into the search
 void PowerSearch::regexSearch(std::string regPhr, int startDate, int startTime, int endDate, int endTime) {
-	std::vector<Task> taskVector;
-	std::vector<Task>::iterator iter;
+	std::vector<Task>::iterator taskIter;
+	std::vector<std::string> tokens;
+	std::vector<std::string>::iterator tokenIter;
+	bool isMatch = false;
 
 	setTasksWithinPeriod(startDate, startTime, endDate, endTime);
 	currentView.clear();
 
-	for (iter = tasksWithinPeriod.begin(); iter != tasksWithinPeriod.end(); ++iter) {
-		if (std::regex_match(iter->getName(), std::regex(regPhr))) {
-			currentView.push_back(*iter);
+	for (taskIter = tasksWithinPeriod.begin(); taskIter != tasksWithinPeriod.end(); ++taskIter) {
+		tokens = Utilities::stringToVec(taskIter->getName());
+		for (tokenIter=tokens.begin(); tokenIter!=tokens.end(); ++tokenIter) {
+			if (std::regex_match(*tokenIter, std::regex(regPhr))) {
+				isMatch = true;
+			}
 		}
+
+		if (isMatch) {
+			currentView.push_back(*taskIter);
+		}
+		isMatch = false;
 	}
 }
 

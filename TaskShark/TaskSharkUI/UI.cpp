@@ -29,7 +29,6 @@ UI::UI() {
 	getInput();
 	processAndExecute();
 	input->Clear();
-	originalRowPosition = 0;
 	tabs->Style = this->Style;
 	//	floatingTaskDisplay->SelectionAlignment = HorizontalAlignment::Center;
 	inputHistoryCount = 0;

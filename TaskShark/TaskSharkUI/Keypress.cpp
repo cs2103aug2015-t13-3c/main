@@ -19,25 +19,25 @@ System::Void UI::input_KeyUp (
 	System::Object^ sender,
 	System::Windows::Forms::KeyEventArgs^ e) {
 
-	Keys key = e->KeyCode;
-	if (e->KeyCode == Keys::Home) {
-		// Do nothing 
-		return;
-	}
-	if (key == Keys::Tab) {
-		if (dropDown->DroppedDown) {
-			incrementDropCount();
-		} else {
-			selectFields();
+		Keys key = e->KeyCode;
+		if (e->KeyCode == Keys::Home) {
+			// Do nothing 
+			return;
 		}
-		return;
-	}
-	if (key != Keys::Up && key != Keys::Down && key != Keys::Return) {
-		commandAutoComplete();
-		// Unstable:
-		// highlightSyntax();
-		return;
-	}
+		if (key == Keys::Tab) {
+			if (dropDown->DroppedDown) {
+				incrementDropCount();
+			} else {
+				selectFields();
+			}
+			return;
+		}
+		if (key != Keys::Up && key != Keys::Down && key != Keys::Return) {
+			commandAutoComplete();
+			// Unstable:
+			// highlightSyntax();
+			return;
+		}
 }
 
 // This function is activated whenever a key is pressed
@@ -56,47 +56,101 @@ System::Void UI::input_KeyDown(
 	System::Object^ sender,
 	System::Windows::Forms::KeyEventArgs^ e) {
 
-	Keys key = e->KeyCode;	
-	if (helpMode) {
-		closeHelpMode();
-		return;
-	}
-	if (key == Keys::Return) { 
-		if (input->Text == "s") {
-			if (tileView) {
-				tileView = false;
-			} else {
-				tileView = true;
-			}
-			updateDisplay();
-			input->Clear();
+		Keys key = e->KeyCode;	
+		if (helpMode) {
+			closeHelpMode();
 			return;
 		}
-		if (dropDown->DroppedDown) {
-			if (acceptAutosuggest()) {
+		if (key == Keys::Return) { 
+			if (input->Text == "s") {
+				if (tileView) {
+					tileView = false;
+				} else {
+					tileView = true;
+				}
+				updateDisplay();
+				input->Clear();
 				return;
 			}
+			if (dropDown->DroppedDown) {
+				if (acceptAutosuggest()) {
+					return;
+				}
+			}
+			getInput();
+			processAndExecute();
+			addCommandHistory();
+			input->Clear();
+			return; 
 		}
-		getInput();
-		processAndExecute();
-		addCommandHistory();
-		input->Clear();
-		return; 
+		if (key == Keys::Down) {
+			if (dropDown->DroppedDown) {
+				incrementDropCount();
+			} else {
+				toNextCommand();
+			}
+			return;
+		}
+		if (key == Keys::Up) {
+			if (dropDown->DroppedDown) {
+				decrementDropCount();
+			} else {
+				toPreviousCommand();
+			}
+			return;
+		}
+}
+
+System::Void UI::tabs_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+	DisplayMode index = (DisplayMode)tabs->SelectedIndex;
+	switch (index) {
+	case ALL:
+		input->Text = "view all";
+		break;
+	case TODAY:
+		input->Text = "view today";
+		break;
+	case WEEK:
+		input->Text = "view week";
+		break;
+	case EVENTS:
+		input->Text = "view events";
+		break;
+	case DEADLINES:
+		input->Text = "view todo";
+		break;
+	case FLOATINGS:
+		input->Text = "view floating";
+		break;
+	case SEARCHES:
+		// not implemented
+		break;
+	case PAST_:
+		input->Text = "view past";
+		break;
+	case FREESLOTS:
+		// not implemented yet
+		break;
 	}
-	if (key == Keys::Down) {
-		if (dropDown->DroppedDown) {
-			incrementDropCount();
-		} else {
-			toNextCommand();
-		}
+	getInput();
+	processAndExecute();
+	input->Clear();
+}
+System::Void UI::UI_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	if(e->KeyCode == Keys::Escape) {	
+		this->WindowState = FormWindowState::Minimized;
 		return;
 	}
-	if (key == Keys::Up) {
-		if (dropDown->DroppedDown) {
-			decrementDropCount();
-		} else {
-			toPreviousCommand();
+}
+System::Void UI::display_Click(System::Object^  sender, System::EventArgs^  e) {
+	input->Focus();
+}
+System::Void UI::UI_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	if(e->Shift) {	
+		if(e->KeyCode == Keys::Up) {
+			scrollUp();
+		} else if(e->KeyCode == Keys::Down) {
+			scrollDown();
 		}
-		return;
 	}
 }
