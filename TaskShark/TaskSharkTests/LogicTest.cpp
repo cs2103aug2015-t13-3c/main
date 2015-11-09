@@ -25,6 +25,8 @@ public:
 		logic->processCommand(std::string("Add that from 14 Oct to 16 Oct"));
 		logic->processCommand(std::string("Add then"));
 		logic->processCommand(std::string("Add this from 13 Oct to 15 Oct"));
+		logic->processCommand(std::string("Search from 10 Oct to 17 Oct for 1 h"));
+		logic->processCommand(std::string("Delete 1"));
 
 		std::vector<Task> copyTask;	
 		std::vector<Task>::iterator iter;

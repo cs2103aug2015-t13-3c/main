@@ -106,9 +106,11 @@ private:
 protected:
 	static const std::string ERROR_INDEX_OUT_OF_BOUNDS;
 	static const std::string ERROR_TASK_START_LATER_THAN_TASK_END;
+	static const std::string ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE;
 
 	static std::vector<Task> currentView;
 	static std::vector<Task> taskStore;
+	static bool isFreePeriodMode;
 
 	TsLogger* logger;
 	bool isExecuteSuccess;
@@ -135,7 +137,6 @@ protected:
 
 	void sortFloating(std::vector<Task> &taskVector);
 	void sortEvent(std::vector<Task> &taskVector);
-	void sortPriority(std::vector<Task> &taskVector);
 	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
 	void sortDate(std::vector<Task> &taskVector);
 	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView

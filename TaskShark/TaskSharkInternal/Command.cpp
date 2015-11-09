@@ -85,10 +85,11 @@ void Command::undo() {
 
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
 const std::string Command::ERROR_TASK_START_LATER_THAN_TASK_END = "Start of task is later than end of task";
+const std::string Command::ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE = "Action cannot be performed when viewing free periods";
 
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
-
+bool			  Command::isFreePeriodMode;
 // Initialises the corresponding iterators with the guiID
 // guiID is the ID seen on GUI, not the unique task ID
 // Use for in-place insertion / deletion for undo methods
@@ -193,29 +194,6 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 	}
 }
 
-// Sorts priority tasks to be at the top
-void Command::sortPriority(std::vector<Task> &taskVector) {
-	std::vector<Task>::iterator i;
-	std::vector<Task>::iterator j;
-	std::vector<Task>::iterator k;
-	Task tempTask;
-
-	i = taskVector.begin();
-	while (i != taskVector.end()) {
-		for (j = i; j != taskVector.end(); ++j) {
-			if (j->getPriorityStatus() == true) {
-				tempTask = *j;
-				for (k = j; k != i; --k) {
-					std::swap(*k, *(k-1)); 
-				}
-				*i = tempTask;
-				break;
-			}
-		}
-		++i;
-	}
-}
-
 void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
 	std::vector<Task> periodStore;
 	currentView.clear();
@@ -278,7 +256,6 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 		}
 	}
 
-	//sortPriority(taskVector);
 	sortFloating(taskVector);
 	sortEvent(taskVector);
 }
@@ -404,6 +381,7 @@ std::string Command::getMessage() {
 //============== ADD : PUBLIC METHODS ===============
 
 Add::Add(Task task, std::string restOfCommand) : Command(ADD) {
+	isFreePeriodMode = false;
 	newTask = task;
 	currViewID = 0;
 	isOverlap = false;
@@ -427,6 +405,7 @@ void Add::execute() {
 // Add must have executed before undoing,
 // otherwise currViewID will not be updated
 void Add::undo() {
+	isFreePeriodMode = false;
 	Delete taskToDelete(uniqueID,true);
 	taskToDelete.execute();
 	Task::lastEditID = 0;
@@ -488,9 +467,13 @@ void Add::checkOverlap() {
 //============ DELETE : PUBLIC METHODS =============
 
 Delete::Delete(int currentViewID) : Command(DELETE) {
-	deleteID = currentViewID;
-	initialiseIteratorsFromGuiID(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
-	setUndoDeleteInfo();
+	if (isFreePeriodMode) {
+		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
+	} else {
+		deleteID = currentViewID;
+		initialiseIteratorsFromGuiID(deleteID); // Sets taskStoreIter and currViewIter, using currentViewID
+		setUndoDeleteInfo();
+	}
 }
 
 //Overloaded Delete constructor used for undo only
@@ -514,6 +497,7 @@ void Delete::execute() {
 
 // Adds the deleted task back to the exact location it was before
 void Delete::undo() {
+	isFreePeriodMode = false;
 	if ((unsigned int)taskStorePos < taskStore.size()) {
 		taskStore.insert(taskStore.begin() + taskStorePos,taskToBeDeleted);
 	} else {
@@ -554,21 +538,29 @@ void Delete::setUndoDeleteInfo() {
 //============= MODIFY : PUBLIC METHODS ============
 
 Modify::Modify(int taskID, bool isModifyFloating) : Command(MODIFY) {
-	modifyID = taskID;
-	isSetFloating = isModifyFloating;
-	initialiseIteratorsFromGuiID(modifyID);
-	originalTask = *currViewIter;
+	if (isFreePeriodMode) {
+		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
+	} else {
+		modifyID = taskID;
+		isSetFloating = isModifyFloating;
+		initialiseIteratorsFromGuiID(modifyID);
+		originalTask = *currViewIter;
+	}
 }
 
 Modify::Modify(int taskID, std::vector<FieldType> fields,
 			   Task task, std::string restOfInput) : Command(MODIFY) {
-				   modifyID = taskID;
-				   isSetFloating = false;
-				   fieldsToModify = fields;
-				   tempTask = task;
-				   invalidDateTimeString = restOfInput;
-				   initialiseIteratorsFromGuiID(modifyID);
-	originalTask = *currViewIter;
+				   if (isFreePeriodMode) {
+					   throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
+				   } else {
+					   modifyID = taskID;
+					   isSetFloating = false;
+					   fieldsToModify = fields;
+					   tempTask = task;
+					   invalidDateTimeString = restOfInput;
+					   initialiseIteratorsFromGuiID(modifyID);
+					   originalTask = *currViewIter;
+				   }
 }
 
 Modify::Modify(CommandType pick) : Command(pick) {}
@@ -606,6 +598,7 @@ void Modify::execute() {
 }
 
 void Modify::undo() {
+	isFreePeriodMode = false;
 	initialiseIteratorsFromUniqueID();
 	*taskStoreIter = originalTask;
 	if(currViewPos != -1) {
@@ -638,106 +631,109 @@ void Modify::doModify() {
 	bool isStartTimeSet = false;
 	bool isEndTimeSet = false;
 
-	if (tempTask.getType() == EVENT) {
-		taskStoreIter->setType(EVENT);
-	}
-	if (tempTask.getReserveType() == EVENT) {
-		taskStoreIter->setReserveType(EVENT);
-	}
-
-	for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
-		switch (*fieldIter) {
-		case NAME:
-			taskStoreIter->setName(tempTask.getName());			
-			break;
-		case LABELS_ADD:
-			taskStoreIter->addLabels(tempTask.getLabels());
-			break;
-		case LABELS_DELETE:
-		case LABELS_CLEAR:
-			if (tempTask.getLabelsToDelete().empty()) {
-				taskStoreIter->clearLabels();
-			} else {
-				taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
-			}
-			break;
-		case PRIORITY_SET:
-			taskStoreIter->setPriority();
-			break;
-		case PRIORITY_UNSET:
-			taskStoreIter->unsetPriority();
-			break;
-		case START_DATE:
-			taskStoreIter->setStartDate(tempTask.getStartDate());
-			break;
-		case START_TIME:
-			taskStoreIter->setStartTime(tempTask.getStartTime());
-			if ((fieldIter+1 != fieldsToModify.end()) && (fieldIter+2 != fieldsToModify.end())
-				&& (*(fieldIter+2) == START_TIME)) {	// Accounts for events that modifies endTime
-					*(fieldIter+2) = END_TIME;
-			}
-			isStartTimeSet = true;
-			break;
-		case END_DATE:
-			taskStoreIter->setEndDate(tempTask.getEndDate());
-			break;
-		case END_TIME:
-			if (taskStoreIter->getEndDate() == DATE_NOT_SET) {
-				taskStoreIter->setEndDate(tempTask.getStartDate());
-			}
-			taskStoreIter->setEndTime(tempTask.getEndTime());
-			isEndTimeSet = true;
-			break;
-		case TODO_DATE:
-			isTODO = true;
-			taskStoreIter->setEndDate(tempTask.getEndDate());
-			taskStoreIter->setEndTime(tempTask.getEndTime());
-			break;
-		case TODO_TIME:
-			isTODO = true;
-			isEndTimeSet = true;
-			taskStoreIter->setEndTime(tempTask.getEndTime());
-			break;
-		case RESERVE_START_DATE:
-			taskStoreIter->addReserveStartDate(tempTask.getReserveStartDate());
-			break;
-		case RESERVE_START_TIME:
-			taskStoreIter->addReserveStartTime(tempTask.getReserveStartTime());
-			break;
-		case RESERVE_END_DATE:
-			taskStoreIter->addReserveEndDate(tempTask.getReserveEndDate());
-			break;
-		case RESERVE_END_TIME:
-			taskStoreIter->addReserveEndTime(tempTask.getReserveEndTime());
-			break;
-		case RESERVE_TODO_DATE:
-			isTODOreserve = true;
-			taskStoreIter->addReserveEndDate(tempTask.getEndDate());
-			break;
-		case RESERVE_TODO_TIME:
-			isTODOreserve = true;
-			taskStoreIter->addReserveEndTime(tempTask.getEndTime());
-			break;
-		case RESERVE:
-			break;
-		case INVALID_FIELD:
-			throw std::runtime_error("Error in fetching field name"); 
+	if (!isDateLogical(tempTask)) {
+		throw std::runtime_error(ERROR_TASK_START_LATER_THAN_TASK_END);
+	} else {
+		if (tempTask.getType() == EVENT) {
+			taskStoreIter->setType(EVENT);
 		}
-	}
-
-	if (isTODO) {
-		taskStoreIter->setType(TODO);
-		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
-		if (isStartTimeSet) {
-			taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
-		} else if (isEndTimeSet) {
-			taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
+		if (tempTask.getReserveType() == EVENT) {
+			taskStoreIter->setReserveType(EVENT);
 		}
-	}
-	if (isTODOreserve) {
-		taskStoreIter->setReserveType(TODO);
-		taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
-		taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
+
+		for (fieldIter = fieldsToModify.begin(); fieldIter != fieldsToModify.end(); ++fieldIter) {
+			switch (*fieldIter) {
+			case NAME:
+				taskStoreIter->setName(tempTask.getName());			
+				break;
+			case LABELS_ADD:
+				taskStoreIter->addLabels(tempTask.getLabels());
+				break;
+			case LABELS_DELETE:
+			case LABELS_CLEAR:
+				if (tempTask.getLabelsToDelete().empty()) {
+					taskStoreIter->clearLabels();
+				} else {
+					taskStoreIter->deleteLabels(tempTask.getLabelsToDelete());
+				}
+				break;
+			case PRIORITY_SET:
+				taskStoreIter->setPriority();
+				break;
+			case PRIORITY_UNSET:
+				taskStoreIter->unsetPriority();
+				break;
+			case START_DATE:
+				taskStoreIter->setStartDate(tempTask.getStartDate());
+				break;
+			case START_TIME:
+				taskStoreIter->setStartTime(tempTask.getStartTime());
+				if ((fieldIter+1 != fieldsToModify.end()) && (fieldIter+2 != fieldsToModify.end())
+					&& (*(fieldIter+2) == START_TIME)) {	// Accounts for events that modifies endTime
+						*(fieldIter+2) = END_TIME;
+				}
+				isStartTimeSet = true;
+				break;
+			case END_DATE:
+				taskStoreIter->setEndDate(tempTask.getEndDate());
+				break;
+			case END_TIME:
+				if (taskStoreIter->getEndDate() == DATE_NOT_SET) {
+					taskStoreIter->setEndDate(tempTask.getStartDate());
+				}
+				taskStoreIter->setEndTime(tempTask.getEndTime());
+				isEndTimeSet = true;
+				break;
+			case TODO_DATE:
+				isTODO = true;
+				taskStoreIter->setEndDate(tempTask.getEndDate());
+				taskStoreIter->setEndTime(tempTask.getEndTime());
+				break;
+			case TODO_TIME:
+				isTODO = true;
+				isEndTimeSet = true;
+				taskStoreIter->setEndTime(tempTask.getEndTime());
+				break;
+			case RESERVE_START_DATE:
+				taskStoreIter->addReserveStartDate(tempTask.getReserveStartDate());
+				break;
+			case RESERVE_START_TIME:
+				taskStoreIter->addReserveStartTime(tempTask.getReserveStartTime());
+				break;
+			case RESERVE_END_DATE:
+				taskStoreIter->addReserveEndDate(tempTask.getReserveEndDate());
+				break;
+			case RESERVE_END_TIME:
+				taskStoreIter->addReserveEndTime(tempTask.getReserveEndTime());
+				break;
+			case RESERVE_TODO_DATE:
+				isTODOreserve = true;
+				taskStoreIter->addReserveEndDate(tempTask.getEndDate());
+				break;
+			case RESERVE_TODO_TIME:
+				isTODOreserve = true;
+				taskStoreIter->addReserveEndTime(tempTask.getEndTime());
+				break;
+			case RESERVE:
+				break;
+			case INVALID_FIELD:
+				throw std::runtime_error("Error in fetching field name"); 
+			}
+		}
+		if (isTODO) {
+			taskStoreIter->setType(TODO);
+			taskStoreIter->setStartDate(taskStoreIter->getEndDate());
+			if (isStartTimeSet) {
+				taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
+			} else if (isEndTimeSet) {
+				taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
+			}
+		}
+		if (isTODOreserve) {
+			taskStoreIter->setReserveType(TODO);
+			taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
+			taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
+		}
 	}
 }
 
@@ -797,6 +793,7 @@ currentView.insert(preCurrViewIter, tempTask);
 //============== SEARCH : PUBLIC METHODS ===========
 
 Search::Search(std::string phraseString) : Command(SEARCH) {
+	isFreePeriodMode = false;
 	searchPhrase = phraseString;
 	currentViewBeforeSearch = currentView;
 }
@@ -822,6 +819,7 @@ void Search::execute() {
 }
 
 void Search::undo() {
+	isFreePeriodMode = false;
 	currentView = currentViewBeforeSearch;
 }
 
@@ -950,8 +948,12 @@ bool Search::amendView(std::string listOfIds) {
 //============= MARKDONE : PUBLIC METHODS ===========
 
 Markdone::Markdone(int taskID) : Command(MARKDONE) {
-	doneID = taskID;
-	taskName = "";
+	if (isFreePeriodMode) {
+		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
+	} else {
+		doneID = taskID;
+		taskName = "";
+	}
 }
 
 Markdone::~Markdone() {}
@@ -967,10 +969,10 @@ void Markdone::execute() {
 }
 
 void Markdone::undo() {
+	isFreePeriodMode = false;
 	if (successMarkDone) {
 		getIterator();
 		taskStoreIter->unmarkDone();
-		// currentView.insert(currViewIter,*taskStoreIter);
 	}	
 	defaultView();
 }
@@ -987,7 +989,6 @@ void Markdone::markDone() {
 	successMarkDone = taskStoreIter->markDone();
 	if (successMarkDone) {
 		taskName = currViewIter->getName();
-		// currentView.erase(currViewIter);
 	}
 }
 
@@ -998,7 +999,11 @@ void Markdone::markDone() {
 //=========== UNMARKDONE : PUBLIC METHODS ==========
 
 UnmarkDone::UnmarkDone(int taskID) : Command(MARKDONE) {
-	undoneID = taskID;
+	if (isFreePeriodMode) {
+		throw std::runtime_error(ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE);
+	} else {
+		undoneID = taskID;
+	}
 }
 
 UnmarkDone::~UnmarkDone() {}
@@ -1014,10 +1019,10 @@ void UnmarkDone::execute() {
 }
 
 void UnmarkDone::undo() {
+	isFreePeriodMode = false;
 	if (successUnmarkDone) {
 		getIterator();
 		taskStoreIter->markDone();
-		// currentView.insert(currViewIter,*taskStoreIter);
 	}
 	defaultView();
 }
@@ -1045,12 +1050,14 @@ void UnmarkDone::unmarkDone() {
 //==================================================
 
 View::View(ViewType newView, std::string labels) : Command(VIEW) {
+	isFreePeriodMode = false;
 	view = newView;
 	viewLabels = Utilities::stringToVec(labels);
 	previousView = currentView;
 }
 
 View::View(std::vector<std::string> viewParameters, std::string periodInput, ViewType period) : Command(VIEW) {
+	isFreePeriodMode = false;
 	view = VIEWTYPE_PERIOD;
 	periodParams = viewParameters;
 	periodString = periodInput;
@@ -1148,6 +1155,7 @@ void View::execute() {
 }
 
 void View::undo() {
+	isFreePeriodMode = false;
 	currentView = previousView;
 }
 
@@ -1250,6 +1258,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 //==================================================
 
 ClearAll::ClearAll() : Command(CLEAR_ALL) {
+	isFreePeriodMode = false;
 	previousView = currentView;
 }
 
@@ -1261,6 +1270,7 @@ void ClearAll::execute() {
 }
 
 void ClearAll::undo() {
+	isFreePeriodMode = false;
 	currentView = previousView;
 	taskStore = previousView;	
 }
@@ -1274,6 +1284,7 @@ std::string ClearAll::getMessage() {
 //==================================================
 
 DisplayAll::DisplayAll() : Command(DISPLAY_ALL) {
+	isFreePeriodMode = false;
 	previousView = currentView;
 }
 
@@ -1287,6 +1298,7 @@ void DisplayAll::execute() {
 
 
 void DisplayAll::undo() {
+	isFreePeriodMode = false;
 	currentView = previousView;	
 }
 
@@ -1328,6 +1340,7 @@ void Redo::execute() {
 //============= PICK : PUBLIC METHODS ============
 
 Pick::Pick(int taskID, bool isPick) : Modify(PICK) {
+	isFreePeriodMode = false;
 	modifyID = taskID;
 	pickReserve = isPick;
 }
@@ -1344,6 +1357,7 @@ void Pick::execute() {
 }
 
 void Pick::undo() {
+	isFreePeriodMode = false;
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
@@ -1383,6 +1397,7 @@ void Pick::doPick() {
 Load::Load() : Command(LOAD) {
 	IO* io = IO::getInstance();
 	filePath = io->getFilePath();
+	isFreePeriodMode = false;
 }
 
 // Load new file path, which is already parsed
@@ -1426,6 +1441,7 @@ std::string Load::getMessage() {
 
 // Save to current file path (or default)
 Save::Save() : Command(SAVE) {
+	isFreePeriodMode = false;
 	io = IO::getInstance();
 	filePath = io->getFilePath();
 }
@@ -1459,6 +1475,7 @@ std::string Save::getMessage() {
 //==================================================
 
 Set::Set(std::string keyword, std::string userString) : Command(SET) {
+	isFreePeriodMode = false;
 	type = keyword;
 	customString = userString;
 }

@@ -278,13 +278,16 @@ void PowerSearch::searchFreeSlot(int startDate, int startTime, int endDate, int 
 
 void PowerSearch::execute() {
 	if (searchPhrase == "") {
+		isFreePeriodMode = true;
 		searchFreeSlot(startDate,startTime, endDate, endTime, daysNeeded, hrsNeeded, minsNeeded);
 		msg = "Here is the list of free slots available";
 	} else if (Utilities::isSubstring("*", searchPhrase) || Utilities::isSubstring("+", searchPhrase) ||
 		Utilities::isSubstring("?", searchPhrase)) { 
+			isFreePeriodMode = false;
 			regexSearch(searchPhrase, startDate, startTime, endDate, endTime);
 			msg = "Results for \""+ searchPhrase + "\"";
 	} else {
+		isFreePeriodMode = false;
 		searchInfo(searchPhrase, startDate, startTime, endDate, endTime);
 		msg = "Results for \"" + searchPhrase + "\"";
 	}
