@@ -319,7 +319,7 @@ void Command::defaultView() {
 	sortDate(taskStore);
 	int today = Utilities::getLocalDay() + Utilities::getLocalMonth()*100 + Utilities::getLocalYear()*10000;
 	// TODO: Handle dates at end of month
-	viewPeriod(today,0,today+2,2400);
+	viewPeriod(today,TIME_NOT_SET,today+2,2359);
 	return;
 }
 
@@ -1014,10 +1014,8 @@ ViewType View::getViewType() {
 }
 
 void View::execute() {
-
-	logger->log(DEBUG,"Viewing...");
-	
 	if (TS::firstLoad == true) {
+		logger->log(DEBUG,"Startup view");
 		defaultView();
 		Logic::setTodayMode();
 		return;
@@ -1074,7 +1072,7 @@ void View::execute() {
 				weekDate += 100 - 28;
 			}
 		}
-		viewPeriod(currentDate, 0, weekDate, 2359);
+		viewPeriod(currentDate, TIME_NOT_SET, weekDate, 2359);
 		Logic::setWeekMode();
 		break; }
 	case VIEWTYPE_LABELS:
@@ -1184,7 +1182,7 @@ bool View::viewLabel(std::vector<std::string> label) {
 		searchSet = taskIter->getLabels();
 		for (setIter = searchSet.begin(); setIter != searchSet.end(); ++setIter) {
 			for (labelIter = label.begin(); labelIter != label.end(); ++labelIter) {
-				if (*setIter == *labelIter) {
+				if (Utilities::equalsIgnoreCase(*setIter,*labelIter)) {
 					currentView.push_back(*taskIter);
 					break;
 				}
@@ -1290,7 +1288,7 @@ void Pick::execute() {
 	originalTask = *currViewIter;
 	doPick();
 	Task::lastEditID = originalTask.getID();
-	//defaultView();
+	// defaultView();
 	initialiseIterators(modifyID);
 }
 
@@ -1298,7 +1296,7 @@ void Pick::undo() {
 	*taskStoreIter = originalTask;
 	*currViewIter = originalTask;
 	Task::lastEditID = originalTask.getID();
-	//defaultView();
+	// defaultView();
 }
 
 std::string Pick::getMessage() {

@@ -181,6 +181,8 @@ ViewType Utilities::stringToViewType(std::string viewString) {
 
 	if (viewString == "") {
 		view = VIEWTYPE_INVALID;
+	} else if (equalsIgnoreCase(viewString,VIEW_HOME)) {
+		view = VIEWTYPE_HOME;
 	} else if (equalsIgnoreCase(viewString,VIEW_ALL)) {
 		view = VIEWTYPE_ALL;
 	} else if (equalsIgnoreCase(viewString,VIEW_FLOATING)) {
@@ -414,8 +416,8 @@ std::string	Utilities::viewTypeToString(ViewType view) {
 	std::string viewString;
 
 	switch(view) {
-	case VIEWTYPE_INVALID:
-		viewString = "invalid";
+	case VIEWTYPE_HOME:
+		viewString = VIEW_HOME;
 		break;
 	case VIEWTYPE_ALL:
 		viewString = VIEW_ALL;
@@ -443,6 +445,9 @@ std::string	Utilities::viewTypeToString(ViewType view) {
 		break;
 	case VIEWTYPE_LABELS:
 		viewString = VIEW_WEEK;
+		break;
+	case VIEWTYPE_INVALID:
+		viewString = "VIEW_INVALID";
 		break;
 	}
 

@@ -58,7 +58,8 @@ enum CommandType {
 };
 
 // These are the valid View keywords
-// Count: 7
+// Count: 8
+const std::string VIEW_HOME = "home";
 const std::string VIEW_ALL = "all";
 const std::string VIEW_FLOATING = "floating";
 const std::string VIEW_EVENT = "events";
@@ -69,7 +70,7 @@ const std::string VIEW_WEEK = "week";
 // const std::string VIEW_LABEL = "label";
 
 // These are the View enums
-// Count: 8 + VIEWTYPE_INVALID
+// Count: 10 + VIEWTYPE_INVALID
 enum ViewType {
 	VIEWTYPE_HOME,
 	VIEWTYPE_ALL,
@@ -79,8 +80,8 @@ enum ViewType {
 	VIEWTYPE_TODAY,
 	VIEWTYPE_PAST,
 	VIEWTYPE_WEEK,
-	VIEWTYPE_PERIOD,
-	VIEWTYPE_LABELS,
+	VIEWTYPE_PERIOD, // No keyword, triggered by heuristics
+	VIEWTYPE_LABELS, // No keyword, triggered by heuristics
 	VIEWTYPE_INVALID
 };
 
