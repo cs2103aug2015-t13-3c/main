@@ -28,8 +28,11 @@ int History::getUndoSize() {
 // Add new command into History stack
 void History::add(Command *cmd) {
 	// cmd.execute();
-	commandHistory.push_back(cmd);
-	redoHistory.clear();
+
+	if(checkUndoableCommand(cmd)) {
+		commandHistory.push_back(cmd);
+		redoHistory.clear();
+	}
 }
 
 // Undo most recent command in History stack
@@ -61,4 +64,13 @@ void History::redo() {
 void History::clearHistory() {
 	commandHistory.clear();
 	redoHistory.clear();
+}
+
+bool History::checkUndoableCommand(Command* cmd) {
+	CommandType type = cmd->getCommand();
+	if(type == VIEW || type == SEARCH || type == POWERSEARCH || type == DISPLAY_ALL) {
+		return false;
+	} else {
+		return true;
+	}
 }
