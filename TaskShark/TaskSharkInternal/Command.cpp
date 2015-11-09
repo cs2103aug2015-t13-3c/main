@@ -81,6 +81,11 @@ void Command::undo() {
 	throw std::runtime_error("Action cannot be undone");
 }
 
+
+std::string Command::getMessage() {
+	return "";
+}
+
 //================ COMMAND : PROTECTED METHODS ==================
 
 const std::string Command::ERROR_INDEX_OUT_OF_BOUNDS = "Invalid index";
@@ -90,6 +95,12 @@ const std::string Command::ERROR_INVALID_ACTION_IN_FREE_PERIOD_MODE = "Action ca
 std::vector<Task> Command::taskStore;
 std::vector<Task> Command::currentView;
 bool			  Command::isFreePeriodMode;
+
+//================ COMMAND : INITIALISSATION METHODS ==================
+// Methods to initialise relevant iterators and variables
+// Used in contrsuctors of COMMAND sub-classes
+
+
 // Initialises the corresponding iterators with the guiID
 // guiID is the ID seen on GUI, not the unique task ID
 // Use for in-place insertion / deletion for undo methods
@@ -133,6 +144,60 @@ bool Command::isDateLogical(Task task) {
 	}
 	return true;
 }
+
+void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
+						 std::vector<Task>::iterator &taskIter) {
+							 if (index == 0) {
+								 index = Task::lastEditID;
+							 }
+							 if (isValidIndex(index)) {	
+								 currIter = matchCurrentViewIndex(index);
+								 index = currIter->getID();
+								 taskIter = matchTaskStoreIndex(index);
+							 } else {
+								 logger->log(WARN,"Invalid index: " + std::to_string(index));
+								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
+							 }
+}
+
+bool Command::isValidIndex(int index) {
+	if (index <1 || index > (int)currentView.size()) {
+		return false;
+	} 
+	return true;
+} 
+
+// Index is ID as seen on GUI
+std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
+	assert(index >0 && index <= (int)currentView.size());
+	std::vector<Task>::iterator iter = currentView.begin();
+	for (int i=1; i< index; ++i) {
+		++iter;
+	}
+	return iter;
+}
+
+// Index is uniqueID
+std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
+	std::vector<Task>::iterator iter = taskStore.begin();
+	while (iter->getID() != index && iter != taskStore.end()) {
+		++iter;
+	}
+	assert(iter != taskStore.end());
+	return iter;
+}
+
+// Index is uniqueID
+std::vector<Task>::iterator Command::matchCurrentViewUniqueID(int ID) {
+	std::vector<Task>::iterator iter = currentView.begin();
+	while (iter != currentView.end() && iter->getID() != ID) {
+		++iter;
+	}
+	return iter;
+}
+
+//================ COMMAND : SORTING METHODS ==================
+// Methods to sort TaskVector before returning it to UI
 
 // Sorts floating tasks to be at the bottom
 void Command::sortFloating(std::vector<Task> &taskVector) {
@@ -196,38 +261,6 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 	//sortDate(taskVector.begin(),k+1);
 }
 
-void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
-	std::vector<Task> periodStore;
-	currentView.clear();
-	periodStore = taskStore;
-	sortDefault(periodStore);
-	removeDoneTasks(periodStore);
-	std::vector<Task>::iterator iter = periodStore.begin();
-
-	for (iter = periodStore.begin(); iter != periodStore.end(); ++iter) {
-		if (iter->getType() == FLOATING) {
-			currentView.push_back(*iter);
-		} else {
-			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
-				currentView.push_back(*iter);
-			}
-
-			// If date is the same, further filter using time in the date
-			if (iter->getStartDate() == startDate) {
-				if (iter->getStartTime() >= startTime) {
-					currentView.push_back(*iter);
-				}
-			}
-
-			if (iter->getStartDate() == endDate) {
-				if (iter->getStartTime() <= endTime) {
-					currentView.push_back(*iter);				
-				}
-			}
-		}
-	}
-}
-
 // Sorts tasks by increasing order of start date
 void Command::sortDate(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i;
@@ -250,7 +283,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 void Command::sortDate(std::vector<Task>::iterator start, std::vector<Task>::iterator end) {
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
-	
+
 	// Sorts date after time to ensure date is accurately sorted
 	// Uses bubblesort algorithm
 	for (i = end; i != start; --i) {
@@ -290,6 +323,38 @@ void Command::sortDefault(std::vector<Task> &taskVector) {
 	sortEvent(taskVector);
 }
 
+void Command::viewPeriod(int startDate, int startTime, int endDate, int endTime) {
+	std::vector<Task> periodStore;
+	currentView.clear();
+	periodStore = taskStore;
+	sortDefault(periodStore);
+	removeDoneTasks(periodStore);
+	std::vector<Task>::iterator iter = periodStore.begin();
+
+	for (iter = periodStore.begin(); iter != periodStore.end(); ++iter) {
+		if (iter->getType() == FLOATING) {
+			currentView.push_back(*iter);
+		} else {
+			if ((iter->getStartDate() > startDate) && (iter->getStartDate() < endDate)) {
+				currentView.push_back(*iter);
+			}
+
+			// If date is the same, further filter using time in the date
+			if (iter->getStartDate() == startDate) {
+				if (iter->getStartTime() >= startTime) {
+					currentView.push_back(*iter);
+				}
+			}
+
+			if (iter->getStartDate() == endDate) {
+				if (iter->getStartTime() <= endTime) {
+					currentView.push_back(*iter);				
+				}
+			}
+		}
+	}
+}
+
 void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	std::vector<Task>::iterator i = taskVector.begin();
 
@@ -302,6 +367,7 @@ void Command::removeDoneTasks(std::vector<Task> &taskVector) {
 	}
 }
 
+// Removes all tasks of a certain type, e.g. events, floating, todo
 void Command::removeTaskType(std::vector<Task> &taskVector, TaskType type) {
 	std::vector<Task>::iterator i = taskVector.begin();
 
@@ -349,60 +415,6 @@ void Command::defaultView() {
 	return;
 }
 
-void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
-						 std::vector<Task>::iterator &taskIter) {
-							 if (index == 0) {
-								 index = Task::lastEditID;
-							 }
-							 if (isValidIndex(index)) {	
-								 currIter = matchCurrentViewIndex(index);
-								 index = currIter->getID();
-								 taskIter = matchTaskStoreIndex(index);
-							 } else {
-								 logger->log(WARN,"Invalid index: " + std::to_string(index));
-								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
-							 }
-}
-
-bool Command::isValidIndex(int index) {
-	if (index <1 || index > (int)currentView.size()) {
-		return false;
-	} 
-	return true;
-} 
-
-// Index is ID as seen on GUI
-std::vector<Task>::iterator Command::matchCurrentViewIndex(int index) {
-	assert(index >0 && index <= (int)currentView.size());
-	std::vector<Task>::iterator iter = currentView.begin();
-	for (int i=1; i< index; ++i) {
-		++iter;
-	}
-	return iter;
-}
-
-// Index is uniqueID
-std::vector<Task>::iterator Command::matchTaskStoreIndex(int index) {
-	std::vector<Task>::iterator iter = taskStore.begin();
-	while (iter->getID() != index && iter != taskStore.end()) {
-		++iter;
-	}
-	assert(iter != taskStore.end());
-	return iter;
-}
-
-// Index is uniqueID
-std::vector<Task>::iterator Command::matchCurrentViewUniqueID(int ID) {
-	std::vector<Task>::iterator iter = currentView.begin();
-	while (iter != currentView.end() && iter->getID() != ID) {
-		++iter;
-	}
-	return iter;
-}
-
-std::string Command::getMessage() {
-	return "";
-}
 
 //==================================================
 //                        ADD
@@ -535,14 +547,6 @@ void Delete::undo() {
 	}
 	Task::lastEditID = taskToBeDeleted.getID();
 
-	/*
-	// For in-place undoing, if view is not set back to default
-	if ((unsigned int)currViewPos < currentView.size()) {
-	currentView.insert(currentView.begin() + currViewPos,taskToBeDeleted);
-	} else {
-	currentView.push_back(taskToBeDeleted);
-	}
-	*/
 	defaultView();
 	Logic::setHomeMode();
 }
@@ -624,7 +628,6 @@ void Modify::execute() {
 	sortDefault(taskStore);
 	sortDefault(currentView);	
 	Task::lastEditID = originalTask.getID();
-	//defaultView();
 }
 
 void Modify::undo() {
@@ -633,8 +636,6 @@ void Modify::undo() {
 	*taskStoreIter = originalTask;
 	if(currViewPos != -1) {
 		*currViewIter = originalTask;
-		//currentView.erase(currViewIter);
-		//currentView.insert(currViewIter,originalTask);
 	}
 
 	sortDefault(taskStore);
@@ -750,20 +751,29 @@ void Modify::doModify() {
 				throw std::runtime_error("Error in fetching field name"); 
 			}
 		}
-		if (isTODO) {
-			taskStoreIter->setType(TODO);
-			taskStoreIter->setStartDate(taskStoreIter->getEndDate());
-			if (isStartTimeSet) {
-				taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
-			} else if (isEndTimeSet) {
-				taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
-			}
+	}
+
+	setTodo(isTODO, isStartTimeSet, isEndTimeSet);
+	setTodoReserve(isTODOreserve);
+}
+
+void Modify::setTodo(bool isTODO, bool isStartTimeSet, bool isEndTimeSet) {
+	if (isTODO) {
+		taskStoreIter->setType(TODO);
+		taskStoreIter->setStartDate(taskStoreIter->getEndDate());
+		if (isStartTimeSet) {
+			taskStoreIter->setEndTime(taskStoreIter->getStartTime());	
+		} else if (isEndTimeSet) {
+			taskStoreIter->setStartTime(taskStoreIter->getEndTime());		
 		}
-		if (isTODOreserve) {
-			taskStoreIter->setReserveType(TODO);
-			taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
-			taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
-		}
+	}
+}
+
+void Modify::setTodoReserve(bool isTODOreserve) {
+	if (isTODOreserve) {
+		taskStoreIter->setReserveType(TODO);
+		taskStoreIter->addReserveStartDate(taskStoreIter->getReserveEndDate());
+		taskStoreIter->addReserveStartTime(taskStoreIter->getReserveEndTime());
 	}
 }
 
@@ -801,18 +811,7 @@ bool Modify::updateEVENT() {
 	return true;
 }
 
-// Moves modified back to previous position before executing
-// In case sequence was swapped during sorting
-/*
-void Modify::moveToPrevPos() {
-std::vector<Task>::iterator preCurrViewIter;
-Task tempTask = *currViewIter;
-currentView.erase(currViewIter);
 
-preCurrViewIter = currentView.begin() + prevCurrPos;
-currentView.insert(preCurrViewIter, tempTask);
-}
-*/
 
 // Chin Kiat Boon @@author A0096720A
 
@@ -1017,7 +1016,7 @@ std::string Markdone::getMessage() {
 //============= MARKDONE : PRIVATE METHODS ===========
 
 void Markdone::markDone() {
-	
+
 
 	successMarkDone = taskStoreIter->markDone();
 	if (successMarkDone) {

@@ -128,24 +128,13 @@ protected:
 	void updateViewIter();
 	void defaultView();
 
+	//=== INITIALISATION METHODS ====
 	void initialiseIteratorsFromGuiID(int guiID);
 	void initialiseIteratorsFromUniqueID();
 	void getIterator();
 
 	// Returns false if start is later than end, by checking date then time
 	bool isDateLogical(Task task);
-
-	void sortFloating(std::vector<Task> &taskVector);
-	void sortEvent(std::vector<Task> &taskVector);
-	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
-	void sortDate(std::vector<Task> &taskVector);
-	void sortDate(std::vector<Task>::iterator start, std::vector<Task>::iterator end);
-	void sortTime(std::vector<Task> &taskVector);
-	void sortDefault(std::vector<Task> &taskVector);
-	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
-	void removeTaskType(std::vector<Task> &taskVector, TaskType type);
-	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
-
 	void matchIndex(int index, std::vector<Task>::iterator &currIter, 
 		std::vector<Task>::iterator &taskIter);
 	bool isValidIndex(int index);
@@ -153,6 +142,18 @@ protected:
 	std::vector<Task>::iterator matchTaskStoreIndex(int index);
 	std::vector<Task>::iterator matchCurrentViewUniqueID(int ID);
 
+	//====== SORTING METHODS======
+	void sortFloating(std::vector<Task> &taskVector);
+	void sortEvent(std::vector<Task> &taskVector);
+	void sortDate(std::vector<Task> &taskVector);
+	void sortDate(std::vector<Task>::iterator start, std::vector<Task>::iterator end);
+	void sortTime(std::vector<Task> &taskVector);
+	void sortDefault(std::vector<Task> &taskVector);
+	void viewPeriod(int startDate, int EndDate, int StartTime, int EndTime);
+	void removeDoneTasks(std::vector<Task> & taskVector); // Removes done tasks from currentView
+	void removeTaskType(std::vector<Task> &taskVector, TaskType type);
+	void addPeriod(std::vector<Task> &taskVector, int startDate, int startTime, int endDate, int endTime);
+	
 public:
 	Command(CommandType newCmd=INVALID, std::string rawInput="");
 	CommandType getCommand();
@@ -227,6 +228,9 @@ private:
 	int prevCurrPos;
 
 	void doModify();
+
+	void setTodo(bool isTODO, bool isStartTimeSet, bool isEndTimeSet);
+	void setTodoReserve(bool isTODOreserve);
 
 	bool updateFLOATING();
 	bool updateTODO();
