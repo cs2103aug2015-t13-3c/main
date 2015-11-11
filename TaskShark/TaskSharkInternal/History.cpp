@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "History.h"
 
-History* History::theOne = new History();
+History* History::theOne = nullptr;
 
 std::vector<Command*> History::commandHistory;
 std::vector<Command*> History::redoHistory;
@@ -18,6 +18,9 @@ History::~History() {}
 //========== PUBLIC METHODS ==========
 
 History* History::getInstance() {
+	if (theOne == nullptr) {
+		theOne = new History();
+	}
 	return theOne;
 }
 

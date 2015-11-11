@@ -168,7 +168,7 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 	std::vector<Task> nonEventVector;
 	std::vector<Task>::iterator i;
 	Task tempTask;
-	
+
 	if(taskVector.size() == 0) {
 		return;
 	}
@@ -180,7 +180,7 @@ void Command::sortEvent(std::vector<Task> &taskVector) {
 			nonEventVector.push_back(*i);
 		}
 	}
-	
+
 	taskVector = eventVector;
 	taskVector.insert(taskVector.end(),nonEventVector.begin(),nonEventVector.end());
 }
@@ -239,7 +239,7 @@ void Command::sortDate(std::vector<Task> &taskVector) {
 void Command::sortDate(std::vector<Task>::iterator start, std::vector<Task>::iterator end) {
 	std::vector<Task>::iterator i;
 	std::vector<Task>::iterator j;
-	
+
 	// Sorts date after time to ensure date is accurately sorted
 	// Uses bubblesort algorithm
 	for (i = end; i != start; --i) {
@@ -612,8 +612,8 @@ void Modify::execute() {
 	updateViewIter();
 	sortDefault(taskStore);
 	sortDefault(currentView);	
-	Task::lastEditID = originalTask.getID();
-	//defaultView();
+	Task::lastEditID = uniqueID;
+	// defaultView();
 }
 
 void Modify::undo() {
@@ -627,7 +627,7 @@ void Modify::undo() {
 	sortDefault(taskStore);
 	sortDefault(currentView);
 	initialiseIteratorsFromUniqueID();
-	Task::lastEditID = originalTask.getID();
+	Task::lastEditID = uniqueID;
 }
 
 std::string Modify::getMessage() {
@@ -762,8 +762,10 @@ void Modify::doModify() {
 // All others: EVENTS
 void Modify::updateTaskTypes() {
 	if (!updateFLOATING()) {
-		if (!updateTODO()) {
-			updateEVENT();
+		if (taskStoreIter->getStartDate() < taskStoreIter->getEndDate()
+			|| ((taskStoreIter->getStartDate() == taskStoreIter->getEndDate())
+			&& (taskStoreIter->getStartTime() < taskStoreIter->getEndTime()))) {
+				updateEVENT();
 		}
 	}
 }
@@ -1362,25 +1364,34 @@ Pick::Pick(int taskID, bool isPick) : Modify(PICK) {
 	isFreePeriodMode = false;
 	modifyID = taskID;
 	pickReserve = isPick;
+	initialiseIteratorsFromGuiID(modifyID);
+	originalTask = *currViewIter;
 }
 
 Pick::~Pick() {}
 
 void Pick::execute() {
-	initialiseIteratorsFromGuiID(modifyID);
-	originalTask = *currViewIter;
+	uniqueID = originalTask.getID();
+	initialiseIteratorsFromUniqueID();
 	doPick();
-	Task::lastEditID = originalTask.getID();
-	// defaultView();
-	initialiseIteratorsFromGuiID(modifyID);
+	updateViewIter();
+	sortDefault(taskStore);
+	sortDefault(currentView);	
+	Task::lastEditID = uniqueID;
 }
 
 void Pick::undo() {
 	isFreePeriodMode = false;
+	initialiseIteratorsFromUniqueID();
 	*taskStoreIter = originalTask;
-	*currViewIter = originalTask;
-	Task::lastEditID = originalTask.getID();
-	// defaultView();
+	if(currViewPos != -1) {
+		*currViewIter = originalTask;
+	}
+
+	sortDefault(taskStore);
+	sortDefault(currentView);
+	// initialiseIteratorsFromUniqueID();
+	Task::lastEditID = uniqueID;
 }
 
 std::string Pick::getMessage() {

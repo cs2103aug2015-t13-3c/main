@@ -4,7 +4,7 @@
 
 const std::string TsLogger::logFileName = ".tslog";
 
-TsLogger* TsLogger::theOne = new TsLogger();
+TsLogger* TsLogger::theOne = nullptr;
 
 TsLogger::TsLogger() {
 	logLevel = INFO;
@@ -42,6 +42,9 @@ int TsLogger::getDate() {
 }
 
 TsLogger* TsLogger::getInstance() {
+	if (theOne == nullptr) {
+		theOne = new TsLogger();
+	}
 	return theOne;
 }
 

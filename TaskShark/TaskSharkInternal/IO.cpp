@@ -10,7 +10,7 @@ using namespace rapidjson;
 std::string IO::filePath = "mytasks.txt";
 const std::string IO::configPath = ".tsconfig";
 
-IO* IO::theOne = new IO();
+IO* IO::theOne = nullptr;
 
 IO::IO() {
 	TsLogger::getInstance()->log(SYS,"IO instantiated");
@@ -30,6 +30,9 @@ IO::~IO() {}
 // TODO: Handle empty file / improper content exceptions
 
 IO* IO::getInstance() {
+	if (theOne == nullptr) {
+		theOne = new IO();
+	}
 	return theOne;
 }
 

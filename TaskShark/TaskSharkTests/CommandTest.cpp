@@ -1034,7 +1034,7 @@ public:
 	std::string userInput;
 
 	TEST_METHOD_INITIALIZE(ClearTaskStoreAndGetParser) {
-		cmd->clearTaskStore();
+		Command::clearTaskStore();
 		parser = Parser::getInstance();
 		history = History::getInstance();
 		history->clearHistory();
@@ -1084,6 +1084,7 @@ public:
 		viewAllCmd = parser->parse(userInput);
 		viewAllCmd->execute();
 		task = cmd->getTaskStore().back();
+		Assert::AreEqual((unsigned int)1,cmd->getTaskStore().size());
 		Assert::AreEqual(std::string("Recursion Lecture"),task.getName());
 		Assert::AreEqual(std::string("TODO"),Utilities::taskTypeToString(task.getType()));
 		// Assert::AreEqual(std::string(""),task.getLabelString());

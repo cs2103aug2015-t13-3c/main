@@ -55,7 +55,7 @@ public:
 	}
 
 	TEST_METHOD(Parser_parse_Add) {
-		cmd->clearTaskStore();
+		Command::clearTaskStore();
 		Add* add;
 		size_t storeSizeBeforeAdd;
 

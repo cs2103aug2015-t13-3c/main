@@ -6,7 +6,7 @@
 const std::string Logic::ERROR_NO_INPUT = "No input";
 const std::string Logic::ERROR_INVALID_COMMAND = "Invalid command entered";
 
-Logic* Logic::theOne = new Logic();
+Logic* Logic::theOne = nullptr;
 
 DisplayMode Logic::mode=TODAY;
 
@@ -29,6 +29,9 @@ Logic::~Logic() {
 //==================================================
 
 Logic* Logic::getInstance() {
+	if (theOne == nullptr) {
+		theOne = new Logic();
+	}
 	Load initialLoad(IO::getInstance()->getFilePath());
 	try {
 		initialLoad.execute();
