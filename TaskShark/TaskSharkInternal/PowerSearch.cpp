@@ -43,6 +43,7 @@ void PowerSearch::addPeriod(int startDate, int startTime, int endDate, int endTi
 	freePeriod.setEndDate(endDate);
 	if (endTime == 0) {
 		freePeriod.setEndTime(2359);
+		freePeriod.setEndDate(endDate-1);
 	} else {
 		freePeriod.setEndTime(endTime);
 	}
@@ -201,6 +202,18 @@ void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int 
 	if ((freeDateStart < endDate) || ((freeDateStart == endDate) && (freeTimeStart < endTime))) {
 		addPeriod(freeDateStart, freeTimeStart, endDate, endTime);
 	}
+	
+	// Account for case when last free period exceeds endDate/endTime
+	iter = freePeriods.begin();
+	do {
+		++iter;
+	} while (iter != freePeriods.end());
+	--iter;
+	if ((iter->getEndDate() > endDate) || 
+		(((iter->getEndDate() == endDate) && (iter->getEndTime() > endTime)))) {
+			iter->setEndDate(endDate);
+			iter->setEndTime(endTime);
+	}
 }
 
 std::vector<Task> PowerSearch::getTasksWithinPeriod() {
@@ -282,7 +295,7 @@ void PowerSearch::execute() {
 		searchFreeSlot(startDate,startTime, endDate, endTime, daysNeeded, hrsNeeded, minsNeeded);
 		msg = "Here is the list of free slots available";
 	} else if (Utilities::isSubstring("*", searchPhrase) || Utilities::isSubstring("+", searchPhrase) ||
-		Utilities::isSubstring("?", searchPhrase)) { 
+		Utilities::isSubstring("?", searchPhrase) || Utilities::isSubstring(".", searchPhrase)) { 
 			isFreePeriodMode = false;
 			regexSearch(searchPhrase, startDate, startTime, endDate, endTime);
 			msg = "Results for \""+ searchPhrase + "\"";

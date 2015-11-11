@@ -18,6 +18,22 @@
 		}
 		,
 		{
+			"name": "event",
+			"type": "EVENT",
+			"uniqueID": 6,
+			"label": [],
+
+			"isDone": false,
+			"isPriority": false,
+
+			"startDate": 151105,
+			"startTime": -1,
+
+			"endDate": 151106,
+			"endTime": -1
+		}
+		,
+		{
 			"name": "this",
 			"type": "FLOATING",
 			"uniqueID": 4,
