@@ -202,17 +202,19 @@ void PowerSearch::setFreePeriods(int startDate, int startTime, int endDate, int 
 	if ((freeDateStart < endDate) || ((freeDateStart == endDate) && (freeTimeStart < endTime))) {
 		addPeriod(freeDateStart, freeTimeStart, endDate, endTime);
 	}
-	
+
 	// Account for case when last free period exceeds endDate/endTime
-	iter = freePeriods.begin();
-	do {
-		++iter;
-	} while (iter != freePeriods.end());
-	--iter;
-	if ((iter->getEndDate() > endDate) || 
-		(((iter->getEndDate() == endDate) && (iter->getEndTime() > endTime)))) {
-			iter->setEndDate(endDate);
-			iter->setEndTime(endTime);
+	if (freePeriods.size() > 0) {
+		iter = freePeriods.begin();
+		do {
+			++iter;
+		} while (iter != freePeriods.end());
+		--iter;
+		if ((iter->getEndDate() > endDate) || 
+			(((iter->getEndDate() == endDate) && (iter->getEndTime() > endTime)))) {
+				iter->setEndDate(endDate);
+				iter->setEndTime(endTime);
+		}
 	}
 }
 
