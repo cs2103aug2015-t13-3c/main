@@ -1,6 +1,8 @@
 # Taskshark files
 !TaskShark/Debug/help.png
 !TaskShark/Debug/shark.ico
+!TaskShark/Release/help.png
+!TaskShark/Release/shark.ico
 
 
 ## Ignore Visual Studio temporary files, build results, and
