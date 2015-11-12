@@ -48,6 +48,10 @@ TsLogger* TsLogger::getInstance() {
 	return theOne;
 }
 
+Level TsLogger::getLogLevel() {
+	return logLevel;
+}
+
 void TsLogger::setLogLevel(Level level) {
 	if (logLevel != level) {
 		log(SYS,"Log level changed from " + std::to_string(logLevel) + " to "+ std::to_string(level));

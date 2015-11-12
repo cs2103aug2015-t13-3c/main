@@ -340,17 +340,17 @@ void Command::defaultView() {
 
 void Command::matchIndex(int index, std::vector<Task>::iterator &currIter,
 						 std::vector<Task>::iterator &taskIter) {
-							 if (index == 0) {
-								 index = Task::lastEditID;
-							 }
-							 if (isValidIndex(index)) {	
-								 currIter = matchCurrentViewIndex(index);
-								 index = currIter->getID();
-								 taskIter = matchTaskStoreIndex(index);
-							 } else {
-								 logger->log(WARN,"Invalid index: " + std::to_string(index));
-								 throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
-							 }
+	if (index == 0) {
+		index = Task::lastEditID;
+	}
+	if (isValidIndex(index)) {	
+		currIter = matchCurrentViewIndex(index);
+		index = currIter->getID();
+		taskIter = matchTaskStoreIndex(index);
+	} else {
+		logger->log(WARN,"Invalid index: " + std::to_string(index));
+		throw std::runtime_error(ERROR_INDEX_OUT_OF_BOUNDS);
+	}
 }
 
 bool Command::isValidIndex(int index) {
@@ -688,6 +688,7 @@ void Modify::doModify() {
 				break;
 			case START_TIME:
 				taskStoreIter->setStartTime(tempTask.getStartTime());
+				logger->log(DEBUG,"Setting startTime as: " + std::to_string(taskStoreIter->getStartTime()));
 				if ((fieldIter+1 != fieldsToModify.end()) && (fieldIter+2 != fieldsToModify.end())
 					&& (*(fieldIter+2) == START_TIME)) {	// Accounts for events that modifies endTime
 						*(fieldIter+2) = END_TIME;
@@ -1516,6 +1517,12 @@ void Set::execute() {
 	isExecuteSuccess = false;
 	if (Utilities::equalsIgnoreCase(type,"welcome")) {
 		TS::MESSAGE_WELCOME = customString;
+	} else 	if (Utilities::equalsIgnoreCase(type,"log")) {
+		if (Utilities::equalsIgnoreCase(customString,"debug")) {
+			logger->setLogLevel(DEBUG);
+		} else {
+			logger->setLogLevel(INFO);
+		}
 	} else if (Utilities::stringToVec(customString).size() == 1) {
 		isExecuteSuccess = IO::getInstance()->setCustomCommand(type,customString);
 	}
@@ -1526,6 +1533,8 @@ std::string Set::getMessage() {
 	msg = "";
 	if (Utilities::equalsIgnoreCase(type,"welcome")) {
 		msg = "Welcome message successfully set as: " + TS::MESSAGE_WELCOME;
+	} else if (Utilities::equalsIgnoreCase(type,"log")) {
+		msg = "Log level set as: " + std::to_string(logger->getLogLevel());
 	} else if (isExecuteSuccess) {
 		msg = "Command \"" + type + "\" successfully set as: " + customString;
 	} else {

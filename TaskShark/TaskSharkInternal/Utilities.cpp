@@ -11,6 +11,7 @@ Utilities::~Utilities() {}
 //==================================================
 
 //========== Int-to-Type Converters ==========
+
 std::set<int> Utilities::intToSet(int num) {
 	std::set<int> set;
 	set.insert(num);

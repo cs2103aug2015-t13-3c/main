@@ -50,6 +50,7 @@ UI::UI() {
 	keywords->Add(NOTDONE);
 	keywords->Add(PICK);
 	keywords->Add(REDO);
+	keywords->Add(SET);
 	keywords->Add(FROM);
 	keywords->Add(BY);
 	keywords->Add(TO);
@@ -121,9 +122,10 @@ UI::UI() {
 	saveCommands->Add("save to <FILEPATH>");
 
 	//********** SET command formats *****************
-	saveCommands = gcnew List<String^>();
-	saveCommands->Add("set welcome <MESSAGE>");
-	saveCommands->Add("set <COMMAND KEYWORD> <CUSTOM KEYWORD>");
+	setCommands = gcnew List<String^>();
+	setCommands->Add("set welcome <MESSAGE>");
+	setCommands->Add("set log <DEBUG>");
+	setCommands->Add("set <COMMAND KEYWORD> <CUSTOM KEYWORD>");
 
 	suggestions = gcnew Hashtable();
 	suggestions->Add(HELP,HELP);

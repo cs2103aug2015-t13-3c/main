@@ -644,6 +644,8 @@ bool IO::setCommandKeyword(std::string &identifier, std::string keyword) {
 		|| keyword == "home"// Protected keyword: shortcut for default 'home' view
 		|| keyword == "help"// Protected keyword: show help page
 		|| keyword == "set"	// Protected keyword: set custom messages or command identifiers
+		|| keyword == "log"	// Protected keyword: used with 'set' for log level
+		|| keyword == "welcome"	// Protected keyword: used with 'set' for welcome message
 		|| (&identifier != &TS::COMMAND_ADD				&& keyword == TS::COMMAND_ADD)
 		|| (&identifier != &TS::COMMAND_DELETE			&& keyword == TS::COMMAND_DELETE)
 		|| (&identifier != &TS::COMMAND_MODIFY			&& keyword == TS::COMMAND_MODIFY)

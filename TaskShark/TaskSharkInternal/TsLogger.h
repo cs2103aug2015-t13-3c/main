@@ -37,14 +37,16 @@ class TsLogger {
 private:
 	static const std::string logFileName;
 	static TsLogger* theOne;
-	Level logLevel;
 	TsLogger();
+	
+	Level logLevel;
+	char* getLocalTime();
 
 public:
-	char* getLocalTime();
 	static TsLogger* getInstance();
 	~TsLogger();
 
+	Level getLogLevel();
 	void setLogLevel(Level level);
 	void log(Level level, std::string message);
 	int getDate();

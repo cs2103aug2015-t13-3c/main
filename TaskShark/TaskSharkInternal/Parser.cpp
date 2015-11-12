@@ -10,7 +10,6 @@ Parser* Parser::theOne = nullptr;
 Parser::Parser() {
 	logger = TsLogger::getInstance();
 	logger->log(SYS,"Parser instantiated");
-	// logger->setLogLevel(DEBUG);
 }
 
 Parser::~Parser() {
@@ -74,93 +73,93 @@ std::string Parser::parseFileName(std::string stringFilePath) {
 void Parser::createCmd(CommandType cmdType, std::string restOfInput, Command*& cmd) {
 	switch (cmdType) {
 	case ADD: {
-			if (restOfInput == "") {
-				log(WARN,WARNING_NULL_TASK_STRING);
-				throw std::runtime_error(WARNING_NULL_TASK_STRING);
-			}
-			Task* taskPtr = parseTask(restOfInput);
-			taskPtr->setID(Task::incrementRunningCount());
-			cmd = new Add(*taskPtr,restOfInput);
-			break; }
+		if (restOfInput == "") {
+			log(WARN,WARNING_NULL_TASK_STRING);
+			throw std::runtime_error(WARNING_NULL_TASK_STRING);
+		}
+		Task* taskPtr = parseTask(restOfInput);
+		taskPtr->setID(Task::incrementRunningCount());
+		cmd = new Add(*taskPtr,restOfInput);
+		break; }
 
 	case DELETE: {
-			if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
-				log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
-				throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
-			}
-			int deleteID = Utilities::stringToInt(restOfInput);
-			cmd = new Delete(deleteID);
-			break; }
+		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
+			log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
+			throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
+		}
+		int deleteID = Utilities::stringToInt(restOfInput);
+		cmd = new Delete(deleteID);
+		break; }
 
 	case MODIFY: {
-			std::string tempTaskString;
-			if (restOfInput == "" ||
-				((tempTaskString=Utilities::removeFirstWord(restOfInput)) == "") && Task::lastEditID == 0) {
+		std::string tempTaskString;
+		if (restOfInput == "" ||
+			((tempTaskString=Utilities::removeFirstWord(restOfInput)) == "") && Task::lastEditID == 0) {
 				log(WARN,WARNING_NULL_MODIFY_STRING);
 				throw std::runtime_error(WARNING_NULL_MODIFY_STRING);
-			}
+		}
 
-			int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-			if (modifyID == 0 && Task::lastEditID != 0) {
-				tempTaskString = restOfInput;
-			}
-			if (Utilities::containsAny(tempTaskString,"float floating")) {
-				bool isSetFloating = true;
-				cmd = new Modify(modifyID,isSetFloating);
-			} else {
-				std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
-				Task* tempTaskPtr = parseTask(tempTaskString);
-				cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr,tempTaskString);
-			}
-			break; }
+		int modifyID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+		if (modifyID == 0 && Task::lastEditID != 0) {
+			tempTaskString = restOfInput;
+		}
+		if (Utilities::containsAny(tempTaskString,"float floating")) {
+			bool isSetFloating = true;
+			cmd = new Modify(modifyID,isSetFloating);
+		} else {
+			std::vector<FieldType> fieldsToModify = extractFields(restOfInput);
+			Task* tempTaskPtr = parseTask(tempTaskString);
+			cmd = new Modify(modifyID,fieldsToModify,*tempTaskPtr,tempTaskString);
+		}
+		break; }
 
 	case PICK: {
-			bool isPick = false;
-			if (restOfInput == "") {
-				log(WARN,WARNING_NULL_PICK_TASK);
-				throw std::runtime_error(WARNING_NULL_PICK_TASK);
-			}
-			int pickID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
-			std::string pickString = Utilities::removeFirstWord(restOfInput);
-			if (!pickString.empty() && Utilities::containsAny(pickString,"r re reserve")) {
-				isPick = true;
-			}
-			cmd = new Pick(pickID,isPick);
-			break; }
+		bool isPick = false;
+		if (restOfInput == "") {
+			log(WARN,WARNING_NULL_PICK_TASK);
+			throw std::runtime_error(WARNING_NULL_PICK_TASK);
+		}
+		int pickID = Utilities::stringToInt(Utilities::getFirstWord(restOfInput));
+		std::string pickString = Utilities::removeFirstWord(restOfInput);
+		if (!pickString.empty() && Utilities::containsAny(pickString,"r re reserve")) {
+			isPick = true;
+		}
+		cmd = new Pick(pickID,isPick);
+		break; }
 
 	case POWERSEARCH:
 	case SEARCH: {
-			if (restOfInput == "") {
-				log(WARN,WARNING_NULL_SEARCH_STRING + ": " + restOfInput);
-				throw std::runtime_error(WARNING_NULL_SEARCH_STRING + "!");
+		if (restOfInput == "") {
+			log(WARN,WARNING_NULL_SEARCH_STRING + ": " + restOfInput);
+			throw std::runtime_error(WARNING_NULL_SEARCH_STRING + "!");
 
-			} else if (isPowerSearchFormat(restOfInput)) {
-				std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
-				cmd = new PowerSearch(searchParameters);
+		} else if (isPowerSearchFormat(restOfInput)) {
+			std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
+			cmd = new PowerSearch(searchParameters);
 
-			} else {
-				std::string searchPhrase = restOfInput;
-				cmd = new Search(searchPhrase);
-			}
-			break; }
+		} else {
+			std::string searchPhrase = restOfInput;
+			cmd = new Search(searchPhrase);
+		}
+		break; }
 
 	case MARKDONE: {
-			if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
-				log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
-				throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
-			}
-			int doneID = Utilities::stringToInt(restOfInput);
-			cmd = new Markdone(doneID);
-			break; }
+		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
+			log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
+			throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
+		}
+		int doneID = Utilities::stringToInt(restOfInput);
+		cmd = new Markdone(doneID);
+		break; }
 
 	case UNMARKDONE: {
-			if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
-				log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
-				throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
-			}
-			int notdoneID = Utilities::stringToInt(restOfInput);
-			cmd = new UnmarkDone(notdoneID);
-			break; }
+		if (!Utilities::isPositiveNonZeroInt(restOfInput)) {
+			log(WARN,WARNING_INVALID_INT_STRING + restOfInput);
+			throw std::runtime_error(WARNING_INVALID_INT_STRING + restOfInput);
+		}
+		int notdoneID = Utilities::stringToInt(restOfInput);
+		cmd = new UnmarkDone(notdoneID);
+		break; }
 
 	case UNDO:
 		cmd = new Undo;
@@ -171,15 +170,15 @@ void Parser::createCmd(CommandType cmdType, std::string restOfInput, Command*& c
 		break;
 
 	case VIEW: {
-			log(DEBUG,"View option: " + restOfInput);
-			if (restOfInput!="" && isPowerSearchKeywords(restOfInput)) {
-				std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
-				cmd = new View(searchParameters,restOfInput);
-			} else {
-				ViewType newView = Utilities::stringToViewType(restOfInput);
-				cmd = new View(newView,restOfInput);
-			}
-			break; }
+		log(DEBUG,"View option: " + restOfInput);
+		if (restOfInput!="" && isPowerSearchKeywords(restOfInput)) {
+			std::vector<std::string> searchParameters = parseSearchParameters(restOfInput);
+			cmd = new View(searchParameters,restOfInput);
+		} else {
+			ViewType newView = Utilities::stringToViewType(restOfInput);
+			cmd = new View(newView,restOfInput);
+		}
+		break; }
 
 	case VIEW_DEFAULT:
 		cmd = new View(VIEWTYPE_HOME,restOfInput);
@@ -194,40 +193,40 @@ void Parser::createCmd(CommandType cmdType, std::string restOfInput, Command*& c
 		break;
 
 	case LOAD: {
-			if (restOfInput == "") {
-				log(WARN,WARNING_NULL_FILE_PATH);
-				throw std::runtime_error(WARNING_NULL_FILE_PATH);
-			}
-			bool isOverwriteFile = true;
-			if (Utilities::containsAny(Utilities::getFirstWord(restOfInput),"from")) {
-				isOverwriteFile = false;
-				restOfInput = Utilities::removeFirstWord(restOfInput);
-			}
-			cmd = new Load(parseFileName(restOfInput),isOverwriteFile);
-			break; }
+		if (restOfInput == "") {
+			log(WARN,WARNING_NULL_FILE_PATH);
+			throw std::runtime_error(WARNING_NULL_FILE_PATH);
+		}
+		bool isOverwriteFile = true;
+		if (Utilities::containsAny(Utilities::getFirstWord(restOfInput),"from")) {
+			isOverwriteFile = false;
+			restOfInput = Utilities::removeFirstWord(restOfInput);
+		}
+		cmd = new Load(parseFileName(restOfInput),isOverwriteFile);
+		break; }
 
 	case SAVE: {
-			if (restOfInput == "") {
-				log(WARN,WARNING_NULL_FILE_PATH);
-				throw std::runtime_error(WARNING_NULL_FILE_PATH);
-			}
-			bool isDeletePrevFile = false;
-			if (Utilities::equalsIgnoreCase(Utilities::getFirstWord(restOfInput),"to")) {
-				isDeletePrevFile = true;
-				restOfInput = Utilities::removeFirstWord(restOfInput);
-			}
-			cmd = new Save(parseFileName(restOfInput),isDeletePrevFile);
-			break; }
+		if (restOfInput == "") {
+			log(WARN,WARNING_NULL_FILE_PATH);
+			throw std::runtime_error(WARNING_NULL_FILE_PATH);
+		}
+		bool isDeletePrevFile = false;
+		if (Utilities::equalsIgnoreCase(Utilities::getFirstWord(restOfInput),"to")) {
+			isDeletePrevFile = true;
+			restOfInput = Utilities::removeFirstWord(restOfInput);
+		}
+		cmd = new Save(parseFileName(restOfInput),isDeletePrevFile);
+		break; }
 
 	case SET: {
-			if (restOfInput == "") {
-				log(WARN,"Nothing to set!");
-				throw std::runtime_error("Nothing to set!");
-			}
-			std::string keyword = Utilities::getFirstWord(restOfInput);
-			std::string userString = Utilities::removeFirstWord(restOfInput);
-			cmd = new Set(keyword,userString);
-			break; }
+		if (restOfInput == "") {
+			log(WARN,"Nothing to set!");
+			throw std::runtime_error("Nothing to set!");
+		}
+		std::string keyword = Utilities::getFirstWord(restOfInput);
+		std::string userString = Utilities::removeFirstWord(restOfInput);
+		cmd = new Set(keyword,userString);
+		break; }
 
 	case EXIT:
 		cmd = new Exit;
@@ -712,176 +711,176 @@ void Parser::convertFieldToReserve(FieldType &inputMode) {
 
 std::string Parser::placeInField(Task* newTask,bool &isTODO,bool &isTODOreserve,bool &isReservation,
 								 FieldType inputMode,std::vector<std::string> inputString) {
-									 if (inputMode == RESERVE) {
-										 isReservation = true;
-										 return "";
-									 }
+	if (inputMode == RESERVE) {
+		isReservation = true;
+		return "";
+	}
 
-									 log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
-									 int newDate = DATE_NOT_SET;
-									 int newTime = TIME_NOT_SET;
+	log(DEBUG,"Parsing string: " + Utilities::vecToString(inputString));
+	int newDate = DATE_NOT_SET;
+	int newTime = TIME_NOT_SET;
 
-									 if (isDateField(inputMode)) {
-										 newDate = parseDate(inputString);
-										 if (newDate == INVALID_DATE_FORMAT) {
-											 newTime = parseTime(inputString);
-											 if(newTime == INVALID_DATE_FORMAT) {
-												 std::string invalidDateTimeString = Utilities::vecToString(inputString);
-												 return invalidDateTimeString;
-											 } else {
-												 convertFieldDateToTime(inputMode);
-											 }
-										 }
+	if (isDateField(inputMode)) {
+		newDate = parseDate(inputString);
+		if (newDate == INVALID_DATE_FORMAT) {
+			newTime = parseTime(inputString);
+			if(newTime == INVALID_DATE_FORMAT) {
+				std::string invalidDateTimeString = Utilities::vecToString(inputString);
+				return invalidDateTimeString;
+			} else {
+				convertFieldDateToTime(inputMode);
+			}
+		}
 
-										 if (!isReservation) {
-											 if (/*newTask->getType()==FLOATING &&*/ isTodoField(inputMode)) {
-												 isTODO = true;
-											 } else if (isTODO && inputMode==START_TIME) {
-												 inputMode = TODO_TIME;
-											 }
-										 } else if (isReservation) {
-											 log(DEBUG,"Parsing reservation: " + Utilities::vecToString(inputString));
-											 if (newTask->getReserveType()==FLOATING && isTodoField(inputMode)) {
-												 isTODOreserve = true;
-											 } else if (isTODOreserve && inputMode==START_TIME) {
-												 inputMode = TODO_TIME;
-											 }
-											 convertFieldToReserve(inputMode);
-										 }
-									 }
+		if (!isReservation) {
+			if (/*newTask->getType()==FLOATING &&*/ isTodoField(inputMode)) {
+				isTODO = true;
+			} else if (isTODO && inputMode==START_TIME) {
+				inputMode = TODO_TIME;
+			}
+		} else if (isReservation) {
+			log(DEBUG,"Parsing reservation: " + Utilities::vecToString(inputString));
+			if (newTask->getReserveType()==FLOATING && isTodoField(inputMode)) {
+				isTODOreserve = true;
+			} else if (isTODOreserve && inputMode==START_TIME) {
+				inputMode = TODO_TIME;
+			}
+			convertFieldToReserve(inputMode);
+		}
+	}
 
-									 switch (inputMode) {
-									 case NAME:
-										 newTask->setName(Utilities::vecToString(removeSlashKeywords(inputString)));
-										 break;
-									 case LABELS_ADD:
-										 newTask->addLabels(removeSlashKeywords(inputString));
-										 break;
-									 case LABELS_DELETE:
-										 newTask->setLabelsToDelete(removeSlashKeywords(inputString));
-										 break;
-									 case LABELS_CLEAR:
-										 // Nothing to set
-										 break;
-									 case PRIORITY_SET:
-										 newTask->setPriority();
-										 break;
-									 case PRIORITY_UNSET:
-										 // Unset by default
-										 break;
-									 case START_DATE:
-										 logSetTaskType(EVENT);
-										 newTask->setType(EVENT);
-										 newTask->setStartDate(newDate);
-										 if (newTask->getEndDate() == DATE_NOT_SET) {
-											 newTask->setEndDate(newDate);
-										 }
-										 break;
-									 case TODO_DATE:
-									 case END_DATE:
-										 if (newTask->getType() == FLOATING) {
-											 logSetTaskType(TODO);
-											 isTODO = true;
-										 } else if (isTODO
-											 || (newTask->getType()==EVENT && newTask->getStartDate()==DATE_NOT_SET)) {
-												 newTask->setStartDate(newDate);
-										 }
-										 newTask->setEndDate(newDate);
-										 break;
-									 case START_TIME:
-										 logSetTaskType(EVENT);
-										 newTask->setType(EVENT);
-										 if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-											 if (newTask->getStartTime() == TIME_NOT_SET) {
-												 newTask->setStartTime(newTime);
-											 }
-										 } else {
-											 break;
-										 }
-									 case TODO_TIME:
-									 case END_TIME:
-										 if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-											 if (newTask->getStartDate() == DATE_NOT_SET) {
-												 if (newTask->getEndDate() == DATE_NOT_SET) {
-													 newTask->setStartDate(parseByDay(Utilities::stringToVec("today")));
-												 } else {
-													 newTask->setStartDate(newTask->getEndDate());
-												 }
-											 }
-											 if (newTask->getEndDate() == DATE_NOT_SET) {
-												 newTask->setEndDate(newTask->getStartDate());
-											 }
+	switch (inputMode) {
+	case NAME:
+		newTask->setName(Utilities::vecToString(removeSlashKeywords(inputString)));
+		break;
+	case LABELS_ADD:
+		newTask->addLabels(removeSlashKeywords(inputString));
+		break;
+	case LABELS_DELETE:
+		newTask->setLabelsToDelete(removeSlashKeywords(inputString));
+		break;
+	case LABELS_CLEAR:
+		// Nothing to set
+		break;
+	case PRIORITY_SET:
+		newTask->setPriority();
+		break;
+	case PRIORITY_UNSET:
+		// Unset by default
+		break;
+	case START_DATE:
+		logSetTaskType(EVENT);
+		newTask->setType(EVENT);
+		newTask->setStartDate(newDate);
+		if (newTask->getEndDate() == DATE_NOT_SET) {
+			newTask->setEndDate(newDate);
+		}
+		break;
+	case TODO_DATE:
+	case END_DATE:
+		if (newTask->getType() == FLOATING) {
+			logSetTaskType(TODO);
+			isTODO = true;
+		} else if (isTODO
+			|| (newTask->getType()==EVENT && newTask->getStartDate()==DATE_NOT_SET)) {
+				newTask->setStartDate(newDate);
+		}
+		newTask->setEndDate(newDate);
+		break;
+	case START_TIME:
+		logSetTaskType(EVENT);
+		newTask->setType(EVENT);
+		if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if (newTask->getStartTime() == TIME_NOT_SET) {
+				newTask->setStartTime(newTime);
+			}
+		} else {
+			break;
+		}
+	case TODO_TIME:
+	case END_TIME:
+		if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if (newTask->getStartDate() == DATE_NOT_SET) {
+				if (newTask->getEndDate() == DATE_NOT_SET) {
+					newTask->setStartDate(parseByDay(Utilities::stringToVec("today")));
+				} else {
+					newTask->setStartDate(newTask->getEndDate());
+				}
+			}
+			if (newTask->getEndDate() == DATE_NOT_SET) {
+				newTask->setEndDate(newTask->getStartDate());
+			}
 
-											 newTask->setEndTime(newTime);
-											 if (newTask->getStartTime()!=TIME_NOT_SET && newTask->getStartTime()!=newTask->getEndTime()) {
-												 logSetTaskType(EVENT);
-												 newTask->setType(EVENT);
-											 } else if (newTask->getType()==EVENT && newTask->getStartTime()==TIME_NOT_SET) {
-												 newTask->setStartTime(newTime);
-											 } else if (newTask->getType()==FLOATING) {
-												 logSetTaskType(TODO);
-												 isTODO = true;
-											 }
-										 }
-										 break;
-										 //===== Reservation: Follow above and modify accordingly =====
-									 case RESERVE_START_DATE:
-										 log(DEBUG,"Placing in reserveStartDate");
-										 newTask->setReserveType(EVENT);
-										 newTask->addReserveStartDate(newDate);
-										 break;
-									 case RESERVE_TODO_DATE:
-									 case RESERVE_END_DATE:
-										 log(DEBUG,"Placing in reserveEndDate");
-										 if (newTask->getReserveType() == FLOATING) {
-											 isTODOreserve = true;
-										 } else if (isTODOreserve
-											 || (newTask->getReserveType()==EVENT && newTask->getReserveStartDate()==DATE_NOT_SET)) {
-												 newTask->addReserveStartDate(newDate);
-										 }
-										 newTask->addReserveEndDate(newDate);
-										 break;
-									 case RESERVE_START_TIME:
-										 log(DEBUG,"Placing in reserveStartTime");
-										 newTask->setReserveType(EVENT);
-										 if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-											 if (newTask->getReserveStartTime() == TIME_NOT_SET) {
-												 newTask->addReserveStartTime(newTime);
-											 }
-										 } else {
-											 break;
-										 }
-									 case RESERVE_TODO_TIME:
-									 case RESERVE_END_TIME:
-										 log(DEBUG,"Placing in reserveEndTime");
-										 if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
-											 if (newTask->getReserveStartDate() == DATE_NOT_SET) {
-												 if (newTask->getReserveEndDate() == DATE_NOT_SET) {
-													 newTask->addReserveStartDate(parseByDay(Utilities::stringToVec("today")));
-												 } else {
-													 newTask->addReserveStartDate(newTask->getReserveEndDate());
-												 }
-											 }
-											 if (newTask->getReserveEndDate() == DATE_NOT_SET) {
-												 newTask->addReserveEndDate(newTask->getReserveStartDate());
-											 }
-											 newTask->addReserveEndTime(newTime);
-											 if (   newTask->getReserveStartTime() != TIME_NOT_SET
-												 && newTask->getReserveStartTime() != newTask->getReserveEndTime()) {
-													 newTask->setReserveType(EVENT);
-											 } else if (newTask->getReserveType()==EVENT && newTask->getReserveStartTime()==TIME_NOT_SET) {
-												 newTask->addReserveStartTime(newTime);
-											 } else if (newTask->getReserveType()==FLOATING) {
-												 isTODOreserve = true;
-											 }
-										 }
-										 break;
-									 case RESERVE:
-										 //===== Reservation: Follow end =====
-									 case INVALID_FIELD:
-										 break;
-									 }
-									 return "";
+			newTask->setEndTime(newTime);
+			if (newTask->getStartTime()!=TIME_NOT_SET && newTask->getStartTime()!=newTask->getEndTime()) {
+				logSetTaskType(EVENT);
+				newTask->setType(EVENT);
+			} else if (newTask->getType()==EVENT && newTask->getStartTime()==TIME_NOT_SET) {
+				newTask->setStartTime(newTime);
+			} else if (newTask->getType()==FLOATING) {
+				logSetTaskType(TODO);
+				isTODO = true;
+			}
+		}
+		break;
+		//===== Reservation: Follow above and modify accordingly =====
+	case RESERVE_START_DATE:
+		log(DEBUG,"Placing in reserveStartDate");
+		newTask->setReserveType(EVENT);
+		newTask->addReserveStartDate(newDate);
+		break;
+	case RESERVE_TODO_DATE:
+	case RESERVE_END_DATE:
+		log(DEBUG,"Placing in reserveEndDate");
+		if (newTask->getReserveType() == FLOATING) {
+			isTODOreserve = true;
+		} else if (isTODOreserve
+			|| (newTask->getReserveType()==EVENT && newTask->getReserveStartDate()==DATE_NOT_SET)) {
+				newTask->addReserveStartDate(newDate);
+		}
+		newTask->addReserveEndDate(newDate);
+		break;
+	case RESERVE_START_TIME:
+		log(DEBUG,"Placing in reserveStartTime");
+		newTask->setReserveType(EVENT);
+		if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if (newTask->getReserveStartTime() == TIME_NOT_SET) {
+				newTask->addReserveStartTime(newTime);
+			}
+		} else {
+			break;
+		}
+	case RESERVE_TODO_TIME:
+	case RESERVE_END_TIME:
+		log(DEBUG,"Placing in reserveEndTime");
+		if ((newTime = parseTime(inputString)) != INVALID_TIME_FORMAT) {
+			if (newTask->getReserveStartDate() == DATE_NOT_SET) {
+				if (newTask->getReserveEndDate() == DATE_NOT_SET) {
+					newTask->addReserveStartDate(parseByDay(Utilities::stringToVec("today")));
+				} else {
+					newTask->addReserveStartDate(newTask->getReserveEndDate());
+				}
+			}
+			if (newTask->getReserveEndDate() == DATE_NOT_SET) {
+				newTask->addReserveEndDate(newTask->getReserveStartDate());
+			}
+			newTask->addReserveEndTime(newTime);
+			if (   newTask->getReserveStartTime() != TIME_NOT_SET
+				&& newTask->getReserveStartTime() != newTask->getReserveEndTime()) {
+					newTask->setReserveType(EVENT);
+			} else if (newTask->getReserveType()==EVENT && newTask->getReserveStartTime()==TIME_NOT_SET) {
+				newTask->addReserveStartTime(newTime);
+			} else if (newTask->getReserveType()==FLOATING) {
+				isTODOreserve = true;
+			}
+		}
+		break;
+	case RESERVE:
+		//===== Reservation: Follow end =====
+	case INVALID_FIELD:
+		break;
+	}
+	return "";
 }
 
 int Parser::findMaxDays(Month month, int year) { // default year is 2015
