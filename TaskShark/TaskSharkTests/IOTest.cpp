@@ -181,7 +181,7 @@ public:
 	}
 
 	TEST_METHOD(IO_saveFile_threeLines) {
-		Command::clearTaskStore();
+		Task::setRunningCount(0);
 		std::vector<Task> textVector;
 		Task newTask;
 		newTask.setID(Task::incrementRunningCount()); // Added to fix uniqueID (Aaron)
