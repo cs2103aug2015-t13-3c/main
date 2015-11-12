@@ -147,7 +147,7 @@ public:
 		iter = copyTask.begin();
 		Assert::AreEqual(151009, iter->getStartDate());
 		Assert::AreEqual(2300, iter->getStartTime());
-		Assert::AreEqual(151010, iter->getEndDate());
+		Assert::AreEqual(151009, iter->getEndDate());
 		Assert::AreEqual(2359, iter->getEndTime());
 
 		++iter;
